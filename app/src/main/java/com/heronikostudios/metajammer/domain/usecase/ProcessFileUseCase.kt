@@ -1,6 +1,7 @@
 package com.heronikostudios.metajammer.domain.usecase
 
 import com.heronikostudios.metajammer.data.MetadataRepository
+import com.heronikostudios.metajammer.domain.model.MetadataReplacementPlan
 import com.heronikostudios.metajammer.domain.model.ProcessingMode
 import com.heronikostudios.metajammer.domain.model.SelectedFile
 import java.io.File
@@ -11,12 +12,14 @@ class ProcessFileUseCase(
     operator fun invoke(
         selectedFile: SelectedFile,
         processingMode: ProcessingMode,
-        keepOrientation: Boolean
+        keepOrientation: Boolean,
+        replacementPlan: MetadataReplacementPlan? = null
     ): File {
         return metadataRepository.processFile(
             selectedFile = selectedFile,
             mode = processingMode,
-            keepOrientation = keepOrientation
+            keepOrientation = keepOrientation,
+            replacementPlan = replacementPlan
         )
     }
 }

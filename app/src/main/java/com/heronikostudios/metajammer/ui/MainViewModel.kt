@@ -10,8 +10,8 @@ import com.heronikostudios.metajammer.data.MetadataRepository
 import com.heronikostudios.metajammer.data.SettingsRepository
 import com.heronikostudios.metajammer.domain.model.AppSettings
 import com.heronikostudios.metajammer.domain.model.MetadataEntry
+import com.heronikostudios.metajammer.domain.model.MetadataReplacementPlan
 import com.heronikostudios.metajammer.domain.model.NightModeSetting
-import com.heronikostudios.metajammer.domain.model.PostProcessAction
 import com.heronikostudios.metajammer.domain.model.ProcessingMode
 import com.heronikostudios.metajammer.domain.model.SelectedFile
 import com.heronikostudios.metajammer.domain.usecase.ProcessFileUseCase
@@ -41,6 +41,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _changePreview = MutableStateFlow<Map<Uri, List<MetadataEntry>>>(emptyMap())
     val changePreview: StateFlow<Map<Uri, List<MetadataEntry>>> = _changePreview.asStateFlow()
+
+    private val _replacementPlans = MutableStateFlow<Map<Uri, MetadataReplacementPlan>>(emptyMap())
 
     private val _selectedMode = MutableStateFlow<ProcessingMode?>(null)
     val selectedMode: StateFlow<ProcessingMode?> = _selectedMode.asStateFlow()
@@ -118,6 +120,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _selectedFiles.value = files
         loadMetadataPreview(files)
         _changePreview.value = emptyMap()
+        _replacementPlans.value = emptyMap()
         _selectedMode.value = null
         _processedFiles.value = emptyList()
     }
@@ -137,6 +140,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setProcessingMode(mode: ProcessingMode) {
         _selectedMode.value = mode
+        if (mode == ProcessingMode.POISON_METADATA) {
+            val plans = _selectedFiles.value.associate { file ->
+                file.uri to MetadataReplacementGenerator.generatePlan()
+            }
+            _replacementPlans.value = plans
+        } else {
+            _replacementPlans.value = emptyMap()
+        }
         generateChangePreview(mode)
     }
 
@@ -151,76 +162,62 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         listOf(MetadataEntry("Info", "No metadata would be removed"))
                     } else {
                         currentMetadata.map {
-                            MetadataEntry(
-                                key = it.key,
-                                value = "${it.value}  →  [REMOVED]"
-                            )
+                            MetadataEntry(it.key, "${it.value}  →  [REMOVED]")
                         }
                     }
                 }
 
                 ProcessingMode.POISON_METADATA -> {
-                    val make = MetadataReplacementGenerator.randomMake()
-                    val model = MetadataReplacementGenerator.randomModel(make)
-                    val software = MetadataReplacementGenerator.randomSoftware(make)
-                    val dateTime = MetadataReplacementGenerator.randomRecentDateTime()
-                    val imageDescription = MetadataReplacementGenerator.randomImageDescription()
-                    val userComment = MetadataReplacementGenerator.randomUserComment()
-                    val photographicSensitivity = MetadataReplacementGenerator.randomPhotographicSensitivity()
-                    val exposureTime = MetadataReplacementGenerator.randomExposureTime()
-                    val fNumber = MetadataReplacementGenerator.randomFNumber()
-                    val focalLength = MetadataReplacementGenerator.randomFocalLength()
-                    val whiteBalance = MetadataReplacementGenerator.randomWhiteBalance()
-                    val flash = MetadataReplacementGenerator.randomFlash()
-                    val (lat, lon) = MetadataReplacementGenerator.randomLatLong()
-                    val latRef = if (lat >= 0) "N" else "S"
-                    val lonRef = if (lon >= 0) "E" else "W"
+                    val plan = _replacementPlans.value[file.uri]
+                    if (plan == null) {
+                        listOf(MetadataEntry("Info", "No replacement plan available"))
+                    } else {
+                        val targetMap = linkedMapOf(
+                            "DateTime" to plan.dateTime,
+                            "DateTimeOriginal" to plan.dateTime,
+                            "DateTimeDigitized" to plan.dateTime,
+                            "Make" to plan.make,
+                            "Model" to plan.model,
+                            "Software" to plan.software,
+                            "ImageDescription" to plan.imageDescription,
+                            "UserComment" to plan.userComment,
+                            "PhotographicSensitivity" to plan.photographicSensitivity,
+                            "ExposureTime" to plan.exposureTime,
+                            "FNumber" to plan.fNumber,
+                            "FocalLength" to plan.focalLength,
+                            "WhiteBalance" to plan.whiteBalance,
+                            "Flash" to plan.flash,
+                            "GPSLatitude" to plan.latitude.toString(),
+                            "GPSLatitudeRef" to plan.latitudeRef,
+                            "GPSLongitude" to plan.longitude.toString(),
+                            "GPSLongitudeRef" to plan.longitudeRef
+                        )
 
-                    val targetMap = linkedMapOf(
-                        "DateTime" to dateTime,
-                        "DateTimeOriginal" to dateTime,
-                        "DateTimeDigitized" to dateTime,
-                        "Make" to make,
-                        "Model" to model,
-                        "Software" to software,
-                        "ImageDescription" to imageDescription,
-                        "UserComment" to userComment,
-                        "PhotographicSensitivity" to photographicSensitivity,
-                        "ExposureTime" to exposureTime,
-                        "FNumber" to fNumber,
-                        "FocalLength" to focalLength,
-                        "WhiteBalance" to whiteBalance,
-                        "Flash" to flash,
-                        "GPSLatitude" to lat.toString(),
-                        "GPSLatitudeRef" to latRef,
-                        "GPSLongitude" to lon.toString(),
-                        "GPSLongitudeRef" to lonRef
-                    )
-
-                    if (_appSettings.value.keepImageOrientation) {
-                        currentMap["Orientation"]?.let { orientation ->
-                            targetMap["Orientation"] = orientation
-                        }
-                    }
-
-                    val orderedKeys = linkedSetOf<String>().apply {
-                        addAll(currentMap.keys)
-                        addAll(targetMap.keys)
-                    }
-
-                    orderedKeys.map { key ->
-                        val oldValue = currentMap[key]
-                        val newValue = targetMap[key]
-
-                        val previewValue = when {
-                            oldValue == null && newValue != null -> "[ADDED] $newValue"
-                            oldValue != null && newValue == null -> "[UNCHANGED] $oldValue"
-                            oldValue != null && newValue != null && oldValue == newValue -> "[UNCHANGED] $oldValue"
-                            oldValue != null && newValue != null -> "[CHANGED] $oldValue  →  $newValue"
-                            else -> "[NO DATA]"
+                        if (_appSettings.value.keepImageOrientation) {
+                            currentMap["Orientation"]?.let { orientation ->
+                                targetMap["Orientation"] = orientation
+                            }
                         }
 
-                        MetadataEntry(key = key, value = previewValue)
+                        val orderedKeys = linkedSetOf<String>().apply {
+                            addAll(currentMap.keys)
+                            addAll(targetMap.keys)
+                        }
+
+                        orderedKeys.map { key ->
+                            val oldValue = currentMap[key]
+                            val newValue = targetMap[key]
+
+                            val previewValue = when {
+                                oldValue == null && newValue != null -> "[ADDED] $newValue"
+                                oldValue != null && newValue == null -> "[UNCHANGED] $oldValue"
+                                oldValue != null && newValue != null && oldValue == newValue -> "[UNCHANGED] $oldValue"
+                                oldValue != null && newValue != null -> "[CHANGED] $oldValue  →  $newValue"
+                                else -> "[NO DATA]"
+                            }
+
+                            MetadataEntry(key, previewValue)
+                        }
                     }
                 }
             }
@@ -271,6 +268,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun setKeepImageOrientation(enabled: Boolean) {
         viewModelScope.launch {
             settingsRepository.setKeepImageOrientation(enabled)
+            _selectedMode.value?.let { generateChangePreview(it) }
         }
     }
 
@@ -309,6 +307,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun clearProcessedFiles() {
+        _processedFiles.value.forEach { (_, file) ->
+            runCatching { file.delete() }
+        }
         _processedFiles.value = emptyList()
     }
 
@@ -331,10 +332,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             _processing.value = true
             try {
                 val results = files.map { selectedFile ->
+                    val replacementPlan = _replacementPlans.value[selectedFile.uri]
                     selectedFile to processFileUseCase(
                         selectedFile = selectedFile,
                         processingMode = mode,
-                        keepOrientation = keepOrientation
+                        keepOrientation = keepOrientation,
+                        replacementPlan = replacementPlan
                     )
                 }
                 _processedFiles.value = results
@@ -363,7 +366,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
 
         cleanupProcessedFilesIfNeeded()
-
         return results
     }
 
@@ -382,8 +384,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
 
         cleanupProcessedFilesIfNeeded()
-
         return results
+    }
+
+    fun getFirstProcessedFileForSharing(): Pair<SelectedFile, File>? {
+        return _processedFiles.value.firstOrNull()
     }
 
     private fun cleanupProcessedFilesIfNeeded() {

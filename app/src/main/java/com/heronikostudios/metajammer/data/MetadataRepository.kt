@@ -3,6 +3,7 @@ package com.heronikostudios.metajammer.data
 import android.content.Context
 import androidx.exifinterface.media.ExifInterface
 import com.heronikostudios.metajammer.domain.model.MetadataEntry
+import com.heronikostudios.metajammer.domain.model.MetadataReplacementPlan
 import com.heronikostudios.metajammer.domain.model.ProcessingMode
 import com.heronikostudios.metajammer.domain.model.SelectedFile
 import com.heronikostudios.metajammer.metadata.ImageMetadataProcessor
@@ -19,15 +20,23 @@ class MetadataRepository(
     fun processFile(
         selectedFile: SelectedFile,
         mode: ProcessingMode,
-        keepOrientation: Boolean
+        keepOrientation: Boolean,
+        replacementPlan: MetadataReplacementPlan? = null
     ): File {
         return when {
             selectedFile.mimeType?.startsWith("image/") == true -> {
                 when (mode) {
-                    ProcessingMode.POISON_METADATA -> imageProcessor.poisonMetadata(
-                        selectedFile.uri,
-                        keepOrientation = keepOrientation
-                    )
+                    ProcessingMode.POISON_METADATA -> {
+                        val plan = requireNotNull(replacementPlan) {
+                            "Replacement plan is required for poison metadata mode"
+                        }
+                        imageProcessor.poisonMetadata(
+                            inputUri = selectedFile.uri,
+                            plan = plan,
+                            keepOrientation = keepOrientation
+                        )
+                    }
+
                     ProcessingMode.REMOVE_METADATA -> imageProcessor.removeMetadata(
                         selectedFile.uri,
                         keepOrientation = keepOrientation
@@ -53,6 +62,7 @@ class MetadataRepository(
             selectedFile.mimeType?.startsWith("image/") == true -> {
                 readImageMetadata(selectedFile)
             }
+
             else -> {
                 listOf(
                     MetadataEntry("Info", "Metadata preview not yet supported for ${selectedFile.mimeType ?: "unknown"}")
@@ -96,11 +106,7 @@ class MetadataRepository(
 
         return tags.mapNotNull { tag ->
             val value = exif.getAttribute(tag)
-            if (!value.isNullOrBlank()) {
-                MetadataEntry(tag, value)
-            } else {
-                null
-            }
+            if (!value.isNullOrBlank()) MetadataEntry(tag, value) else null
         }.ifEmpty {
             listOf(MetadataEntry("Info", "No readable EXIF metadata found"))
         }

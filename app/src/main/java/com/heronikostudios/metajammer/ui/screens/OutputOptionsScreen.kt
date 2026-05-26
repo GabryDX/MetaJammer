@@ -42,7 +42,7 @@ fun OutputOptionsScreen(
 
         Text(
             text = if (shareResultAsDefault) {
-                "Sharing is enabled by default. Saving will also trigger sharing."
+                "Saving will also trigger sharing."
             } else {
                 "Choose whether to save or share the processed result."
             },

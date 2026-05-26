@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.exifinterface.media.ExifInterface
 import com.heronikostudios.metajammer.data.FileRepository
+import com.heronikostudios.metajammer.domain.model.MetadataReplacementPlan
 import java.io.File
 
 class ImageMetadataProcessor(
@@ -74,7 +75,11 @@ class ImageMetadataProcessor(
         return outputFile
     }
 
-    fun poisonMetadata(inputUri: Uri, keepOrientation: Boolean = true): File {
+    fun poisonMetadata(
+        inputUri: Uri,
+        plan: MetadataReplacementPlan,
+        keepOrientation: Boolean = true
+    ): File {
         val inputFile = fileRepository.copyUriToCache(inputUri, prefix = "img_in_", suffix = ".jpg")
         val outputFile = File(context.cacheDir, "img_poisoned_${System.currentTimeMillis()}.jpg")
         inputFile.copyTo(outputFile, overwrite = true)
@@ -84,52 +89,26 @@ class ImageMetadataProcessor(
 
         val exif = ExifInterface(outputFile.absolutePath)
 
-        val make = MetadataReplacementGenerator.randomMake()
-        val model = MetadataReplacementGenerator.randomModel(make)
-        val software = MetadataReplacementGenerator.randomSoftware(make)
-        val dateTime = MetadataReplacementGenerator.randomRecentDateTime()
-        val imageDescription = MetadataReplacementGenerator.randomImageDescription()
-        val userComment = MetadataReplacementGenerator.randomUserComment()
-        val (lat, lon) = MetadataReplacementGenerator.randomLatLong()
-
-        exif.setAttribute(ExifInterface.TAG_DATETIME, dateTime)
-        exif.setAttribute(ExifInterface.TAG_DATETIME_ORIGINAL, dateTime)
-        exif.setAttribute(ExifInterface.TAG_DATETIME_DIGITIZED, dateTime)
-        exif.setAttribute(ExifInterface.TAG_MAKE, make)
-        exif.setAttribute(ExifInterface.TAG_MODEL, model)
-        exif.setAttribute(ExifInterface.TAG_SOFTWARE, software)
-        exif.setAttribute(ExifInterface.TAG_IMAGE_DESCRIPTION, imageDescription)
-        exif.setAttribute(ExifInterface.TAG_USER_COMMENT, userComment)
-        exif.setAttribute(
-            ExifInterface.TAG_PHOTOGRAPHIC_SENSITIVITY,
-            MetadataReplacementGenerator.randomPhotographicSensitivity()
-        )
-        exif.setAttribute(
-            ExifInterface.TAG_EXPOSURE_TIME,
-            MetadataReplacementGenerator.randomExposureTime()
-        )
-        exif.setAttribute(
-            ExifInterface.TAG_F_NUMBER,
-            MetadataReplacementGenerator.randomFNumber()
-        )
-        exif.setAttribute(
-            ExifInterface.TAG_FOCAL_LENGTH,
-            MetadataReplacementGenerator.randomFocalLength()
-        )
-        exif.setAttribute(
-            ExifInterface.TAG_WHITE_BALANCE,
-            MetadataReplacementGenerator.randomWhiteBalance()
-        )
-        exif.setAttribute(
-            ExifInterface.TAG_FLASH,
-            MetadataReplacementGenerator.randomFlash()
-        )
+        exif.setAttribute(ExifInterface.TAG_DATETIME, plan.dateTime)
+        exif.setAttribute(ExifInterface.TAG_DATETIME_ORIGINAL, plan.dateTime)
+        exif.setAttribute(ExifInterface.TAG_DATETIME_DIGITIZED, plan.dateTime)
+        exif.setAttribute(ExifInterface.TAG_MAKE, plan.make)
+        exif.setAttribute(ExifInterface.TAG_MODEL, plan.model)
+        exif.setAttribute(ExifInterface.TAG_SOFTWARE, plan.software)
+        exif.setAttribute(ExifInterface.TAG_IMAGE_DESCRIPTION, plan.imageDescription)
+        exif.setAttribute(ExifInterface.TAG_USER_COMMENT, plan.userComment)
+        exif.setAttribute(ExifInterface.TAG_PHOTOGRAPHIC_SENSITIVITY, plan.photographicSensitivity)
+        exif.setAttribute(ExifInterface.TAG_EXPOSURE_TIME, plan.exposureTime)
+        exif.setAttribute(ExifInterface.TAG_F_NUMBER, plan.fNumber)
+        exif.setAttribute(ExifInterface.TAG_FOCAL_LENGTH, plan.focalLength)
+        exif.setAttribute(ExifInterface.TAG_WHITE_BALANCE, plan.whiteBalance)
+        exif.setAttribute(ExifInterface.TAG_FLASH, plan.flash)
 
         if (keepOrientation && !originalOrientation.isNullOrBlank()) {
             exif.setAttribute(ExifInterface.TAG_ORIENTATION, originalOrientation)
         }
 
-        exif.setLatLong(lat, lon)
+        exif.setLatLong(plan.latitude, plan.longitude)
 
         exif.saveAttributes()
         return outputFile

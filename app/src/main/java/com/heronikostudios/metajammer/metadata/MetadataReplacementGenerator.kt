@@ -1,5 +1,6 @@
 package com.heronikostudios.metajammer.metadata
 
+import com.heronikostudios.metajammer.domain.model.MetadataReplacementPlan
 import java.time.LocalDateTime
 import kotlin.random.Random
 
@@ -57,83 +58,35 @@ object MetadataReplacementGenerator {
     )
 
     private val genericDescriptions = listOf(
-        "Outdoor scene",
-        "Street view",
-        "Portrait shot",
-        "Landscape",
-        "Night shot",
-        "Daylight photo",
-        "Travel photo",
-        "Family moment",
-        "Weekend outing",
-        "City skyline",
-        "Close-up photo",
-        "Casual snapshot",
-        "Nature view",
-        "Indoor shot",
-        "Event photo",
-        "Vacation memory"
+        "Outdoor scene", "Street view", "Portrait shot", "Landscape", "Night shot",
+        "Daylight photo", "Travel photo", "Family moment", "Weekend outing",
+        "City skyline", "Close-up photo", "Casual snapshot", "Nature view",
+        "Indoor shot", "Event photo", "Vacation memory"
     )
 
     private val realisticDescriptions = listOf(
-        "Morning walk in the park",
-        "Sunset over the water",
-        "Weekend trip downtown",
-        "Coffee shop window seat",
-        "View from the hotel balcony",
-        "Quiet street after rain",
-        "Afternoon by the river",
-        "Family lunch outdoors",
-        "City lights at night",
-        "Train station platform",
-        "A quick stop on the way home",
-        "View from the trail",
-        "Beachside in the evening",
-        "Lunch break outside",
-        "First day of the trip",
-        "Last evening before leaving",
-        "View from the apartment",
-        "Walk through the old town",
-        "Late afternoon in the city",
-        "Short break during the drive"
+        "Morning walk in the park", "Sunset over the water", "Weekend trip downtown",
+        "Coffee shop window seat", "View from the hotel balcony", "Quiet street after rain",
+        "Afternoon by the river", "Family lunch outdoors", "City lights at night",
+        "Train station platform", "A quick stop on the way home", "View from the trail",
+        "Beachside in the evening", "Lunch break outside", "First day of the trip",
+        "Last evening before leaving", "View from the apartment", "Walk through the old town",
+        "Late afternoon in the city", "Short break during the drive"
     )
 
     private val userComments = listOf(
-        "Nice lighting in this one",
-        "Taken during the trip",
-        "Good shot from earlier",
-        "Saved for later",
-        "Remember this place",
-        "Best one from today",
-        "Kept this version",
-        "Captured on the way back",
-        "Worth keeping",
-        "One of my favorites",
-        "Shot from the other side",
-        "Good detail in the background",
-        "Better than the first attempt",
-        "This angle worked well",
-        "Taken just before sunset",
-        "Looks better full size",
-        "Original version kept",
-        "Clearer than expected",
-        "Taken near the station",
-        "Good color in this one"
+        "Nice lighting in this one", "Taken during the trip", "Good shot from earlier",
+        "Saved for later", "Remember this place", "Best one from today",
+        "Kept this version", "Captured on the way back", "Worth keeping",
+        "One of my favorites", "Shot from the other side", "Good detail in the background",
+        "Better than the first attempt", "This angle worked well", "Taken just before sunset",
+        "Looks better full size", "Original version kept", "Clearer than expected",
+        "Taken near the station", "Good color in this one"
     )
 
     private val imageDirections = listOf(
         "Front camera", "Rear camera", "Wide lens", "Main camera", "Telephoto", "Ultra wide"
     )
-
-    fun randomDateTime(): String {
-        val year = Random.nextInt(2016, 2025)
-        val month = Random.nextInt(1, 13)
-        val day = Random.nextInt(1, 29)
-        val hour = Random.nextInt(0, 24)
-        val minute = Random.nextInt(0, 60)
-        val second = Random.nextInt(0, 60)
-        return "%04d:%02d:%02d %02d:%02d:%02d".format(year, month, day, hour, minute, second)
-    }
 
     fun randomRecentDateTime(): String {
         val now = LocalDateTime.now()
@@ -154,14 +107,12 @@ object MetadataReplacementGenerator {
 
     fun randomMake(): String = makes.random()
 
-    fun randomModel(make: String? = null): String {
-        val selectedMake = make ?: randomMake()
-        return modelsByMake[selectedMake]?.random() ?: "Model-${Random.nextInt(100, 999)}"
+    fun randomModel(make: String): String {
+        return modelsByMake[make]?.random() ?: "Model-${Random.nextInt(100, 999)}"
     }
 
-    fun randomSoftware(make: String? = null): String {
-        val selectedMake = make ?: randomMake()
-        return softwareByMake[selectedMake]?.random()
+    fun randomSoftware(make: String): String {
+        return softwareByMake[make]?.random()
             ?: listOf("Firmware 1.0", "Android 13", "Android 14", "System 2.1").random()
     }
 
@@ -209,5 +160,42 @@ object MetadataReplacementGenerator {
 
     fun randomFlash(): String {
         return listOf("0", "1").random()
+    }
+
+    fun generatePlan(): MetadataReplacementPlan {
+        val make = randomMake()
+        val model = randomModel(make)
+        val software = randomSoftware(make)
+        val dateTime = randomRecentDateTime()
+        val imageDescription = randomImageDescription()
+        val userComment = randomUserComment()
+        val photographicSensitivity = randomPhotographicSensitivity()
+        val exposureTime = randomExposureTime()
+        val fNumber = randomFNumber()
+        val focalLength = randomFocalLength()
+        val whiteBalance = randomWhiteBalance()
+        val flash = randomFlash()
+        val (latitude, longitude) = randomLatLong()
+        val latitudeRef = if (latitude >= 0) "N" else "S"
+        val longitudeRef = if (longitude >= 0) "E" else "W"
+
+        return MetadataReplacementPlan(
+            dateTime = dateTime,
+            make = make,
+            model = model,
+            software = software,
+            imageDescription = imageDescription,
+            userComment = userComment,
+            photographicSensitivity = photographicSensitivity,
+            exposureTime = exposureTime,
+            fNumber = fNumber,
+            focalLength = focalLength,
+            whiteBalance = whiteBalance,
+            flash = flash,
+            latitude = latitude,
+            longitude = longitude,
+            latitudeRef = latitudeRef,
+            longitudeRef = longitudeRef
+        )
     }
 }

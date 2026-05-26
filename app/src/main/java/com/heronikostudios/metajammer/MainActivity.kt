@@ -258,7 +258,11 @@ fun MetaJammerApp(
                         if (appSettings.shareResultAsDefault) {
                             val firstSavedUri = savedUris.firstOrNull()
                             if (firstSavedUri != null && firstProcessed != null) {
-                                shareFileUseCase(context, firstSavedUri, firstProcessed.first.mimeType)
+                                shareFileUseCase.shareUri(
+                                    context = context,
+                                    uri = firstSavedUri,
+                                    mimeType = firstProcessed.first.mimeType
+                                )
                             }
                         }
                     },
@@ -269,16 +273,23 @@ fun MetaJammerApp(
                         if (appSettings.shareResultAsDefault) {
                             val firstSavedUri = savedUris.firstOrNull()
                             if (firstSavedUri != null && firstProcessed != null) {
-                                shareFileUseCase(context, firstSavedUri, firstProcessed.first.mimeType)
+                                shareFileUseCase.shareUri(
+                                    context = context,
+                                    uri = firstSavedUri,
+                                    mimeType = firstProcessed.first.mimeType
+                                )
                             }
                         }
                     },
                     onShareOnly = {
-                        val firstProcessed = processedFiles.firstOrNull() ?: return@OutputOptionsScreen
-                        val savedUris = viewModel.saveProcessedFilesToDefault()
-                        savedUris.firstOrNull()?.let { uri ->
-                            shareFileUseCase(context, uri, firstProcessed.first.mimeType)
-                        }
+                        val firstProcessed = viewModel.getFirstProcessedFileForSharing()
+                            ?: return@OutputOptionsScreen
+
+                        shareFileUseCase.shareFile(
+                            context = context,
+                            file = firstProcessed.second,
+                            mimeType = firstProcessed.first.mimeType
+                        )
                     },
                     modifier = Modifier.padding(innerPadding)
                 )
