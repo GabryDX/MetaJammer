@@ -13,6 +13,7 @@ import com.heronikostudios.metajammer.domain.model.ProcessingMode
 import com.heronikostudios.metajammer.domain.model.SelectedFile
 import com.heronikostudios.metajammer.domain.usecase.ProcessFileUseCase
 import com.heronikostudios.metajammer.domain.usecase.SaveFileUseCase
+import com.heronikostudios.metajammer.metadata.MetadataReplacementGenerator
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -34,6 +35,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _metadataPreview = MutableStateFlow<Map<Uri, List<MetadataEntry>>>(emptyMap())
     val metadataPreview: StateFlow<Map<Uri, List<MetadataEntry>>> = _metadataPreview.asStateFlow()
+
+    private val _changePreview = MutableStateFlow<Map<Uri, List<MetadataEntry>>>(emptyMap())
+    val changePreview: StateFlow<Map<Uri, List<MetadataEntry>>> = _changePreview.asStateFlow()
 
     private val _selectedMode = MutableStateFlow<ProcessingMode?>(null)
     val selectedMode: StateFlow<ProcessingMode?> = _selectedMode.asStateFlow()
@@ -62,6 +66,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         val files = uris.map { fileRepository.getSelectedFile(it) }
         _selectedFiles.value = files
         loadMetadataPreview(files)
+        _changePreview.value = emptyMap()
+        _selectedMode.value = null
+        _processedFiles.value = emptyList()
     }
 
     private fun loadMetadataPreview(files: List<SelectedFile>) {
@@ -79,6 +86,95 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setProcessingMode(mode: ProcessingMode) {
         _selectedMode.value = mode
+        generateChangePreview(mode)
+    }
+
+    private fun generateChangePreview(mode: ProcessingMode) {
+        val previewMap = _selectedFiles.value.associate { file ->
+            val currentMetadata = _metadataPreview.value[file.uri].orEmpty()
+            val currentMap = currentMetadata.associate { it.key to it.value }
+
+            val changed = when (mode) {
+                ProcessingMode.REMOVE_METADATA -> {
+                    if (currentMetadata.isEmpty()) {
+                        listOf(MetadataEntry("Info", "No metadata would be removed"))
+                    } else {
+                        currentMetadata.map {
+                            MetadataEntry(
+                                key = it.key,
+                                value = "${it.value}  →  [REMOVED]"
+                            )
+                        }
+                    }
+                }
+
+                ProcessingMode.POISON_METADATA -> {
+                    val randomDateTime = MetadataReplacementGenerator.randomDateTime()
+                    val randomMake = MetadataReplacementGenerator.randomMake()
+                    val randomModel = MetadataReplacementGenerator.randomModel()
+                    val randomSoftware = MetadataReplacementGenerator.randomSoftware()
+                    val (lat, lon) = MetadataReplacementGenerator.randomLatLong()
+                    val latRef = if (lat >= 0) "N" else "S"
+                    val lonRef = if (lon >= 0) "E" else "W"
+
+                    val targetMap = linkedMapOf(
+                        "DateTime" to randomDateTime,
+                        "DateTimeOriginal" to randomDateTime,
+                        "DateTimeDigitized" to randomDateTime,
+                        "Make" to randomMake,
+                        "Model" to randomModel,
+                        "Software" to randomSoftware,
+                        "GPSLatitude" to lat.toString(),
+                        "GPSLatitudeRef" to latRef,
+                        "GPSLongitude" to lon.toString(),
+                        "GPSLongitudeRef" to lonRef,
+                        "ImageDescription" to "Edited with MetaJammer",
+                        "UserComment" to "Metadata replaced for privacy testing"
+                    )
+
+                    val orderedKeys = linkedSetOf<String>().apply {
+                        addAll(currentMap.keys)
+                        addAll(targetMap.keys)
+                    }
+
+                    orderedKeys.map { key ->
+                        val oldValue = currentMap[key]
+                        val newValue = targetMap[key]
+
+                        val previewValue = when {
+                            oldValue == null && newValue != null -> {
+                                "[ADDED] $newValue"
+                            }
+
+                            oldValue != null && newValue == null -> {
+                                "[UNCHANGED] $oldValue"
+                            }
+
+                            oldValue != null && newValue != null && oldValue == newValue -> {
+                                "[UNCHANGED] $oldValue"
+                            }
+
+                            oldValue != null && newValue != null -> {
+                                "[CHANGED] $oldValue  →  $newValue"
+                            }
+
+                            else -> {
+                                "[NO DATA]"
+                            }
+                        }
+
+                        MetadataEntry(
+                            key = key,
+                            value = previewValue
+                        )
+                    }
+                }
+            }
+
+            file.uri to changed
+        }
+
+        _changePreview.value = previewMap
     }
 
     fun setPostProcessAction(action: PostProcessAction) {

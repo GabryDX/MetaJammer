@@ -113,6 +113,7 @@ fun MetaJammerApp(
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
 
+    val changePreview by viewModel.changePreview.collectAsState()
     val selectedFiles by viewModel.selectedFiles.collectAsState()
     val metadataPreview by viewModel.metadataPreview.collectAsState()
     val selectedMode by viewModel.selectedMode.collectAsState()
@@ -224,7 +225,9 @@ fun MetaJammerApp(
 
             AppStep.PROCESS -> {
                 ProcessingScreen(
+                    selectedFiles = selectedFiles,
                     selectedMode = selectedMode,
+                    changePreview = changePreview,
                     processing = processing,
                     onModeSelected = viewModel::setProcessingMode,
                     onProcess = {
