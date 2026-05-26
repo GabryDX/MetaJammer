@@ -50,10 +50,17 @@ class MainActivity : ComponentActivity() {
         sharedUris = extractSharedUris(intent)
 
         setContent {
-            MetaJammerTheme {
+            val viewModel: MainViewModel = viewModel()
+            val appSettings by viewModel.appSettings.collectAsState()
+
+            MetaJammerTheme(
+                nightModeSetting = appSettings.nightMode,
+                oledMode = appSettings.oledMode
+            ) {
                 MetaJammerApp(
                     sharedUris = sharedUris,
-                    onExitApp = { finish() }
+                    onExitApp = { finish() },
+                    viewModel = viewModel
                 )
             }
         }
@@ -108,19 +115,19 @@ fun MetaJammerApp(
     sharedUris: List<Uri>,
     onExitApp: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: MainViewModel = viewModel()
+    viewModel: MainViewModel
 ) {
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
 
-    val appSettings by viewModel.appSettings.collectAsState()
-    val changePreview by viewModel.changePreview.collectAsState()
     val selectedFiles by viewModel.selectedFiles.collectAsState()
     val metadataPreview by viewModel.metadataPreview.collectAsState()
+    val changePreview by viewModel.changePreview.collectAsState()
     val selectedMode by viewModel.selectedMode.collectAsState()
     val processedFiles by viewModel.processedFiles.collectAsState()
     val processing by viewModel.processing.collectAsState()
     val message by viewModel.message.collectAsState()
+    val appSettings by viewModel.appSettings.collectAsState()
 
     val shareFileUseCase = remember { ShareFileUseCase() }
 
@@ -292,7 +299,6 @@ fun MetaJammerApp(
                     modifier = Modifier.padding(innerPadding)
                 )
             }
-
         }
     }
 }
