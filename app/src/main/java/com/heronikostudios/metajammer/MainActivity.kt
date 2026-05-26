@@ -26,6 +26,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -114,11 +115,12 @@ private fun previousStep(step: AppStep): AppStep? {
 fun MetaJammerApp(
     sharedUris: List<Uri>,
     onExitApp: () -> Unit,
-    modifier: Modifier = Modifier,
-    viewModel: MainViewModel
+    viewModel: MainViewModel,
+    modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
+    val shareFileUseCase = remember { ShareFileUseCase() }
 
     val selectedFiles by viewModel.selectedFiles.collectAsState()
     val metadataPreview by viewModel.metadataPreview.collectAsState()
@@ -129,9 +131,7 @@ fun MetaJammerApp(
     val message by viewModel.message.collectAsState()
     val appSettings by viewModel.appSettings.collectAsState()
 
-    val shareFileUseCase = remember { ShareFileUseCase() }
-
-    var currentStep by remember { mutableStateOf(AppStep.HOME) }
+    var currentStep by rememberSaveable { mutableStateOf(AppStep.HOME) }
 
     fun navigateBack() {
         val previous = previousStep(currentStep)
@@ -210,7 +210,9 @@ fun MetaJammerApp(
                         currentStep = AppStep.PREVIEW
                     },
                     onContinue = {
-                        currentStep = AppStep.PREVIEW
+                        if (selectedFiles.isNotEmpty()) {
+                            currentStep = AppStep.PREVIEW
+                        }
                     },
                     modifier = Modifier.padding(innerPadding)
                 )
@@ -224,7 +226,7 @@ fun MetaJammerApp(
                         currentStep = AppStep.PROCESS
                     },
                     onBack = {
-                        navigateBack()
+                        currentStep = AppStep.HOME
                     },
                     modifier = Modifier.padding(innerPadding)
                 )
@@ -241,7 +243,9 @@ fun MetaJammerApp(
                         viewModel.processFiles()
                     },
                     onNext = {
-                        currentStep = AppStep.OUTPUT
+                        if (processedFiles.isNotEmpty()) {
+                            currentStep = AppStep.OUTPUT
+                        }
                     },
                     hasProcessedFiles = processedFiles.isNotEmpty(),
                     modifier = Modifier.padding(innerPadding)
