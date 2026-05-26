@@ -5,8 +5,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -23,7 +24,7 @@ fun SettingsScreen(
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
             text = "Settings",
@@ -31,16 +32,34 @@ fun SettingsScreen(
         )
 
         Text(
-            text = "Current default action: $currentDefaultAction",
-            style = MaterialTheme.typography.bodyLarge
+            text = "Default post-processing action",
+            style = MaterialTheme.typography.titleMedium
+        )
+
+        Text(
+            text = "Choose what the app should do by default after processing a file.",
+            style = MaterialTheme.typography.bodyMedium
         )
 
         PostProcessAction.entries.forEach { action ->
-            Button(
-                onClick = { onSetDefaultAction(action) },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Set ${action.name} as default")
+            Card(modifier = Modifier.fillMaxWidth()) {
+                androidx.compose.foundation.layout.Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(12.dp)
+                ) {
+                    RadioButton(
+                        selected = currentDefaultAction == action,
+                        onClick = { onSetDefaultAction(action) }
+                    )
+
+                    Column(modifier = Modifier.padding(start = 8.dp)) {
+                        Text(
+                            text = action.name.replace("_", " "),
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
+                }
             }
         }
     }

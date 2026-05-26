@@ -6,11 +6,15 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -21,11 +25,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.heronikostudios.metajammer.domain.usecase.ShareFileUseCase
 import com.heronikostudios.metajammer.ui.MainViewModel
@@ -33,8 +35,8 @@ import com.heronikostudios.metajammer.ui.screens.HomeScreen
 import com.heronikostudios.metajammer.ui.screens.MetadataPreviewScreen
 import com.heronikostudios.metajammer.ui.screens.OutputOptionsScreen
 import com.heronikostudios.metajammer.ui.screens.ProcessingScreen
+import com.heronikostudios.metajammer.ui.screens.SettingsScreen
 import com.heronikostudios.metajammer.ui.theme.MetaJammerTheme
-import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
@@ -82,9 +84,11 @@ private enum class AppStep {
     HOME,
     PREVIEW,
     PROCESS,
-    OUTPUT
+    OUTPUT,
+    SETTINGS
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MetaJammerApp(
     sharedUris: List<Uri>,
@@ -92,7 +96,6 @@ fun MetaJammerApp(
     viewModel: MainViewModel = viewModel()
 ) {
     val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
     val selectedFiles by viewModel.selectedFiles.collectAsState()
@@ -123,160 +126,134 @@ fun MetaJammerApp(
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        text = when (currentStep) {
+                            AppStep.HOME -> "MetaJammer"
+                            AppStep.PREVIEW -> "Metadata Preview"
+                            AppStep.PROCESS -> "Process Files"
+                            AppStep.OUTPUT -> "Output Options"
+                            AppStep.SETTINGS -> "Settings"
+                        }
+                    )
+                },
+                navigationIcon = {
+                    if (currentStep != AppStep.HOME) {
+                        IconButton(
+                            onClick = {
+                                currentStep = when (currentStep) {
+                                    AppStep.HOME -> AppStep.HOME
+                                    AppStep.PREVIEW -> AppStep.HOME
+                                    AppStep.PROCESS -> AppStep.PREVIEW
+                                    AppStep.OUTPUT -> AppStep.PROCESS
+                                    AppStep.SETTINGS -> AppStep.HOME
+                                }
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Back"
+                            )
+                        }
+                    }
+                },
+                actions = {
+                    IconButton(
+                        onClick = { currentStep = AppStep.SETTINGS }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Settings,
+                            contentDescription = "Settings"
+                        )
+                    }
+                }
+            )
+        },
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
         }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            verticalArrangement = Arrangement.Top
-        ) {
-            when (currentStep) {
-                AppStep.HOME -> {
-                    HomeScreen(
-                        selectedFiles = selectedFiles,
-                        onFilesPicked = { uris ->
-                            viewModel.setIncomingUris(uris)
-                            currentStep = AppStep.PREVIEW
-                        },
-                        onContinue = {
-                            currentStep = AppStep.PREVIEW
-                        },
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-
-                AppStep.PREVIEW -> {
-                    MetadataPreviewScreen(
-                        selectedFiles = selectedFiles,
-                        metadataPreview = metadataPreview,
-                        onContinue = {
-                            currentStep = AppStep.PROCESS
-                        },
-                        onBack = {
-                            currentStep = AppStep.HOME
-                        },
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-
-                AppStep.PROCESS -> {
-                    ProcessingScreen(
-                        selectedMode = selectedMode,
-                        processing = processing,
-                        onModeSelected = viewModel::setProcessingMode,
-                        onProcess = {
-                            viewModel.processFiles()
-                        },
-                        onNext = {
-                            currentStep = AppStep.OUTPUT
-                        },
-                        hasProcessedFiles = processedFiles.isNotEmpty(),
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-
-                AppStep.OUTPUT -> {
-                    OutputOptionsScreen(
-                        selectedAction = selectedPostAction,
-                        onActionSelected = viewModel::setPostProcessAction,
-                        onSaveDefaultPreference = viewModel::saveDefaultPostAction,
-                        onSaveDefault = {
-                            val savedUris = viewModel.saveProcessedFilesToDefault()
-                            coroutineScope.launch {
-                                if (savedUris.isNotEmpty()) {
-                                    snackbarHostState.showSnackbar("Saved ${savedUris.size} file(s) to default folder")
-                                } else {
-                                    snackbarHostState.showSnackbar("No files were saved")
-                                }
-                            }
-                        },
-                        onSaveCustom = { treeUri ->
-                            val savedUris = viewModel.saveProcessedFilesToCustom(treeUri)
-                            coroutineScope.launch {
-                                if (savedUris.isNotEmpty()) {
-                                    snackbarHostState.showSnackbar("Saved ${savedUris.size} file(s) to custom folder")
-                                } else {
-                                    snackbarHostState.showSnackbar("No files were saved")
-                                }
-                            }
-                        },
-                        onShareOnly = {
-                            val firstProcessed = processedFiles.firstOrNull()
-                            if (firstProcessed == null) {
-                                coroutineScope.launch {
-                                    snackbarHostState.showSnackbar("No processed files available to share")
-                                }
-                                return@OutputOptionsScreen
-                            }
-
-                            val savedUris = viewModel.saveProcessedFilesToDefault()
-                            val firstSavedUri = savedUris.firstOrNull()
-
-                            if (firstSavedUri != null) {
-                                shareFileUseCase(
-                                    context = context,
-                                    uri = firstSavedUri,
-                                    mimeType = firstProcessed.first.mimeType
-                                )
-                            } else {
-                                coroutineScope.launch {
-                                    snackbarHostState.showSnackbar("Unable to prepare file for sharing")
-                                }
-                            }
-                        },
-                        onSaveAndShare = {
-                            val firstProcessed = processedFiles.firstOrNull()
-                            if (firstProcessed == null) {
-                                coroutineScope.launch {
-                                    snackbarHostState.showSnackbar("No processed files available")
-                                }
-                                return@OutputOptionsScreen
-                            }
-
-                            val savedUris = viewModel.saveProcessedFilesToDefault()
-                            val firstSavedUri = savedUris.firstOrNull()
-
-                            if (firstSavedUri != null) {
-                                shareFileUseCase(
-                                    context = context,
-                                    uri = firstSavedUri,
-                                    mimeType = firstProcessed.first.mimeType
-                                )
-                                coroutineScope.launch {
-                                    snackbarHostState.showSnackbar("Saved and shared file")
-                                }
-                            } else {
-                                coroutineScope.launch {
-                                    snackbarHostState.showSnackbar("Failed to save file before sharing")
-                                }
-                            }
-                        },
-                        modifier = Modifier.weight(1f)
-                    )
-                }
+        when (currentStep) {
+            AppStep.HOME -> {
+                HomeScreen(
+                    selectedFiles = selectedFiles,
+                    onFilesPicked = { uris ->
+                        viewModel.setIncomingUris(uris)
+                        currentStep = AppStep.PREVIEW
+                    },
+                    onContinue = {
+                        currentStep = AppStep.PREVIEW
+                    },
+                    modifier = Modifier.padding(innerPadding)
+                )
             }
 
-            Button(
-                onClick = {
-                    currentStep = when (currentStep) {
-                        AppStep.HOME -> AppStep.HOME
-                        AppStep.PREVIEW -> AppStep.HOME
-                        AppStep.PROCESS -> AppStep.PREVIEW
-                        AppStep.OUTPUT -> AppStep.PROCESS
-                    }
-                },
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-            ) {
-                Text(
-                    text = when (currentStep) {
-                        AppStep.HOME -> "Home"
-                        AppStep.PREVIEW -> "Back"
-                        AppStep.PROCESS -> "Back"
-                        AppStep.OUTPUT -> "Back"
-                    }
+            AppStep.PREVIEW -> {
+                MetadataPreviewScreen(
+                    selectedFiles = selectedFiles,
+                    metadataPreview = metadataPreview,
+                    onContinue = {
+                        currentStep = AppStep.PROCESS
+                    },
+                    onBack = {
+                        currentStep = AppStep.HOME
+                    },
+                    modifier = Modifier.padding(innerPadding)
+                )
+            }
+
+            AppStep.PROCESS -> {
+                ProcessingScreen(
+                    selectedMode = selectedMode,
+                    processing = processing,
+                    onModeSelected = viewModel::setProcessingMode,
+                    onProcess = {
+                        viewModel.processFiles()
+                    },
+                    onNext = {
+                        currentStep = AppStep.OUTPUT
+                    },
+                    hasProcessedFiles = processedFiles.isNotEmpty(),
+                    modifier = Modifier.padding(innerPadding)
+                )
+            }
+
+            AppStep.OUTPUT -> {
+                OutputOptionsScreen(
+                    selectedAction = selectedPostAction,
+                    onActionSelected = viewModel::setPostProcessAction,
+                    onSaveDefaultPreference = viewModel::saveDefaultPostAction,
+                    onSaveDefault = {
+                        viewModel.saveProcessedFilesToDefault()
+                    },
+                    onSaveCustom = { treeUri ->
+                        viewModel.saveProcessedFilesToCustom(treeUri)
+                    },
+                    onShareOnly = {
+                        val firstProcessed = processedFiles.firstOrNull() ?: return@OutputOptionsScreen
+                        val savedUris = viewModel.saveProcessedFilesToDefault()
+                        savedUris.firstOrNull()?.let { uri ->
+                            shareFileUseCase(context, uri, firstProcessed.first.mimeType)
+                        }
+                    },
+                    onSaveAndShare = {
+                        val firstProcessed = processedFiles.firstOrNull() ?: return@OutputOptionsScreen
+                        val savedUris = viewModel.saveProcessedFilesToDefault()
+                        savedUris.firstOrNull()?.let { uri ->
+                            shareFileUseCase(context, uri, firstProcessed.first.mimeType)
+                        }
+                    },
+                    modifier = Modifier.padding(innerPadding)
+                )
+            }
+
+            AppStep.SETTINGS -> {
+                SettingsScreen(
+                    currentDefaultAction = selectedPostAction,
+                    onSetDefaultAction = viewModel::saveDefaultPostAction,
+                    modifier = Modifier.padding(innerPadding)
                 )
             }
         }
