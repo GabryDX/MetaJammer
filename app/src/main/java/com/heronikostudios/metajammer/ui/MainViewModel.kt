@@ -109,27 +109,41 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 }
 
                 ProcessingMode.POISON_METADATA -> {
-                    val randomDateTime = MetadataReplacementGenerator.randomDateTime()
-                    val randomMake = MetadataReplacementGenerator.randomMake()
-                    val randomModel = MetadataReplacementGenerator.randomModel()
-                    val randomSoftware = MetadataReplacementGenerator.randomSoftware()
+                    val make = MetadataReplacementGenerator.randomMake()
+                    val model = MetadataReplacementGenerator.randomModel(make)
+                    val software = MetadataReplacementGenerator.randomSoftware(make)
+                    val dateTime = MetadataReplacementGenerator.randomRecentDateTime()
+                    val imageDescription = MetadataReplacementGenerator.randomImageDescription()
+                    val userComment = MetadataReplacementGenerator.randomUserComment()
+                    val photographicSensitivity = MetadataReplacementGenerator.randomPhotographicSensitivity()
+                    val exposureTime = MetadataReplacementGenerator.randomExposureTime()
+                    val fNumber = MetadataReplacementGenerator.randomFNumber()
+                    val focalLength = MetadataReplacementGenerator.randomFocalLength()
+                    val whiteBalance = MetadataReplacementGenerator.randomWhiteBalance()
+                    val flash = MetadataReplacementGenerator.randomFlash()
                     val (lat, lon) = MetadataReplacementGenerator.randomLatLong()
                     val latRef = if (lat >= 0) "N" else "S"
                     val lonRef = if (lon >= 0) "E" else "W"
 
                     val targetMap = linkedMapOf(
-                        "DateTime" to randomDateTime,
-                        "DateTimeOriginal" to randomDateTime,
-                        "DateTimeDigitized" to randomDateTime,
-                        "Make" to randomMake,
-                        "Model" to randomModel,
-                        "Software" to randomSoftware,
+                        "DateTime" to dateTime,
+                        "DateTimeOriginal" to dateTime,
+                        "DateTimeDigitized" to dateTime,
+                        "Make" to make,
+                        "Model" to model,
+                        "Software" to software,
+                        "ImageDescription" to imageDescription,
+                        "UserComment" to userComment,
+                        "PhotographicSensitivity" to photographicSensitivity,
+                        "ExposureTime" to exposureTime,
+                        "FNumber" to fNumber,
+                        "FocalLength" to focalLength,
+                        "WhiteBalance" to whiteBalance,
+                        "Flash" to flash,
                         "GPSLatitude" to lat.toString(),
                         "GPSLatitudeRef" to latRef,
                         "GPSLongitude" to lon.toString(),
-                        "GPSLongitudeRef" to lonRef,
-                        "ImageDescription" to "Edited with MetaJammer",
-                        "UserComment" to "Metadata replaced for privacy testing"
+                        "GPSLongitudeRef" to lonRef
                     )
 
                     val orderedKeys = linkedSetOf<String>().apply {

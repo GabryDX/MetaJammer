@@ -65,20 +65,51 @@ class ImageMetadataProcessor(
         inputFile.copyTo(outputFile, overwrite = true)
 
         val exif = ExifInterface(outputFile.absolutePath)
-        val randomDateTime = MetadataReplacementGenerator.randomDateTime()
+
+        val make = MetadataReplacementGenerator.randomMake()
+        val model = MetadataReplacementGenerator.randomModel(make)
+        val software = MetadataReplacementGenerator.randomSoftware(make)
+        val dateTime = MetadataReplacementGenerator.randomRecentDateTime()
+        val imageDescription = MetadataReplacementGenerator.randomImageDescription()
+        val userComment = MetadataReplacementGenerator.randomUserComment()
         val (lat, lon) = MetadataReplacementGenerator.randomLatLong()
 
-        exif.setAttribute(ExifInterface.TAG_DATETIME, randomDateTime)
-        exif.setAttribute(ExifInterface.TAG_DATETIME_ORIGINAL, randomDateTime)
-        exif.setAttribute(ExifInterface.TAG_DATETIME_DIGITIZED, randomDateTime)
-        exif.setAttribute(ExifInterface.TAG_MAKE, MetadataReplacementGenerator.randomMake())
-        exif.setAttribute(ExifInterface.TAG_MODEL, MetadataReplacementGenerator.randomModel())
-        exif.setAttribute(ExifInterface.TAG_SOFTWARE, MetadataReplacementGenerator.randomSoftware())
-        exif.setAttribute(ExifInterface.TAG_IMAGE_DESCRIPTION, "Edited with MetaJammer")
-        exif.setAttribute(ExifInterface.TAG_USER_COMMENT, "Metadata replaced for privacy testing")
+        exif.setAttribute(ExifInterface.TAG_DATETIME, dateTime)
+        exif.setAttribute(ExifInterface.TAG_DATETIME_ORIGINAL, dateTime)
+        exif.setAttribute(ExifInterface.TAG_DATETIME_DIGITIZED, dateTime)
+        exif.setAttribute(ExifInterface.TAG_MAKE, make)
+        exif.setAttribute(ExifInterface.TAG_MODEL, model)
+        exif.setAttribute(ExifInterface.TAG_SOFTWARE, software)
+        exif.setAttribute(ExifInterface.TAG_IMAGE_DESCRIPTION, imageDescription)
+        exif.setAttribute(ExifInterface.TAG_USER_COMMENT, userComment)
+        exif.setAttribute(
+            ExifInterface.TAG_PHOTOGRAPHIC_SENSITIVITY,
+            MetadataReplacementGenerator.randomPhotographicSensitivity()
+        )
+        exif.setAttribute(
+            ExifInterface.TAG_EXPOSURE_TIME,
+            MetadataReplacementGenerator.randomExposureTime()
+        )
+        exif.setAttribute(
+            ExifInterface.TAG_F_NUMBER,
+            MetadataReplacementGenerator.randomFNumber()
+        )
+        exif.setAttribute(
+            ExifInterface.TAG_FOCAL_LENGTH,
+            MetadataReplacementGenerator.randomFocalLength()
+        )
+        exif.setAttribute(
+            ExifInterface.TAG_WHITE_BALANCE,
+            MetadataReplacementGenerator.randomWhiteBalance()
+        )
+        exif.setAttribute(
+            ExifInterface.TAG_FLASH,
+            MetadataReplacementGenerator.randomFlash()
+        )
         exif.setLatLong(lat, lon)
 
         exif.saveAttributes()
         return outputFile
     }
+
 }
