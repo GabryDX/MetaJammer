@@ -15,6 +15,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -29,6 +30,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.heronikostudios.metajammer.domain.usecase.ShareFileUseCase
 import com.heronikostudios.metajammer.ui.MainViewModel
 import com.heronikostudios.metajammer.ui.screens.HomeScreen
+import com.heronikostudios.metajammer.ui.screens.MetadataPreviewScreen
 import com.heronikostudios.metajammer.ui.screens.OutputOptionsScreen
 import com.heronikostudios.metajammer.ui.screens.ProcessingScreen
 import com.heronikostudios.metajammer.ui.theme.MetaJammerTheme
@@ -46,12 +48,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MetaJammerTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    MetaJammerApp(
-                        sharedUris = sharedUris,
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                MetaJammerApp(sharedUris = sharedUris)
             }
         }
     }
@@ -83,11 +80,12 @@ class MainActivity : ComponentActivity() {
 
 private enum class AppStep {
     HOME,
+    PREVIEW,
     PROCESS,
     OUTPUT
 }
 
-@androidx.compose.runtime.Composable
+@Composable
 fun MetaJammerApp(
     sharedUris: List<Uri>,
     modifier: Modifier = Modifier,
@@ -98,6 +96,7 @@ fun MetaJammerApp(
     val snackbarHostState = remember { SnackbarHostState() }
 
     val selectedFiles by viewModel.selectedFiles.collectAsState()
+    val metadataPreview by viewModel.metadataPreview.collectAsState()
     val selectedMode by viewModel.selectedMode.collectAsState()
     val selectedPostAction by viewModel.selectedPostAction.collectAsState()
     val processedFiles by viewModel.processedFiles.collectAsState()
@@ -111,6 +110,7 @@ fun MetaJammerApp(
     LaunchedEffect(sharedUris) {
         if (sharedUris.isNotEmpty()) {
             viewModel.setIncomingUris(sharedUris)
+            currentStep = AppStep.PREVIEW
         }
     }
 
@@ -139,9 +139,24 @@ fun MetaJammerApp(
                         selectedFiles = selectedFiles,
                         onFilesPicked = { uris ->
                             viewModel.setIncomingUris(uris)
+                            currentStep = AppStep.PREVIEW
                         },
                         onContinue = {
+                            currentStep = AppStep.PREVIEW
+                        },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+
+                AppStep.PREVIEW -> {
+                    MetadataPreviewScreen(
+                        selectedFiles = selectedFiles,
+                        metadataPreview = metadataPreview,
+                        onContinue = {
                             currentStep = AppStep.PROCESS
+                        },
+                        onBack = {
+                            currentStep = AppStep.HOME
                         },
                         modifier = Modifier.weight(1f)
                     )
@@ -248,7 +263,8 @@ fun MetaJammerApp(
                 onClick = {
                     currentStep = when (currentStep) {
                         AppStep.HOME -> AppStep.HOME
-                        AppStep.PROCESS -> AppStep.HOME
+                        AppStep.PREVIEW -> AppStep.HOME
+                        AppStep.PROCESS -> AppStep.PREVIEW
                         AppStep.OUTPUT -> AppStep.PROCESS
                     }
                 },
@@ -257,6 +273,7 @@ fun MetaJammerApp(
                 Text(
                     text = when (currentStep) {
                         AppStep.HOME -> "Home"
+                        AppStep.PREVIEW -> "Back"
                         AppStep.PROCESS -> "Back"
                         AppStep.OUTPUT -> "Back"
                     }

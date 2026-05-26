@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.heronikostudios.metajammer.data.FileRepository
 import com.heronikostudios.metajammer.data.MetadataRepository
 import com.heronikostudios.metajammer.data.SettingsRepository
+import com.heronikostudios.metajammer.domain.model.MetadataEntry
 import com.heronikostudios.metajammer.domain.model.PostProcessAction
 import com.heronikostudios.metajammer.domain.model.ProcessingMode
 import com.heronikostudios.metajammer.domain.model.SelectedFile
@@ -30,6 +31,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _selectedFiles = MutableStateFlow<List<SelectedFile>>(emptyList())
     val selectedFiles: StateFlow<List<SelectedFile>> = _selectedFiles.asStateFlow()
+
+    private val _metadataPreview = MutableStateFlow<Map<Uri, List<MetadataEntry>>>(emptyMap())
+    val metadataPreview: StateFlow<Map<Uri, List<MetadataEntry>>> = _metadataPreview.asStateFlow()
 
     private val _selectedMode = MutableStateFlow<ProcessingMode?>(null)
     val selectedMode: StateFlow<ProcessingMode?> = _selectedMode.asStateFlow()
@@ -57,6 +61,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun setIncomingUris(uris: List<Uri>) {
         val files = uris.map { fileRepository.getSelectedFile(it) }
         _selectedFiles.value = files
+        loadMetadataPreview(files)
+    }
+
+    private fun loadMetadataPreview(files: List<SelectedFile>) {
+        viewModelScope.launch {
+            try {
+                val previewMap = files.associate { file ->
+                    file.uri to metadataRepository.readMetadata(file)
+                }
+                _metadataPreview.value = previewMap
+            } catch (e: Exception) {
+                _message.value = "Failed to read metadata: ${e.message}"
+            }
+        }
     }
 
     fun setProcessingMode(mode: ProcessingMode) {
