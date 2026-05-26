@@ -16,12 +16,22 @@ class MetadataRepository(
     private val imageProcessor = ImageMetadataProcessor(context, fileRepository)
     private val videoProcessor = VideoMetadataProcessor(context, fileRepository)
 
-    fun processFile(selectedFile: SelectedFile, mode: ProcessingMode): File {
+    fun processFile(
+        selectedFile: SelectedFile,
+        mode: ProcessingMode,
+        keepOrientation: Boolean
+    ): File {
         return when {
             selectedFile.mimeType?.startsWith("image/") == true -> {
                 when (mode) {
-                    ProcessingMode.POISON_METADATA -> imageProcessor.poisonMetadata(selectedFile.uri)
-                    ProcessingMode.REMOVE_METADATA -> imageProcessor.removeMetadata(selectedFile.uri)
+                    ProcessingMode.POISON_METADATA -> imageProcessor.poisonMetadata(
+                        selectedFile.uri,
+                        keepOrientation = keepOrientation
+                    )
+                    ProcessingMode.REMOVE_METADATA -> imageProcessor.removeMetadata(
+                        selectedFile.uri,
+                        keepOrientation = keepOrientation
+                    )
                 }
             }
 
@@ -33,7 +43,6 @@ class MetadataRepository(
             }
 
             else -> {
-                // Generic fallback: just copy file to cache unchanged
                 fileRepository.copyUriToCache(selectedFile.uri, prefix = "generic_", suffix = null)
             }
         }

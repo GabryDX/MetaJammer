@@ -58,7 +58,33 @@ class FileRepository(private val context: Context) {
     fun saveToDefaultFolder(
         sourceFile: File,
         displayName: String,
-        mimeType: String?
+        mimeType: String?,
+        configuredPath: String?
+    ): Uri? {
+        val path = configuredPath ?: "Pictures/MetaJammer"
+
+        return if (path.startsWith("content://")) {
+            saveToCustomFolder(
+                treeUri = Uri.parse(path),
+                sourceFile = sourceFile,
+                displayName = displayName,
+                mimeType = mimeType
+            )
+        } else {
+            saveToMediaStorePath(
+                sourceFile = sourceFile,
+                displayName = displayName,
+                mimeType = mimeType,
+                relativePath = path
+            )
+        }
+    }
+
+    private fun saveToMediaStorePath(
+        sourceFile: File,
+        displayName: String,
+        mimeType: String?,
+        relativePath: String
     ): Uri? {
         val resolver = context.contentResolver
 
@@ -66,12 +92,6 @@ class FileRepository(private val context: Context) {
             mimeType?.startsWith("image/") == true -> MediaStore.Images.Media.EXTERNAL_CONTENT_URI
             mimeType?.startsWith("video/") == true -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
             else -> MediaStore.Downloads.EXTERNAL_CONTENT_URI
-        }
-
-        val relativePath = when {
-            mimeType?.startsWith("image/") == true -> "Pictures/MetaJammer"
-            mimeType?.startsWith("video/") == true -> "Movies/MetaJammer"
-            else -> "Download/MetaJammer"
         }
 
         val values = ContentValues().apply {

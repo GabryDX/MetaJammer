@@ -113,11 +113,11 @@ fun MetaJammerApp(
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
 
+    val appSettings by viewModel.appSettings.collectAsState()
     val changePreview by viewModel.changePreview.collectAsState()
     val selectedFiles by viewModel.selectedFiles.collectAsState()
     val metadataPreview by viewModel.metadataPreview.collectAsState()
     val selectedMode by viewModel.selectedMode.collectAsState()
-    val selectedPostAction by viewModel.selectedPostAction.collectAsState()
     val processedFiles by viewModel.processedFiles.collectAsState()
     val processing by viewModel.processing.collectAsState()
     val message by viewModel.message.collectAsState()
@@ -243,23 +243,30 @@ fun MetaJammerApp(
 
             AppStep.OUTPUT -> {
                 OutputOptionsScreen(
-                    selectedAction = selectedPostAction,
-                    onActionSelected = viewModel::setPostProcessAction,
-                    onSaveDefaultPreference = viewModel::saveDefaultPostAction,
+                    shareResultAsDefault = appSettings.shareResultAsDefault,
                     onSaveDefault = {
-                        viewModel.saveProcessedFilesToDefault()
-                    },
-                    onSaveCustom = { treeUri ->
-                        viewModel.saveProcessedFilesToCustom(treeUri)
-                    },
-                    onShareOnly = {
-                        val firstProcessed = processedFiles.firstOrNull() ?: return@OutputOptionsScreen
+                        val firstProcessed = processedFiles.firstOrNull()
                         val savedUris = viewModel.saveProcessedFilesToDefault()
-                        savedUris.firstOrNull()?.let { uri ->
-                            shareFileUseCase(context, uri, firstProcessed.first.mimeType)
+
+                        if (appSettings.shareResultAsDefault) {
+                            val firstSavedUri = savedUris.firstOrNull()
+                            if (firstSavedUri != null && firstProcessed != null) {
+                                shareFileUseCase(context, firstSavedUri, firstProcessed.first.mimeType)
+                            }
                         }
                     },
-                    onSaveAndShare = {
+                    onSaveCustom = { treeUri ->
+                        val firstProcessed = processedFiles.firstOrNull()
+                        val savedUris = viewModel.saveProcessedFilesToCustom(treeUri)
+
+                        if (appSettings.shareResultAsDefault) {
+                            val firstSavedUri = savedUris.firstOrNull()
+                            if (firstSavedUri != null && firstProcessed != null) {
+                                shareFileUseCase(context, firstSavedUri, firstProcessed.first.mimeType)
+                            }
+                        }
+                    },
+                    onShareOnly = {
                         val firstProcessed = processedFiles.firstOrNull() ?: return@OutputOptionsScreen
                         val savedUris = viewModel.saveProcessedFilesToDefault()
                         savedUris.firstOrNull()?.let { uri ->
@@ -272,11 +279,20 @@ fun MetaJammerApp(
 
             AppStep.SETTINGS -> {
                 SettingsScreen(
-                    currentDefaultAction = selectedPostAction,
-                    onSetDefaultAction = viewModel::saveDefaultPostAction,
+                    settings = appSettings,
+                    onUseRandomFileNamesChanged = viewModel::setUseRandomFileNames,
+                    onDefaultSavingPathSelected = viewModel::persistAndSetDefaultSavingPath,
+                    onAutomaticDeletionChanged = viewModel::setAutomaticDeletion,
+                    onKeepImageOrientationChanged = viewModel::setKeepImageOrientation,
+                    onShareResultAsDefaultChanged = viewModel::setShareResultAsDefault,
+                    onDefaultPrefixChanged = viewModel::setDefaultPrefix,
+                    onDefaultSuffixChanged = viewModel::setDefaultSuffix,
+                    onNightModeChanged = viewModel::setNightMode,
+                    onOledModeChanged = viewModel::setOledMode,
                     modifier = Modifier.padding(innerPadding)
                 )
             }
+
         }
     }
 }

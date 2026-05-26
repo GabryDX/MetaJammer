@@ -10,9 +10,15 @@ class SaveFileUseCase(
     fun saveToDefaultFolder(
         sourceFile: File,
         displayName: String,
-        mimeType: String?
+        mimeType: String?,
+        configuredPath: String?
     ): Uri? {
-        return fileRepository.saveToDefaultFolder(sourceFile, displayName, mimeType)
+        return fileRepository.saveToDefaultFolder(
+            sourceFile = sourceFile,
+            displayName = displayName,
+            mimeType = mimeType,
+            configuredPath = configuredPath
+        )
     }
 
     fun saveToCustomFolder(

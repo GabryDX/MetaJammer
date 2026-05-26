@@ -1,13 +1,16 @@
 package com.heronikostudios.metajammer.ui
 
 import android.app.Application
+import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.heronikostudios.metajammer.data.FileRepository
 import com.heronikostudios.metajammer.data.MetadataRepository
 import com.heronikostudios.metajammer.data.SettingsRepository
+import com.heronikostudios.metajammer.domain.model.AppSettings
 import com.heronikostudios.metajammer.domain.model.MetadataEntry
+import com.heronikostudios.metajammer.domain.model.NightModeSetting
 import com.heronikostudios.metajammer.domain.model.PostProcessAction
 import com.heronikostudios.metajammer.domain.model.ProcessingMode
 import com.heronikostudios.metajammer.domain.model.SelectedFile
@@ -42,9 +45,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _selectedMode = MutableStateFlow<ProcessingMode?>(null)
     val selectedMode: StateFlow<ProcessingMode?> = _selectedMode.asStateFlow()
 
-    private val _selectedPostAction = MutableStateFlow(PostProcessAction.SAVE_DEFAULT)
-    val selectedPostAction: StateFlow<PostProcessAction> = _selectedPostAction.asStateFlow()
-
     private val _processedFiles = MutableStateFlow<List<Pair<SelectedFile, File>>>(emptyList())
     val processedFiles: StateFlow<List<Pair<SelectedFile, File>>> = _processedFiles.asStateFlow()
 
@@ -54,10 +54,61 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _message = MutableStateFlow<String?>(null)
     val message: StateFlow<String?> = _message.asStateFlow()
 
+    private val _appSettings = MutableStateFlow(AppSettings())
+    val appSettings: StateFlow<AppSettings> = _appSettings.asStateFlow()
+
     init {
         viewModelScope.launch {
-            settingsRepository.defaultPostActionFlow.collect {
-                _selectedPostAction.value = it
+            settingsRepository.useRandomFileNamesFlow.collect { value ->
+                _appSettings.value = _appSettings.value.copy(useRandomFileNames = value)
+            }
+        }
+
+        viewModelScope.launch {
+            settingsRepository.defaultSavingPathFlow.collect { value ->
+                _appSettings.value = _appSettings.value.copy(defaultSavingPath = value)
+            }
+        }
+
+        viewModelScope.launch {
+            settingsRepository.automaticDeletionFlow.collect { value ->
+                _appSettings.value = _appSettings.value.copy(automaticDeletion = value)
+            }
+        }
+
+        viewModelScope.launch {
+            settingsRepository.keepImageOrientationFlow.collect { value ->
+                _appSettings.value = _appSettings.value.copy(keepImageOrientation = value)
+            }
+        }
+
+        viewModelScope.launch {
+            settingsRepository.shareResultAsDefaultFlow.collect { value ->
+                _appSettings.value = _appSettings.value.copy(shareResultAsDefault = value)
+            }
+        }
+
+        viewModelScope.launch {
+            settingsRepository.defaultPrefixFlow.collect { value ->
+                _appSettings.value = _appSettings.value.copy(defaultPrefix = value)
+            }
+        }
+
+        viewModelScope.launch {
+            settingsRepository.defaultSuffixFlow.collect { value ->
+                _appSettings.value = _appSettings.value.copy(defaultSuffix = value)
+            }
+        }
+
+        viewModelScope.launch {
+            settingsRepository.nightModeFlow.collect { value ->
+                _appSettings.value = _appSettings.value.copy(nightMode = value)
+            }
+        }
+
+        viewModelScope.launch {
+            settingsRepository.oledModeFlow.collect { value ->
+                _appSettings.value = _appSettings.value.copy(oledMode = value)
             }
         }
     }
@@ -146,6 +197,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         "GPSLongitudeRef" to lonRef
                     )
 
+                    if (_appSettings.value.keepImageOrientation) {
+                        currentMap["Orientation"]?.let { orientation ->
+                            targetMap["Orientation"] = orientation
+                        }
+                    }
+
                     val orderedKeys = linkedSetOf<String>().apply {
                         addAll(currentMap.keys)
                         addAll(targetMap.keys)
@@ -156,31 +213,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         val newValue = targetMap[key]
 
                         val previewValue = when {
-                            oldValue == null && newValue != null -> {
-                                "[ADDED] $newValue"
-                            }
-
-                            oldValue != null && newValue == null -> {
-                                "[UNCHANGED] $oldValue"
-                            }
-
-                            oldValue != null && newValue != null && oldValue == newValue -> {
-                                "[UNCHANGED] $oldValue"
-                            }
-
-                            oldValue != null && newValue != null -> {
-                                "[CHANGED] $oldValue  →  $newValue"
-                            }
-
-                            else -> {
-                                "[NO DATA]"
-                            }
+                            oldValue == null && newValue != null -> "[ADDED] $newValue"
+                            oldValue != null && newValue == null -> "[UNCHANGED] $oldValue"
+                            oldValue != null && newValue != null && oldValue == newValue -> "[UNCHANGED] $oldValue"
+                            oldValue != null && newValue != null -> "[CHANGED] $oldValue  →  $newValue"
+                            else -> "[NO DATA]"
                         }
 
-                        MetadataEntry(
-                            key = key,
-                            value = previewValue
-                        )
+                        MetadataEntry(key = key, value = previewValue)
                     }
                 }
             }
@@ -191,14 +231,76 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _changePreview.value = previewMap
     }
 
-    fun setPostProcessAction(action: PostProcessAction) {
-        _selectedPostAction.value = action
+    fun setUseRandomFileNames(enabled: Boolean) {
+        viewModelScope.launch {
+            settingsRepository.setUseRandomFileNames(enabled)
+        }
     }
 
-    fun saveDefaultPostAction(action: PostProcessAction) {
+    fun persistAndSetDefaultSavingPath(uri: Uri?) {
+        if (uri == null) {
+            viewModelScope.launch {
+                settingsRepository.setDefaultSavingPathString("Pictures/MetaJammer")
+                _message.value = "Default saving path reset to Pictures/MetaJammer"
+            }
+            return
+        }
+
+        if (uri.toString().startsWith("content://")) {
+            try {
+                appContext.contentResolver.takePersistableUriPermission(
+                    uri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                )
+            } catch (_: Exception) {
+            }
+        }
+
         viewModelScope.launch {
-            settingsRepository.setDefaultPostAction(action)
-            _message.value = "Default action saved: $action"
+            settingsRepository.setDefaultSavingPath(uri)
+            _message.value = "Default saving path updated"
+        }
+    }
+
+    fun setAutomaticDeletion(enabled: Boolean) {
+        viewModelScope.launch {
+            settingsRepository.setAutomaticDeletion(enabled)
+        }
+    }
+
+    fun setKeepImageOrientation(enabled: Boolean) {
+        viewModelScope.launch {
+            settingsRepository.setKeepImageOrientation(enabled)
+        }
+    }
+
+    fun setShareResultAsDefault(enabled: Boolean) {
+        viewModelScope.launch {
+            settingsRepository.setShareResultAsDefault(enabled)
+        }
+    }
+
+    fun setDefaultPrefix(value: String) {
+        viewModelScope.launch {
+            settingsRepository.setDefaultPrefix(value)
+        }
+    }
+
+    fun setDefaultSuffix(value: String) {
+        viewModelScope.launch {
+            settingsRepository.setDefaultSuffix(value)
+        }
+    }
+
+    fun setNightMode(mode: NightModeSetting) {
+        viewModelScope.launch {
+            settingsRepository.setNightMode(mode)
+        }
+    }
+
+    fun setOledMode(enabled: Boolean) {
+        viewModelScope.launch {
+            settingsRepository.setOledMode(enabled)
         }
     }
 
@@ -213,6 +315,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun processFiles() {
         val files = _selectedFiles.value
         val mode = _selectedMode.value
+        val keepOrientation = _appSettings.value.keepImageOrientation
 
         if (files.isEmpty()) {
             _message.value = "No files selected"
@@ -228,7 +331,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             _processing.value = true
             try {
                 val results = files.map { selectedFile ->
-                    selectedFile to processFileUseCase(selectedFile, mode)
+                    selectedFile to processFileUseCase(
+                        selectedFile = selectedFile,
+                        processingMode = mode,
+                        keepOrientation = keepOrientation
+                    )
                 }
                 _processedFiles.value = results
                 _message.value = "Processing complete"
@@ -242,16 +349,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun saveProcessedFilesToDefault(): List<Uri> {
         val results = mutableListOf<Uri>()
+        val configuredPath = _appSettings.value.defaultSavingPath
 
         _processedFiles.value.forEach { (selectedFile, processedFile) ->
             val fileName = buildOutputName(selectedFile.displayName)
             val savedUri = saveFileUseCase.saveToDefaultFolder(
                 sourceFile = processedFile,
                 displayName = fileName,
-                mimeType = selectedFile.mimeType
+                mimeType = selectedFile.mimeType,
+                configuredPath = configuredPath
             )
             if (savedUri != null) results.add(savedUri)
         }
+
+        cleanupProcessedFilesIfNeeded()
 
         return results
     }
@@ -270,17 +381,33 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             if (savedUri != null) results.add(savedUri)
         }
 
+        cleanupProcessedFilesIfNeeded()
+
         return results
     }
 
-    private fun buildOutputName(originalName: String): String {
-        val dotIndex = originalName.lastIndexOf('.')
-        return if (dotIndex > 0) {
-            val base = originalName.substring(0, dotIndex)
-            val ext = originalName.substring(dotIndex)
-            "${base}_processed$ext"
-        } else {
-            "${originalName}_processed"
+    private fun cleanupProcessedFilesIfNeeded() {
+        if (_appSettings.value.automaticDeletion) {
+            _processedFiles.value.forEach { (_, file) ->
+                runCatching { file.delete() }
+            }
+            _processedFiles.value = emptyList()
         }
+    }
+
+    private fun buildOutputName(originalName: String): String {
+        val settings = _appSettings.value
+
+        val dotIndex = originalName.lastIndexOf('.')
+        val base = if (dotIndex > 0) originalName.substring(0, dotIndex) else originalName
+        val ext = if (dotIndex > 0) originalName.substring(dotIndex) else ""
+
+        val finalBase = if (settings.useRandomFileNames) {
+            "mj_${System.currentTimeMillis()}"
+        } else {
+            "${settings.defaultPrefix}$base${settings.defaultSuffix}"
+        }
+
+        return "${finalBase}_processed$ext"
     }
 }

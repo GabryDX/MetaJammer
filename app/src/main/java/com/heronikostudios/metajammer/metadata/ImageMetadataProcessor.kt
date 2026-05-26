@@ -11,10 +11,13 @@ class ImageMetadataProcessor(
     private val fileRepository: FileRepository
 ) {
 
-    fun removeMetadata(inputUri: Uri): File {
+    fun removeMetadata(inputUri: Uri, keepOrientation: Boolean = true): File {
         val inputFile = fileRepository.copyUriToCache(inputUri, prefix = "img_in_", suffix = ".jpg")
         val outputFile = File(context.cacheDir, "img_clean_${System.currentTimeMillis()}.jpg")
         inputFile.copyTo(outputFile, overwrite = true)
+
+        val originalExif = ExifInterface(inputFile.absolutePath)
+        val originalOrientation = originalExif.getAttribute(ExifInterface.TAG_ORIENTATION)
 
         val exif = ExifInterface(outputFile.absolutePath)
 
@@ -48,21 +51,36 @@ class ImageMetadataProcessor(
             ExifInterface.TAG_GPS_PROCESSING_METHOD,
             ExifInterface.TAG_GPS_SPEED,
             ExifInterface.TAG_GPS_SPEED_REF,
-            ExifInterface.TAG_GPS_TIMESTAMP
+            ExifInterface.TAG_GPS_TIMESTAMP,
+            ExifInterface.TAG_FLASH,
+            ExifInterface.TAG_FOCAL_LENGTH,
+            ExifInterface.TAG_WHITE_BALANCE,
+            ExifInterface.TAG_EXPOSURE_TIME,
+            ExifInterface.TAG_F_NUMBER,
+            ExifInterface.TAG_PHOTOGRAPHIC_SENSITIVITY
         )
 
         tagsToClear.forEach { tag ->
             exif.setAttribute(tag, null)
         }
 
+        if (keepOrientation && !originalOrientation.isNullOrBlank()) {
+            exif.setAttribute(ExifInterface.TAG_ORIENTATION, originalOrientation)
+        } else {
+            exif.setAttribute(ExifInterface.TAG_ORIENTATION, null)
+        }
+
         exif.saveAttributes()
         return outputFile
     }
 
-    fun poisonMetadata(inputUri: Uri): File {
+    fun poisonMetadata(inputUri: Uri, keepOrientation: Boolean = true): File {
         val inputFile = fileRepository.copyUriToCache(inputUri, prefix = "img_in_", suffix = ".jpg")
         val outputFile = File(context.cacheDir, "img_poisoned_${System.currentTimeMillis()}.jpg")
         inputFile.copyTo(outputFile, overwrite = true)
+
+        val originalExif = ExifInterface(inputFile.absolutePath)
+        val originalOrientation = originalExif.getAttribute(ExifInterface.TAG_ORIENTATION)
 
         val exif = ExifInterface(outputFile.absolutePath)
 
@@ -106,10 +124,14 @@ class ImageMetadataProcessor(
             ExifInterface.TAG_FLASH,
             MetadataReplacementGenerator.randomFlash()
         )
+
+        if (keepOrientation && !originalOrientation.isNullOrBlank()) {
+            exif.setAttribute(ExifInterface.TAG_ORIENTATION, originalOrientation)
+        }
+
         exif.setLatLong(lat, lon)
 
         exif.saveAttributes()
         return outputFile
     }
-
 }

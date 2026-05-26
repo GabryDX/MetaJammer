@@ -10,8 +10,13 @@ class ProcessFileUseCase(
 ) {
     operator fun invoke(
         selectedFile: SelectedFile,
-        processingMode: ProcessingMode
+        processingMode: ProcessingMode,
+        keepOrientation: Boolean
     ): File {
-        return metadataRepository.processFile(selectedFile, processingMode)
+        return metadataRepository.processFile(
+            selectedFile = selectedFile,
+            mode = processingMode,
+            keepOrientation = keepOrientation
+        )
     }
 }

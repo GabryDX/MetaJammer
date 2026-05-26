@@ -10,22 +10,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.heronikostudios.metajammer.domain.model.PostProcessAction
 
 @Composable
 fun OutputOptionsScreen(
-    selectedAction: PostProcessAction,
-    onActionSelected: (PostProcessAction) -> Unit,
-    onSaveDefaultPreference: (PostProcessAction) -> Unit,
+    shareResultAsDefault: Boolean,
     onSaveDefault: () -> Unit,
     onSaveCustom: (Uri) -> Unit,
     onShareOnly: () -> Unit,
-    onSaveAndShare: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val folderPicker = rememberLauncherForActivityResult(
@@ -33,8 +28,6 @@ fun OutputOptionsScreen(
     ) { uri ->
         uri?.let(onSaveCustom)
     }
-
-    val actions = PostProcessAction.entries
 
     Column(
         modifier = modifier
@@ -47,25 +40,14 @@ fun OutputOptionsScreen(
             style = MaterialTheme.typography.headlineSmall
         )
 
-        actions.forEach { action ->
-            androidx.compose.foundation.layout.Row {
-                RadioButton(
-                    selected = selectedAction == action,
-                    onClick = { onActionSelected(action) }
-                )
-                Text(
-                    text = action.name,
-                    modifier = Modifier.padding(top = 12.dp)
-                )
-            }
-        }
-
-        Button(
-            onClick = { onSaveDefaultPreference(selectedAction) },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Save as Default Action")
-        }
+        Text(
+            text = if (shareResultAsDefault) {
+                "Sharing is enabled by default. Saving will also trigger sharing."
+            } else {
+                "Choose whether to save or share the processed result."
+            },
+            style = MaterialTheme.typography.bodyMedium
+        )
 
         Button(
             onClick = onSaveDefault,
@@ -85,14 +67,7 @@ fun OutputOptionsScreen(
             onClick = onShareOnly,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Share Processed File")
-        }
-
-        Button(
-            onClick = onSaveAndShare,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Save and Share")
+            Text("Share")
         }
     }
 }
