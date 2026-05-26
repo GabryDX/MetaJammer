@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
@@ -50,7 +51,10 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MetaJammerTheme {
-                MetaJammerApp(sharedUris = sharedUris)
+                MetaJammerApp(
+                    sharedUris = sharedUris,
+                    onExitApp = { finish() }
+                )
             }
         }
     }
@@ -88,10 +92,21 @@ private enum class AppStep {
     SETTINGS
 }
 
+private fun previousStep(step: AppStep): AppStep? {
+    return when (step) {
+        AppStep.HOME -> null
+        AppStep.PREVIEW -> AppStep.HOME
+        AppStep.PROCESS -> AppStep.PREVIEW
+        AppStep.OUTPUT -> AppStep.PROCESS
+        AppStep.SETTINGS -> AppStep.HOME
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MetaJammerApp(
     sharedUris: List<Uri>,
+    onExitApp: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: MainViewModel = viewModel()
 ) {
@@ -109,6 +124,19 @@ fun MetaJammerApp(
     val shareFileUseCase = remember { ShareFileUseCase() }
 
     var currentStep by remember { mutableStateOf(AppStep.HOME) }
+
+    fun navigateBack() {
+        val previous = previousStep(currentStep)
+        if (previous != null) {
+            currentStep = previous
+        } else {
+            onExitApp()
+        }
+    }
+
+    BackHandler {
+        navigateBack()
+    }
 
     LaunchedEffect(sharedUris) {
         if (sharedUris.isNotEmpty()) {
@@ -141,17 +169,7 @@ fun MetaJammerApp(
                 },
                 navigationIcon = {
                     if (currentStep != AppStep.HOME) {
-                        IconButton(
-                            onClick = {
-                                currentStep = when (currentStep) {
-                                    AppStep.HOME -> AppStep.HOME
-                                    AppStep.PREVIEW -> AppStep.HOME
-                                    AppStep.PROCESS -> AppStep.PREVIEW
-                                    AppStep.OUTPUT -> AppStep.PROCESS
-                                    AppStep.SETTINGS -> AppStep.HOME
-                                }
-                            }
-                        ) {
+                        IconButton(onClick = { navigateBack() }) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                 contentDescription = "Back"
@@ -198,7 +216,7 @@ fun MetaJammerApp(
                         currentStep = AppStep.PROCESS
                     },
                     onBack = {
-                        currentStep = AppStep.HOME
+                        navigateBack()
                     },
                     modifier = Modifier.padding(innerPadding)
                 )
