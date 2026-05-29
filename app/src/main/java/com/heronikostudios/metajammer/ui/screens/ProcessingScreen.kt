@@ -39,11 +39,6 @@ fun ProcessingScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text(
-            text = "Choose Processing Mode",
-            style = MaterialTheme.typography.headlineSmall
-        )
-
         Card(modifier = Modifier.fillMaxWidth()) {
             Column(
                 modifier = Modifier.padding(12.dp),

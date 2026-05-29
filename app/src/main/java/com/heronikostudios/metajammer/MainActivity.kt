@@ -164,12 +164,16 @@ fun MetaJammerApp(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        when (currentStep) {
+                        text = when (currentStep) {
                             AppStep.HOME -> "MetaJammer"
                             AppStep.PREVIEW -> "Metadata Preview"
                             AppStep.PROCESS -> "Process Files"
                             AppStep.OUTPUT -> "Output Options"
                             AppStep.SETTINGS -> "Settings"
+                        },
+                        style = when (currentStep) {
+                            AppStep.HOME -> androidx.compose.material3.MaterialTheme.typography.headlineMedium
+                            else -> androidx.compose.material3.MaterialTheme.typography.titleLarge
                         }
                     )
                 },

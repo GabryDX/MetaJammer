@@ -33,11 +33,6 @@ fun MetadataPreviewScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text(
-            text = "Metadata Preview",
-            style = MaterialTheme.typography.headlineSmall
-        )
-
         LazyColumn(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(12.dp)

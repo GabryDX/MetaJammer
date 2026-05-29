@@ -39,11 +39,6 @@ fun HomeScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
-            text = "MetaJammer",
-            style = MaterialTheme.typography.headlineMedium
-        )
-
-        Text(
             text = "Select files from storage or share them into the app.",
             style = MaterialTheme.typography.bodyMedium
         )

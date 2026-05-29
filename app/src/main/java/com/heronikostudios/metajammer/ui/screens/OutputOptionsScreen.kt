@@ -36,11 +36,6 @@ fun OutputOptionsScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
-            text = "Output Options",
-            style = MaterialTheme.typography.headlineSmall
-        )
-
-        Text(
             text = if (shareResultAsDefault) {
                 "Saving will also trigger sharing."
             } else {
