@@ -41,7 +41,6 @@ fun SettingsScreen(
     settings: AppSettings,
     onUseRandomFileNamesChanged: (Boolean) -> Unit,
     onDefaultSavingPathSelected: (Uri?) -> Unit,
-    onAutomaticDeletionChanged: (Boolean) -> Unit,
     onKeepImageOrientationChanged: (Boolean) -> Unit,
     onShareResultAsDefaultChanged: (Boolean) -> Unit,
     onDefaultPrefixChanged: (String) -> Unit,
@@ -163,13 +162,6 @@ fun SettingsScreen(
                 )
 
                 SettingSwitchRow(
-                    title = "Automatic deletion",
-                    subtitle = "Delete temporary processed files automatically after saving or sharing",
-                    checked = settings.automaticDeletion,
-                    onCheckedChange = onAutomaticDeletionChanged
-                )
-
-                SettingSwitchRow(
                     title = "Keep image orientation",
                     subtitle = "Preserve image orientation metadata when possible",
                     checked = settings.keepImageOrientation,
@@ -185,7 +177,7 @@ fun SettingsScreen(
 
                 DialogSettingRow(
                     title = "Default Prefix",
-                    value = if (settings.defaultPrefix.isBlank()) "Not set" else settings.defaultPrefix,
+                    value = settings.defaultPrefix.ifBlank { "Not set" },
                     onClick = {
                         tempPrefix = settings.defaultPrefix
                         showPrefixDialog = true
@@ -194,7 +186,7 @@ fun SettingsScreen(
 
                 DialogSettingRow(
                     title = "Default Suffix",
-                    value = if (settings.defaultSuffix.isBlank()) "Not set" else settings.defaultSuffix,
+                    value = settings.defaultSuffix.ifBlank { "Not set" },
                     onClick = {
                         tempSuffix = settings.defaultSuffix
                         showSuffixDialog = true

@@ -330,7 +330,6 @@ fun MetaJammerApp(
                     settings = appSettings,
                     onUseRandomFileNamesChanged = viewModel::setUseRandomFileNames,
                     onDefaultSavingPathSelected = viewModel::persistAndSetDefaultSavingPath,
-                    onAutomaticDeletionChanged = viewModel::setAutomaticDeletion,
                     onKeepImageOrientationChanged = viewModel::setKeepImageOrientation,
                     onShareResultAsDefaultChanged = viewModel::setShareResultAsDefault,
                     onDefaultPrefixChanged = viewModel::setDefaultPrefix,

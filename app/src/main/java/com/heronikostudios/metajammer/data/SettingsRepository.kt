@@ -19,14 +19,12 @@ class SettingsRepository(private val context: Context) {
     companion object {
         private val USE_RANDOM_FILE_NAMES = booleanPreferencesKey("use_random_file_names")
         private val DEFAULT_SAVING_PATH = stringPreferencesKey("default_saving_path")
-        private val AUTOMATIC_DELETION = booleanPreferencesKey("automatic_deletion")
         private val KEEP_IMAGE_ORIENTATION = booleanPreferencesKey("keep_image_orientation")
         private val SHARE_RESULT_AS_DEFAULT = booleanPreferencesKey("share_result_as_default")
         private val DEFAULT_PREFIX = stringPreferencesKey("default_prefix")
         private val DEFAULT_SUFFIX = stringPreferencesKey("default_suffix")
         private val NIGHT_MODE = stringPreferencesKey("night_mode")
         private val OLED_MODE = booleanPreferencesKey("oled_mode")
-
         private val AUTO_HANDLE_SHARED_FILES = booleanPreferencesKey("auto_handle_shared_files")
         private val SHARED_FILES_PROCESSING_MODE = stringPreferencesKey("shared_files_processing_mode")
         private val SHARED_FILES_OUTPUT_ACTION = stringPreferencesKey("shared_files_output_action")
@@ -51,13 +49,6 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setDefaultSavingPathString(path: String) {
         context.dataStore.edit { it[DEFAULT_SAVING_PATH] = path }
-    }
-
-    val automaticDeletionFlow: Flow<Boolean> =
-        context.dataStore.data.map { it[AUTOMATIC_DELETION] ?: false }
-
-    suspend fun setAutomaticDeletion(enabled: Boolean) {
-        context.dataStore.edit { it[AUTOMATIC_DELETION] = enabled }
     }
 
     val keepImageOrientationFlow: Flow<Boolean> =

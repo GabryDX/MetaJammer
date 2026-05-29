@@ -78,11 +78,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
         viewModelScope.launch {
-            settingsRepository.automaticDeletionFlow.collect {
-                _appSettings.value = _appSettings.value.copy(automaticDeletion = it)
-            }
-        }
-        viewModelScope.launch {
             settingsRepository.keepImageOrientationFlow.collect {
                 _appSettings.value = _appSettings.value.copy(keepImageOrientation = it)
             }
@@ -141,11 +136,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setIncomingUris(uris: List<Uri>) {
         val files = uris.distinct().map(fileRepository::getSelectedFile)
+        clearProcessedFiles()
         _selectedFiles.value = files
+        _metadataPreview.value = emptyMap()
         _changePreview.value = emptyMap()
         _replacementPlans.value = emptyMap()
         _selectedMode.value = null
-        clearProcessedFiles()
         loadMetadataPreview(files)
     }
 
@@ -362,7 +358,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun saveProcessedFilesToDefault(): List<Uri> {
-        val uris = _processedFiles.value.mapNotNull { (selectedFile, processedFile) ->
+        return _processedFiles.value.mapNotNull { (selectedFile, processedFile) ->
             saveFileUseCase.saveToDefaultFolder(
                 sourceFile = processedFile,
                 displayName = buildOutputName(selectedFile.displayName),
@@ -370,12 +366,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 configuredPath = _appSettings.value.defaultSavingPath
             )
         }
-        cleanupProcessedFilesIfNeeded()
-        return uris
     }
 
     fun saveProcessedFilesToCustom(treeUri: Uri): List<Uri> {
-        val uris = _processedFiles.value.mapNotNull { (selectedFile, processedFile) ->
+        return _processedFiles.value.mapNotNull { (selectedFile, processedFile) ->
             saveFileUseCase.saveToCustomFolder(
                 treeUri = treeUri,
                 sourceFile = processedFile,
@@ -383,8 +377,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 mimeType = selectedFile.mimeType
             )
         }
-        cleanupProcessedFilesIfNeeded()
-        return uris
     }
 
     fun getFirstProcessedFileForSharing(): Pair<SelectedFile, File>? =
@@ -442,10 +434,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         settingsRepository.setUseRandomFileNames(enabled)
     }
 
-    fun setAutomaticDeletion(enabled: Boolean) = launchSettingUpdate {
-        settingsRepository.setAutomaticDeletion(enabled)
-    }
-
     fun setKeepImageOrientation(enabled: Boolean) = launchSettingUpdate {
         settingsRepository.setKeepImageOrientation(enabled)
         if (_selectedMode.value != null) generateChangePreview()
@@ -494,12 +482,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun clearProcessedFiles() {
         _processedFiles.value.forEach { (_, file) -> runCatching { file.delete() } }
         _processedFiles.value = emptyList()
-    }
-
-    private fun cleanupProcessedFilesIfNeeded() {
-        if (_appSettings.value.automaticDeletion) {
-            clearProcessedFiles()
-        }
     }
 
     private fun buildOutputName(originalName: String): String {

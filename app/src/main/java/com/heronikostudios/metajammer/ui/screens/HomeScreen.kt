@@ -29,7 +29,7 @@ fun HomeScreen(
     val pickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenMultipleDocuments()
     ) { uris ->
-        if (!uris.isNullOrEmpty()) {
+        if (uris.isNotEmpty()) {
             onFilesPicked(uris)
         }
     }
