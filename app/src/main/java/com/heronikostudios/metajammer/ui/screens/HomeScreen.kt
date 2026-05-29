@@ -40,19 +40,60 @@ fun HomeScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text(
-            text = "Select files from storage or share them into the app.",
-            style = MaterialTheme.typography.bodyMedium
-        )
+        if (selectedFiles.isEmpty()) {
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(
+                        text = "Protect metadata before sharing files.",
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    Text(
+                        text = "MetaJammer helps you inspect image metadata and either remove it or replace it before saving or sharing.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
+                }
+            }
 
-        Button(
-            onClick = { pickerLauncher.launch(arrayOf("*/*")) },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Select Files")
-        }
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Text(
+                        text = "How it works",
+                        style = MaterialTheme.typography.titleMedium
+                    )
 
-        if (selectedFiles.isNotEmpty()) {
+                    Text(
+                        text = "1. Select files from your device or share them into the app.",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    Text(
+                        text = "2. Review the detected metadata.",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    Text(
+                        text = "3. Remove metadata or poison it with realistic replacement values.",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
+
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(
+                        text = "Tip",
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    Text(
+                        text = "You can also open Gallery or another app and share files directly into MetaJammer.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
+                }
+            }
+        } else {
             Text(
                 text = "Selected Files",
                 style = MaterialTheme.typography.titleMedium
@@ -76,7 +117,16 @@ fun HomeScreen(
                     }
                 }
             }
+        }
 
+        Button(
+            onClick = { pickerLauncher.launch(arrayOf("*/*")) },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(if (selectedFiles.isEmpty()) "Select Files" else "Select More Files")
+        }
+
+        if (selectedFiles.isNotEmpty()) {
             Button(
                 onClick = onContinue,
                 modifier = Modifier.fillMaxWidth()
