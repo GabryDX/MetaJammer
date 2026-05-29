@@ -2,12 +2,11 @@ package com.heronikostudios.metajammer.data
 
 import android.content.Context
 import android.net.Uri
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.heronikostudios.metajammer.domain.model.NightModeSetting
-import com.heronikostudios.metajammer.domain.model.PostProcessAction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -16,8 +15,6 @@ private val Context.dataStore by preferencesDataStore(name = "meta_jammer_settin
 class SettingsRepository(private val context: Context) {
 
     companion object {
-        private val DEFAULT_POST_ACTION = stringPreferencesKey("default_post_action")
-
         private val USE_RANDOM_FILE_NAMES = booleanPreferencesKey("use_random_file_names")
         private val DEFAULT_SAVING_PATH = stringPreferencesKey("default_saving_path")
         private val AUTOMATIC_DELETION = booleanPreferencesKey("automatic_deletion")
@@ -27,19 +24,6 @@ class SettingsRepository(private val context: Context) {
         private val DEFAULT_SUFFIX = stringPreferencesKey("default_suffix")
         private val NIGHT_MODE = stringPreferencesKey("night_mode")
         private val OLED_MODE = booleanPreferencesKey("oled_mode")
-    }
-
-    val defaultPostActionFlow: Flow<PostProcessAction> =
-        context.dataStore.data.map { preferences ->
-            preferences[DEFAULT_POST_ACTION]
-                ?.let { saved -> runCatching { PostProcessAction.valueOf(saved) }.getOrNull() }
-                ?: PostProcessAction.SAVE_DEFAULT
-        }
-
-    suspend fun setDefaultPostAction(action: PostProcessAction) {
-        context.dataStore.edit { preferences ->
-            preferences[DEFAULT_POST_ACTION] = action.name
-        }
     }
 
     val useRandomFileNamesFlow: Flow<Boolean> =
@@ -54,18 +38,12 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setDefaultSavingPath(uri: Uri?) {
         context.dataStore.edit { preferences ->
-            if (uri == null) {
-                preferences[DEFAULT_SAVING_PATH] = "Pictures/MetaJammer"
-            } else {
-                preferences[DEFAULT_SAVING_PATH] = uri.toString()
-            }
+            preferences[DEFAULT_SAVING_PATH] = uri?.toString() ?: "Pictures/MetaJammer"
         }
     }
 
     suspend fun setDefaultSavingPathString(path: String) {
-        context.dataStore.edit { preferences ->
-            preferences[DEFAULT_SAVING_PATH] = path
-        }
+        context.dataStore.edit { it[DEFAULT_SAVING_PATH] = path }
     }
 
     val automaticDeletionFlow: Flow<Boolean> =
