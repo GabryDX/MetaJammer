@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -22,6 +23,7 @@ fun HomeScreen(
     selectedFiles: List<SelectedFile>,
     onFilesPicked: (List<Uri>) -> Unit,
     onContinue: () -> Unit,
+    onClearSelection: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val pickerLauncher = rememberLauncherForActivityResult(
@@ -59,9 +61,18 @@ fun HomeScreen(
             selectedFiles.forEach { file ->
                 Card(modifier = Modifier.fillMaxWidth()) {
                     Column(modifier = Modifier.padding(12.dp)) {
-                        Text(file.displayName, style = MaterialTheme.typography.bodyLarge)
-                        Text("Type: ${file.mimeType ?: "unknown"}", style = MaterialTheme.typography.bodySmall)
-                        Text("Size: ${file.sizeBytes ?: 0} bytes", style = MaterialTheme.typography.bodySmall)
+                        Text(
+                            text = file.displayName,
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                        Text(
+                            text = "Type: ${file.mimeType ?: "unknown"}",
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                        Text(
+                            text = "Size: ${file.sizeBytes ?: 0} bytes",
+                            style = MaterialTheme.typography.bodySmall
+                        )
                     }
                 }
             }
@@ -71,6 +82,13 @@ fun HomeScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Continue")
+            }
+
+            OutlinedButton(
+                onClick = onClearSelection,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Clear Selection")
             }
         }
     }

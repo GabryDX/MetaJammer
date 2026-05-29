@@ -246,6 +246,9 @@ fun MetaJammerApp(
                     onContinue = {
                         if (selectedFiles.isNotEmpty()) navigateTo(AppStep.PREVIEW)
                     },
+                    onClearSelection = {
+                        viewModel.clearSelection()
+                    },
                     modifier = Modifier.padding(innerPadding)
                 )
             }

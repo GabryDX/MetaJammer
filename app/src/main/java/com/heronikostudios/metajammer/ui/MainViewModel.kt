@@ -149,6 +149,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         loadMetadataPreview(files)
     }
 
+    fun clearSelection() {
+        _selectedFiles.value = emptyList()
+        _metadataPreview.value = emptyMap()
+        _changePreview.value = emptyMap()
+        _replacementPlans.value = emptyMap()
+        _selectedMode.value = null
+        clearProcessedFiles()
+    }
+
     private fun loadMetadataPreview(files: List<SelectedFile>) {
         viewModelScope.launch {
             runCatching {
