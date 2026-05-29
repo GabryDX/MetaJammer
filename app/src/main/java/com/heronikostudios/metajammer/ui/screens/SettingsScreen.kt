@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
@@ -20,10 +21,13 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -50,15 +54,24 @@ fun SettingsScreen(
         onDefaultSavingPathSelected(uri)
     }
 
-    val prefixState = remember(settings.defaultPrefix) { mutableStateOf(settings.defaultPrefix) }
-    val suffixState = remember(settings.defaultSuffix) { mutableStateOf(settings.defaultSuffix) }
+    var showNightModeDialog by remember { mutableStateOf(false) }
+    var showPrefixDialog by remember { mutableStateOf(false) }
+    var showSuffixDialog by remember { mutableStateOf(false) }
+
+    var tempNightMode by remember(settings.nightMode) { mutableStateOf(settings.nightMode) }
+    var tempPrefix by remember(settings.defaultPrefix) { mutableStateOf(settings.defaultPrefix) }
+    var tempSuffix by remember(settings.defaultSuffix) { mutableStateOf(settings.defaultSuffix) }
+
+    LaunchedEffect(settings.nightMode) {
+        tempNightMode = settings.nightMode
+    }
 
     LaunchedEffect(settings.defaultPrefix) {
-        prefixState.value = settings.defaultPrefix
+        tempPrefix = settings.defaultPrefix
     }
 
     LaunchedEffect(settings.defaultSuffix) {
-        suffixState.value = settings.defaultSuffix
+        tempSuffix = settings.defaultSuffix
     }
 
     Column(
@@ -74,7 +87,10 @@ fun SettingsScreen(
         )
 
         Card(modifier = Modifier.fillMaxWidth()) {
-            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
                 Text(
                     text = "File management",
                     style = MaterialTheme.typography.titleMedium
@@ -118,7 +134,10 @@ fun SettingsScreen(
         }
 
         Card(modifier = Modifier.fillMaxWidth()) {
-            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
                 Text(
                     text = "Image / File",
                     style = MaterialTheme.typography.titleMedium
@@ -140,72 +159,49 @@ fun SettingsScreen(
 
                 SettingSwitchRow(
                     title = "Share result as default",
-                    subtitle = "Prefer sharing the processed result by default",
+                    subtitle = "Saving will also trigger sharing",
                     checked = settings.shareResultAsDefault,
                     onCheckedChange = onShareResultAsDefaultChanged
                 )
 
-                OutlinedTextField(
-                    value = prefixState.value,
-                    onValueChange = {
-                        prefixState.value = it
-                        onDefaultPrefixChanged(it)
-                    },
-                    label = { Text("Default Prefix") },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
+                DialogSettingRow(
+                    title = "Default Prefix",
+                    value = if (settings.defaultPrefix.isBlank()) "Not set" else settings.defaultPrefix,
+                    onClick = {
+                        tempPrefix = settings.defaultPrefix
+                        showPrefixDialog = true
+                    }
                 )
 
-                OutlinedTextField(
-                    value = suffixState.value,
-                    onValueChange = {
-                        suffixState.value = it
-                        onDefaultSuffixChanged(it)
-                    },
-                    label = { Text("Default Suffix") },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
+                DialogSettingRow(
+                    title = "Default Suffix",
+                    value = if (settings.defaultSuffix.isBlank()) "Not set" else settings.defaultSuffix,
+                    onClick = {
+                        tempSuffix = settings.defaultSuffix
+                        showSuffixDialog = true
+                    }
                 )
             }
         }
 
         Card(modifier = Modifier.fillMaxWidth()) {
-            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
                 Text(
                     text = "UI",
                     style = MaterialTheme.typography.titleMedium
                 )
 
-                Text(
-                    text = "Night mode",
-                    style = MaterialTheme.typography.bodyLarge
-                )
-
-                NightModeSetting.entries.forEach { mode ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .selectable(
-                                selected = settings.nightMode == mode,
-                                onClick = { onNightModeChanged(mode) }
-                            )
-                            .padding(vertical = 4.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        RadioButton(
-                            selected = settings.nightMode == mode,
-                            onClick = { onNightModeChanged(mode) }
-                        )
-                        Text(
-                            text = when (mode) {
-                                NightModeSetting.ALWAYS -> "Always"
-                                NightModeSetting.AUTOMATIC -> "Automatic"
-                                NightModeSetting.ONLY_LOW_BATTERY -> "Only low battery"
-                                NightModeSetting.NEVER -> "Never"
-                            }
-                        )
+                DialogSettingRow(
+                    title = "Night mode",
+                    value = settings.nightMode.toReadableLabel(),
+                    onClick = {
+                        tempNightMode = settings.nightMode
+                        showNightModeDialog = true
                     }
-                }
+                )
 
                 HorizontalDivider()
 
@@ -217,6 +213,139 @@ fun SettingsScreen(
                 )
             }
         }
+    }
+
+    if (showNightModeDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                showNightModeDialog = false
+            },
+            title = {
+                Text("Night mode")
+            },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    NightModeSetting.entries.forEach { mode ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .selectable(
+                                    selected = tempNightMode == mode,
+                                    onClick = { tempNightMode = mode }
+                                )
+                                .padding(vertical = 4.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(
+                                selected = tempNightMode == mode,
+                                onClick = { tempNightMode = mode }
+                            )
+                            Text(text = mode.toReadableLabel())
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        onNightModeChanged(tempNightMode)
+                        showNightModeDialog = false
+                    }
+                ) {
+                    Text("OK")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        tempNightMode = settings.nightMode
+                        showNightModeDialog = false
+                    }
+                ) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
+
+    if (showPrefixDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                showPrefixDialog = false
+            },
+            title = {
+                Text("Default Prefix")
+            },
+            text = {
+                OutlinedTextField(
+                    value = tempPrefix,
+                    onValueChange = { tempPrefix = it },
+                    label = { Text("Default Prefix") },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        onDefaultPrefixChanged(tempPrefix)
+                        showPrefixDialog = false
+                    }
+                ) {
+                    Text("OK")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        tempPrefix = settings.defaultPrefix
+                        showPrefixDialog = false
+                    }
+                ) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
+
+    if (showSuffixDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                showSuffixDialog = false
+            },
+            title = {
+                Text("Default Suffix")
+            },
+            text = {
+                OutlinedTextField(
+                    value = tempSuffix,
+                    onValueChange = { tempSuffix = it },
+                    label = { Text("Default Suffix") },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        onDefaultSuffixChanged(tempSuffix)
+                        showSuffixDialog = false
+                    }
+                ) {
+                    Text("OK")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        tempSuffix = settings.defaultSuffix
+                        showSuffixDialog = false
+                    }
+                ) {
+                    Text("Cancel")
+                }
+            }
+        )
     }
 }
 
@@ -248,5 +377,45 @@ private fun SettingSwitchRow(
             checked = checked,
             onCheckedChange = onCheckedChange
         )
+    }
+}
+
+@Composable
+private fun DialogSettingRow(
+    title: String,
+    value: String,
+    onClick: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp)
+    ) {
+        Button(
+            onClick = onClick,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+                Text(
+                    text = value,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+        }
+    }
+}
+
+private fun NightModeSetting.toReadableLabel(): String {
+    return when (this) {
+        NightModeSetting.ALWAYS -> "Always"
+        NightModeSetting.AUTOMATIC -> "Automatic"
+        NightModeSetting.ONLY_LOW_BATTERY -> "Only low battery"
+        NightModeSetting.NEVER -> "Never"
     }
 }
