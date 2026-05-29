@@ -14,6 +14,7 @@ import com.heronikostudios.metajammer.domain.model.MetadataReplacementPlan
 import com.heronikostudios.metajammer.domain.model.NightModeSetting
 import com.heronikostudios.metajammer.domain.model.ProcessingMode
 import com.heronikostudios.metajammer.domain.model.SelectedFile
+import com.heronikostudios.metajammer.domain.model.SharedInputOutputAction
 import com.heronikostudios.metajammer.domain.usecase.ProcessFileUseCase
 import com.heronikostudios.metajammer.domain.usecase.SaveFileUseCase
 import com.heronikostudios.metajammer.metadata.MetadataReplacementGenerator
@@ -57,6 +58,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _appSettings = MutableStateFlow(AppSettings())
     val appSettings: StateFlow<AppSettings> = _appSettings.asStateFlow()
+
+    private val _settingsInitialized = MutableStateFlow(false)
+    val settingsInitialized: StateFlow<Boolean> = _settingsInitialized.asStateFlow()
 
     init {
         observeSettings()
@@ -108,6 +112,31 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 _appSettings.value = _appSettings.value.copy(oledMode = it)
             }
         }
+        viewModelScope.launch {
+            var firstEmission = true
+            settingsRepository.autoHandleSharedFilesFlow.collect {
+                _appSettings.value = _appSettings.value.copy(autoHandleSharedFiles = it)
+                if (firstEmission) {
+                    _settingsInitialized.value = true
+                    firstEmission = false
+                }
+            }
+        }
+        viewModelScope.launch {
+            settingsRepository.sharedFilesProcessingModeFlow.collect {
+                _appSettings.value = _appSettings.value.copy(sharedFilesProcessingMode = it)
+            }
+        }
+        viewModelScope.launch {
+            settingsRepository.sharedFilesOutputActionFlow.collect {
+                _appSettings.value = _appSettings.value.copy(sharedFilesOutputAction = it)
+            }
+        }
+        viewModelScope.launch {
+            settingsRepository.sharedFilesCustomPathFlow.collect {
+                _appSettings.value = _appSettings.value.copy(sharedFilesCustomPath = it)
+            }
+        }
     }
 
     fun setIncomingUris(uris: List<Uri>) {
@@ -146,7 +175,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun regeneratePoisonPlans() {
         if (_selectedMode.value != ProcessingMode.POISON_METADATA) return
-        _replacementPlans.value = _selectedFiles.value.associate { it.uri to MetadataReplacementGenerator.generatePlan() }
+        _replacementPlans.value = _selectedFiles.value.associate {
+            it.uri to MetadataReplacementGenerator.generatePlan()
+        }
         generateChangePreview()
     }
 
@@ -258,6 +289,69 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun autoHandleSharedInput(
+        onShareFileReady: (File, String?) -> Unit
+    ) {
+        val files = _selectedFiles.value
+        if (files.isEmpty()) {
+            _message.value = "No shared files received"
+            return
+        }
+
+        val mode = _appSettings.value.sharedFilesProcessingMode
+        val keepOrientation = _appSettings.value.keepImageOrientation
+
+        if (mode == ProcessingMode.POISON_METADATA) {
+            _replacementPlans.value = files.associate {
+                it.uri to MetadataReplacementGenerator.generatePlan()
+            }
+        } else {
+            _replacementPlans.value = emptyMap()
+        }
+
+        viewModelScope.launch {
+            _processing.value = true
+            runCatching {
+                val results = files.map { selectedFile ->
+                    val plan = _replacementPlans.value[selectedFile.uri]
+                    selectedFile to processFileUseCase(
+                        selectedFile = selectedFile,
+                        processingMode = mode,
+                        keepOrientation = keepOrientation,
+                        replacementPlan = plan
+                    )
+                }
+                _processedFiles.value = results
+
+                when (_appSettings.value.sharedFilesOutputAction) {
+                    SharedInputOutputAction.SAVE_TO_DEFAULT_FOLDER -> {
+                        saveProcessedFilesToDefault()
+                    }
+
+                    SharedInputOutputAction.SAVE_TO_SHARED_FOLDER -> {
+                        val path = _appSettings.value.sharedFilesCustomPath
+                        if (path.isNullOrBlank()) {
+                            throw IllegalStateException("No shared-files folder configured")
+                        }
+                        saveProcessedFilesToCustom(Uri.parse(path))
+                    }
+
+                    SharedInputOutputAction.SHARE_TO_ANOTHER_APP -> {
+                        val first = getFirstProcessedFileForSharing()
+                            ?: throw IllegalStateException("No processed file available for sharing")
+                        onShareFileReady(first.second, first.first.mimeType)
+                    }
+                }
+            }.onSuccess {
+                _message.value = "Shared files handled automatically"
+            }.onFailure {
+                _message.value = "Automatic handling failed: ${it.message}"
+            }
+
+            _processing.value = false
+        }
+    }
+
     fun saveProcessedFilesToDefault(): List<Uri> {
         val uris = _processedFiles.value.mapNotNull { (selectedFile, processedFile) ->
             saveFileUseCase.saveToDefaultFolder(
@@ -311,6 +405,30 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun persistAndSetSharedFilesCustomPath(uri: Uri?) {
+        if (uri == null) {
+            viewModelScope.launch {
+                settingsRepository.setSharedFilesCustomPath(null)
+                _message.value = "Shared-files folder cleared"
+            }
+            return
+        }
+
+        if (uri.toString().startsWith("content://")) {
+            runCatching {
+                appContext.contentResolver.takePersistableUriPermission(
+                    uri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                )
+            }
+        }
+
+        viewModelScope.launch {
+            settingsRepository.setSharedFilesCustomPath(uri)
+            _message.value = "Shared-files folder updated"
+        }
+    }
+
     fun setUseRandomFileNames(enabled: Boolean) = launchSettingUpdate {
         settingsRepository.setUseRandomFileNames(enabled)
     }
@@ -342,6 +460,18 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setOledMode(enabled: Boolean) = launchSettingUpdate {
         settingsRepository.setOledMode(enabled)
+    }
+
+    fun setAutoHandleSharedFiles(enabled: Boolean) = launchSettingUpdate {
+        settingsRepository.setAutoHandleSharedFiles(enabled)
+    }
+
+    fun setSharedFilesProcessingMode(mode: ProcessingMode) = launchSettingUpdate {
+        settingsRepository.setSharedFilesProcessingMode(mode)
+    }
+
+    fun setSharedFilesOutputAction(action: SharedInputOutputAction) = launchSettingUpdate {
+        settingsRepository.setSharedFilesOutputAction(action)
     }
 
     private fun launchSettingUpdate(block: suspend () -> Unit) {

@@ -33,6 +33,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.heronikostudios.metajammer.domain.model.AppSettings
 import com.heronikostudios.metajammer.domain.model.NightModeSetting
+import com.heronikostudios.metajammer.domain.model.ProcessingMode
+import com.heronikostudios.metajammer.domain.model.SharedInputOutputAction
 
 @Composable
 fun SettingsScreen(
@@ -46,6 +48,10 @@ fun SettingsScreen(
     onDefaultSuffixChanged: (String) -> Unit,
     onNightModeChanged: (NightModeSetting) -> Unit,
     onOledModeChanged: (Boolean) -> Unit,
+    onAutoHandleSharedFilesChanged: (Boolean) -> Unit,
+    onSharedFilesProcessingModeChanged: (ProcessingMode) -> Unit,
+    onSharedFilesOutputActionChanged: (SharedInputOutputAction) -> Unit,
+    onSharedFilesCustomPathSelected: (Uri?) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val folderPicker = rememberLauncherForActivityResult(
@@ -54,24 +60,42 @@ fun SettingsScreen(
         onDefaultSavingPathSelected(uri)
     }
 
+    val sharedFolderPicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocumentTree()
+    ) { uri ->
+        onSharedFilesCustomPathSelected(uri)
+    }
+
     var showNightModeDialog by remember { mutableStateOf(false) }
     var showPrefixDialog by remember { mutableStateOf(false) }
     var showSuffixDialog by remember { mutableStateOf(false) }
+    var showSharedProcessingModeDialog by remember { mutableStateOf(false) }
+    var showSharedOutputActionDialog by remember { mutableStateOf(false) }
 
     var tempNightMode by remember(settings.nightMode) { mutableStateOf(settings.nightMode) }
     var tempPrefix by remember(settings.defaultPrefix) { mutableStateOf(settings.defaultPrefix) }
     var tempSuffix by remember(settings.defaultSuffix) { mutableStateOf(settings.defaultSuffix) }
+    var tempSharedProcessingMode by remember(settings.sharedFilesProcessingMode) {
+        mutableStateOf(settings.sharedFilesProcessingMode)
+    }
+    var tempSharedOutputAction by remember(settings.sharedFilesOutputAction) {
+        mutableStateOf(settings.sharedFilesOutputAction)
+    }
 
     LaunchedEffect(settings.nightMode) {
         tempNightMode = settings.nightMode
     }
-
     LaunchedEffect(settings.defaultPrefix) {
         tempPrefix = settings.defaultPrefix
     }
-
     LaunchedEffect(settings.defaultSuffix) {
         tempSuffix = settings.defaultSuffix
+    }
+    LaunchedEffect(settings.sharedFilesProcessingMode) {
+        tempSharedProcessingMode = settings.sharedFilesProcessingMode
+    }
+    LaunchedEffect(settings.sharedFilesOutputAction) {
+        tempSharedOutputAction = settings.sharedFilesOutputAction
     }
 
     Column(
@@ -185,6 +209,71 @@ fun SettingsScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Text(
+                    text = "Default behavior for shared files",
+                    style = MaterialTheme.typography.titleMedium
+                )
+
+                SettingSwitchRow(
+                    title = "Enable automatic handling",
+                    subtitle = "When files are shared from another app, process them immediately using the defaults below",
+                    checked = settings.autoHandleSharedFiles,
+                    onCheckedChange = onAutoHandleSharedFilesChanged
+                )
+
+                DialogSettingRow(
+                    title = "Metadata action",
+                    value = settings.sharedFilesProcessingMode.toReadableLabel(),
+                    onClick = {
+                        tempSharedProcessingMode = settings.sharedFilesProcessingMode
+                        showSharedProcessingModeDialog = true
+                    }
+                )
+
+                DialogSettingRow(
+                    title = "Output action",
+                    value = settings.sharedFilesOutputAction.toReadableLabel(),
+                    onClick = {
+                        tempSharedOutputAction = settings.sharedFilesOutputAction
+                        showSharedOutputActionDialog = true
+                    }
+                )
+
+                if (settings.sharedFilesOutputAction == SharedInputOutputAction.SAVE_TO_SHARED_FOLDER) {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(
+                            text = "Dedicated shared-files folder",
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+
+                        Text(
+                            text = settings.sharedFilesCustomPath ?: "No dedicated folder selected",
+                            style = MaterialTheme.typography.bodySmall
+                        )
+
+                        Button(
+                            onClick = { sharedFolderPicker.launch(null) },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text("Select Dedicated Folder")
+                        }
+
+                        Button(
+                            onClick = { onSharedFilesCustomPathSelected(null) },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text("Clear Dedicated Folder")
+                        }
+                    }
+                }
+            }
+        }
+
+        Card(modifier = Modifier.fillMaxWidth()) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Text(
                     text = "UI",
                     style = MaterialTheme.typography.titleMedium
                 )
@@ -212,12 +301,8 @@ fun SettingsScreen(
 
     if (showNightModeDialog) {
         AlertDialog(
-            onDismissRequest = {
-                showNightModeDialog = false
-            },
-            title = {
-                Text("Night mode")
-            },
+            onDismissRequest = { showNightModeDialog = false },
+            title = { Text("Night mode") },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     NightModeSetting.entries.forEach { mode ->
@@ -265,12 +350,8 @@ fun SettingsScreen(
 
     if (showPrefixDialog) {
         AlertDialog(
-            onDismissRequest = {
-                showPrefixDialog = false
-            },
-            title = {
-                Text("Default Prefix")
-            },
+            onDismissRequest = { showPrefixDialog = false },
+            title = { Text("Default Prefix") },
             text = {
                 OutlinedTextField(
                     value = tempPrefix,
@@ -305,12 +386,8 @@ fun SettingsScreen(
 
     if (showSuffixDialog) {
         AlertDialog(
-            onDismissRequest = {
-                showSuffixDialog = false
-            },
-            title = {
-                Text("Default Suffix")
-            },
+            onDismissRequest = { showSuffixDialog = false },
+            title = { Text("Default Suffix") },
             text = {
                 OutlinedTextField(
                     value = tempSuffix,
@@ -335,6 +412,104 @@ fun SettingsScreen(
                     onClick = {
                         tempSuffix = settings.defaultSuffix
                         showSuffixDialog = false
+                    }
+                ) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
+
+    if (showSharedProcessingModeDialog) {
+        AlertDialog(
+            onDismissRequest = { showSharedProcessingModeDialog = false },
+            title = { Text("Metadata action for shared files") },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    ProcessingMode.entries.forEach { mode ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .selectable(
+                                    selected = tempSharedProcessingMode == mode,
+                                    onClick = { tempSharedProcessingMode = mode }
+                                )
+                                .padding(vertical = 4.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(
+                                selected = tempSharedProcessingMode == mode,
+                                onClick = { tempSharedProcessingMode = mode }
+                            )
+                            Text(text = mode.toReadableLabel())
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        onSharedFilesProcessingModeChanged(tempSharedProcessingMode)
+                        showSharedProcessingModeDialog = false
+                    }
+                ) {
+                    Text("OK")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        tempSharedProcessingMode = settings.sharedFilesProcessingMode
+                        showSharedProcessingModeDialog = false
+                    }
+                ) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
+
+    if (showSharedOutputActionDialog) {
+        AlertDialog(
+            onDismissRequest = { showSharedOutputActionDialog = false },
+            title = { Text("Output action for shared files") },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    SharedInputOutputAction.entries.forEach { action ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .selectable(
+                                    selected = tempSharedOutputAction == action,
+                                    onClick = { tempSharedOutputAction = action }
+                                )
+                                .padding(vertical = 4.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(
+                                selected = tempSharedOutputAction == action,
+                                onClick = { tempSharedOutputAction = action }
+                            )
+                            Text(text = action.toReadableLabel())
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        onSharedFilesOutputActionChanged(tempSharedOutputAction)
+                        showSharedOutputActionDialog = false
+                    }
+                ) {
+                    Text("OK")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        tempSharedOutputAction = settings.sharedFilesOutputAction
+                        showSharedOutputActionDialog = false
                     }
                 ) {
                     Text("Cancel")
@@ -412,5 +587,20 @@ private fun NightModeSetting.toReadableLabel(): String {
         NightModeSetting.AUTOMATIC -> "Automatic"
         NightModeSetting.ONLY_LOW_BATTERY -> "Only low battery"
         NightModeSetting.NEVER -> "Never"
+    }
+}
+
+private fun ProcessingMode.toReadableLabel(): String {
+    return when (this) {
+        ProcessingMode.POISON_METADATA -> "Poison metadata"
+        ProcessingMode.REMOVE_METADATA -> "Remove metadata"
+    }
+}
+
+private fun SharedInputOutputAction.toReadableLabel(): String {
+    return when (this) {
+        SharedInputOutputAction.SAVE_TO_DEFAULT_FOLDER -> "Save to default folder"
+        SharedInputOutputAction.SAVE_TO_SHARED_FOLDER -> "Save to dedicated shared-files folder"
+        SharedInputOutputAction.SHARE_TO_ANOTHER_APP -> "Share to another app"
     }
 }

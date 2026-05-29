@@ -9,5 +9,10 @@ data class AppSettings(
     val defaultPrefix: String = "",
     val defaultSuffix: String = "",
     val nightMode: NightModeSetting = NightModeSetting.AUTOMATIC,
-    val oledMode: Boolean = false
+    val oledMode: Boolean = false,
+
+    val autoHandleSharedFiles: Boolean = false,
+    val sharedFilesProcessingMode: ProcessingMode = ProcessingMode.REMOVE_METADATA,
+    val sharedFilesOutputAction: SharedInputOutputAction = SharedInputOutputAction.SAVE_TO_DEFAULT_FOLDER,
+    val sharedFilesCustomPath: String? = null
 )

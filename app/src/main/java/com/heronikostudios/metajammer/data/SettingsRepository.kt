@@ -7,6 +7,8 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.heronikostudios.metajammer.domain.model.NightModeSetting
+import com.heronikostudios.metajammer.domain.model.ProcessingMode
+import com.heronikostudios.metajammer.domain.model.SharedInputOutputAction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -24,6 +26,11 @@ class SettingsRepository(private val context: Context) {
         private val DEFAULT_SUFFIX = stringPreferencesKey("default_suffix")
         private val NIGHT_MODE = stringPreferencesKey("night_mode")
         private val OLED_MODE = booleanPreferencesKey("oled_mode")
+
+        private val AUTO_HANDLE_SHARED_FILES = booleanPreferencesKey("auto_handle_shared_files")
+        private val SHARED_FILES_PROCESSING_MODE = stringPreferencesKey("shared_files_processing_mode")
+        private val SHARED_FILES_OUTPUT_ACTION = stringPreferencesKey("shared_files_output_action")
+        private val SHARED_FILES_CUSTOM_PATH = stringPreferencesKey("shared_files_custom_path")
     }
 
     val useRandomFileNamesFlow: Flow<Boolean> =
@@ -97,5 +104,47 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setOledMode(enabled: Boolean) {
         context.dataStore.edit { it[OLED_MODE] = enabled }
+    }
+
+    val autoHandleSharedFilesFlow: Flow<Boolean> =
+        context.dataStore.data.map { it[AUTO_HANDLE_SHARED_FILES] ?: false }
+
+    suspend fun setAutoHandleSharedFiles(enabled: Boolean) {
+        context.dataStore.edit { it[AUTO_HANDLE_SHARED_FILES] = enabled }
+    }
+
+    val sharedFilesProcessingModeFlow: Flow<ProcessingMode> =
+        context.dataStore.data.map { preferences ->
+            preferences[SHARED_FILES_PROCESSING_MODE]
+                ?.let { runCatching { ProcessingMode.valueOf(it) }.getOrNull() }
+                ?: ProcessingMode.REMOVE_METADATA
+        }
+
+    suspend fun setSharedFilesProcessingMode(mode: ProcessingMode) {
+        context.dataStore.edit { it[SHARED_FILES_PROCESSING_MODE] = mode.name }
+    }
+
+    val sharedFilesOutputActionFlow: Flow<SharedInputOutputAction> =
+        context.dataStore.data.map { preferences ->
+            preferences[SHARED_FILES_OUTPUT_ACTION]
+                ?.let { runCatching { SharedInputOutputAction.valueOf(it) }.getOrNull() }
+                ?: SharedInputOutputAction.SAVE_TO_DEFAULT_FOLDER
+        }
+
+    suspend fun setSharedFilesOutputAction(action: SharedInputOutputAction) {
+        context.dataStore.edit { it[SHARED_FILES_OUTPUT_ACTION] = action.name }
+    }
+
+    val sharedFilesCustomPathFlow: Flow<String?> =
+        context.dataStore.data.map { it[SHARED_FILES_CUSTOM_PATH] }
+
+    suspend fun setSharedFilesCustomPath(uri: Uri?) {
+        context.dataStore.edit { preferences ->
+            if (uri == null) {
+                preferences.remove(SHARED_FILES_CUSTOM_PATH)
+            } else {
+                preferences[SHARED_FILES_CUSTOM_PATH] = uri.toString()
+            }
+        }
     }
 }
