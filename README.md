@@ -36,6 +36,7 @@ To verify the authenticity and integrity of MetaJammer APKs, you can use [AppVer
 
 <p align="center">
   <img src="images/screenshots/home_screen.jpg" alt="Chat Screen" width="320"/>
+  <img src="images/screenshots/settings_screen.jpg" alt="Settings Screen" width="320"/>
 </p>
 
 ## License

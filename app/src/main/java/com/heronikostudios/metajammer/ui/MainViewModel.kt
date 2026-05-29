@@ -14,6 +14,7 @@ import com.heronikostudios.metajammer.domain.model.MetadataReplacementPlan
 import com.heronikostudios.metajammer.domain.model.NightModeSetting
 import com.heronikostudios.metajammer.domain.model.ProcessingMode
 import com.heronikostudios.metajammer.domain.model.SelectedFile
+import com.heronikostudios.metajammer.domain.model.SharedInputOutputAction
 import com.heronikostudios.metajammer.domain.usecase.ProcessFileUseCase
 import com.heronikostudios.metajammer.domain.usecase.SaveFileUseCase
 import com.heronikostudios.metajammer.metadata.MetadataReplacementGenerator
@@ -26,7 +27,6 @@ import java.io.File
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val appContext = getApplication<Application>().applicationContext
-
     private val fileRepository = FileRepository(appContext)
     private val metadataRepository = MetadataRepository(appContext, fileRepository)
     private val settingsRepository = SettingsRepository(appContext)
@@ -59,111 +59,151 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _appSettings = MutableStateFlow(AppSettings())
     val appSettings: StateFlow<AppSettings> = _appSettings.asStateFlow()
 
+    private val _settingsInitialized = MutableStateFlow(false)
+    val settingsInitialized: StateFlow<Boolean> = _settingsInitialized.asStateFlow()
+
     init {
+        observeSettings()
+    }
+
+    private fun observeSettings() {
         viewModelScope.launch {
-            settingsRepository.useRandomFileNamesFlow.collect { value ->
-                _appSettings.value = _appSettings.value.copy(useRandomFileNames = value)
+            settingsRepository.useRandomFileNamesFlow.collect {
+                _appSettings.value = _appSettings.value.copy(useRandomFileNames = it)
             }
         }
-
         viewModelScope.launch {
-            settingsRepository.defaultSavingPathFlow.collect { value ->
-                _appSettings.value = _appSettings.value.copy(defaultSavingPath = value)
+            settingsRepository.defaultSavingPathFlow.collect {
+                _appSettings.value = _appSettings.value.copy(defaultSavingPath = it)
             }
         }
-
         viewModelScope.launch {
-            settingsRepository.automaticDeletionFlow.collect { value ->
-                _appSettings.value = _appSettings.value.copy(automaticDeletion = value)
+            settingsRepository.keepImageOrientationFlow.collect {
+                _appSettings.value = _appSettings.value.copy(keepImageOrientation = it)
             }
         }
-
         viewModelScope.launch {
-            settingsRepository.keepImageOrientationFlow.collect { value ->
-                _appSettings.value = _appSettings.value.copy(keepImageOrientation = value)
+            settingsRepository.shareResultAsDefaultFlow.collect {
+                _appSettings.value = _appSettings.value.copy(shareResultAsDefault = it)
             }
         }
-
         viewModelScope.launch {
-            settingsRepository.shareResultAsDefaultFlow.collect { value ->
-                _appSettings.value = _appSettings.value.copy(shareResultAsDefault = value)
+            settingsRepository.defaultPrefixFlow.collect {
+                _appSettings.value = _appSettings.value.copy(defaultPrefix = it)
             }
         }
-
         viewModelScope.launch {
-            settingsRepository.defaultPrefixFlow.collect { value ->
-                _appSettings.value = _appSettings.value.copy(defaultPrefix = value)
+            settingsRepository.defaultSuffixFlow.collect {
+                _appSettings.value = _appSettings.value.copy(defaultSuffix = it)
             }
         }
-
         viewModelScope.launch {
-            settingsRepository.defaultSuffixFlow.collect { value ->
-                _appSettings.value = _appSettings.value.copy(defaultSuffix = value)
+            settingsRepository.nightModeFlow.collect {
+                _appSettings.value = _appSettings.value.copy(nightMode = it)
             }
         }
-
         viewModelScope.launch {
-            settingsRepository.nightModeFlow.collect { value ->
-                _appSettings.value = _appSettings.value.copy(nightMode = value)
+            settingsRepository.oledModeFlow.collect {
+                _appSettings.value = _appSettings.value.copy(oledMode = it)
             }
         }
-
         viewModelScope.launch {
-            settingsRepository.oledModeFlow.collect { value ->
-                _appSettings.value = _appSettings.value.copy(oledMode = value)
+            var firstEmission = true
+            settingsRepository.autoHandleSharedFilesFlow.collect {
+                _appSettings.value = _appSettings.value.copy(autoHandleSharedFiles = it)
+                if (firstEmission) {
+                    _settingsInitialized.value = true
+                    firstEmission = false
+                }
+            }
+        }
+        viewModelScope.launch {
+            settingsRepository.sharedFilesProcessingModeFlow.collect {
+                _appSettings.value = _appSettings.value.copy(sharedFilesProcessingMode = it)
+            }
+        }
+        viewModelScope.launch {
+            settingsRepository.sharedFilesOutputActionFlow.collect {
+                _appSettings.value = _appSettings.value.copy(sharedFilesOutputAction = it)
+            }
+        }
+        viewModelScope.launch {
+            settingsRepository.sharedFilesCustomPathFlow.collect {
+                _appSettings.value = _appSettings.value.copy(sharedFilesCustomPath = it)
             }
         }
     }
 
     fun setIncomingUris(uris: List<Uri>) {
-        val files = uris.map { fileRepository.getSelectedFile(it) }
+        val files = uris.distinct().map(fileRepository::getSelectedFile)
+        clearProcessedFiles()
         _selectedFiles.value = files
-        loadMetadataPreview(files)
+        _metadataPreview.value = emptyMap()
         _changePreview.value = emptyMap()
         _replacementPlans.value = emptyMap()
         _selectedMode.value = null
-        _processedFiles.value = emptyList()
+        loadMetadataPreview(files)
+    }
+
+    fun clearSelection() {
+        _selectedFiles.value = emptyList()
+        _metadataPreview.value = emptyMap()
+        _changePreview.value = emptyMap()
+        _replacementPlans.value = emptyMap()
+        _selectedMode.value = null
+        clearProcessedFiles()
     }
 
     private fun loadMetadataPreview(files: List<SelectedFile>) {
         viewModelScope.launch {
-            try {
-                val previewMap = files.associate { file ->
+            runCatching {
+                files.associate { file ->
                     file.uri to metadataRepository.readMetadata(file)
                 }
-                _metadataPreview.value = previewMap
-            } catch (e: Exception) {
-                _message.value = "Failed to read metadata: ${e.message}"
+            }.onSuccess {
+                _metadataPreview.value = it
+            }.onFailure {
+                _message.value = "Failed to read metadata: ${it.message}"
             }
         }
     }
 
     fun setProcessingMode(mode: ProcessingMode) {
         _selectedMode.value = mode
-        if (mode == ProcessingMode.POISON_METADATA) {
-            val plans = _selectedFiles.value.associate { file ->
-                file.uri to MetadataReplacementGenerator.generatePlan()
-            }
-            _replacementPlans.value = plans
+        _replacementPlans.value = if (mode == ProcessingMode.POISON_METADATA) {
+            _selectedFiles.value.associate { it.uri to MetadataReplacementGenerator.generatePlan() }
         } else {
-            _replacementPlans.value = emptyMap()
+            emptyMap()
         }
-        generateChangePreview(mode)
+        generateChangePreview()
     }
 
-    private fun generateChangePreview(mode: ProcessingMode) {
-        val previewMap = _selectedFiles.value.associate { file ->
+    fun regeneratePoisonPlans() {
+        if (_selectedMode.value != ProcessingMode.POISON_METADATA) return
+        _replacementPlans.value = _selectedFiles.value.associate {
+            it.uri to MetadataReplacementGenerator.generatePlan()
+        }
+        generateChangePreview()
+    }
+
+    private fun generateChangePreview() {
+        val mode = _selectedMode.value ?: run {
+            _changePreview.value = emptyMap()
+            return
+        }
+
+        val keepOrientation = _appSettings.value.keepImageOrientation
+
+        _changePreview.value = _selectedFiles.value.associate { file ->
             val currentMetadata = _metadataPreview.value[file.uri].orEmpty()
             val currentMap = currentMetadata.associate { it.key to it.value }
 
-            val changed = when (mode) {
+            val entries = when (mode) {
                 ProcessingMode.REMOVE_METADATA -> {
                     if (currentMetadata.isEmpty()) {
                         listOf(MetadataEntry("Info", "No metadata would be removed"))
                     } else {
-                        currentMetadata.map {
-                            MetadataEntry(it.key, "${it.value}  →  [REMOVED]")
-                        }
+                        currentMetadata.map { MetadataEntry(it.key, "${it.value}  →  [REMOVED]") }
                     }
                 }
 
@@ -193,46 +233,154 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                             "GPSLongitudeRef" to plan.longitudeRef
                         )
 
-                        if (_appSettings.value.keepImageOrientation) {
-                            currentMap["Orientation"]?.let { orientation ->
-                                targetMap["Orientation"] = orientation
-                            }
+                        if (keepOrientation) {
+                            currentMap["Orientation"]?.let { targetMap["Orientation"] = it }
                         }
 
-                        val orderedKeys = linkedSetOf<String>().apply {
+                        linkedSetOf<String>().apply {
                             addAll(currentMap.keys)
                             addAll(targetMap.keys)
-                        }
-
-                        orderedKeys.map { key ->
+                        }.map { key ->
                             val oldValue = currentMap[key]
                             val newValue = targetMap[key]
-
-                            val previewValue = when {
+                            val value = when {
                                 oldValue == null && newValue != null -> "[ADDED] $newValue"
                                 oldValue != null && newValue == null -> "[UNCHANGED] $oldValue"
-                                oldValue != null && newValue != null && oldValue == newValue -> "[UNCHANGED] $oldValue"
-                                oldValue != null && newValue != null -> "[CHANGED] $oldValue  →  $newValue"
-                                else -> "[NO DATA]"
+                                oldValue == newValue -> "[UNCHANGED] ${oldValue ?: ""}"
+                                else -> "[CHANGED] $oldValue  →  $newValue"
                             }
-
-                            MetadataEntry(key, previewValue)
+                            MetadataEntry(key, value)
                         }
                     }
                 }
             }
 
-            file.uri to changed
+            file.uri to entries
         }
-
-        _changePreview.value = previewMap
     }
 
-    fun setUseRandomFileNames(enabled: Boolean) {
+    fun processFiles() {
+        val files = _selectedFiles.value
+        val mode = _selectedMode.value
+
+        if (files.isEmpty()) {
+            _message.value = "No files selected"
+            return
+        }
+        if (mode == null) {
+            _message.value = "Please choose a processing mode"
+            return
+        }
+
         viewModelScope.launch {
-            settingsRepository.setUseRandomFileNames(enabled)
+            _processing.value = true
+            runCatching {
+                files.map { selectedFile ->
+                    val plan = _replacementPlans.value[selectedFile.uri]
+                    selectedFile to processFileUseCase(
+                        selectedFile = selectedFile,
+                        processingMode = mode,
+                        keepOrientation = _appSettings.value.keepImageOrientation,
+                        replacementPlan = plan
+                    )
+                }
+            }.onSuccess {
+                _processedFiles.value = it
+                _message.value = "Processing complete"
+            }.onFailure {
+                _message.value = "Processing failed: ${it.message}"
+            }
+            _processing.value = false
         }
     }
+
+    fun autoHandleSharedInput(
+        onShareFileReady: (File, String?) -> Unit
+    ) {
+        val files = _selectedFiles.value
+        if (files.isEmpty()) {
+            _message.value = "No shared files received"
+            return
+        }
+
+        val mode = _appSettings.value.sharedFilesProcessingMode
+        val keepOrientation = _appSettings.value.keepImageOrientation
+
+        if (mode == ProcessingMode.POISON_METADATA) {
+            _replacementPlans.value = files.associate {
+                it.uri to MetadataReplacementGenerator.generatePlan()
+            }
+        } else {
+            _replacementPlans.value = emptyMap()
+        }
+
+        viewModelScope.launch {
+            _processing.value = true
+            runCatching {
+                val results = files.map { selectedFile ->
+                    val plan = _replacementPlans.value[selectedFile.uri]
+                    selectedFile to processFileUseCase(
+                        selectedFile = selectedFile,
+                        processingMode = mode,
+                        keepOrientation = keepOrientation,
+                        replacementPlan = plan
+                    )
+                }
+                _processedFiles.value = results
+
+                when (_appSettings.value.sharedFilesOutputAction) {
+                    SharedInputOutputAction.SAVE_TO_DEFAULT_FOLDER -> {
+                        saveProcessedFilesToDefault()
+                    }
+
+                    SharedInputOutputAction.SAVE_TO_SHARED_FOLDER -> {
+                        val path = _appSettings.value.sharedFilesCustomPath
+                        if (path.isNullOrBlank()) {
+                            throw IllegalStateException("No shared-files folder configured")
+                        }
+                        saveProcessedFilesToCustom(Uri.parse(path))
+                    }
+
+                    SharedInputOutputAction.SHARE_TO_ANOTHER_APP -> {
+                        val first = getFirstProcessedFileForSharing()
+                            ?: throw IllegalStateException("No processed file available for sharing")
+                        onShareFileReady(first.second, first.first.mimeType)
+                    }
+                }
+            }.onSuccess {
+                _message.value = "Shared files handled automatically"
+            }.onFailure {
+                _message.value = "Automatic handling failed: ${it.message}"
+            }
+
+            _processing.value = false
+        }
+    }
+
+    fun saveProcessedFilesToDefault(): List<Uri> {
+        return _processedFiles.value.mapNotNull { (selectedFile, processedFile) ->
+            saveFileUseCase.saveToDefaultFolder(
+                sourceFile = processedFile,
+                displayName = buildOutputName(selectedFile.displayName),
+                mimeType = selectedFile.mimeType,
+                configuredPath = _appSettings.value.defaultSavingPath
+            )
+        }
+    }
+
+    fun saveProcessedFilesToCustom(treeUri: Uri): List<Uri> {
+        return _processedFiles.value.mapNotNull { (selectedFile, processedFile) ->
+            saveFileUseCase.saveToCustomFolder(
+                treeUri = treeUri,
+                sourceFile = processedFile,
+                displayName = buildOutputName(selectedFile.displayName),
+                mimeType = selectedFile.mimeType
+            )
+        }
+    }
+
+    fun getFirstProcessedFileForSharing(): Pair<SelectedFile, File>? =
+        _processedFiles.value.firstOrNull()
 
     fun persistAndSetDefaultSavingPath(uri: Uri?) {
         if (uri == null) {
@@ -244,12 +392,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
 
         if (uri.toString().startsWith("content://")) {
-            try {
+            runCatching {
                 appContext.contentResolver.takePersistableUriPermission(
                     uri,
                     Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                 )
-            } catch (_: Exception) {
             }
         }
 
@@ -259,47 +406,73 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun setAutomaticDeletion(enabled: Boolean) {
+    fun persistAndSetSharedFilesCustomPath(uri: Uri?) {
+        if (uri == null) {
+            viewModelScope.launch {
+                settingsRepository.setSharedFilesCustomPath(null)
+                _message.value = "Shared-files folder cleared"
+            }
+            return
+        }
+
+        if (uri.toString().startsWith("content://")) {
+            runCatching {
+                appContext.contentResolver.takePersistableUriPermission(
+                    uri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                )
+            }
+        }
+
         viewModelScope.launch {
-            settingsRepository.setAutomaticDeletion(enabled)
+            settingsRepository.setSharedFilesCustomPath(uri)
+            _message.value = "Shared-files folder updated"
         }
     }
 
-    fun setKeepImageOrientation(enabled: Boolean) {
-        viewModelScope.launch {
-            settingsRepository.setKeepImageOrientation(enabled)
-            _selectedMode.value?.let { generateChangePreview(it) }
-        }
+    fun setUseRandomFileNames(enabled: Boolean) = launchSettingUpdate {
+        settingsRepository.setUseRandomFileNames(enabled)
     }
 
-    fun setShareResultAsDefault(enabled: Boolean) {
-        viewModelScope.launch {
-            settingsRepository.setShareResultAsDefault(enabled)
-        }
+    fun setKeepImageOrientation(enabled: Boolean) = launchSettingUpdate {
+        settingsRepository.setKeepImageOrientation(enabled)
+        if (_selectedMode.value != null) generateChangePreview()
     }
 
-    fun setDefaultPrefix(value: String) {
-        viewModelScope.launch {
-            settingsRepository.setDefaultPrefix(value)
-        }
+    fun setShareResultAsDefault(enabled: Boolean) = launchSettingUpdate {
+        settingsRepository.setShareResultAsDefault(enabled)
     }
 
-    fun setDefaultSuffix(value: String) {
-        viewModelScope.launch {
-            settingsRepository.setDefaultSuffix(value)
-        }
+    fun setDefaultPrefix(value: String) = launchSettingUpdate {
+        settingsRepository.setDefaultPrefix(value)
     }
 
-    fun setNightMode(mode: NightModeSetting) {
-        viewModelScope.launch {
-            settingsRepository.setNightMode(mode)
-        }
+    fun setDefaultSuffix(value: String) = launchSettingUpdate {
+        settingsRepository.setDefaultSuffix(value)
     }
 
-    fun setOledMode(enabled: Boolean) {
-        viewModelScope.launch {
-            settingsRepository.setOledMode(enabled)
-        }
+    fun setNightMode(mode: NightModeSetting) = launchSettingUpdate {
+        settingsRepository.setNightMode(mode)
+    }
+
+    fun setOledMode(enabled: Boolean) = launchSettingUpdate {
+        settingsRepository.setOledMode(enabled)
+    }
+
+    fun setAutoHandleSharedFiles(enabled: Boolean) = launchSettingUpdate {
+        settingsRepository.setAutoHandleSharedFiles(enabled)
+    }
+
+    fun setSharedFilesProcessingMode(mode: ProcessingMode) = launchSettingUpdate {
+        settingsRepository.setSharedFilesProcessingMode(mode)
+    }
+
+    fun setSharedFilesOutputAction(action: SharedInputOutputAction) = launchSettingUpdate {
+        settingsRepository.setSharedFilesOutputAction(action)
+    }
+
+    private fun launchSettingUpdate(block: suspend () -> Unit) {
+        viewModelScope.launch { block() }
     }
 
     fun clearMessage() {
@@ -307,102 +480,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun clearProcessedFiles() {
-        _processedFiles.value.forEach { (_, file) ->
-            runCatching { file.delete() }
-        }
+        _processedFiles.value.forEach { (_, file) -> runCatching { file.delete() } }
         _processedFiles.value = emptyList()
-    }
-
-    fun processFiles() {
-        val files = _selectedFiles.value
-        val mode = _selectedMode.value
-        val keepOrientation = _appSettings.value.keepImageOrientation
-
-        if (files.isEmpty()) {
-            _message.value = "No files selected"
-            return
-        }
-
-        if (mode == null) {
-            _message.value = "Please choose a processing mode"
-            return
-        }
-
-        viewModelScope.launch {
-            _processing.value = true
-            try {
-                val results = files.map { selectedFile ->
-                    val replacementPlan = _replacementPlans.value[selectedFile.uri]
-                    selectedFile to processFileUseCase(
-                        selectedFile = selectedFile,
-                        processingMode = mode,
-                        keepOrientation = keepOrientation,
-                        replacementPlan = replacementPlan
-                    )
-                }
-                _processedFiles.value = results
-                _message.value = "Processing complete"
-            } catch (e: Exception) {
-                _message.value = "Processing failed: ${e.message}"
-            } finally {
-                _processing.value = false
-            }
-        }
-    }
-
-    fun saveProcessedFilesToDefault(): List<Uri> {
-        val results = mutableListOf<Uri>()
-        val configuredPath = _appSettings.value.defaultSavingPath
-
-        _processedFiles.value.forEach { (selectedFile, processedFile) ->
-            val fileName = buildOutputName(selectedFile.displayName)
-            val savedUri = saveFileUseCase.saveToDefaultFolder(
-                sourceFile = processedFile,
-                displayName = fileName,
-                mimeType = selectedFile.mimeType,
-                configuredPath = configuredPath
-            )
-            if (savedUri != null) results.add(savedUri)
-        }
-
-        cleanupProcessedFilesIfNeeded()
-        return results
-    }
-
-    fun saveProcessedFilesToCustom(treeUri: Uri): List<Uri> {
-        val results = mutableListOf<Uri>()
-
-        _processedFiles.value.forEach { (selectedFile, processedFile) ->
-            val fileName = buildOutputName(selectedFile.displayName)
-            val savedUri = saveFileUseCase.saveToCustomFolder(
-                treeUri = treeUri,
-                sourceFile = processedFile,
-                displayName = fileName,
-                mimeType = selectedFile.mimeType
-            )
-            if (savedUri != null) results.add(savedUri)
-        }
-
-        cleanupProcessedFilesIfNeeded()
-        return results
-    }
-
-    fun getFirstProcessedFileForSharing(): Pair<SelectedFile, File>? {
-        return _processedFiles.value.firstOrNull()
-    }
-
-    private fun cleanupProcessedFilesIfNeeded() {
-        if (_appSettings.value.automaticDeletion) {
-            _processedFiles.value.forEach { (_, file) ->
-                runCatching { file.delete() }
-            }
-            _processedFiles.value = emptyList()
-        }
     }
 
     private fun buildOutputName(originalName: String): String {
         val settings = _appSettings.value
-
         val dotIndex = originalName.lastIndexOf('.')
         val base = if (dotIndex > 0) originalName.substring(0, dotIndex) else originalName
         val ext = if (dotIndex > 0) originalName.substring(dotIndex) else ""
