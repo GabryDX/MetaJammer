@@ -1,6 +1,5 @@
 package com.heronikostudios.metajammer.data
 
-import android.content.Context
 import androidx.exifinterface.media.ExifInterface
 import com.heronikostudios.metajammer.domain.model.MetadataEntry
 import com.heronikostudios.metajammer.domain.model.MetadataReplacementPlan
@@ -11,11 +10,10 @@ import com.heronikostudios.metajammer.metadata.VideoMetadataProcessor
 import java.io.File
 
 class MetadataRepository(
-    context: Context,
     private val fileRepository: FileRepository
 ) {
-    private val imageProcessor = ImageMetadataProcessor(context, fileRepository)
-    private val videoProcessor = VideoMetadataProcessor(context, fileRepository)
+    private val imageProcessor = ImageMetadataProcessor(fileRepository)
+    private val videoProcessor = VideoMetadataProcessor(fileRepository)
 
     fun processFile(
         selectedFile: SelectedFile,

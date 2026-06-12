@@ -28,7 +28,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val appContext = getApplication<Application>().applicationContext
     private val fileRepository = FileRepository(appContext)
-    private val metadataRepository = MetadataRepository(appContext, fileRepository)
+    private val metadataRepository = MetadataRepository(fileRepository)
     private val settingsRepository = SettingsRepository(appContext)
     private val processFileUseCase = ProcessFileUseCase(metadataRepository)
     private val saveFileUseCase = SaveFileUseCase(fileRepository)

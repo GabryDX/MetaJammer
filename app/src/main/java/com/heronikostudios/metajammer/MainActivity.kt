@@ -95,9 +95,9 @@ class MainActivity : ComponentActivity() {
             else -> emptyList()
         }
 
-        // Basic validation: ensure they are content or file URIs
+        // Basic validation: ensure they are content URIs
         return uris.filter { uri ->
-            uri.scheme == "content" || uri.scheme == "file"
+            uri.scheme == "content"
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.heronikostudios.metajammer.metadata
 
-import android.content.Context
 import android.net.Uri
 import androidx.exifinterface.media.ExifInterface
 import com.heronikostudios.metajammer.data.FileRepository
@@ -8,13 +7,12 @@ import com.heronikostudios.metajammer.domain.model.MetadataReplacementPlan
 import java.io.File
 
 class ImageMetadataProcessor(
-    private val context: Context,
     private val fileRepository: FileRepository
 ) {
 
     fun removeMetadata(inputUri: Uri, keepOrientation: Boolean = true): File {
         val inputFile = fileRepository.copyUriToCache(inputUri, prefix = "img_in_", suffix = ".jpg")
-        val outputFile = File(context.cacheDir, "img_clean_${System.currentTimeMillis()}.jpg")
+        val outputFile = fileRepository.createSharedTempFile("img_clean_", ".jpg")
         inputFile.copyTo(outputFile, overwrite = true)
 
         val originalExif = ExifInterface(inputFile.absolutePath)
@@ -81,7 +79,7 @@ class ImageMetadataProcessor(
         keepOrientation: Boolean = true
     ): File {
         val inputFile = fileRepository.copyUriToCache(inputUri, prefix = "img_in_", suffix = ".jpg")
-        val outputFile = File(context.cacheDir, "img_poisoned_${System.currentTimeMillis()}.jpg")
+        val outputFile = fileRepository.createSharedTempFile("img_poisoned_", ".jpg")
         inputFile.copyTo(outputFile, overwrite = true)
 
         val originalExif = ExifInterface(inputFile.absolutePath)

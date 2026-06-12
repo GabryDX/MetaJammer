@@ -29,7 +29,7 @@ class FileRepository(private val context: Context) {
                 val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
 
                 if (nameIndex != -1) {
-                    name = cursor.getString(nameIndex)
+                    name = sanitizeFileName(cursor.getString(nameIndex))
                 }
                 if (sizeIndex != -1 && !cursor.isNull(sizeIndex)) {
                     size = cursor.getLong(sizeIndex)
@@ -46,7 +46,7 @@ class FileRepository(private val context: Context) {
     }
 
     fun copyUriToCache(uri: Uri, prefix: String = "input_", suffix: String? = null): File {
-        val tempFile = File.createTempFile(prefix, suffix, context.cacheDir)
+        val tempFile = createSharedTempFile(prefix, suffix)
         context.contentResolver.openInputStream(uri)?.use { input ->
             tempFile.outputStream().use { output ->
                 input.copyTo(output)
@@ -133,5 +133,37 @@ class FileRepository(private val context: Context) {
         } ?: return null
 
         return outFile.uri
+    }
+
+    /**
+     * Creates a temporary file in a specific 'shared' subdirectory of the cache.
+     * This subdirectory is the only one exposed via FileProvider.
+     */
+    fun createSharedTempFile(prefix: String, suffix: String?): File {
+        val sharedDir = File(context.cacheDir, "shared")
+        if (!sharedDir.exists()) {
+            sharedDir.mkdirs()
+        }
+        return File.createTempFile(prefix, suffix, sharedDir)
+    }
+
+    /**
+     * Sanitizes a filename to prevent path traversal and remove illegal characters.
+     */
+    private fun sanitizeFileName(fileName: String?): String {
+        if (fileName.isNullOrBlank()) return "unknown_${System.currentTimeMillis()}"
+        
+        // 1. Strip path components by getting only the 'name' part
+        val nameOnly = File(fileName).name
+        
+        // 2. Replace common illegal characters with underscores
+        val sanitized = nameOnly.replace(Regex("[^a-zA-Z0-9._-]"), "_")
+        
+        // 3. Ensure it's not empty and doesn't start with a dot (hidden file)
+        return if (sanitized.isBlank() || sanitized.startsWith(".")) {
+            "file_${System.currentTimeMillis()}_$sanitized"
+        } else {
+            sanitized
+        }
     }
 }

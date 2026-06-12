@@ -1,12 +1,10 @@
 package com.heronikostudios.metajammer.metadata
 
-import android.content.Context
 import android.net.Uri
 import com.heronikostudios.metajammer.data.FileRepository
 import java.io.File
 
 class VideoMetadataProcessor(
-    private val context: Context,
     private val fileRepository: FileRepository
 ) {
 
@@ -25,7 +23,7 @@ class VideoMetadataProcessor(
 
     private fun copyVideo(inputUri: Uri, prefix: String): File {
         val inputFile = fileRepository.copyUriToCache(inputUri, prefix = "video_in_", suffix = ".mp4")
-        val outputFile = File(context.cacheDir, "${prefix}${System.currentTimeMillis()}.mp4")
+        val outputFile = fileRepository.createSharedTempFile(prefix, ".mp4")
         inputFile.copyTo(outputFile, overwrite = true)
         return outputFile
     }
