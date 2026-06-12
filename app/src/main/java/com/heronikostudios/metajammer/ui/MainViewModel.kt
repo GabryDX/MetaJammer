@@ -63,6 +63,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val settingsInitialized: StateFlow<Boolean> = _settingsInitialized.asStateFlow()
 
     init {
+        fileRepository.clearCache()
         observeSettings()
     }
 
@@ -136,7 +137,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setIncomingUris(uris: List<Uri>) {
         val files = uris.distinct().map(fileRepository::getSelectedFile)
-        clearProcessedFiles()
+        clearTempFiles()
         _selectedFiles.value = files
         _metadataPreview.value = emptyMap()
         _changePreview.value = emptyMap()
@@ -151,7 +152,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _changePreview.value = emptyMap()
         _replacementPlans.value = emptyMap()
         _selectedMode.value = null
-        clearProcessedFiles()
+        clearTempFiles()
     }
 
     private fun loadMetadataPreview(files: List<SelectedFile>) {
@@ -491,9 +492,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _message.value = null
     }
 
-    fun clearProcessedFiles() {
+    fun clearTempFiles() {
         _processedFiles.value.forEach { (_, file) -> runCatching { file.delete() } }
         _processedFiles.value = emptyList()
+        fileRepository.clearCache()
     }
 
     private fun buildOutputName(originalName: String): String {

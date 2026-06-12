@@ -148,6 +148,16 @@ class FileRepository(private val context: Context) {
     }
 
     /**
+     * Clears all temporary files in the 'shared' cache directory.
+     */
+    fun clearCache() {
+        val sharedDir = File(context.cacheDir, "shared")
+        if (sharedDir.exists()) {
+            sharedDir.listFiles()?.forEach { it.delete() }
+        }
+    }
+
+    /**
      * Sanitizes a filename to prevent path traversal and remove illegal characters.
      */
     private fun sanitizeFileName(fileName: String?): String {
