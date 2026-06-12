@@ -4,23 +4,34 @@
 
 # MetaJammer
 
-**MetaJammer** is an Android app (Kotlin) that lets you scramble, fake, or remove metadata from images, videos, and files. Share or select files, process their metadata, then save or share them instantly. Protect your privacy and control your digital footprint with ease.
+**MetaJammer** is a privacy-focused Android application designed to scramble, fake, or completely strip metadata from your media files. It provides users with total control over their digital footprint before sharing photos or videos online.
 
-## Features
+## Key Features
 
-- **Poison Metadata:** Randomize or invent metadata fields (e.g., location, date, device info).
-- **Remove Metadata:** Strip all metadata from files.
-- **Flexible Workflow:** Save processed files to a default or custom folder, share directly, or both.
-- **Automation:** Set your preferred action as default for one-tap processing.
-- **Share Integration:** Send files to MetaJammer via Android’s share menu or select from within the app.
-- **Privacy First:** Handles file permissions and user data securely.
+- **🛡️ Deep Metadata Stripping:** More than just EXIF. MetaJammer targets XMP, GPS coordinates, hardware serial numbers, and embedded thumbnails to ensure no "leaks" remain.
+- **🧪 Metadata Poisoning:** Don't just remove data—confuse it. Generate realistic but fake metadata (camera models, dates, locations) to blend in.
+- **🗺️ Interactive Map Picker:** Visually choose a "fake" location on an OpenStreetMap interface for your poisoned metadata.
+- **⚡ Quick Scrub & Share:** A "truly invisible" workflow. Share a file to MetaJammer, let it auto-process, and immediately re-open the share sheet with the clean version.
+- **📦 Background Batch Processing:** Reliable processing for 50+ high-resolution files at once using Android WorkManager, complete with system notifications.
+- **📂 Flexible Output:** Save to custom folders via SAF, use standard MediaStore collections, or share directly to other apps.
+- **🖼️ Multi-Format Support:** Full compatibility with modern formats including JPEG, WebP, and HEIF/HEIC.
+
+## Privacy & Security
+
+MetaJammer is built on the **Principle of Least Privilege**:
+
+- **Zero Broad Permissions:** The app requires NO `READ_EXTERNAL_STORAGE` or `WRITE_EXTERNAL_STORAGE` permissions. It uses modern Scoped Storage and SAF.
+- **Opt-in Internet:** Internet access is strictly restricted to the optional Map Picker and is only active after explicit user consent.
+- **Hardened I/O:** Every filename is sanitized to prevent path-traversal attacks.
+- **No Cloud Leaks:** Android Auto-Backup is disabled to ensure unstripped metadata never leaves your device during processing.
+- **Automatic Cleanup:** All temporary processing residue is programmatically wiped from the cache after every session.
 
 ## Getting Started
 
 1. **Clone this repo:**  
    `git clone https://github.com/GabryDX/MetaJammer.git`
-2. **Open in Android Studio.**
-3. **Build & run on your Android device.**
+2. **Open in Android Studio (Ladybug or newer recommended).**
+3. **Build & run on your Android device (minSdk 33).**
 
 ## APK Verification
 
@@ -35,7 +46,7 @@ To verify the authenticity and integrity of MetaJammer APKs, you can use [AppVer
 ## Screenshots
 
 <p align="center">
-  <img src="images/screenshots/home_screen.jpg" alt="Chat Screen" width="320"/>
+  <img src="images/screenshots/home_screen.jpg" alt="Home Screen" width="320"/>
   <img src="images/screenshots/settings_screen.jpg" alt="Settings Screen" width="320"/>
 </p>
 
@@ -45,4 +56,4 @@ ISC License
 
 ---
 
-**Contributions are welcome!** Please open issues or pull requests for suggestions and improvements.
+**Contributions are welcome!** Feel free to open issues or pull requests to help make mobile privacy more accessible.
