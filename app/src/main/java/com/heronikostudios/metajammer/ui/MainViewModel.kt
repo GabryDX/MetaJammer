@@ -486,6 +486,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun buildOutputName(originalName: String): String {
         val settings = _appSettings.value
+        
+        // Sanitize base name to remove path traversal or illegal characters
+        fun sanitize(name: String): String = name.replace(Regex("[^a-zA-Z0-9._-]"), "_")
+
         val dotIndex = originalName.lastIndexOf('.')
         val base = if (dotIndex > 0) originalName.substring(0, dotIndex) else originalName
         val ext = if (dotIndex > 0) originalName.substring(dotIndex) else ""
@@ -493,9 +497,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         val finalBase = if (settings.useRandomFileNames) {
             "mj_${System.currentTimeMillis()}"
         } else {
-            "${settings.defaultPrefix}$base${settings.defaultSuffix}"
+            val prefix = sanitize(settings.defaultPrefix)
+            val suffix = sanitize(settings.defaultSuffix)
+            val sanitizedBase = sanitize(base)
+            "$prefix$sanitizedBase$suffix"
         }
 
-        return "${finalBase}_processed$ext"
+        val extension = sanitize(ext)
+        return "${finalBase}_processed$extension"
     }
 }
