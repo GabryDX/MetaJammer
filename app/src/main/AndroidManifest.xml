@@ -6,6 +6,7 @@
          only uses it to load Map Tiles for the optional Map Picker feature.
          Users are asked to opt-in before any network connection is made. -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <!-- MetaJammer follows the Principle of Least Privilege:
          - No broad storage permissions required (uses SAF and MediaStore).

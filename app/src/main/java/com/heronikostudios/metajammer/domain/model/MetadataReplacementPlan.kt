@@ -1,5 +1,8 @@
 package com.heronikostudios.metajammer.domain.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class MetadataReplacementPlan(
     val dateTime: String,
     val make: String,

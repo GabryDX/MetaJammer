@@ -5,6 +5,10 @@ import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import com.heronikostudios.metajammer.data.FileRepository
 import com.heronikostudios.metajammer.data.MetadataRepository
 import com.heronikostudios.metajammer.data.SettingsRepository
@@ -20,10 +24,13 @@ import com.heronikostudios.metajammer.domain.usecase.ProcessFileUseCase
 import com.heronikostudios.metajammer.domain.usecase.SaveFileUseCase
 import com.heronikostudios.metajammer.metadata.MetadataReplacementGenerator
 import com.heronikostudios.metajammer.util.SanitizationUtils
+import com.heronikostudios.metajammer.worker.MetadataProcessingWorker
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import java.io.File
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
@@ -32,6 +39,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val fileRepository = FileRepository(appContext)
     private val metadataRepository = MetadataRepository(fileRepository)
     private val settingsRepository = SettingsRepository(appContext)
+    private val workManager = WorkManager.getInstance(appContext)
     private val processFileUseCase = ProcessFileUseCase(metadataRepository)
     private val saveFileUseCase = SaveFileUseCase(fileRepository)
 
@@ -64,6 +72,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _settingsInitialized = MutableStateFlow(false)
     val settingsInitialized: StateFlow<Boolean> = _settingsInitialized.asStateFlow()
+
+    private val _workInfo = MutableStateFlow<WorkInfo?>(null)
+    val workInfo: StateFlow<WorkInfo?> = _workInfo.asStateFlow()
 
     init {
         fileRepository.clearCache()
@@ -195,10 +206,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun updatePlanLocation(uri: Uri, latitude: Double, longitude: Double) {
         val currentPlans = _replacementPlans.value.toMutableMap()
         val plan = currentPlans[uri] ?: MetadataReplacementGenerator.generatePlan()
-        
+
         val latitudeRef = if (latitude >= 0) "N" else "S"
         val longitudeRef = if (longitude >= 0) "E" else "W"
-        
+
         currentPlans[uri] = plan.copy(
             latitude = latitude,
             longitude = longitude,
@@ -303,6 +314,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             return
         }
 
+        if (files.size > 5) {
+            enqueueBackgroundProcessing(files, mode)
+            return
+        }
+
         viewModelScope.launch {
             _processing.value = true
             runCatching {
@@ -326,6 +342,42 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    private fun enqueueBackgroundProcessing(files: List<SelectedFile>, mode: ProcessingMode) {
+        val plans = _replacementPlans.value.mapKeys { it.key.toString() }
+        val plansFile = File(appContext.cacheDir, "processing_plans_${System.currentTimeMillis()}.json")
+        plansFile.writeText(Json.encodeToString(plans))
+
+        val inputData = Data.Builder()
+            .putStringArray(MetadataProcessingWorker.KEY_INPUT_URIS, files.map { it.uri.toString() }.toTypedArray())
+            .putString(MetadataProcessingWorker.KEY_MODE, mode.name)
+            .putBoolean(MetadataProcessingWorker.KEY_KEEP_ORIENTATION, _appSettings.value.keepImageOrientation)
+            .putString(MetadataProcessingWorker.KEY_THUMBNAIL_HANDLING, _appSettings.value.thumbnailHandling.name)
+            .putString(MetadataProcessingWorker.KEY_PLANS_FILE_PATH, plansFile.absolutePath)
+            .putString(MetadataProcessingWorker.KEY_SAVING_PATH, _appSettings.value.defaultSavingPath)
+            .putString(MetadataProcessingWorker.KEY_DEFAULT_PREFIX, _appSettings.value.defaultPrefix)
+            .putString(MetadataProcessingWorker.KEY_DEFAULT_SUFFIX, _appSettings.value.defaultSuffix)
+            .putBoolean(MetadataProcessingWorker.KEY_USE_RANDOM_NAMES, _appSettings.value.useRandomFileNames)
+            .build()
+
+        val workRequest = OneTimeWorkRequestBuilder<MetadataProcessingWorker>()
+            .setInputData(inputData)
+            .build()
+
+        workManager.enqueue(workRequest)
+
+        viewModelScope.launch {
+            workManager.getWorkInfoByIdFlow(workRequest.id).collect { info ->
+                _workInfo.value = info
+                if (info != null && info.state == WorkInfo.State.SUCCEEDED) {
+                    val savedUris = info.outputData.getStringArray("saved_uris")
+                    _message.value = "Background processing complete. ${savedUris?.size ?: 0} files saved."
+                } else if (info != null && info.state == WorkInfo.State.FAILED) {
+                    _message.value = "Background processing failed."
+                }
+            }
+        }
+    }
+
     fun autoHandleSharedInput(
         onShareFileReady: (File, String?) -> Unit
     ) {
@@ -344,6 +396,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         } else {
             _replacementPlans.value = emptyMap()
+        }
+
+        if (files.size > 5) {
+            enqueueBackgroundProcessing(files, mode)
+            return
         }
 
         viewModelScope.launch {

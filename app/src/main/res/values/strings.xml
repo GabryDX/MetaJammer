@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">MetaJammer</string>
+    <string name="notification_channel_name">File Processing</string>
+    <string name="notification_processing_title">Processing Files</string>
+    <string name="notification_processing_message">Stripping metadata from %1$d files...</string>
+    <string name="notification_complete_title">Processing Complete</string>
+    <string name="notification_complete_message">Successfully processed %1$d files.</string>
 </resources>

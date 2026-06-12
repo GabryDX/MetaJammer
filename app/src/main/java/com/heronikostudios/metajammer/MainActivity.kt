@@ -1,12 +1,17 @@
 package com.heronikostudios.metajammer
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.work.WorkInfo
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -145,6 +150,20 @@ fun MetaJammerApp(
     val appSettings by viewModel.appSettings.collectAsStateWithLifecycle()
     val settingsInitialized by viewModel.settingsInitialized.collectAsStateWithLifecycle()
     val replacementPlans by viewModel.replacementPlans.collectAsStateWithLifecycle()
+
+    val notificationPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { _ ->
+        // Handle result if needed
+    }
+
+    var showNotificationPermissionExplanation by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        if (context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            showNotificationPermissionExplanation = true
+        }
+    }
 
     var currentStep by rememberSaveable { mutableStateOf(AppStep.HOME) }
     var previousNonSettingsStep by rememberSaveable { mutableStateOf(AppStep.HOME) }
@@ -292,6 +311,7 @@ fun MetaJammerApp(
                         selectedMode = selectedMode,
                         changePreview = changePreview,
                         processing = processing,
+                        workInfo = viewModel.workInfo.collectAsStateWithLifecycle().value,
                         onModeSelected = viewModel::setProcessingMode,
                         onProcess = viewModel::processFiles,
                         onNext = {
@@ -305,7 +325,7 @@ fun MetaJammerApp(
                                 showInternetPermissionExplanation = true
                             }
                         },
-                        hasProcessedFiles = processedFiles.isNotEmpty(),
+                        hasProcessedFiles = processedFiles.isNotEmpty() || viewModel.workInfo.collectAsStateWithLifecycle().value?.state == WorkInfo.State.SUCCEEDED,
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -421,6 +441,38 @@ fun MetaJammerApp(
                     androidx.compose.material3.TextButton(
                         onClick = {
                             showInternetPermissionExplanation = false
+                        }
+                    ) {
+                        Text("Not Now")
+                    }
+                }
+            )
+        }
+
+        if (showNotificationPermissionExplanation) {
+            androidx.compose.material3.AlertDialog(
+                onDismissRequest = { showNotificationPermissionExplanation = false },
+                title = { Text("Stay Informed") },
+                text = {
+                    Text(
+                        "MetaJammer can show notifications to keep you updated on the progress of large file batches while they process in the background. \n\n" +
+                                "This is especially useful if you want to switch to another app while MetaJammer finishes its work."
+                    )
+                },
+                confirmButton = {
+                    androidx.compose.material3.TextButton(
+                        onClick = {
+                            showNotificationPermissionExplanation = false
+                            notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                        }
+                    ) {
+                        Text("Continue")
+                    }
+                },
+                dismissButton = {
+                    androidx.compose.material3.TextButton(
+                        onClick = {
+                            showNotificationPermissionExplanation = false
                         }
                     ) {
                         Text("Not Now")
