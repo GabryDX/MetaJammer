@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -34,6 +35,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.heronikostudios.metajammer.domain.usecase.ShareFileUseCase
 import com.heronikostudios.metajammer.ui.MainViewModel
+import com.heronikostudios.metajammer.ui.components.MessageBanner
 import com.heronikostudios.metajammer.ui.screens.HomeScreen
 import com.heronikostudios.metajammer.ui.screens.MetadataPreviewScreen
 import com.heronikostudios.metajammer.ui.screens.OutputOptionsScreen
@@ -145,6 +147,7 @@ fun MetaJammerApp(
     var handledSharedSignature by rememberSaveable { mutableStateOf<String?>(null) }
 
     fun navigateTo(step: AppStep) {
+        viewModel.clearMessage()
         if (step != AppStep.SETTINGS) {
             previousNonSettingsStep = step
         }
@@ -195,13 +198,6 @@ fun MetaJammerApp(
         }
     }
 
-    LaunchedEffect(message) {
-        message?.let {
-            snackbarHostState.showSnackbar(it)
-            viewModel.clearMessage()
-        }
-    }
-
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
@@ -245,113 +241,124 @@ fun MetaJammerApp(
             SnackbarHost(snackbarHostState)
         }
     ) { innerPadding ->
-        when (currentStep) {
-            AppStep.HOME -> {
-                HomeScreen(
-                    selectedFiles = selectedFiles,
-                    onFilesPicked = {
-                        viewModel.setIncomingUris(it)
-                        navigateTo(AppStep.PREVIEW)
-                    },
-                    onContinue = {
-                        if (selectedFiles.isNotEmpty()) navigateTo(AppStep.PREVIEW)
-                    },
-                    onClearSelection = {
-                        viewModel.clearSelection()
-                    },
-                    modifier = Modifier.padding(innerPadding)
+        Column(
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            message?.let {
+                MessageBanner(
+                    message = it,
+                    onDismiss = { viewModel.clearMessage() }
                 )
             }
 
-            AppStep.PREVIEW -> {
-                MetadataPreviewScreen(
-                    selectedFiles = selectedFiles,
-                    metadataPreview = metadataPreview,
-                    onContinue = { navigateTo(AppStep.PROCESS) },
-                    onBack = { navigateTo(AppStep.HOME) },
-                    modifier = Modifier.padding(innerPadding)
-                )
-            }
+            when (currentStep) {
+                AppStep.HOME -> {
+                    HomeScreen(
+                        selectedFiles = selectedFiles,
+                        onFilesPicked = {
+                            viewModel.setIncomingUris(it)
+                            navigateTo(AppStep.PREVIEW)
+                        },
+                        onContinue = {
+                            if (selectedFiles.isNotEmpty()) navigateTo(AppStep.PREVIEW)
+                        },
+                        onClearSelection = {
+                            viewModel.clearSelection()
+                        },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
 
-            AppStep.PROCESS -> {
-                ProcessingScreen(
-                    selectedFiles = selectedFiles,
-                    selectedMode = selectedMode,
-                    changePreview = changePreview,
-                    processing = processing,
-                    onModeSelected = viewModel::setProcessingMode,
-                    onProcess = viewModel::processFiles,
-                    onNext = {
-                        if (processedFiles.isNotEmpty()) navigateTo(AppStep.OUTPUT)
-                    },
-                    hasProcessedFiles = processedFiles.isNotEmpty(),
-                    modifier = Modifier.padding(innerPadding)
-                )
-            }
+                AppStep.PREVIEW -> {
+                    MetadataPreviewScreen(
+                        selectedFiles = selectedFiles,
+                        metadataPreview = metadataPreview,
+                        onContinue = { navigateTo(AppStep.PROCESS) },
+                        onBack = { navigateTo(AppStep.HOME) },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
 
-            AppStep.OUTPUT -> {
-                OutputOptionsScreen(
-                    shareResultAsDefault = appSettings.shareResultAsDefault,
-                    onSaveDefault = {
-                        val firstProcessed = processedFiles.firstOrNull()
-                        val savedUris = viewModel.saveProcessedFilesToDefault()
+                AppStep.PROCESS -> {
+                    ProcessingScreen(
+                        selectedFiles = selectedFiles,
+                        selectedMode = selectedMode,
+                        changePreview = changePreview,
+                        processing = processing,
+                        onModeSelected = viewModel::setProcessingMode,
+                        onProcess = viewModel::processFiles,
+                        onNext = {
+                            if (processedFiles.isNotEmpty()) navigateTo(AppStep.OUTPUT)
+                        },
+                        hasProcessedFiles = processedFiles.isNotEmpty(),
+                        modifier = Modifier.weight(1f)
+                    )
+                }
 
-                        if (appSettings.shareResultAsDefault) {
-                            val firstSavedUri = savedUris.firstOrNull()
-                            if (firstSavedUri != null && firstProcessed != null) {
-                                shareFileUseCase.shareUri(
+                AppStep.OUTPUT -> {
+                    OutputOptionsScreen(
+                        shareResultAsDefault = appSettings.shareResultAsDefault,
+                        onSaveDefault = {
+                            val firstProcessed = processedFiles.firstOrNull()
+                            val savedUris = viewModel.saveProcessedFilesToDefault()
+
+                            if (appSettings.shareResultAsDefault) {
+                                val firstSavedUri = savedUris.firstOrNull()
+                                if (firstSavedUri != null && firstProcessed != null) {
+                                    shareFileUseCase.shareUri(
+                                        context = context,
+                                        uri = firstSavedUri,
+                                        mimeType = firstProcessed.first.mimeType
+                                    )
+                                }
+                            }
+                        },
+                        onSaveCustom = { treeUri ->
+                            val firstProcessed = processedFiles.firstOrNull()
+                            val savedUris = viewModel.saveProcessedFilesToCustom(treeUri)
+
+                            if (appSettings.shareResultAsDefault) {
+                                val firstSavedUri = savedUris.firstOrNull()
+                                if (firstSavedUri != null && firstProcessed != null) {
+                                    shareFileUseCase.shareUri(
+                                        context = context,
+                                        uri = firstSavedUri,
+                                        mimeType = firstProcessed.first.mimeType
+                                    )
+                                }
+                            }
+                        },
+                        onShareOnly = {
+                            viewModel.getFirstProcessedFileForSharing()?.let { (selectedFile, file) ->
+                                shareFileUseCase.shareFile(
                                     context = context,
-                                    uri = firstSavedUri,
-                                    mimeType = firstProcessed.first.mimeType
+                                    file = file,
+                                    mimeType = selectedFile.mimeType
                                 )
                             }
-                        }
-                    },
-                    onSaveCustom = { treeUri ->
-                        val firstProcessed = processedFiles.firstOrNull()
-                        val savedUris = viewModel.saveProcessedFilesToCustom(treeUri)
+                        },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
 
-                        if (appSettings.shareResultAsDefault) {
-                            val firstSavedUri = savedUris.firstOrNull()
-                            if (firstSavedUri != null && firstProcessed != null) {
-                                shareFileUseCase.shareUri(
-                                    context = context,
-                                    uri = firstSavedUri,
-                                    mimeType = firstProcessed.first.mimeType
-                                )
-                            }
-                        }
-                    },
-                    onShareOnly = {
-                        viewModel.getFirstProcessedFileForSharing()?.let { (selectedFile, file) ->
-                            shareFileUseCase.shareFile(
-                                context = context,
-                                file = file,
-                                mimeType = selectedFile.mimeType
-                            )
-                        }
-                    },
-                    modifier = Modifier.padding(innerPadding)
-                )
-            }
-
-            AppStep.SETTINGS -> {
-                SettingsScreen(
-                    settings = appSettings,
-                    onUseRandomFileNamesChanged = viewModel::setUseRandomFileNames,
-                    onDefaultSavingPathSelected = viewModel::persistAndSetDefaultSavingPath,
-                    onKeepImageOrientationChanged = viewModel::setKeepImageOrientation,
-                    onShareResultAsDefaultChanged = viewModel::setShareResultAsDefault,
-                    onDefaultPrefixChanged = viewModel::setDefaultPrefix,
-                    onDefaultSuffixChanged = viewModel::setDefaultSuffix,
-                    onNightModeChanged = viewModel::setNightMode,
-                    onOledModeChanged = viewModel::setOledMode,
-                    onAutoHandleSharedFilesChanged = viewModel::setAutoHandleSharedFiles,
-                    onSharedFilesProcessingModeChanged = viewModel::setSharedFilesProcessingMode,
-                    onSharedFilesOutputActionChanged = viewModel::setSharedFilesOutputAction,
-                    onSharedFilesCustomPathSelected = viewModel::persistAndSetSharedFilesCustomPath,
-                    modifier = Modifier.padding(innerPadding)
-                )
+                AppStep.SETTINGS -> {
+                    SettingsScreen(
+                        settings = appSettings,
+                        onUseRandomFileNamesChanged = viewModel::setUseRandomFileNames,
+                        onDefaultSavingPathSelected = viewModel::persistAndSetDefaultSavingPath,
+                        onKeepImageOrientationChanged = viewModel::setKeepImageOrientation,
+                        onShareResultAsDefaultChanged = viewModel::setShareResultAsDefault,
+                        onDefaultPrefixChanged = viewModel::setDefaultPrefix,
+                        onDefaultSuffixChanged = viewModel::setDefaultSuffix,
+                        onNightModeChanged = viewModel::setNightMode,
+                        onOledModeChanged = viewModel::setOledMode,
+                        onAutoHandleSharedFilesChanged = viewModel::setAutoHandleSharedFiles,
+                        onSharedFilesProcessingModeChanged = viewModel::setSharedFilesProcessingMode,
+                        onSharedFilesOutputActionChanged = viewModel::setSharedFilesOutputAction,
+                        onSharedFilesCustomPathSelected = viewModel::persistAndSetSharedFilesCustomPath,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
             }
         }
     }

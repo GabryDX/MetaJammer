@@ -358,7 +358,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun saveProcessedFilesToDefault(): List<Uri> {
-        return _processedFiles.value.mapNotNull { (selectedFile, processedFile) ->
+        val results = _processedFiles.value.mapNotNull { (selectedFile, processedFile) ->
             saveFileUseCase.saveToDefaultFolder(
                 sourceFile = processedFile,
                 displayName = buildOutputName(selectedFile.displayName),
@@ -366,10 +366,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 configuredPath = _appSettings.value.defaultSavingPath
             )
         }
+        if (results.isNotEmpty()) {
+            _message.value = "Saved ${results.size} file(s) to default folder"
+        } else if (_processedFiles.value.isNotEmpty()) {
+            _message.value = "Failed to save files"
+        }
+        return results
     }
 
     fun saveProcessedFilesToCustom(treeUri: Uri): List<Uri> {
-        return _processedFiles.value.mapNotNull { (selectedFile, processedFile) ->
+        val results = _processedFiles.value.mapNotNull { (selectedFile, processedFile) ->
             saveFileUseCase.saveToCustomFolder(
                 treeUri = treeUri,
                 sourceFile = processedFile,
@@ -377,6 +383,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 mimeType = selectedFile.mimeType
             )
         }
+        if (results.isNotEmpty()) {
+            _message.value = "Saved ${results.size} file(s) to custom folder"
+        } else if (_processedFiles.value.isNotEmpty()) {
+            _message.value = "Failed to save files"
+        }
+        return results
     }
 
     fun getFirstProcessedFileForSharing(): Pair<SelectedFile, File>? =
