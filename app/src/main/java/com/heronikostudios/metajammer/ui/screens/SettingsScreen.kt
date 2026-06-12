@@ -35,6 +35,7 @@ import com.heronikostudios.metajammer.domain.model.AppSettings
 import com.heronikostudios.metajammer.domain.model.NightModeSetting
 import com.heronikostudios.metajammer.domain.model.ProcessingMode
 import com.heronikostudios.metajammer.domain.model.SharedInputOutputAction
+import com.heronikostudios.metajammer.domain.model.ThumbnailHandling
 
 @Composable
 fun SettingsScreen(
@@ -51,6 +52,7 @@ fun SettingsScreen(
     onSharedFilesProcessingModeChanged: (ProcessingMode) -> Unit,
     onSharedFilesOutputActionChanged: (SharedInputOutputAction) -> Unit,
     onSharedFilesCustomPathSelected: (Uri?) -> Unit,
+    onThumbnailHandlingChanged: (ThumbnailHandling) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val folderPicker = rememberLauncherForActivityResult(
@@ -70,6 +72,7 @@ fun SettingsScreen(
     var showSuffixDialog by remember { mutableStateOf(false) }
     var showSharedProcessingModeDialog by remember { mutableStateOf(false) }
     var showSharedOutputActionDialog by remember { mutableStateOf(false) }
+    var showThumbnailHandlingDialog by remember { mutableStateOf(false) }
 
     var tempNightMode by remember(settings.nightMode) { mutableStateOf(settings.nightMode) }
     var tempPrefix by remember(settings.defaultPrefix) { mutableStateOf(settings.defaultPrefix) }
@@ -79,6 +82,9 @@ fun SettingsScreen(
     }
     var tempSharedOutputAction by remember(settings.sharedFilesOutputAction) {
         mutableStateOf(settings.sharedFilesOutputAction)
+    }
+    var tempThumbnailHandling by remember(settings.thumbnailHandling) {
+        mutableStateOf(settings.thumbnailHandling)
     }
 
     LaunchedEffect(settings.nightMode) {
@@ -95,6 +101,9 @@ fun SettingsScreen(
     }
     LaunchedEffect(settings.sharedFilesOutputAction) {
         tempSharedOutputAction = settings.sharedFilesOutputAction
+    }
+    LaunchedEffect(settings.thumbnailHandling) {
+        tempThumbnailHandling = settings.thumbnailHandling
     }
 
     Column(
@@ -190,6 +199,15 @@ fun SettingsScreen(
                     onClick = {
                         tempSuffix = settings.defaultSuffix
                         showSuffixDialog = true
+                    }
+                )
+
+                DialogSettingRow(
+                    title = "Embedded thumbnail",
+                    value = settings.thumbnailHandling.toReadableLabel(),
+                    onClick = {
+                        tempThumbnailHandling = settings.thumbnailHandling
+                        showThumbnailHandlingDialog = true
                     }
                 )
             }
@@ -509,6 +527,55 @@ fun SettingsScreen(
             }
         )
     }
+
+    if (showThumbnailHandlingDialog) {
+        AlertDialog(
+            onDismissRequest = { showThumbnailHandlingDialog = false },
+            title = { Text("Embedded thumbnail") },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    ThumbnailHandling.entries.forEach { handling ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .selectable(
+                                    selected = tempThumbnailHandling == handling,
+                                    onClick = { tempThumbnailHandling = handling }
+                                )
+                                .padding(vertical = 4.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(
+                                selected = tempThumbnailHandling == handling,
+                                onClick = { tempThumbnailHandling = handling }
+                            )
+                            Text(text = handling.toReadableLabel())
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        onThumbnailHandlingChanged(tempThumbnailHandling)
+                        showThumbnailHandlingDialog = false
+                    }
+                ) {
+                    Text("OK")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        tempThumbnailHandling = settings.thumbnailHandling
+                        showThumbnailHandlingDialog = false
+                    }
+                ) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
 }
 
 @Composable
@@ -594,5 +661,12 @@ private fun SharedInputOutputAction.toReadableLabel(): String {
         SharedInputOutputAction.SAVE_TO_DEFAULT_FOLDER -> "Save to default folder"
         SharedInputOutputAction.SAVE_TO_SHARED_FOLDER -> "Save to dedicated shared-files folder"
         SharedInputOutputAction.SHARE_TO_ANOTHER_APP -> "Share to another app"
+    }
+}
+
+private fun ThumbnailHandling.toReadableLabel(): String {
+    return when (this) {
+        ThumbnailHandling.REMOVE -> "Remove (recommended for maximum privacy)"
+        ThumbnailHandling.KEEP_SCRUBBED -> "Keep scrubbed (thumbnail remains but its metadata is cleared)"
     }
 }

@@ -9,6 +9,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.heronikostudios.metajammer.domain.model.NightModeSetting
 import com.heronikostudios.metajammer.domain.model.ProcessingMode
 import com.heronikostudios.metajammer.domain.model.SharedInputOutputAction
+import com.heronikostudios.metajammer.domain.model.ThumbnailHandling
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -29,6 +30,7 @@ class SettingsRepository(private val context: Context) {
         private val SHARED_FILES_PROCESSING_MODE = stringPreferencesKey("shared_files_processing_mode")
         private val SHARED_FILES_OUTPUT_ACTION = stringPreferencesKey("shared_files_output_action")
         private val SHARED_FILES_CUSTOM_PATH = stringPreferencesKey("shared_files_custom_path")
+        private val THUMBNAIL_HANDLING = stringPreferencesKey("thumbnail_handling")
     }
 
     val useRandomFileNamesFlow: Flow<Boolean> =
@@ -137,5 +139,16 @@ class SettingsRepository(private val context: Context) {
                 preferences[SHARED_FILES_CUSTOM_PATH] = uri.toString()
             }
         }
+    }
+
+    val thumbnailHandlingFlow: Flow<ThumbnailHandling> =
+        context.dataStore.data.map { preferences ->
+            preferences[THUMBNAIL_HANDLING]
+                ?.let { runCatching { ThumbnailHandling.valueOf(it) }.getOrNull() }
+                ?: ThumbnailHandling.REMOVE
+        }
+
+    suspend fun setThumbnailHandling(handling: ThumbnailHandling) {
+        context.dataStore.edit { it[THUMBNAIL_HANDLING] = handling.name }
     }
 }

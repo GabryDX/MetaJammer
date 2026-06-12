@@ -5,6 +5,7 @@ import com.heronikostudios.metajammer.domain.model.MetadataEntry
 import com.heronikostudios.metajammer.domain.model.MetadataReplacementPlan
 import com.heronikostudios.metajammer.domain.model.ProcessingMode
 import com.heronikostudios.metajammer.domain.model.SelectedFile
+import com.heronikostudios.metajammer.domain.model.ThumbnailHandling
 import com.heronikostudios.metajammer.metadata.ImageMetadataProcessor
 import com.heronikostudios.metajammer.metadata.VideoMetadataProcessor
 import java.io.File
@@ -19,6 +20,7 @@ class MetadataRepository(
         selectedFile: SelectedFile,
         mode: ProcessingMode,
         keepOrientation: Boolean,
+        thumbnailHandling: ThumbnailHandling = ThumbnailHandling.REMOVE,
         replacementPlan: MetadataReplacementPlan? = null
     ): File {
         return when {
@@ -31,13 +33,15 @@ class MetadataRepository(
                         imageProcessor.poisonMetadata(
                             inputUri = selectedFile.uri,
                             plan = plan,
-                            keepOrientation = keepOrientation
+                            keepOrientation = keepOrientation,
+                            thumbnailHandling = thumbnailHandling
                         )
                     }
 
                     ProcessingMode.REMOVE_METADATA -> imageProcessor.removeMetadata(
                         selectedFile.uri,
-                        keepOrientation = keepOrientation
+                        keepOrientation = keepOrientation,
+                        thumbnailHandling = thumbnailHandling
                     )
                 }
             }

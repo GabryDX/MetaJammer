@@ -13,12 +13,14 @@ class ProcessFileUseCase(
         selectedFile: SelectedFile,
         processingMode: ProcessingMode,
         keepOrientation: Boolean,
+        thumbnailHandling: com.heronikostudios.metajammer.domain.model.ThumbnailHandling = com.heronikostudios.metajammer.domain.model.ThumbnailHandling.REMOVE,
         replacementPlan: MetadataReplacementPlan? = null
     ): File {
         return metadataRepository.processFile(
             selectedFile = selectedFile,
             mode = processingMode,
             keepOrientation = keepOrientation,
+            thumbnailHandling = thumbnailHandling,
             replacementPlan = replacementPlan
         )
     }

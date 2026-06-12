@@ -356,6 +356,7 @@ fun MetaJammerApp(
                         onSharedFilesProcessingModeChanged = viewModel::setSharedFilesProcessingMode,
                         onSharedFilesOutputActionChanged = viewModel::setSharedFilesOutputAction,
                         onSharedFilesCustomPathSelected = viewModel::persistAndSetSharedFilesCustomPath,
+                        onThumbnailHandlingChanged = viewModel::setThumbnailHandling,
                         modifier = Modifier.weight(1f)
                     )
                 }

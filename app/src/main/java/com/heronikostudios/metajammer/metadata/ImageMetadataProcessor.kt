@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.exifinterface.media.ExifInterface
 import com.heronikostudios.metajammer.data.FileRepository
 import com.heronikostudios.metajammer.domain.model.MetadataReplacementPlan
+import com.heronikostudios.metajammer.domain.model.ThumbnailHandling
 import java.io.File
 
 class ImageMetadataProcessor(
@@ -14,7 +15,11 @@ class ImageMetadataProcessor(
      * Removes metadata from an image.
      * Uses an extensive list of tags to clear, targeting privacy-sensitive information.
      */
-    fun removeMetadata(inputUri: Uri, keepOrientation: Boolean = true): File {
+    fun removeMetadata(
+        inputUri: Uri,
+        keepOrientation: Boolean = true,
+        thumbnailHandling: ThumbnailHandling = ThumbnailHandling.REMOVE
+    ): File {
         val extension = fileRepository.getExtension(inputUri)
         val inputFile = fileRepository.copyUriToCache(inputUri, prefix = "img_in_", suffix = extension)
         val outputFile = fileRepository.createSharedTempFile("img_clean_", extension)
@@ -79,6 +84,7 @@ class ImageMetadataProcessor(
             ExifInterface.TAG_XMP // Clear embedded XMP data which often contains deep history
         )
 
+        // Standard clearing clears tags from both IFD0 (main) and IFD1 (thumbnail).
         tagsToClear.forEach { tag ->
             exif.setAttribute(tag, null)
         }
@@ -87,6 +93,13 @@ class ImageMetadataProcessor(
             exif.setAttribute(ExifInterface.TAG_ORIENTATION, originalOrientation)
         } else {
             exif.setAttribute(ExifInterface.TAG_ORIENTATION, null)
+        }
+
+        if (thumbnailHandling == ThumbnailHandling.REMOVE) {
+            // AndroidX ExifInterface doesn't have a simple removeThumbnail(). 
+            // We'll try to clear the offset/length tags which effectively hides it.
+            exif.setAttribute(ExifInterface.TAG_JPEG_INTERCHANGE_FORMAT, null)
+            exif.setAttribute(ExifInterface.TAG_JPEG_INTERCHANGE_FORMAT_LENGTH, null)
         }
 
         exif.saveAttributes()
@@ -99,7 +112,8 @@ class ImageMetadataProcessor(
     fun poisonMetadata(
         inputUri: Uri,
         plan: MetadataReplacementPlan,
-        keepOrientation: Boolean = true
+        keepOrientation: Boolean = true,
+        thumbnailHandling: ThumbnailHandling = ThumbnailHandling.REMOVE
     ): File {
         val extension = fileRepository.getExtension(inputUri)
         val inputFile = fileRepository.copyUriToCache(inputUri, prefix = "img_in_", suffix = extension)
@@ -141,6 +155,13 @@ class ImageMetadataProcessor(
 
         if (keepOrientation && !originalOrientation.isNullOrBlank()) {
             exif.setAttribute(ExifInterface.TAG_ORIENTATION, originalOrientation)
+        }
+
+        if (thumbnailHandling == ThumbnailHandling.REMOVE) {
+            // AndroidX ExifInterface doesn't have a simple removeThumbnail(). 
+            // We'll try to clear the offset/length tags which effectively hides it.
+            exif.setAttribute(ExifInterface.TAG_JPEG_INTERCHANGE_FORMAT, null)
+            exif.setAttribute(ExifInterface.TAG_JPEG_INTERCHANGE_FORMAT_LENGTH, null)
         }
 
         exif.setLatLong(plan.latitude, plan.longitude)

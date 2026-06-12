@@ -15,6 +15,7 @@ import com.heronikostudios.metajammer.domain.model.NightModeSetting
 import com.heronikostudios.metajammer.domain.model.ProcessingMode
 import com.heronikostudios.metajammer.domain.model.SelectedFile
 import com.heronikostudios.metajammer.domain.model.SharedInputOutputAction
+import com.heronikostudios.metajammer.domain.model.ThumbnailHandling
 import com.heronikostudios.metajammer.domain.usecase.ProcessFileUseCase
 import com.heronikostudios.metajammer.domain.usecase.SaveFileUseCase
 import com.heronikostudios.metajammer.metadata.MetadataReplacementGenerator
@@ -131,6 +132,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             settingsRepository.sharedFilesCustomPathFlow.collect {
                 _appSettings.value = _appSettings.value.copy(sharedFilesCustomPath = it)
+            }
+        }
+        viewModelScope.launch {
+            settingsRepository.thumbnailHandlingFlow.collect {
+                _appSettings.value = _appSettings.value.copy(thumbnailHandling = it)
             }
         }
     }
@@ -282,6 +288,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         selectedFile = selectedFile,
                         processingMode = mode,
                         keepOrientation = _appSettings.value.keepImageOrientation,
+                        thumbnailHandling = _appSettings.value.thumbnailHandling,
                         replacementPlan = plan
                     )
                 }
@@ -324,6 +331,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         selectedFile = selectedFile,
                         processingMode = mode,
                         keepOrientation = keepOrientation,
+                        thumbnailHandling = _appSettings.value.thumbnailHandling,
                         replacementPlan = plan
                     )
                 }
@@ -482,6 +490,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setSharedFilesOutputAction(action: SharedInputOutputAction) = launchSettingUpdate {
         settingsRepository.setSharedFilesOutputAction(action)
+    }
+
+    fun setThumbnailHandling(handling: ThumbnailHandling) = launchSettingUpdate {
+        settingsRepository.setThumbnailHandling(handling)
     }
 
     private fun launchSettingUpdate(block: suspend () -> Unit) {
