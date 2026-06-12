@@ -61,6 +61,13 @@ class MetadataRepository(
                 readImageMetadata(selectedFile)
             }
 
+            selectedFile.mimeType?.startsWith("video/") == true -> {
+                listOf(
+                    MetadataEntry("Warning", "Video metadata stripping is currently limited. File is copied as-is."),
+                    MetadataEntry("Status", "Support for MP4/MOV metadata stripping is planned.")
+                )
+            }
+
             else -> {
                 listOf(
                     MetadataEntry("Info", "Metadata preview not yet supported for ${selectedFile.mimeType ?: "unknown"}")
@@ -99,7 +106,11 @@ class MetadataRepository(
             ExifInterface.TAG_WHITE_BALANCE,
             ExifInterface.TAG_EXPOSURE_TIME,
             ExifInterface.TAG_F_NUMBER,
-            ExifInterface.TAG_PHOTOGRAPHIC_SENSITIVITY
+            ExifInterface.TAG_PHOTOGRAPHIC_SENSITIVITY,
+            ExifInterface.TAG_BODY_SERIAL_NUMBER,
+            ExifInterface.TAG_LENS_MAKE,
+            ExifInterface.TAG_LENS_MODEL,
+            ExifInterface.TAG_LENS_SERIAL_NUMBER
         )
 
         return tags.mapNotNull { tag ->

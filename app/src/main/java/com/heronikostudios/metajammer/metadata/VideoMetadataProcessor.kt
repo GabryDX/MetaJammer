@@ -4,20 +4,25 @@ import android.net.Uri
 import com.heronikostudios.metajammer.data.FileRepository
 import java.io.File
 
+/**
+ * Handles metadata processing for video files.
+ * 
+ * NOTE: Current implementation is a placeholder. Real metadata stripping for videos
+ * requires re-muxing the file (e.g., using MediaMuxer and MediaExtractor) to strip
+ * location data and other atoms from the MP4/MOV container.
+ */
 class VideoMetadataProcessor(
     private val fileRepository: FileRepository
 ) {
 
     fun removeMetadata(inputUri: Uri): File {
-        // MVP placeholder:
-        // Copy the file into cache as a passthrough.
-        // Real metadata rewriting for video containers requires more specialized tooling.
+        // TODO: Implement MediaMuxer based stripping to actually remove metadata atoms.
+        // For now, we perform a passthrough but warn the user in the UI.
         return copyVideo(inputUri, "video_clean_")
     }
 
     fun poisonMetadata(inputUri: Uri): File {
-        // MVP placeholder:
-        // Copy the file into cache as a passthrough.
+        // TODO: Implement MediaMuxer based poisoning.
         return copyVideo(inputUri, "video_poisoned_")
     }
 
