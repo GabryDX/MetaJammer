@@ -19,6 +19,7 @@ import com.heronikostudios.metajammer.domain.model.ThumbnailHandling
 import com.heronikostudios.metajammer.domain.usecase.ProcessFileUseCase
 import com.heronikostudios.metajammer.domain.usecase.SaveFileUseCase
 import com.heronikostudios.metajammer.metadata.MetadataReplacementGenerator
+import com.heronikostudios.metajammer.util.SanitizationUtils
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -513,9 +514,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private fun buildOutputName(originalName: String): String {
         val settings = _appSettings.value
         
-        // Sanitize base name to remove path traversal or illegal characters
-        fun sanitize(name: String): String = name.replace(Regex("[^a-zA-Z0-9._-]"), "_")
-
         val dotIndex = originalName.lastIndexOf('.')
         val base = if (dotIndex > 0) originalName.substring(0, dotIndex) else originalName
         val ext = if (dotIndex > 0) originalName.substring(dotIndex) else ""
@@ -523,13 +521,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         val finalBase = if (settings.useRandomFileNames) {
             "mj_${System.currentTimeMillis()}"
         } else {
-            val prefix = sanitize(settings.defaultPrefix)
-            val suffix = sanitize(settings.defaultSuffix)
-            val sanitizedBase = sanitize(base)
+            val prefix = SanitizationUtils.sanitizeSimple(settings.defaultPrefix)
+            val suffix = SanitizationUtils.sanitizeSimple(settings.defaultSuffix)
+            val sanitizedBase = SanitizationUtils.sanitizeSimple(base)
             "$prefix$sanitizedBase$suffix"
         }
 
-        val extension = sanitize(ext)
+        val extension = SanitizationUtils.sanitizeSimple(ext)
         return "${finalBase}_processed$extension"
     }
 }

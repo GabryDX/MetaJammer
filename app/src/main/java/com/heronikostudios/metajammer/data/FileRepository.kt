@@ -8,6 +8,7 @@ import android.provider.OpenableColumns
 import android.webkit.MimeTypeMap
 import androidx.documentfile.provider.DocumentFile
 import com.heronikostudios.metajammer.domain.model.SelectedFile
+import com.heronikostudios.metajammer.util.SanitizationUtils
 import java.io.File
 import java.util.Locale
 
@@ -31,7 +32,7 @@ class FileRepository(private val context: Context) {
                 val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
 
                 if (nameIndex != -1) {
-                    name = sanitizeFileName(cursor.getString(nameIndex))
+                    name = SanitizationUtils.sanitizeFileName(cursor.getString(nameIndex))
                 }
                 if (sizeIndex != -1 && !cursor.isNull(sizeIndex)) {
                     size = cursor.getLong(sizeIndex)
@@ -184,20 +185,8 @@ class FileRepository(private val context: Context) {
     /**
      * Sanitizes a filename to prevent path traversal and remove illegal characters.
      */
+    @Deprecated("Use SanitizationUtils.sanitizeFileName", replaceWith = ReplaceWith("SanitizationUtils.sanitizeFileName(fileName)"))
     private fun sanitizeFileName(fileName: String?): String {
-        if (fileName.isNullOrBlank()) return "unknown_${System.currentTimeMillis()}"
-        
-        // 1. Strip path components by getting only the 'name' part
-        val nameOnly = File(fileName).name
-        
-        // 2. Replace common illegal characters with underscores
-        val sanitized = nameOnly.replace(Regex("[^a-zA-Z0-9._-]"), "_")
-        
-        // 3. Ensure it's not empty and doesn't start with a dot (hidden file)
-        return if (sanitized.isBlank() || sanitized.startsWith(".")) {
-            "file_${System.currentTimeMillis()}_$sanitized"
-        } else {
-            sanitized
-        }
+        return SanitizationUtils.sanitizeFileName(fileName)
     }
 }
