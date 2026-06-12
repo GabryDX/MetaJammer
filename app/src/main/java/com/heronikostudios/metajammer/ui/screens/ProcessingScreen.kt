@@ -30,6 +30,7 @@ fun ProcessingScreen(
     onModeSelected: (ProcessingMode) -> Unit,
     onProcess: () -> Unit,
     onNext: () -> Unit,
+    onEditLocation: (Uri) -> Unit,
     hasProcessedFiles: Boolean,
     modifier: Modifier = Modifier
 ) {
@@ -98,6 +99,15 @@ fun ProcessingScreen(
                                         text = "${entry.key}: ${entry.value}",
                                         style = MaterialTheme.typography.bodySmall
                                     )
+                                }
+                                
+                                if (selectedMode == ProcessingMode.POISON_METADATA) {
+                                    Button(
+                                        onClick = { onEditLocation(file.uri) },
+                                        modifier = Modifier.padding(top = 8.dp)
+                                    ) {
+                                        Text("Change Location on Map")
+                                    }
                                 }
                             }
                         }

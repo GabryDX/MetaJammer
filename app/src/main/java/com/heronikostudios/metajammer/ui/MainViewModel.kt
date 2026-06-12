@@ -45,6 +45,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val changePreview: StateFlow<Map<Uri, List<MetadataEntry>>> = _changePreview.asStateFlow()
 
     private val _replacementPlans = MutableStateFlow<Map<Uri, MetadataReplacementPlan>>(emptyMap())
+    val replacementPlans: StateFlow<Map<Uri, MetadataReplacementPlan>> = _replacementPlans.asStateFlow()
 
     private val _selectedMode = MutableStateFlow<ProcessingMode?>(null)
     val selectedMode: StateFlow<ProcessingMode?> = _selectedMode.asStateFlow()
@@ -140,6 +141,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 _appSettings.value = _appSettings.value.copy(thumbnailHandling = it)
             }
         }
+        viewModelScope.launch {
+            settingsRepository.allowInternetForMapFlow.collect {
+                _appSettings.value = _appSettings.value.copy(allowInternetForMap = it)
+            }
+        }
     }
 
     fun setIncomingUris(uris: List<Uri>) {
@@ -178,11 +184,28 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setProcessingMode(mode: ProcessingMode) {
         _selectedMode.value = mode
-        _replacementPlans.value = if (mode == ProcessingMode.POISON_METADATA) {
-            _selectedFiles.value.associate { it.uri to MetadataReplacementGenerator.generatePlan() }
-        } else {
-            emptyMap()
+        if (mode == ProcessingMode.POISON_METADATA && _replacementPlans.value.isEmpty()) {
+            _replacementPlans.value = _selectedFiles.value.associate { it.uri to MetadataReplacementGenerator.generatePlan() }
+        } else if (mode != ProcessingMode.POISON_METADATA) {
+            _replacementPlans.value = emptyMap()
         }
+        generateChangePreview()
+    }
+
+    fun updatePlanLocation(uri: Uri, latitude: Double, longitude: Double) {
+        val currentPlans = _replacementPlans.value.toMutableMap()
+        val plan = currentPlans[uri] ?: MetadataReplacementGenerator.generatePlan()
+        
+        val latitudeRef = if (latitude >= 0) "N" else "S"
+        val longitudeRef = if (longitude >= 0) "E" else "W"
+        
+        currentPlans[uri] = plan.copy(
+            latitude = latitude,
+            longitude = longitude,
+            latitudeRef = latitudeRef,
+            longitudeRef = longitudeRef
+        )
+        _replacementPlans.value = currentPlans
         generateChangePreview()
     }
 
@@ -495,6 +518,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setThumbnailHandling(handling: ThumbnailHandling) = launchSettingUpdate {
         settingsRepository.setThumbnailHandling(handling)
+    }
+
+    fun setAllowInternetForMap(allowed: Boolean) = launchSettingUpdate {
+        settingsRepository.setAllowInternetForMap(allowed)
     }
 
     private fun launchSettingUpdate(block: suspend () -> Unit) {

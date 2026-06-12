@@ -53,6 +53,7 @@ fun SettingsScreen(
     onSharedFilesOutputActionChanged: (SharedInputOutputAction) -> Unit,
     onSharedFilesCustomPathSelected: (Uri?) -> Unit,
     onThumbnailHandlingChanged: (ThumbnailHandling) -> Unit,
+    onAllowInternetForMapChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val folderPicker = rememberLauncherForActivityResult(
@@ -209,6 +210,13 @@ fun SettingsScreen(
                         tempThumbnailHandling = settings.thumbnailHandling
                         showThumbnailHandlingDialog = true
                     }
+                )
+
+                SettingSwitchRow(
+                    title = "Enable map picker",
+                    subtitle = "Allow the app to connect to the internet to show OpenStreetMap for location selection",
+                    checked = settings.allowInternetForMap,
+                    onCheckedChange = onAllowInternetForMapChanged
                 )
             }
         }

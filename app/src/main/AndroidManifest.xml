@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Internet is a 'normal' permission (granted at install), but MetaJammer
+         only uses it to load Map Tiles for the optional Map Picker feature.
+         Users are asked to opt-in before any network connection is made. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <!-- MetaJammer follows the Principle of Least Privilege:
          - No broad storage permissions required (uses SAF and MediaStore).
          - narrowed FileProvider access to specific 'shared/' subfolders.

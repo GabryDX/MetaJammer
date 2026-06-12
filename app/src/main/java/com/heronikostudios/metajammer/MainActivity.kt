@@ -37,6 +37,7 @@ import com.heronikostudios.metajammer.domain.usecase.ShareFileUseCase
 import com.heronikostudios.metajammer.ui.MainViewModel
 import com.heronikostudios.metajammer.ui.components.MessageBanner
 import com.heronikostudios.metajammer.ui.screens.HomeScreen
+import com.heronikostudios.metajammer.ui.screens.LocationPickerScreen
 import com.heronikostudios.metajammer.ui.screens.MetadataPreviewScreen
 import com.heronikostudios.metajammer.ui.screens.OutputOptionsScreen
 import com.heronikostudios.metajammer.ui.screens.ProcessingScreen
@@ -108,6 +109,7 @@ private enum class AppStep {
     HOME,
     PREVIEW,
     PROCESS,
+    LOCATION_PICKER,
     OUTPUT,
     SETTINGS
 }
@@ -116,6 +118,7 @@ private fun previousStep(step: AppStep): AppStep? = when (step) {
     AppStep.HOME -> null
     AppStep.PREVIEW -> AppStep.HOME
     AppStep.PROCESS -> AppStep.PREVIEW
+    AppStep.LOCATION_PICKER -> AppStep.PROCESS
     AppStep.OUTPUT -> AppStep.PROCESS
     AppStep.SETTINGS -> null
 }
@@ -141,10 +144,13 @@ fun MetaJammerApp(
     val message by viewModel.message.collectAsStateWithLifecycle()
     val appSettings by viewModel.appSettings.collectAsStateWithLifecycle()
     val settingsInitialized by viewModel.settingsInitialized.collectAsStateWithLifecycle()
+    val replacementPlans by viewModel.replacementPlans.collectAsStateWithLifecycle()
 
     var currentStep by rememberSaveable { mutableStateOf(AppStep.HOME) }
     var previousNonSettingsStep by rememberSaveable { mutableStateOf(AppStep.HOME) }
     var handledSharedSignature by rememberSaveable { mutableStateOf<String?>(null) }
+    var uriToEditLocation by remember { mutableStateOf<Uri?>(null) }
+    var showInternetPermissionExplanation by remember { mutableStateOf(false) }
 
     fun navigateTo(step: AppStep) {
         viewModel.clearMessage()
@@ -208,6 +214,7 @@ fun MetaJammerApp(
                             AppStep.HOME -> "MetaJammer"
                             AppStep.PREVIEW -> "Metadata Preview"
                             AppStep.PROCESS -> "Process Files"
+                            AppStep.LOCATION_PICKER -> "Pick Location"
                             AppStep.OUTPUT -> "Output Options"
                             AppStep.SETTINGS -> "Settings"
                         },
@@ -290,9 +297,34 @@ fun MetaJammerApp(
                         onNext = {
                             if (processedFiles.isNotEmpty()) navigateTo(AppStep.OUTPUT)
                         },
+                        onEditLocation = { uri ->
+                            uriToEditLocation = uri
+                            if (appSettings.allowInternetForMap) {
+                                navigateTo(AppStep.LOCATION_PICKER)
+                            } else {
+                                showInternetPermissionExplanation = true
+                            }
+                        },
                         hasProcessedFiles = processedFiles.isNotEmpty(),
                         modifier = Modifier.weight(1f)
                     )
+                }
+
+                AppStep.LOCATION_PICKER -> {
+                    val uri = uriToEditLocation
+                    if (uri != null) {
+                        val plan = replacementPlans[uri]
+                        
+                        LocationPickerScreen(
+                            initialLat = plan?.latitude ?: 0.0,
+                            initialLon = plan?.longitude ?: 0.0,
+                            onLocationPicked = { lat, lon ->
+                                viewModel.updatePlanLocation(uri, lat, lon)
+                                navigateBack()
+                            },
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
                 }
 
                 AppStep.OUTPUT -> {
@@ -357,10 +389,44 @@ fun MetaJammerApp(
                         onSharedFilesOutputActionChanged = viewModel::setSharedFilesOutputAction,
                         onSharedFilesCustomPathSelected = viewModel::persistAndSetSharedFilesCustomPath,
                         onThumbnailHandlingChanged = viewModel::setThumbnailHandling,
+                        onAllowInternetForMapChanged = viewModel::setAllowInternetForMap,
                         modifier = Modifier.weight(1f)
                     )
                 }
             }
+        }
+
+        if (showInternetPermissionExplanation) {
+            androidx.compose.material3.AlertDialog(
+                onDismissRequest = { showInternetPermissionExplanation = false },
+                title = { Text("Map Picker & Internet Access") },
+                text = {
+                    Text(
+                        "To show a map for location picking, MetaJammer needs to connect to the internet to load map tiles from OpenStreetMap. \n\n" +
+                                "If you decline, the app will continue to work perfectly for all metadata stripping and poisoning features, but you won't be able to pick locations visually on a map."
+                    )
+                },
+                confirmButton = {
+                    androidx.compose.material3.TextButton(
+                        onClick = {
+                            viewModel.setAllowInternetForMap(true)
+                            showInternetPermissionExplanation = false
+                            navigateTo(AppStep.LOCATION_PICKER)
+                        }
+                    ) {
+                        Text("Allow & Open Map")
+                    }
+                },
+                dismissButton = {
+                    androidx.compose.material3.TextButton(
+                        onClick = {
+                            showInternetPermissionExplanation = false
+                        }
+                    ) {
+                        Text("Not Now")
+                    }
+                }
+            )
         }
     }
 }

@@ -31,6 +31,7 @@ class SettingsRepository(private val context: Context) {
         private val SHARED_FILES_OUTPUT_ACTION = stringPreferencesKey("shared_files_output_action")
         private val SHARED_FILES_CUSTOM_PATH = stringPreferencesKey("shared_files_custom_path")
         private val THUMBNAIL_HANDLING = stringPreferencesKey("thumbnail_handling")
+        private val ALLOW_INTERNET_FOR_MAP = booleanPreferencesKey("allow_internet_for_map")
     }
 
     val useRandomFileNamesFlow: Flow<Boolean> =
@@ -150,5 +151,12 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setThumbnailHandling(handling: ThumbnailHandling) {
         context.dataStore.edit { it[THUMBNAIL_HANDLING] = handling.name }
+    }
+
+    val allowInternetForMapFlow: Flow<Boolean> =
+        context.dataStore.data.map { it[ALLOW_INTERNET_FOR_MAP] ?: false }
+
+    suspend fun setAllowInternetForMap(allowed: Boolean) {
+        context.dataStore.edit { it[ALLOW_INTERNET_FOR_MAP] = allowed }
     }
 }
