@@ -15,8 +15,9 @@ class ImageMetadataProcessor(
      * Uses an extensive list of tags to clear, targeting privacy-sensitive information.
      */
     fun removeMetadata(inputUri: Uri, keepOrientation: Boolean = true): File {
-        val inputFile = fileRepository.copyUriToCache(inputUri, prefix = "img_in_", suffix = ".jpg")
-        val outputFile = fileRepository.createSharedTempFile("img_clean_", ".jpg")
+        val extension = fileRepository.getExtension(inputUri)
+        val inputFile = fileRepository.copyUriToCache(inputUri, prefix = "img_in_", suffix = extension)
+        val outputFile = fileRepository.createSharedTempFile("img_clean_", extension)
         inputFile.copyTo(outputFile, overwrite = true)
 
         val originalExif = ExifInterface(inputFile.absolutePath)
@@ -100,8 +101,9 @@ class ImageMetadataProcessor(
         plan: MetadataReplacementPlan,
         keepOrientation: Boolean = true
     ): File {
-        val inputFile = fileRepository.copyUriToCache(inputUri, prefix = "img_in_", suffix = ".jpg")
-        val outputFile = fileRepository.createSharedTempFile("img_poisoned_", ".jpg")
+        val extension = fileRepository.getExtension(inputUri)
+        val inputFile = fileRepository.copyUriToCache(inputUri, prefix = "img_in_", suffix = extension)
+        val outputFile = fileRepository.createSharedTempFile("img_poisoned_", extension)
         inputFile.copyTo(outputFile, overwrite = true)
 
         val originalExif = ExifInterface(inputFile.absolutePath)

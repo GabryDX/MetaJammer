@@ -77,7 +77,7 @@ class MetadataRepository(
     }
 
     private fun readImageMetadata(selectedFile: SelectedFile): List<MetadataEntry> {
-        val tempFile = fileRepository.copyUriToCache(selectedFile.uri, prefix = "preview_", suffix = ".jpg")
+        val tempFile = fileRepository.copyUriToCache(selectedFile.uri, prefix = "preview_", suffix = null)
         val exif = ExifInterface(tempFile.absolutePath)
 
         val tags = listOf(

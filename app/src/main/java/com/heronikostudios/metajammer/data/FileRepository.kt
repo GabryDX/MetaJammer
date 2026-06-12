@@ -5,9 +5,11 @@ import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
 import android.provider.OpenableColumns
+import android.webkit.MimeTypeMap
 import androidx.documentfile.provider.DocumentFile
 import com.heronikostudios.metajammer.domain.model.SelectedFile
 import java.io.File
+import java.util.Locale
 
 class FileRepository(private val context: Context) {
 
@@ -46,13 +48,35 @@ class FileRepository(private val context: Context) {
     }
 
     fun copyUriToCache(uri: Uri, prefix: String = "input_", suffix: String? = null): File {
-        val tempFile = createSharedTempFile(prefix, suffix)
+        val resolvedSuffix = suffix ?: getExtension(uri)
+        val tempFile = createSharedTempFile(prefix, resolvedSuffix)
         context.contentResolver.openInputStream(uri)?.use { input ->
             tempFile.outputStream().use { output ->
                 input.copyTo(output)
             }
         } ?: error("Unable to open input stream for $uri")
         return tempFile
+    }
+
+    fun getExtension(uri: Uri): String {
+        val mimeType = context.contentResolver.getType(uri)
+        var extension: String? = null
+
+        if (mimeType != null) {
+            extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
+        }
+
+        if (extension == null) {
+            val path = uri.path
+            if (path != null) {
+                val lastDot = path.lastIndexOf('.')
+                if (lastDot != -1) {
+                    extension = path.substring(lastDot + 1).lowercase(Locale.ROOT)
+                }
+            }
+        }
+
+        return if (extension != null) ".$extension" else ""
     }
 
     fun saveToDefaultFolder(
