@@ -232,8 +232,8 @@ fun SettingsScreen(
                 )
 
                 SettingSwitchRow(
-                    title = "Enable automatic handling",
-                    subtitle = "When files are shared from another app, process them immediately using the defaults below",
+                    title = "Quick Scrub & Share",
+                    subtitle = "When files are shared to MetaJammer, automatically strip metadata and re-open the Share Sheet. (Truly invisible workflow)",
                     checked = settings.autoHandleSharedFiles,
                     onCheckedChange = onAutoHandleSharedFilesChanged
                 )
@@ -668,7 +668,7 @@ private fun SharedInputOutputAction.toReadableLabel(): String {
     return when (this) {
         SharedInputOutputAction.SAVE_TO_DEFAULT_FOLDER -> "Save to default folder"
         SharedInputOutputAction.SAVE_TO_SHARED_FOLDER -> "Save to dedicated shared-files folder"
-        SharedInputOutputAction.SHARE_TO_ANOTHER_APP -> "Share to another app"
+        SharedInputOutputAction.SHARE_TO_ANOTHER_APP -> "Re-share sanitized files (Quick Workflow)"
     }
 }
 

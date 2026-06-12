@@ -211,12 +211,14 @@ fun MetaJammerApp(
         viewModel.setIncomingUris(sharedUris)
 
         if (appSettings.autoHandleSharedFiles) {
-            viewModel.autoHandleSharedInput { file, mimeType ->
-                shareFileUseCase.shareFile(
+            viewModel.autoHandleSharedInput { files, mimeType ->
+                shareFileUseCase.shareFiles(
                     context = context,
-                    file = file,
+                    files = files,
                     mimeType = mimeType
                 )
+                // "Invisible" workflow: close MetaJammer after re-sharing
+                onExitApp()
             }
         } else {
             navigateTo(AppStep.PREVIEW)

@@ -379,7 +379,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun autoHandleSharedInput(
-        onShareFileReady: (File, String?) -> Unit
+        onShareFilesReady: (List<File>, String?) -> Unit
     ) {
         val files = _selectedFiles.value
         if (files.isEmpty()) {
@@ -432,9 +432,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     }
 
                     SharedInputOutputAction.SHARE_TO_ANOTHER_APP -> {
-                        val first = getFirstProcessedFileForSharing()
-                            ?: throw IllegalStateException("No processed file available for sharing")
-                        onShareFileReady(first.second, first.first.mimeType)
+                        if (_processedFiles.value.isEmpty()) {
+                            throw IllegalStateException("No processed files available for sharing")
+                        }
+                        val processedFilesList = _processedFiles.value.map { it.second }
+                        val firstMime = _processedFiles.value.first().first.mimeType
+                        val allSameMime = _processedFiles.value.all { it.first.mimeType == firstMime }
+                        onShareFilesReady(processedFilesList, if (allSameMime) firstMime else "*/*")
                     }
                 }
             }.onSuccess {
@@ -597,7 +601,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun buildOutputName(originalName: String): String {
         val settings = _appSettings.value
-        
+
         val dotIndex = originalName.lastIndexOf('.')
         val base = if (dotIndex > 0) originalName.substring(0, dotIndex) else originalName
         val ext = if (dotIndex > 0) originalName.substring(dotIndex) else ""

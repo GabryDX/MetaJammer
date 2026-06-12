@@ -35,4 +35,33 @@ class ShareFileUseCase {
 
         shareUri(context, uri, mimeType)
     }
+
+    fun shareFiles(
+        context: Context,
+        files: List<File>,
+        mimeType: String?
+    ) {
+        if (files.isEmpty()) return
+        
+        if (files.size == 1) {
+            shareFile(context, files[0], mimeType)
+            return
+        }
+
+        val uris = files.map { file ->
+            FileProvider.getUriForFile(
+                context,
+                "${context.packageName}.fileprovider",
+                file
+            )
+        }
+
+        val intent = Intent(Intent.ACTION_SEND_MULTIPLE).apply {
+            type = mimeType ?: "*/*"
+            putParcelableArrayListExtra(Intent.EXTRA_STREAM, ArrayList(uris))
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+
+        context.startActivity(Intent.createChooser(intent, "Share ${files.size} processed files"))
+    }
 }
