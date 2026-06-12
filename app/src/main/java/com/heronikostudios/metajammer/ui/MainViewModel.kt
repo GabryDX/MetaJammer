@@ -28,7 +28,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val appContext = getApplication<Application>().applicationContext
     private val fileRepository = FileRepository(appContext)
-    private val metadataRepository = MetadataRepository(appContext, fileRepository)
+    private val metadataRepository = MetadataRepository(fileRepository)
     private val settingsRepository = SettingsRepository(appContext)
     private val processFileUseCase = ProcessFileUseCase(metadataRepository)
     private val saveFileUseCase = SaveFileUseCase(fileRepository)
@@ -358,7 +358,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun saveProcessedFilesToDefault(): List<Uri> {
-        return _processedFiles.value.mapNotNull { (selectedFile, processedFile) ->
+        val results = _processedFiles.value.mapNotNull { (selectedFile, processedFile) ->
             saveFileUseCase.saveToDefaultFolder(
                 sourceFile = processedFile,
                 displayName = buildOutputName(selectedFile.displayName),
@@ -366,10 +366,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 configuredPath = _appSettings.value.defaultSavingPath
             )
         }
+        if (results.isNotEmpty()) {
+            _message.value = "Saved ${results.size} file(s) to default folder"
+        } else if (_processedFiles.value.isNotEmpty()) {
+            _message.value = "Failed to save files"
+        }
+        return results
     }
 
     fun saveProcessedFilesToCustom(treeUri: Uri): List<Uri> {
-        return _processedFiles.value.mapNotNull { (selectedFile, processedFile) ->
+        val results = _processedFiles.value.mapNotNull { (selectedFile, processedFile) ->
             saveFileUseCase.saveToCustomFolder(
                 treeUri = treeUri,
                 sourceFile = processedFile,
@@ -377,6 +383,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 mimeType = selectedFile.mimeType
             )
         }
+        if (results.isNotEmpty()) {
+            _message.value = "Saved ${results.size} file(s) to custom folder"
+        } else if (_processedFiles.value.isNotEmpty()) {
+            _message.value = "Failed to save files"
+        }
+        return results
     }
 
     fun getFirstProcessedFileForSharing(): Pair<SelectedFile, File>? =
@@ -486,6 +498,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun buildOutputName(originalName: String): String {
         val settings = _appSettings.value
+        
+        // Sanitize base name to remove path traversal or illegal characters
+        fun sanitize(name: String): String = name.replace(Regex("[^a-zA-Z0-9._-]"), "_")
+
         val dotIndex = originalName.lastIndexOf('.')
         val base = if (dotIndex > 0) originalName.substring(0, dotIndex) else originalName
         val ext = if (dotIndex > 0) originalName.substring(dotIndex) else ""
@@ -493,9 +509,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         val finalBase = if (settings.useRandomFileNames) {
             "mj_${System.currentTimeMillis()}"
         } else {
-            "${settings.defaultPrefix}$base${settings.defaultSuffix}"
+            val prefix = sanitize(settings.defaultPrefix)
+            val suffix = sanitize(settings.defaultSuffix)
+            val sanitizedBase = sanitize(base)
+            "$prefix$sanitizedBase$suffix"
         }
 
-        return "${finalBase}_processed$ext"
+        val extension = sanitize(ext)
+        return "${finalBase}_processed$extension"
     }
 }

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths>
+    <!-- Narrowing down shared paths to specific subdirectories for better security -->
     <cache-path
-        name="cache"
-        path="." />
+        name="shared_cache"
+        path="shared/" />
     <files-path
-        name="files"
-        path="." />
+        name="shared_files"
+        path="shared/" />
 </paths>
