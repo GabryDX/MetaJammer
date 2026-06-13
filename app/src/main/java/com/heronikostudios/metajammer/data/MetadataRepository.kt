@@ -74,7 +74,10 @@ class MetadataRepository(
 
             mime.startsWith("video/") -> {
                 when (mode) {
-                    ProcessingMode.POISON_METADATA -> videoProcessor.poisonMetadata(selectedFile.uri)
+                    ProcessingMode.POISON_METADATA -> {
+                        val plan = requireNotNull(replacementPlan) { "Plan required for poison mode" }
+                        videoProcessor.poisonMetadata(selectedFile.uri, plan.latitude, plan.longitude)
+                    }
                     ProcessingMode.REMOVE_METADATA -> videoProcessor.removeMetadata(selectedFile.uri)
                 }
             }
@@ -87,12 +90,39 @@ class MetadataRepository(
         val mime = selectedFile.mimeType ?: ""
         return when {
             mime.startsWith("image/") -> readImageMetadata(selectedFile)
-            mime.startsWith("video/") -> listOf(
-                MetadataEntry("Warning", "Video metadata stripping is currently limited. File is copied as-is."),
-                MetadataEntry("Status", "Support for MP4/MOV metadata stripping is planned.")
-            )
+            mime.startsWith("video/") -> readVideoMetadata(selectedFile)
             else -> listOf(MetadataEntry("Info", "Metadata preview not yet supported for $mime"))
         }
+    }
+
+    private fun readVideoMetadata(selectedFile: SelectedFile): List<MetadataEntry> {
+        val resolver = fileRepository.getContext().contentResolver
+        val entries = mutableListOf<MetadataEntry>()
+        
+        runCatching {
+            val retriever = android.media.MediaMetadataRetriever()
+            resolver.openFileDescriptor(selectedFile.uri, "r")?.use { fd ->
+                retriever.setDataSource(fd.fileDescriptor)
+                
+                // Add some useful metadata fields
+                retriever.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_DATE)?.let {
+                    entries.add(MetadataEntry("Creation Date", it))
+                }
+                retriever.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_LOCATION)?.let {
+                    entries.add(MetadataEntry("Location (Raw)", it))
+                }
+                retriever.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_DURATION)?.let {
+                    val durationMs = it.toLongOrNull() ?: 0L
+                    entries.add(MetadataEntry("Duration", "${durationMs / 1000}s"))
+                }
+            }
+            retriever.release()
+        }
+
+        entries.add(MetadataEntry("Status", "Full re-muxing supported for MP4/MOV containers."))
+        entries.add(MetadataEntry("Privacy", "This process strips GPS, dates, and device atoms."))
+
+        return entries
     }
 
     private fun readImageMetadata(selectedFile: SelectedFile): List<MetadataEntry> {

@@ -11,6 +11,7 @@ import com.heronikostudios.metajammer.domain.model.SelectedFile
 import com.heronikostudios.metajammer.util.SanitizationUtils
 import java.io.File
 import java.util.Locale
+import androidx.core.net.toUri
 
 class FileRepository(private val context: Context) {
 
@@ -92,7 +93,7 @@ class FileRepository(private val context: Context) {
 
         return if (path.startsWith("content://")) {
             saveToCustomFolder(
-                treeUri = Uri.parse(path),
+                treeUri = path.toUri(),
                 sourceFile = sourceFile,
                 displayName = displayName,
                 mimeType = mimeType
