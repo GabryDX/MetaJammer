@@ -16,20 +16,17 @@ class VideoMetadataProcessor(
 ) {
 
     fun removeMetadata(inputUri: Uri): File {
-        // TODO: Implement MediaMuxer based stripping to actually remove metadata atoms.
-        // For now, we perform a passthrough but warn the user in the UI.
+        // TODO: Implement MediaMuxer based stripping
         return copyVideo(inputUri, "video_clean_")
     }
 
     fun poisonMetadata(inputUri: Uri): File {
-        // TODO: Implement MediaMuxer based poisoning.
+        // TODO: Implement MediaMuxer based poisoning
         return copyVideo(inputUri, "video_poisoned_")
     }
 
     private fun copyVideo(inputUri: Uri, prefix: String): File {
-        val inputFile = fileRepository.copyUriToCache(inputUri, prefix = "video_in_", suffix = ".mp4")
-        val outputFile = fileRepository.createSharedTempFile(prefix, ".mp4")
-        inputFile.copyTo(outputFile, overwrite = true)
-        return outputFile
+        // Optimized: Uses the repository's direct copy method without double-copying.
+        return fileRepository.copyUriToCache(inputUri, prefix = prefix, suffix = ".mp4")
     }
 }

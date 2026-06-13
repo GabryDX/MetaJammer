@@ -16,73 +16,8 @@ class MetadataRepository(
     private val imageProcessor = ImageMetadataProcessor(fileRepository)
     private val videoProcessor = VideoMetadataProcessor(fileRepository)
 
-    fun processFile(
-        selectedFile: SelectedFile,
-        mode: ProcessingMode,
-        keepOrientation: Boolean,
-        thumbnailHandling: ThumbnailHandling = ThumbnailHandling.REMOVE,
-        replacementPlan: MetadataReplacementPlan? = null
-    ): File {
-        return when {
-            selectedFile.mimeType?.startsWith("image/") == true -> {
-                when (mode) {
-                    ProcessingMode.POISON_METADATA -> {
-                        val plan = requireNotNull(replacementPlan) {
-                            "Replacement plan is required for poison metadata mode"
-                        }
-                        imageProcessor.poisonMetadata(
-                            inputUri = selectedFile.uri,
-                            plan = plan,
-                            keepOrientation = keepOrientation,
-                            thumbnailHandling = thumbnailHandling
-                        )
-                    }
-
-                    ProcessingMode.REMOVE_METADATA -> imageProcessor.removeMetadata(
-                        selectedFile.uri,
-                        keepOrientation = keepOrientation,
-                        thumbnailHandling = thumbnailHandling
-                    )
-                }
-            }
-
-            selectedFile.mimeType?.startsWith("video/") == true -> {
-                when (mode) {
-                    ProcessingMode.POISON_METADATA -> videoProcessor.poisonMetadata(selectedFile.uri)
-                    ProcessingMode.REMOVE_METADATA -> videoProcessor.removeMetadata(selectedFile.uri)
-                }
-            }
-
-            else -> {
-                fileRepository.copyUriToCache(selectedFile.uri, prefix = "generic_", suffix = null)
-            }
-        }
-    }
-
-    fun readMetadata(selectedFile: SelectedFile): List<MetadataEntry> {
-        return when {
-            selectedFile.mimeType?.startsWith("image/") == true -> {
-                readImageMetadata(selectedFile)
-            }
-
-            selectedFile.mimeType?.startsWith("video/") == true -> {
-                listOf(
-                    MetadataEntry("Warning", "Video metadata stripping is currently limited. File is copied as-is."),
-                    MetadataEntry("Status", "Support for MP4/MOV metadata stripping is planned.")
-                )
-            }
-
-            else -> {
-                listOf(
-                    MetadataEntry("Info", "Metadata preview not yet supported for ${selectedFile.mimeType ?: "unknown"}")
-                )
-            }
-        }
-    }
-
-    private fun readImageMetadata(selectedFile: SelectedFile): List<MetadataEntry> {
-        val resolver = fileRepository.getContext().contentResolver
-        val tags = listOf(
+    companion object {
+        private val PREVIEW_TAGS = listOf(
             ExifInterface.TAG_ARTIST,
             ExifInterface.TAG_COPYRIGHT,
             ExifInterface.TAG_DATETIME,
@@ -114,11 +49,58 @@ class MetadataRepository(
             ExifInterface.TAG_LENS_MODEL,
             ExifInterface.TAG_LENS_SERIAL_NUMBER
         )
+    }
 
+    fun processFile(
+        selectedFile: SelectedFile,
+        mode: ProcessingMode,
+        keepOrientation: Boolean,
+        thumbnailHandling: ThumbnailHandling = ThumbnailHandling.REMOVE,
+        replacementPlan: MetadataReplacementPlan? = null
+    ): File {
+        val mime = selectedFile.mimeType ?: ""
+        return when {
+            mime.startsWith("image/") -> {
+                when (mode) {
+                    ProcessingMode.POISON_METADATA -> {
+                        val plan = requireNotNull(replacementPlan) { "Plan required for poison mode" }
+                        imageProcessor.poisonMetadata(selectedFile.uri, plan, keepOrientation, thumbnailHandling)
+                    }
+                    ProcessingMode.REMOVE_METADATA -> {
+                        imageProcessor.removeMetadata(selectedFile.uri, keepOrientation, thumbnailHandling)
+                    }
+                }
+            }
+
+            mime.startsWith("video/") -> {
+                when (mode) {
+                    ProcessingMode.POISON_METADATA -> videoProcessor.poisonMetadata(selectedFile.uri)
+                    ProcessingMode.REMOVE_METADATA -> videoProcessor.removeMetadata(selectedFile.uri)
+                }
+            }
+
+            else -> fileRepository.copyUriToCache(selectedFile.uri, prefix = "generic_", suffix = null)
+        }
+    }
+
+    fun readMetadata(selectedFile: SelectedFile): List<MetadataEntry> {
+        val mime = selectedFile.mimeType ?: ""
+        return when {
+            mime.startsWith("image/") -> readImageMetadata(selectedFile)
+            mime.startsWith("video/") -> listOf(
+                MetadataEntry("Warning", "Video metadata stripping is currently limited. File is copied as-is."),
+                MetadataEntry("Status", "Support for MP4/MOV metadata stripping is planned.")
+            )
+            else -> listOf(MetadataEntry("Info", "Metadata preview not yet supported for $mime"))
+        }
+    }
+
+    private fun readImageMetadata(selectedFile: SelectedFile): List<MetadataEntry> {
+        val resolver = fileRepository.getContext().contentResolver
         return try {
             resolver.openInputStream(selectedFile.uri)?.use { inputStream ->
                 val exif = ExifInterface(inputStream)
-                tags.mapNotNull { tag ->
+                PREVIEW_TAGS.mapNotNull { tag ->
                     val value = exif.getAttribute(tag)
                     if (!value.isNullOrBlank()) MetadataEntry(tag, value) else null
                 }
