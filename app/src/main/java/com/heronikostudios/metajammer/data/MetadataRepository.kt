@@ -8,6 +8,7 @@ import com.heronikostudios.metajammer.domain.model.SelectedFile
 import com.heronikostudios.metajammer.domain.model.ThumbnailHandling
 import com.heronikostudios.metajammer.metadata.ImageMetadataProcessor
 import com.heronikostudios.metajammer.metadata.VideoMetadataProcessor
+import timber.log.Timber
 import java.io.File
 
 class MetadataRepository(
@@ -117,6 +118,8 @@ class MetadataRepository(
                 }
             }
             retriever.release()
+        }.onFailure {
+            Timber.e(it, "Failed to read video metadata for %s", selectedFile.uri)
         }
 
         entries.add(MetadataEntry("Status", "Full re-muxing supported for MP4/MOV containers."))
@@ -136,6 +139,7 @@ class MetadataRepository(
                 }
             } ?: emptyList()
         } catch (e: Exception) {
+            Timber.e(e, "Could not read image metadata for %s", selectedFile.uri)
             listOf(MetadataEntry("Error", "Could not read metadata: ${e.message}"))
         }.ifEmpty {
             listOf(MetadataEntry("Info", "No readable EXIF metadata found"))

@@ -35,6 +35,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -65,6 +66,7 @@ dependencies {
     implementation(libs.androidx.exifinterface)
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.timber)
 
     testImplementation(libs.junit)
 

@@ -9,6 +9,7 @@ import android.webkit.MimeTypeMap
 import androidx.documentfile.provider.DocumentFile
 import com.heronikostudios.metajammer.domain.model.SelectedFile
 import com.heronikostudios.metajammer.util.SanitizationUtils
+import timber.log.Timber
 import java.io.File
 import java.util.Locale
 import androidx.core.net.toUri
@@ -58,7 +59,10 @@ class FileRepository(private val context: Context) {
             tempFile.outputStream().use { output ->
                 input.copyTo(output)
             }
-        } ?: error("Unable to open input stream for $uri")
+        } ?: run {
+            Timber.e("Unable to open input stream for %s", uri)
+            error("Unable to open input stream for $uri")
+        }
         return tempFile
     }
 
@@ -129,13 +133,19 @@ class FileRepository(private val context: Context) {
             put(MediaStore.MediaColumns.IS_PENDING, 1)
         }
 
-        val uri = resolver.insert(collection, values) ?: return null
+        val uri = resolver.insert(collection, values) ?: run {
+            Timber.e("Failed to insert media into MediaStore")
+            return null
+        }
 
         resolver.openOutputStream(uri)?.use { output ->
             sourceFile.inputStream().use { input ->
                 input.copyTo(output)
             }
-        } ?: return null
+        } ?: run {
+            Timber.e("Failed to open output stream for MediaStore URI: %s", uri)
+            return null
+        }
 
         val completedValues = ContentValues().apply {
             put(MediaStore.MediaColumns.IS_PENDING, 0)
@@ -151,14 +161,23 @@ class FileRepository(private val context: Context) {
         displayName: String,
         mimeType: String?
     ): Uri? {
-        val folder = DocumentFile.fromTreeUri(context, treeUri) ?: return null
-        val outFile = folder.createFile(mimeType ?: "application/octet-stream", displayName) ?: return null
+        val folder = DocumentFile.fromTreeUri(context, treeUri) ?: run {
+            Timber.e("Failed to get DocumentFile from tree URI: %s", treeUri)
+            return null
+        }
+        val outFile = folder.createFile(mimeType ?: "application/octet-stream", displayName) ?: run {
+            Timber.e("Failed to create file in custom folder")
+            return null
+        }
 
         context.contentResolver.openOutputStream(outFile.uri)?.use { output ->
             sourceFile.inputStream().use { input ->
                 input.copyTo(output)
             }
-        } ?: return null
+        } ?: run {
+            Timber.e("Failed to open output stream for custom folder file: %s", outFile.uri)
+            return null
+        }
 
         return outFile.uri
     }

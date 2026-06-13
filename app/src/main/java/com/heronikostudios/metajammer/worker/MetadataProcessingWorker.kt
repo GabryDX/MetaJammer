@@ -18,6 +18,7 @@ import com.heronikostudios.metajammer.domain.model.ProcessingMode
 import com.heronikostudios.metajammer.domain.model.ThumbnailHandling
 import com.heronikostudios.metajammer.util.SanitizationUtils
 import kotlinx.serialization.json.Json
+import timber.log.Timber
 import java.io.File
 
 class MetadataProcessingWorker(
@@ -61,6 +62,8 @@ class MetadataProcessingWorker(
             runCatching {
                 val json = File(plansFilePath).readText()
                 Json.decodeFromString<Map<String, MetadataReplacementPlan>>(json)
+            }.onFailure {
+                Timber.e(it, "Failed to load replacement plans from %s", plansFilePath)
             }.getOrDefault(emptyMap<String, MetadataReplacementPlan>())
         } else {
             emptyMap()
@@ -104,6 +107,8 @@ class MetadataProcessingWorker(
                 
                 // Update progress
                 setProgress(workDataOf("progress" to (index + 1) * 100 / inputUriStrings.size))
+            }.onFailure {
+                Timber.e(it, "Failed to process file: %s", uriString)
             }
         }
 

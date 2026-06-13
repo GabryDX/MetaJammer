@@ -13,6 +13,7 @@
          - narrowed FileProvider access to specific 'shared/' subfolders.
          - Backups disabled to prevent sensitive metadata from leaking to the cloud. -->
     <application
+        android:name=".MetaJammerApplication"
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"

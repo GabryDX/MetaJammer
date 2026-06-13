@@ -5,6 +5,7 @@ import androidx.exifinterface.media.ExifInterface
 import com.heronikostudios.metajammer.data.FileRepository
 import com.heronikostudios.metajammer.domain.model.MetadataReplacementPlan
 import com.heronikostudios.metajammer.domain.model.ThumbnailHandling
+import timber.log.Timber
 import java.io.File
 
 class ImageMetadataProcessor(
@@ -147,7 +148,11 @@ class ImageMetadataProcessor(
             exif.setAttribute(ExifInterface.TAG_JPEG_INTERCHANGE_FORMAT_LENGTH, null)
         }
 
-        exif.saveAttributes()
+        try {
+            exif.saveAttributes()
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to save EXIF attributes for %s", outputFile.absolutePath)
+        }
         return outputFile
     }
 }

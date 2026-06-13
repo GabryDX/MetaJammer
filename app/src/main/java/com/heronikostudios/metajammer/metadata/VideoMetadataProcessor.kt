@@ -6,6 +6,7 @@ import android.media.MediaFormat
 import android.media.MediaMuxer
 import android.net.Uri
 import com.heronikostudios.metajammer.data.FileRepository
+import timber.log.Timber
 import java.io.File
 import java.nio.ByteBuffer
 
@@ -25,6 +26,7 @@ class VideoMetadataProcessor(
             remuxVideo(inputFile, outputFile, null)
             outputFile
         } catch (e: Exception) {
+            Timber.e(e, "Error removing metadata from video")
             // Fallback to passthrough if remux fails, but ideally we'd log this
             inputFile.copyTo(outputFile, overwrite = true)
             outputFile
@@ -41,6 +43,7 @@ class VideoMetadataProcessor(
             remuxVideo(inputFile, outputFile, latitude to longitude)
             outputFile
         } catch (e: Exception) {
+            Timber.e(e, "Error poisoning metadata in video")
             inputFile.copyTo(outputFile, overwrite = true)
             outputFile
         } finally {

@@ -33,6 +33,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import timber.log.Timber
 import java.io.File
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
@@ -196,6 +197,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }.onSuccess {
                 _metadataPreview.value = it
             }.onFailure {
+                Timber.e(it, "Failed to read metadata for files")
                 _message.value = "Failed to read metadata: ${it.message}"
             }
         }
@@ -346,6 +348,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 _processedFiles.value = it
                 _message.value = "Processing complete"
             }.onFailure {
+                Timber.e(it, "Manual processing failed")
                 _message.value = "Processing failed: ${it.message}"
             }
             _processing.value = false
@@ -456,6 +459,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }.onSuccess {
                 _message.value = "Shared files handled automatically"
             }.onFailure {
+                Timber.e(it, "Automatic shared file handling failed")
                 _message.value = "Automatic handling failed: ${it.message}"
             }
 
