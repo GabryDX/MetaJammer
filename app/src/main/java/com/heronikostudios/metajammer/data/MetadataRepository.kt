@@ -81,9 +81,7 @@ class MetadataRepository(
     }
 
     private fun readImageMetadata(selectedFile: SelectedFile): List<MetadataEntry> {
-        val tempFile = fileRepository.copyUriToCache(selectedFile.uri, prefix = "preview_", suffix = null)
-        val exif = ExifInterface(tempFile.absolutePath)
-
+        val resolver = fileRepository.getContext().contentResolver
         val tags = listOf(
             ExifInterface.TAG_ARTIST,
             ExifInterface.TAG_COPYRIGHT,
@@ -117,9 +115,16 @@ class MetadataRepository(
             ExifInterface.TAG_LENS_SERIAL_NUMBER
         )
 
-        return tags.mapNotNull { tag ->
-            val value = exif.getAttribute(tag)
-            if (!value.isNullOrBlank()) MetadataEntry(tag, value) else null
+        return try {
+            resolver.openInputStream(selectedFile.uri)?.use { inputStream ->
+                val exif = ExifInterface(inputStream)
+                tags.mapNotNull { tag ->
+                    val value = exif.getAttribute(tag)
+                    if (!value.isNullOrBlank()) MetadataEntry(tag, value) else null
+                }
+            } ?: emptyList()
+        } catch (e: Exception) {
+            listOf(MetadataEntry("Error", "Could not read metadata: ${e.message}"))
         }.ifEmpty {
             listOf(MetadataEntry("Info", "No readable EXIF metadata found"))
         }

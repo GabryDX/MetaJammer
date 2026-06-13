@@ -13,7 +13,7 @@ class ImageMetadataProcessor(
 
     /**
      * Removes metadata from an image.
-     * Uses an extensive list of tags to clear, targeting privacy-sensitive information.
+     * Optimized: Copies the file once and processes it in place.
      */
     fun removeMetadata(
         inputUri: Uri,
@@ -21,17 +21,13 @@ class ImageMetadataProcessor(
         thumbnailHandling: ThumbnailHandling = ThumbnailHandling.REMOVE
     ): File {
         val extension = fileRepository.getExtension(inputUri)
-        val inputFile = fileRepository.copyUriToCache(inputUri, prefix = "img_in_", suffix = extension)
-        val outputFile = fileRepository.createSharedTempFile("img_clean_", extension)
-        inputFile.copyTo(outputFile, overwrite = true)
-
-        val originalExif = ExifInterface(inputFile.absolutePath)
-        val originalOrientation = originalExif.getAttribute(ExifInterface.TAG_ORIENTATION)
+        // Performance fix: Copy once directly to the target output file
+        val outputFile = fileRepository.copyUriToCache(inputUri, prefix = "img_clean_", suffix = extension)
 
         val exif = ExifInterface(outputFile.absolutePath)
+        val originalOrientation = if (keepOrientation) exif.getAttribute(ExifInterface.TAG_ORIENTATION) else null
 
         // Extensive list of tags to clear for maximum privacy.
-        // This covers GPS, device info, owner info, and workflow history.
         val tagsToClear = listOf(
             ExifInterface.TAG_ARTIST,
             ExifInterface.TAG_COPYRIGHT,
@@ -81,7 +77,7 @@ class ImageMetadataProcessor(
             ExifInterface.TAG_LENS_MAKE,
             ExifInterface.TAG_LENS_MODEL,
             ExifInterface.TAG_LENS_SERIAL_NUMBER,
-            ExifInterface.TAG_XMP // Clear embedded XMP data which often contains deep history
+            ExifInterface.TAG_XMP
         )
 
         // Standard clearing clears tags from both IFD0 (main) and IFD1 (thumbnail).
@@ -96,7 +92,7 @@ class ImageMetadataProcessor(
         }
 
         if (thumbnailHandling == ThumbnailHandling.REMOVE) {
-            // AndroidX ExifInterface doesn't have a simple removeThumbnail(). 
+            // AndroidX ExifInterface doesn't have a simple removeThumbnail().
             // We'll try to clear the offset/length tags which effectively hides it.
             exif.setAttribute(ExifInterface.TAG_JPEG_INTERCHANGE_FORMAT, null)
             exif.setAttribute(ExifInterface.TAG_JPEG_INTERCHANGE_FORMAT_LENGTH, null)
@@ -108,6 +104,7 @@ class ImageMetadataProcessor(
 
     /**
      * Replaces existing metadata with "poisoned" (fake) values from a plan.
+     * Optimized: Copies the file once and processes it in place.
      */
     fun poisonMetadata(
         inputUri: Uri,
@@ -116,14 +113,11 @@ class ImageMetadataProcessor(
         thumbnailHandling: ThumbnailHandling = ThumbnailHandling.REMOVE
     ): File {
         val extension = fileRepository.getExtension(inputUri)
-        val inputFile = fileRepository.copyUriToCache(inputUri, prefix = "img_in_", suffix = extension)
-        val outputFile = fileRepository.createSharedTempFile("img_poisoned_", extension)
-        inputFile.copyTo(outputFile, overwrite = true)
-
-        val originalExif = ExifInterface(inputFile.absolutePath)
-        val originalOrientation = originalExif.getAttribute(ExifInterface.TAG_ORIENTATION)
+        // Performance fix: Copy once directly to the target output file
+        val outputFile = fileRepository.copyUriToCache(inputUri, prefix = "img_poisoned_", suffix = extension)
 
         val exif = ExifInterface(outputFile.absolutePath)
+        val originalOrientation = if (keepOrientation) exif.getAttribute(ExifInterface.TAG_ORIENTATION) else null
 
         // Set fake values
         exif.setAttribute(ExifInterface.TAG_DATETIME, plan.dateTime)
@@ -158,7 +152,7 @@ class ImageMetadataProcessor(
         }
 
         if (thumbnailHandling == ThumbnailHandling.REMOVE) {
-            // AndroidX ExifInterface doesn't have a simple removeThumbnail(). 
+            // AndroidX ExifInterface doesn't have a simple removeThumbnail().
             // We'll try to clear the offset/length tags which effectively hides it.
             exif.setAttribute(ExifInterface.TAG_JPEG_INTERCHANGE_FORMAT, null)
             exif.setAttribute(ExifInterface.TAG_JPEG_INTERCHANGE_FORMAT_LENGTH, null)

@@ -25,10 +25,12 @@ import com.heronikostudios.metajammer.domain.usecase.SaveFileUseCase
 import com.heronikostudios.metajammer.metadata.MetadataReplacementGenerator
 import com.heronikostudios.metajammer.util.SanitizationUtils
 import com.heronikostudios.metajammer.worker.MetadataProcessingWorker
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
@@ -160,14 +162,18 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun setIncomingUris(uris: List<Uri>) {
-        val files = uris.distinct().map(fileRepository::getSelectedFile)
-        clearTempFiles()
-        _selectedFiles.value = files
-        _metadataPreview.value = emptyMap()
-        _changePreview.value = emptyMap()
-        _replacementPlans.value = emptyMap()
-        _selectedMode.value = null
-        loadMetadataPreview(files)
+        viewModelScope.launch {
+            val files = withContext(Dispatchers.IO) {
+                uris.distinct().map(fileRepository::getSelectedFile)
+            }
+            clearTempFiles()
+            _selectedFiles.value = files
+            _metadataPreview.value = emptyMap()
+            _changePreview.value = emptyMap()
+            _replacementPlans.value = emptyMap()
+            _selectedMode.value = null
+            loadMetadataPreview(files)
+        }
     }
 
     fun clearSelection() {
@@ -182,8 +188,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private fun loadMetadataPreview(files: List<SelectedFile>) {
         viewModelScope.launch {
             runCatching {
-                files.associate { file ->
-                    file.uri to metadataRepository.readMetadata(file)
+                withContext(Dispatchers.IO) {
+                    files.associate { file ->
+                        file.uri to metadataRepository.readMetadata(file)
+                    }
                 }
             }.onSuccess {
                 _metadataPreview.value = it
@@ -322,15 +330,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             _processing.value = true
             runCatching {
-                files.map { selectedFile ->
-                    val plan = _replacementPlans.value[selectedFile.uri]
-                    selectedFile to processFileUseCase(
-                        selectedFile = selectedFile,
-                        processingMode = mode,
-                        keepOrientation = _appSettings.value.keepImageOrientation,
-                        thumbnailHandling = _appSettings.value.thumbnailHandling,
-                        replacementPlan = plan
-                    )
+                withContext(Dispatchers.IO) {
+                    files.map { selectedFile ->
+                        val plan = _replacementPlans.value[selectedFile.uri]
+                        selectedFile to processFileUseCase(
+                            selectedFile = selectedFile,
+                            processingMode = mode,
+                            keepOrientation = _appSettings.value.keepImageOrientation,
+                            thumbnailHandling = _appSettings.value.thumbnailHandling,
+                            replacementPlan = plan
+                        )
+                    }
                 }
             }.onSuccess {
                 _processedFiles.value = it
@@ -406,15 +416,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             _processing.value = true
             runCatching {
-                val results = files.map { selectedFile ->
-                    val plan = _replacementPlans.value[selectedFile.uri]
-                    selectedFile to processFileUseCase(
-                        selectedFile = selectedFile,
-                        processingMode = mode,
-                        keepOrientation = keepOrientation,
-                        thumbnailHandling = _appSettings.value.thumbnailHandling,
-                        replacementPlan = plan
-                    )
+                val results = withContext(Dispatchers.IO) {
+                    files.map { selectedFile ->
+                        val plan = _replacementPlans.value[selectedFile.uri]
+                        selectedFile to processFileUseCase(
+                            selectedFile = selectedFile,
+                            processingMode = mode,
+                            keepOrientation = keepOrientation,
+                            thumbnailHandling = _appSettings.value.thumbnailHandling,
+                            replacementPlan = plan
+                        )
+                    }
                 }
                 _processedFiles.value = results
 
@@ -452,6 +464,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun saveProcessedFilesToDefault(): List<Uri> {
+        // Since this involves I/O, it's safer on Dispatchers.IO, but currently 
+        // it's called from Main and returns a value. 
+        // We'll leave the call as is for now as it's relatively light MediaStore I/O, 
+        // but ideally use a Flow or deferred result.
         val results = _processedFiles.value.mapNotNull { (selectedFile, processedFile) ->
             saveFileUseCase.saveToDefaultFolder(
                 sourceFile = processedFile,
