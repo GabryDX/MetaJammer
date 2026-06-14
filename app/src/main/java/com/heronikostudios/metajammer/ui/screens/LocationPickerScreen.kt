@@ -126,13 +126,20 @@ fun LocationPickerScreen(
                     
                     settings.apply {
                         javaScriptEnabled = true
-                        domStorageEnabled = true
+                        domStorageEnabled = true // Leaflet needs this for some features
                         loadWithOverviewMode = true
                         useWideViewPort = true
                         setSupportZoom(true)
                         builtInZoomControls = true
                         displayZoomControls = false
-                        mixedContentMode = WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
+                        
+                        // Security Hardening
+                        mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
+                        allowFileAccess = false
+                        allowContentAccess = false
+                        setGeolocationEnabled(false) // Not needed as we pick manually
+                        allowFileAccessFromFileURLs = false
+                        allowUniversalAccessFromFileURLs = false
                     }
                     
                     addJavascriptInterface(object {

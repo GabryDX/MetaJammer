@@ -27,9 +27,9 @@ class VideoMetadataProcessor(
             outputFile
         } catch (e: Exception) {
             Timber.e(e, "Error removing metadata from video")
-            // Fallback to passthrough if remux fails, but ideally we'd log this
-            inputFile.copyTo(outputFile, overwrite = true)
-            outputFile
+            // Security: Delete output if failed and throw to prevent leaking original
+            outputFile.delete()
+            throw e
         } finally {
             inputFile.delete()
         }
@@ -44,8 +44,8 @@ class VideoMetadataProcessor(
             outputFile
         } catch (e: Exception) {
             Timber.e(e, "Error poisoning metadata in video")
-            inputFile.copyTo(outputFile, overwrite = true)
-            outputFile
+            outputFile.delete()
+            throw e
         } finally {
             inputFile.delete()
         }

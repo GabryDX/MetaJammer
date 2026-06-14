@@ -152,6 +152,8 @@ class ImageMetadataProcessor(
             exif.saveAttributes()
         } catch (e: Exception) {
             Timber.e(e, "Failed to save EXIF attributes for %s", outputFile.absolutePath)
+            outputFile.delete()
+            throw e
         }
         return outputFile
     }
