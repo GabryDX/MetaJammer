@@ -202,6 +202,10 @@ class FileRepository(private val context: Context) {
         if (sharedDir.exists()) {
             sharedDir.listFiles()?.forEach { it.delete() }
         }
+        // Also clear root cache directory for any stray files like processing_plans
+        context.cacheDir.listFiles()?.forEach { 
+            if (it.isFile) it.delete()
+        }
     }
 
     /**

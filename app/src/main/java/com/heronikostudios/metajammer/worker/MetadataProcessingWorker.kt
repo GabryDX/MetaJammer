@@ -102,6 +102,9 @@ class MetadataProcessingWorker(
                     configuredPath = savingPath
                 )
                 
+                // Cleanup processedFile after saving
+                runCatching { processedFile.delete() }
+                
                 savedUri?.let { savedUris.add(it.toString()) }
                 processedCount++
                 

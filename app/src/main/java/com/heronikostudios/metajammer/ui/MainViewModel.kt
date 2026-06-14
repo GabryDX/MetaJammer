@@ -619,6 +619,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         fileRepository.clearCache()
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        clearTempFiles()
+    }
+
     private fun buildOutputName(originalName: String): String {
         val settings = _appSettings.value
 
