@@ -14,7 +14,8 @@
 - **⚡ Quick Scrub & Share:** A "truly invisible" workflow. Share a file to MetaJammer, let it auto-process, and immediately re-open the share sheet with the clean version.
 - **📦 Background Batch Processing:** Reliable processing for 50+ high-resolution files at once using Android WorkManager, complete with system notifications.
 - **📂 Flexible Output:** Save to custom folders via SAF, use standard MediaStore collections, or share directly to other apps.
-- **🖼️ Multi-Format Support:** Full compatibility with modern formats including JPEG, WebP, and HEIF/HEIC.
+- **🖼️ Multi-Format Support:** Full compatibility with modern image formats (JPEG, WebP, HEIF/HEIC) and video containers (MP4, MOV).
+- **🎨 Modern & Accessible UI:** Built with Jetpack Compose and Material 3, featuring Dynamic Color support, a dedicated OLED black mode, and advanced theme scheduling.
 
 ## Privacy & Security
 
@@ -22,7 +23,7 @@ MetaJammer is built on the **Principle of Least Privilege**:
 
 - **Zero Broad Permissions:** The app requires NO `READ_EXTERNAL_STORAGE` or `WRITE_EXTERNAL_STORAGE` permissions. It uses modern Scoped Storage and SAF.
 - **Opt-in Internet:** Internet access is strictly restricted to the optional Map Picker and is only active after explicit user consent.
-- **Hardened I/O:** Every filename is sanitized to prevent path-traversal attacks.
+- **Hardened I/O:** Every filename is sanitized and processing is isolated to specific subdirectories to prevent path-traversal or unauthorized access.
 - **No Cloud Leaks:** Android Auto-Backup is disabled to ensure unstripped metadata never leaves your device during processing.
 - **Automatic Cleanup:** All temporary processing residue is programmatically wiped from the cache after every session.
 
