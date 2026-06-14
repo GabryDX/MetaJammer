@@ -4,29 +4,16 @@ import android.net.Uri
 import androidx.exifinterface.media.ExifInterface
 import com.heronikostudios.metajammer.data.FileRepository
 import com.heronikostudios.metajammer.domain.model.MetadataReplacementPlan
+import com.heronikostudios.metajammer.domain.model.ThumbnailHandling
+import timber.log.Timber
 import java.io.File
 
 class ImageMetadataProcessor(
     private val fileRepository: FileRepository
 ) {
 
-    /**
-     * Removes metadata from an image.
-     * Uses an extensive list of tags to clear, targeting privacy-sensitive information.
-     */
-    fun removeMetadata(inputUri: Uri, keepOrientation: Boolean = true): File {
-        val inputFile = fileRepository.copyUriToCache(inputUri, prefix = "img_in_", suffix = ".jpg")
-        val outputFile = fileRepository.createSharedTempFile("img_clean_", ".jpg")
-        inputFile.copyTo(outputFile, overwrite = true)
-
-        val originalExif = ExifInterface(inputFile.absolutePath)
-        val originalOrientation = originalExif.getAttribute(ExifInterface.TAG_ORIENTATION)
-
-        val exif = ExifInterface(outputFile.absolutePath)
-
-        // Extensive list of tags to clear for maximum privacy.
-        // This covers GPS, device info, owner info, and workflow history.
-        val tagsToClear = listOf(
+    companion object {
+        private val ALL_PRIVACY_TAGS = listOf(
             ExifInterface.TAG_ARTIST,
             ExifInterface.TAG_COPYRIGHT,
             ExifInterface.TAG_DATETIME,
@@ -75,58 +62,10 @@ class ImageMetadataProcessor(
             ExifInterface.TAG_LENS_MAKE,
             ExifInterface.TAG_LENS_MODEL,
             ExifInterface.TAG_LENS_SERIAL_NUMBER,
-            ExifInterface.TAG_XMP // Clear embedded XMP data which often contains deep history
+            ExifInterface.TAG_XMP
         )
 
-        tagsToClear.forEach { tag ->
-            exif.setAttribute(tag, null)
-        }
-
-        if (keepOrientation && !originalOrientation.isNullOrBlank()) {
-            exif.setAttribute(ExifInterface.TAG_ORIENTATION, originalOrientation)
-        } else {
-            exif.setAttribute(ExifInterface.TAG_ORIENTATION, null)
-        }
-
-        exif.saveAttributes()
-        return outputFile
-    }
-
-    /**
-     * Replaces existing metadata with "poisoned" (fake) values from a plan.
-     */
-    fun poisonMetadata(
-        inputUri: Uri,
-        plan: MetadataReplacementPlan,
-        keepOrientation: Boolean = true
-    ): File {
-        val inputFile = fileRepository.copyUriToCache(inputUri, prefix = "img_in_", suffix = ".jpg")
-        val outputFile = fileRepository.createSharedTempFile("img_poisoned_", ".jpg")
-        inputFile.copyTo(outputFile, overwrite = true)
-
-        val originalExif = ExifInterface(inputFile.absolutePath)
-        val originalOrientation = originalExif.getAttribute(ExifInterface.TAG_ORIENTATION)
-
-        val exif = ExifInterface(outputFile.absolutePath)
-
-        // Set fake values
-        exif.setAttribute(ExifInterface.TAG_DATETIME, plan.dateTime)
-        exif.setAttribute(ExifInterface.TAG_DATETIME_ORIGINAL, plan.dateTime)
-        exif.setAttribute(ExifInterface.TAG_DATETIME_DIGITIZED, plan.dateTime)
-        exif.setAttribute(ExifInterface.TAG_MAKE, plan.make)
-        exif.setAttribute(ExifInterface.TAG_MODEL, plan.model)
-        exif.setAttribute(ExifInterface.TAG_SOFTWARE, plan.software)
-        exif.setAttribute(ExifInterface.TAG_IMAGE_DESCRIPTION, plan.imageDescription)
-        exif.setAttribute(ExifInterface.TAG_USER_COMMENT, plan.userComment)
-        exif.setAttribute(ExifInterface.TAG_PHOTOGRAPHIC_SENSITIVITY, plan.photographicSensitivity)
-        exif.setAttribute(ExifInterface.TAG_EXPOSURE_TIME, plan.exposureTime)
-        exif.setAttribute(ExifInterface.TAG_F_NUMBER, plan.fNumber)
-        exif.setAttribute(ExifInterface.TAG_FOCAL_LENGTH, plan.focalLength)
-        exif.setAttribute(ExifInterface.TAG_WHITE_BALANCE, plan.whiteBalance)
-        exif.setAttribute(ExifInterface.TAG_FLASH, plan.flash)
-
-        // Clear other sensitive tags that aren't part of the plan to ensure no leaks
-        val tagsToClear = listOf(
+        private val POISON_LEAK_PROTECTION_TAGS = listOf(
             ExifInterface.TAG_ARTIST,
             ExifInterface.TAG_COPYRIGHT,
             ExifInterface.TAG_GPS_ALTITUDE,
@@ -135,15 +74,87 @@ class ImageMetadataProcessor(
             ExifInterface.TAG_LENS_SERIAL_NUMBER,
             ExifInterface.TAG_XMP
         )
-        tagsToClear.forEach { exif.setAttribute(it, null) }
+    }
+
+    /**
+     * Removes metadata from an image.
+     */
+    fun removeMetadata(
+        inputUri: Uri,
+        keepOrientation: Boolean = true,
+        thumbnailHandling: ThumbnailHandling = ThumbnailHandling.REMOVE
+    ): File {
+        return processImage(inputUri, "img_clean_", keepOrientation, thumbnailHandling) { exif ->
+            ALL_PRIVACY_TAGS.forEach { tag -> exif.setAttribute(tag, null) }
+        }
+    }
+
+    /**
+     * Replaces existing metadata with "poisoned" (fake) values from a plan.
+     */
+    fun poisonMetadata(
+        inputUri: Uri,
+        plan: MetadataReplacementPlan,
+        keepOrientation: Boolean = true,
+        thumbnailHandling: ThumbnailHandling = ThumbnailHandling.REMOVE
+    ): File {
+        return processImage(inputUri, "img_poisoned_", keepOrientation, thumbnailHandling) { exif ->
+            // Set fake values
+            exif.setAttribute(ExifInterface.TAG_DATETIME, plan.dateTime)
+            exif.setAttribute(ExifInterface.TAG_DATETIME_ORIGINAL, plan.dateTime)
+            exif.setAttribute(ExifInterface.TAG_DATETIME_DIGITIZED, plan.dateTime)
+            exif.setAttribute(ExifInterface.TAG_MAKE, plan.make)
+            exif.setAttribute(ExifInterface.TAG_MODEL, plan.model)
+            exif.setAttribute(ExifInterface.TAG_SOFTWARE, plan.software)
+            exif.setAttribute(ExifInterface.TAG_IMAGE_DESCRIPTION, plan.imageDescription)
+            exif.setAttribute(ExifInterface.TAG_USER_COMMENT, plan.userComment)
+            exif.setAttribute(ExifInterface.TAG_PHOTOGRAPHIC_SENSITIVITY, plan.photographicSensitivity)
+            exif.setAttribute(ExifInterface.TAG_EXPOSURE_TIME, plan.exposureTime)
+            exif.setAttribute(ExifInterface.TAG_F_NUMBER, plan.fNumber)
+            exif.setAttribute(ExifInterface.TAG_FOCAL_LENGTH, plan.focalLength)
+            exif.setAttribute(ExifInterface.TAG_WHITE_BALANCE, plan.whiteBalance)
+            exif.setAttribute(ExifInterface.TAG_FLASH, plan.flash)
+
+            // Clear other sensitive tags to ensure no leaks
+            POISON_LEAK_PROTECTION_TAGS.forEach { exif.setAttribute(it, null) }
+
+            exif.setLatLong(plan.latitude, plan.longitude)
+        }
+    }
+
+    private inline fun processImage(
+        inputUri: Uri,
+        prefix: String,
+        keepOrientation: Boolean,
+        thumbnailHandling: ThumbnailHandling,
+        action: (ExifInterface) -> Unit
+    ): File {
+        val extension = fileRepository.getExtension(inputUri)
+        val outputFile = fileRepository.copyUriToCache(inputUri, prefix = prefix, suffix = extension)
+
+        val exif = ExifInterface(outputFile.absolutePath)
+        val originalOrientation = if (keepOrientation) exif.getAttribute(ExifInterface.TAG_ORIENTATION) else null
+
+        action(exif)
 
         if (keepOrientation && !originalOrientation.isNullOrBlank()) {
             exif.setAttribute(ExifInterface.TAG_ORIENTATION, originalOrientation)
+        } else if (!keepOrientation) {
+            exif.setAttribute(ExifInterface.TAG_ORIENTATION, null)
         }
 
-        exif.setLatLong(plan.latitude, plan.longitude)
+        if (thumbnailHandling == ThumbnailHandling.REMOVE) {
+            exif.setAttribute(ExifInterface.TAG_JPEG_INTERCHANGE_FORMAT, null)
+            exif.setAttribute(ExifInterface.TAG_JPEG_INTERCHANGE_FORMAT_LENGTH, null)
+        }
 
-        exif.saveAttributes()
+        try {
+            exif.saveAttributes()
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to save EXIF attributes for %s", outputFile.absolutePath)
+            outputFile.delete()
+            throw e
+        }
         return outputFile
     }
 }

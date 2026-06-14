@@ -12,5 +12,7 @@ data class AppSettings(
     val autoHandleSharedFiles: Boolean = false,
     val sharedFilesProcessingMode: ProcessingMode = ProcessingMode.REMOVE_METADATA,
     val sharedFilesOutputAction: SharedInputOutputAction = SharedInputOutputAction.SAVE_TO_DEFAULT_FOLDER,
-    val sharedFilesCustomPath: String? = null
+    val sharedFilesCustomPath: String? = null,
+    val thumbnailHandling: ThumbnailHandling = ThumbnailHandling.REMOVE,
+    val allowInternetForMap: Boolean = false
 )

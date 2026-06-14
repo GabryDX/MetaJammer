@@ -5,11 +5,18 @@ import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
 import android.provider.OpenableColumns
+import android.webkit.MimeTypeMap
 import androidx.documentfile.provider.DocumentFile
 import com.heronikostudios.metajammer.domain.model.SelectedFile
+import com.heronikostudios.metajammer.util.SanitizationUtils
+import timber.log.Timber
 import java.io.File
+import java.util.Locale
+import androidx.core.net.toUri
 
 class FileRepository(private val context: Context) {
+
+    fun getContext(): Context = context
 
     fun getSelectedFile(uri: Uri): SelectedFile {
         val resolver = context.contentResolver
@@ -29,7 +36,7 @@ class FileRepository(private val context: Context) {
                 val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
 
                 if (nameIndex != -1) {
-                    name = sanitizeFileName(cursor.getString(nameIndex))
+                    name = SanitizationUtils.sanitizeFileName(cursor.getString(nameIndex))
                 }
                 if (sizeIndex != -1 && !cursor.isNull(sizeIndex)) {
                     size = cursor.getLong(sizeIndex)
@@ -46,13 +53,38 @@ class FileRepository(private val context: Context) {
     }
 
     fun copyUriToCache(uri: Uri, prefix: String = "input_", suffix: String? = null): File {
-        val tempFile = createSharedTempFile(prefix, suffix)
+        val resolvedSuffix = suffix ?: getExtension(uri)
+        val tempFile = createSharedTempFile(prefix, resolvedSuffix)
         context.contentResolver.openInputStream(uri)?.use { input ->
             tempFile.outputStream().use { output ->
                 input.copyTo(output)
             }
-        } ?: error("Unable to open input stream for $uri")
+        } ?: run {
+            Timber.e("Unable to open input stream for %s", uri)
+            error("Unable to open input stream for $uri")
+        }
         return tempFile
+    }
+
+    fun getExtension(uri: Uri): String {
+        val mimeType = context.contentResolver.getType(uri)
+        var extension: String? = null
+
+        if (mimeType != null) {
+            extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
+        }
+
+        if (extension == null) {
+            val path = uri.path
+            if (path != null) {
+                val lastDot = path.lastIndexOf('.')
+                if (lastDot != -1) {
+                    extension = path.substring(lastDot + 1).lowercase(Locale.ROOT)
+                }
+            }
+        }
+
+        return if (extension != null) ".$extension" else ""
     }
 
     fun saveToDefaultFolder(
@@ -65,7 +97,7 @@ class FileRepository(private val context: Context) {
 
         return if (path.startsWith("content://")) {
             saveToCustomFolder(
-                treeUri = Uri.parse(path),
+                treeUri = path.toUri(),
                 sourceFile = sourceFile,
                 displayName = displayName,
                 mimeType = mimeType
@@ -101,13 +133,19 @@ class FileRepository(private val context: Context) {
             put(MediaStore.MediaColumns.IS_PENDING, 1)
         }
 
-        val uri = resolver.insert(collection, values) ?: return null
+        val uri = resolver.insert(collection, values) ?: run {
+            Timber.e("Failed to insert media into MediaStore")
+            return null
+        }
 
         resolver.openOutputStream(uri)?.use { output ->
             sourceFile.inputStream().use { input ->
                 input.copyTo(output)
             }
-        } ?: return null
+        } ?: run {
+            Timber.e("Failed to open output stream for MediaStore URI: %s", uri)
+            return null
+        }
 
         val completedValues = ContentValues().apply {
             put(MediaStore.MediaColumns.IS_PENDING, 0)
@@ -123,14 +161,23 @@ class FileRepository(private val context: Context) {
         displayName: String,
         mimeType: String?
     ): Uri? {
-        val folder = DocumentFile.fromTreeUri(context, treeUri) ?: return null
-        val outFile = folder.createFile(mimeType ?: "application/octet-stream", displayName) ?: return null
+        val folder = DocumentFile.fromTreeUri(context, treeUri) ?: run {
+            Timber.e("Failed to get DocumentFile from tree URI: %s", treeUri)
+            return null
+        }
+        val outFile = folder.createFile(mimeType ?: "application/octet-stream", displayName) ?: run {
+            Timber.e("Failed to create file in custom folder")
+            return null
+        }
 
         context.contentResolver.openOutputStream(outFile.uri)?.use { output ->
             sourceFile.inputStream().use { input ->
                 input.copyTo(output)
             }
-        } ?: return null
+        } ?: run {
+            Timber.e("Failed to open output stream for custom folder file: %s", outFile.uri)
+            return null
+        }
 
         return outFile.uri
     }
@@ -148,22 +195,24 @@ class FileRepository(private val context: Context) {
     }
 
     /**
+     * Clears all temporary files in the 'shared' cache directory.
+     */
+    fun clearCache() {
+        val sharedDir = File(context.cacheDir, "shared")
+        if (sharedDir.exists()) {
+            sharedDir.listFiles()?.forEach { it.delete() }
+        }
+        // Also clear root cache directory for any stray files like processing_plans
+        context.cacheDir.listFiles()?.forEach { 
+            if (it.isFile) it.delete()
+        }
+    }
+
+    /**
      * Sanitizes a filename to prevent path traversal and remove illegal characters.
      */
+    @Deprecated("Use SanitizationUtils.sanitizeFileName", replaceWith = ReplaceWith("SanitizationUtils.sanitizeFileName(fileName)"))
     private fun sanitizeFileName(fileName: String?): String {
-        if (fileName.isNullOrBlank()) return "unknown_${System.currentTimeMillis()}"
-        
-        // 1. Strip path components by getting only the 'name' part
-        val nameOnly = File(fileName).name
-        
-        // 2. Replace common illegal characters with underscores
-        val sanitized = nameOnly.replace(Regex("[^a-zA-Z0-9._-]"), "_")
-        
-        // 3. Ensure it's not empty and doesn't start with a dot (hidden file)
-        return if (sanitized.isBlank() || sanitized.startsWith(".")) {
-            "file_${System.currentTimeMillis()}_$sanitized"
-        } else {
-            sanitized
-        }
+        return SanitizationUtils.sanitizeFileName(fileName)
     }
 }

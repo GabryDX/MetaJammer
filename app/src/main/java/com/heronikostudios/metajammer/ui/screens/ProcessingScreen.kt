@@ -15,11 +15,13 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.heronikostudios.metajammer.domain.model.MetadataEntry
 import com.heronikostudios.metajammer.domain.model.ProcessingMode
 import com.heronikostudios.metajammer.domain.model.SelectedFile
+import androidx.work.WorkInfo
 
 @Composable
 fun ProcessingScreen(
@@ -27,9 +29,11 @@ fun ProcessingScreen(
     selectedMode: ProcessingMode?,
     changePreview: Map<Uri, List<MetadataEntry>>,
     processing: Boolean,
+    workInfo: WorkInfo?,
     onModeSelected: (ProcessingMode) -> Unit,
     onProcess: () -> Unit,
     onNext: () -> Unit,
+    onEditLocation: (Uri) -> Unit,
     hasProcessedFiles: Boolean,
     modifier: Modifier = Modifier
 ) {
@@ -99,6 +103,15 @@ fun ProcessingScreen(
                                         style = MaterialTheme.typography.bodySmall
                                     )
                                 }
+                                
+                                if (selectedMode == ProcessingMode.POISON_METADATA) {
+                                    Button(
+                                        onClick = { onEditLocation(file.uri) },
+                                        modifier = Modifier.padding(top = 8.dp)
+                                    ) {
+                                        Text("Change Location on Map")
+                                    }
+                                }
                             }
                         }
                     }
@@ -115,7 +128,30 @@ fun ProcessingScreen(
         }
 
         if (processing) {
-            CircularProgressIndicator()
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                CircularProgressIndicator()
+                Text("Processing in foreground...", style = MaterialTheme.typography.bodySmall)
+            }
+        }
+
+        workInfo?.let { info ->
+            if (info.state == WorkInfo.State.RUNNING || info.state == WorkInfo.State.ENQUEUED) {
+                val progress = info.progress.getInt("progress", 0)
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    androidx.compose.material3.LinearProgressIndicator(
+                        progress = { progress / 100f },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Text("Background Progress: $progress%", style = MaterialTheme.typography.bodySmall)
+                }
+            }
         }
 
         if (hasProcessedFiles) {

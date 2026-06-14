@@ -3,38 +3,19 @@ package com.heronikostudios.metajammer.ui.screens
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.RadioButton
-import androidx.compose.material3.Switch
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import com.heronikostudios.metajammer.domain.model.AppSettings
-import com.heronikostudios.metajammer.domain.model.NightModeSetting
-import com.heronikostudios.metajammer.domain.model.ProcessingMode
-import com.heronikostudios.metajammer.domain.model.SharedInputOutputAction
+import com.heronikostudios.metajammer.domain.model.*
 
 @Composable
 fun SettingsScreen(
@@ -51,51 +32,19 @@ fun SettingsScreen(
     onSharedFilesProcessingModeChanged: (ProcessingMode) -> Unit,
     onSharedFilesOutputActionChanged: (SharedInputOutputAction) -> Unit,
     onSharedFilesCustomPathSelected: (Uri?) -> Unit,
+    onThumbnailHandlingChanged: (ThumbnailHandling) -> Unit,
+    onAllowInternetForMapChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val folderPicker = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.OpenDocumentTree()
-    ) { uri ->
-        onDefaultSavingPathSelected(uri)
+    val folderPicker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { 
+        onDefaultSavingPathSelected(it) 
+    }
+    val sharedFolderPicker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { 
+        onSharedFilesCustomPathSelected(it) 
     }
 
-    val sharedFolderPicker = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.OpenDocumentTree()
-    ) { uri ->
-        onSharedFilesCustomPathSelected(uri)
-    }
-
-    var showNightModeDialog by remember { mutableStateOf(false) }
-    var showPrefixDialog by remember { mutableStateOf(false) }
-    var showSuffixDialog by remember { mutableStateOf(false) }
-    var showSharedProcessingModeDialog by remember { mutableStateOf(false) }
-    var showSharedOutputActionDialog by remember { mutableStateOf(false) }
-
-    var tempNightMode by remember(settings.nightMode) { mutableStateOf(settings.nightMode) }
-    var tempPrefix by remember(settings.defaultPrefix) { mutableStateOf(settings.defaultPrefix) }
-    var tempSuffix by remember(settings.defaultSuffix) { mutableStateOf(settings.defaultSuffix) }
-    var tempSharedProcessingMode by remember(settings.sharedFilesProcessingMode) {
-        mutableStateOf(settings.sharedFilesProcessingMode)
-    }
-    var tempSharedOutputAction by remember(settings.sharedFilesOutputAction) {
-        mutableStateOf(settings.sharedFilesOutputAction)
-    }
-
-    LaunchedEffect(settings.nightMode) {
-        tempNightMode = settings.nightMode
-    }
-    LaunchedEffect(settings.defaultPrefix) {
-        tempPrefix = settings.defaultPrefix
-    }
-    LaunchedEffect(settings.defaultSuffix) {
-        tempSuffix = settings.defaultSuffix
-    }
-    LaunchedEffect(settings.sharedFilesProcessingMode) {
-        tempSharedProcessingMode = settings.sharedFilesProcessingMode
-    }
-    LaunchedEffect(settings.sharedFilesOutputAction) {
-        tempSharedOutputAction = settings.sharedFilesOutputAction
-    }
+    // Single state for active dialog to reduce memory footprint and avoid overlaps
+    var activeDialog by remember { mutableStateOf<SettingsDialog?>(null) }
 
     Column(
         modifier = modifier
@@ -104,410 +53,156 @@ fun SettingsScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Card(modifier = Modifier.fillMaxWidth()) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                Text(
-                    text = "File management",
-                    style = MaterialTheme.typography.titleMedium
-                )
+        SettingsCategory(title = "File Management") {
+            SettingSwitchRow(
+                title = "Use random file names",
+                subtitle = "Generate randomized output names instead of using the original file name",
+                checked = settings.useRandomFileNames,
+                onCheckedChange = onUseRandomFileNamesChanged
+            )
 
-                SettingSwitchRow(
-                    title = "Use random file names",
-                    subtitle = "Generate randomized output names instead of using the original file name",
-                    checked = settings.useRandomFileNames,
-                    onCheckedChange = onUseRandomFileNamesChanged
-                )
+            HorizontalDivider()
 
-                HorizontalDivider()
+            SettingFolderRow(
+                title = "Default saving path",
+                currentPath = settings.defaultSavingPath ?: "Pictures/MetaJammer",
+                onSelect = { folderPicker.launch(null) },
+                onReset = { onDefaultSavingPathSelected(null) },
+                resetLabel = "Reset to Pictures/MetaJammer"
+            )
+        }
 
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(
-                        text = "Default saving path",
-                        style = MaterialTheme.typography.bodyLarge
-                    )
+        SettingsCategory(title = "Image / File") {
+            SettingSwitchRow(
+                title = "Keep image orientation",
+                subtitle = "Preserve image orientation metadata when possible",
+                checked = settings.keepImageOrientation,
+                onCheckedChange = onKeepImageOrientationChanged
+            )
 
-                    Text(
-                        text = settings.defaultSavingPath ?: "Pictures/MetaJammer",
-                        style = MaterialTheme.typography.bodySmall
-                    )
+            SettingSwitchRow(
+                title = "Share result as default",
+                subtitle = "Saving will also trigger sharing",
+                checked = settings.shareResultAsDefault,
+                onCheckedChange = onShareResultAsDefaultChanged
+            )
 
-                    Button(
-                        onClick = { folderPicker.launch(null) },
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text("Select Default Saving Path")
-                    }
+            HorizontalDivider()
 
-                    Button(
-                        onClick = { onDefaultSavingPathSelected(null) },
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text("Reset to Pictures/MetaJammer")
-                    }
+            DialogSettingRow(
+                title = "Default Prefix",
+                value = settings.defaultPrefix.ifBlank { "Not set" },
+                onClick = { activeDialog = SettingsDialog.Prefix(settings.defaultPrefix) }
+            )
+
+            DialogSettingRow(
+                title = "Default Suffix",
+                value = settings.defaultSuffix.ifBlank { "Not set" },
+                onClick = { activeDialog = SettingsDialog.Suffix(settings.defaultSuffix) }
+            )
+
+            SettingSwitchRow(
+                title = "Keep original thumbnails",
+                subtitle = "If the file contains an embedded thumbnail, preserve it as-is. If disabled, any existing thumbnail will be removed for maximum privacy.",
+                checked = settings.thumbnailHandling == ThumbnailHandling.KEEP_ORIGINAL,
+                onCheckedChange = { isChecked ->
+                    onThumbnailHandlingChanged(if (isChecked) ThumbnailHandling.KEEP_ORIGINAL else ThumbnailHandling.REMOVE)
                 }
+            )
+
+            if (settings.thumbnailHandling == ThumbnailHandling.KEEP_ORIGINAL) {
+                SettingWarningCard(
+                    message = "Warning: Keeping original thumbnails may leak metadata (location, device info) even if main tags are removed."
+                )
+            }
+
+            SettingSwitchRow(
+                title = "Enable map picker",
+                subtitle = "Allow the app to connect to the internet to show OpenStreetMap for location selection",
+                checked = settings.allowInternetForMap,
+                onCheckedChange = onAllowInternetForMapChanged
+            )
+        }
+
+        SettingsCategory(title = "Shared Files Behavior") {
+            SettingSwitchRow(
+                title = "Quick Scrub & Share",
+                subtitle = "Automatically strip metadata and re-open Share Sheet for shared files",
+                checked = settings.autoHandleSharedFiles,
+                onCheckedChange = onAutoHandleSharedFilesChanged
+            )
+
+            DialogSettingRow(
+                title = "Metadata action",
+                value = settings.sharedFilesProcessingMode.toReadableLabel(),
+                onClick = { activeDialog = SettingsDialog.SharedProcessingMode(settings.sharedFilesProcessingMode) }
+            )
+
+            DialogSettingRow(
+                title = "Output action",
+                value = settings.sharedFilesOutputAction.toReadableLabel(),
+                onClick = { activeDialog = SettingsDialog.SharedOutputAction(settings.sharedFilesOutputAction) }
+            )
+
+            if (settings.sharedFilesOutputAction == SharedInputOutputAction.SAVE_TO_SHARED_FOLDER) {
+                SettingFolderRow(
+                    title = "Dedicated shared-files folder",
+                    currentPath = settings.sharedFilesCustomPath ?: "No dedicated folder selected",
+                    onSelect = { sharedFolderPicker.launch(null) },
+                    onReset = { onSharedFilesCustomPathSelected(null) },
+                    resetLabel = "Clear Dedicated Folder"
+                )
             }
         }
 
-        Card(modifier = Modifier.fillMaxWidth()) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                Text(
-                    text = "Image / File",
-                    style = MaterialTheme.typography.titleMedium
-                )
+        SettingsCategory(title = "UI") {
+            DialogSettingRow(
+                title = "Night mode",
+                value = settings.nightMode.toReadableLabel(),
+                onClick = { activeDialog = SettingsDialog.NightMode(settings.nightMode) }
+            )
 
-                SettingSwitchRow(
-                    title = "Keep image orientation",
-                    subtitle = "Preserve image orientation metadata when possible",
-                    checked = settings.keepImageOrientation,
-                    onCheckedChange = onKeepImageOrientationChanged
-                )
-
-                SettingSwitchRow(
-                    title = "Share result as default",
-                    subtitle = "Saving will also trigger sharing",
-                    checked = settings.shareResultAsDefault,
-                    onCheckedChange = onShareResultAsDefaultChanged
-                )
-
-                DialogSettingRow(
-                    title = "Default Prefix",
-                    value = settings.defaultPrefix.ifBlank { "Not set" },
-                    onClick = {
-                        tempPrefix = settings.defaultPrefix
-                        showPrefixDialog = true
-                    }
-                )
-
-                DialogSettingRow(
-                    title = "Default Suffix",
-                    value = settings.defaultSuffix.ifBlank { "Not set" },
-                    onClick = {
-                        tempSuffix = settings.defaultSuffix
-                        showSuffixDialog = true
-                    }
-                )
-            }
-        }
-
-        Card(modifier = Modifier.fillMaxWidth()) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                Text(
-                    text = "Default behavior for shared files",
-                    style = MaterialTheme.typography.titleMedium
-                )
-
-                SettingSwitchRow(
-                    title = "Enable automatic handling",
-                    subtitle = "When files are shared from another app, process them immediately using the defaults below",
-                    checked = settings.autoHandleSharedFiles,
-                    onCheckedChange = onAutoHandleSharedFilesChanged
-                )
-
-                DialogSettingRow(
-                    title = "Metadata action",
-                    value = settings.sharedFilesProcessingMode.toReadableLabel(),
-                    onClick = {
-                        tempSharedProcessingMode = settings.sharedFilesProcessingMode
-                        showSharedProcessingModeDialog = true
-                    }
-                )
-
-                DialogSettingRow(
-                    title = "Output action",
-                    value = settings.sharedFilesOutputAction.toReadableLabel(),
-                    onClick = {
-                        tempSharedOutputAction = settings.sharedFilesOutputAction
-                        showSharedOutputActionDialog = true
-                    }
-                )
-
-                if (settings.sharedFilesOutputAction == SharedInputOutputAction.SAVE_TO_SHARED_FOLDER) {
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text(
-                            text = "Dedicated shared-files folder",
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-
-                        Text(
-                            text = settings.sharedFilesCustomPath ?: "No dedicated folder selected",
-                            style = MaterialTheme.typography.bodySmall
-                        )
-
-                        Button(
-                            onClick = { sharedFolderPicker.launch(null) },
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text("Select Dedicated Folder")
-                        }
-
-                        Button(
-                            onClick = { onSharedFilesCustomPathSelected(null) },
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text("Clear Dedicated Folder")
-                        }
-                    }
-                }
-            }
-        }
-
-        Card(modifier = Modifier.fillMaxWidth()) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                Text(
-                    text = "UI",
-                    style = MaterialTheme.typography.titleMedium
-                )
-
-                DialogSettingRow(
-                    title = "Night mode",
-                    value = settings.nightMode.toReadableLabel(),
-                    onClick = {
-                        tempNightMode = settings.nightMode
-                        showNightModeDialog = true
-                    }
-                )
-
-                HorizontalDivider()
-
-                SettingSwitchRow(
-                    title = "OLED mode",
-                    subtitle = "Use darker black tones for supported dark themes",
-                    checked = settings.oledMode,
-                    onCheckedChange = onOledModeChanged
-                )
-            }
+            SettingSwitchRow(
+                title = "OLED mode",
+                subtitle = "Use darker black tones for supported dark themes",
+                checked = settings.oledMode,
+                onCheckedChange = onOledModeChanged
+            )
         }
     }
 
-    if (showNightModeDialog) {
-        AlertDialog(
-            onDismissRequest = { showNightModeDialog = false },
-            title = { Text("Night mode") },
-            text = {
-                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    NightModeSetting.entries.forEach { mode ->
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .selectable(
-                                    selected = tempNightMode == mode,
-                                    onClick = { tempNightMode = mode }
-                                )
-                                .padding(vertical = 4.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            RadioButton(
-                                selected = tempNightMode == mode,
-                                onClick = { tempNightMode = mode }
-                            )
-                            Text(text = mode.toReadableLabel())
-                        }
-                    }
-                }
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        onNightModeChanged(tempNightMode)
-                        showNightModeDialog = false
-                    }
-                ) {
-                    Text("OK")
-                }
-            },
-            dismissButton = {
-                TextButton(
-                    onClick = {
-                        tempNightMode = settings.nightMode
-                        showNightModeDialog = false
-                    }
-                ) {
-                    Text("Cancel")
-                }
-            }
+    // Centralized Dialog Controller
+    val currentDialog = activeDialog
+    if (currentDialog != null) {
+        HandleSettingsDialog(
+            dialog = currentDialog,
+            onDismiss = { if (activeDialog != null) activeDialog = null },
+            onNightModeChanged = onNightModeChanged,
+            onPrefixChanged = onDefaultPrefixChanged,
+            onSuffixChanged = onDefaultSuffixChanged,
+            onProcessingModeChanged = onSharedFilesProcessingModeChanged,
+            onOutputActionChanged = onSharedFilesOutputActionChanged
         )
     }
+}
 
-    if (showPrefixDialog) {
-        AlertDialog(
-            onDismissRequest = { showPrefixDialog = false },
-            title = { Text("Default Prefix") },
-            text = {
-                OutlinedTextField(
-                    value = tempPrefix,
-                    onValueChange = { tempPrefix = it },
-                    label = { Text("Default Prefix") },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
-                )
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        onDefaultPrefixChanged(tempPrefix)
-                        showPrefixDialog = false
-                    }
-                ) {
-                    Text("OK")
-                }
-            },
-            dismissButton = {
-                TextButton(
-                    onClick = {
-                        tempPrefix = settings.defaultPrefix
-                        showPrefixDialog = false
-                    }
-                ) {
-                    Text("Cancel")
-                }
-            }
-        )
-    }
-
-    if (showSuffixDialog) {
-        AlertDialog(
-            onDismissRequest = { showSuffixDialog = false },
-            title = { Text("Default Suffix") },
-            text = {
-                OutlinedTextField(
-                    value = tempSuffix,
-                    onValueChange = { tempSuffix = it },
-                    label = { Text("Default Suffix") },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
-                )
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        onDefaultSuffixChanged(tempSuffix)
-                        showSuffixDialog = false
-                    }
-                ) {
-                    Text("OK")
-                }
-            },
-            dismissButton = {
-                TextButton(
-                    onClick = {
-                        tempSuffix = settings.defaultSuffix
-                        showSuffixDialog = false
-                    }
-                ) {
-                    Text("Cancel")
-                }
-            }
-        )
-    }
-
-    if (showSharedProcessingModeDialog) {
-        AlertDialog(
-            onDismissRequest = { showSharedProcessingModeDialog = false },
-            title = { Text("Metadata action for shared files") },
-            text = {
-                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    ProcessingMode.entries.forEach { mode ->
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .selectable(
-                                    selected = tempSharedProcessingMode == mode,
-                                    onClick = { tempSharedProcessingMode = mode }
-                                )
-                                .padding(vertical = 4.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            RadioButton(
-                                selected = tempSharedProcessingMode == mode,
-                                onClick = { tempSharedProcessingMode = mode }
-                            )
-                            Text(text = mode.toReadableLabel())
-                        }
-                    }
-                }
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        onSharedFilesProcessingModeChanged(tempSharedProcessingMode)
-                        showSharedProcessingModeDialog = false
-                    }
-                ) {
-                    Text("OK")
-                }
-            },
-            dismissButton = {
-                TextButton(
-                    onClick = {
-                        tempSharedProcessingMode = settings.sharedFilesProcessingMode
-                        showSharedProcessingModeDialog = false
-                    }
-                ) {
-                    Text("Cancel")
-                }
-            }
-        )
-    }
-
-    if (showSharedOutputActionDialog) {
-        AlertDialog(
-            onDismissRequest = { showSharedOutputActionDialog = false },
-            title = { Text("Output action for shared files") },
-            text = {
-                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    SharedInputOutputAction.entries.forEach { action ->
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .selectable(
-                                    selected = tempSharedOutputAction == action,
-                                    onClick = { tempSharedOutputAction = action }
-                                )
-                                .padding(vertical = 4.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            RadioButton(
-                                selected = tempSharedOutputAction == action,
-                                onClick = { tempSharedOutputAction = action }
-                            )
-                            Text(text = action.toReadableLabel())
-                        }
-                    }
-                }
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        onSharedFilesOutputActionChanged(tempSharedOutputAction)
-                        showSharedOutputActionDialog = false
-                    }
-                ) {
-                    Text("OK")
-                }
-            },
-            dismissButton = {
-                TextButton(
-                    onClick = {
-                        tempSharedOutputAction = settings.sharedFilesOutputAction
-                        showSharedOutputActionDialog = false
-                    }
-                ) {
-                    Text("Cancel")
-                }
-            }
-        )
+@Composable
+private fun SettingsCategory(
+    title: String,
+    content: @Composable ColumnScope.() -> Unit
+) {
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.primary
+            )
+            content()
+        }
     }
 }
 
@@ -522,23 +217,56 @@ private fun SettingSwitchRow(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Column(
-            modifier = Modifier.weight(1f)
+        Column(modifier = Modifier.weight(1f)) {
+            Text(text = title, style = MaterialTheme.typography.bodyLarge)
+            Text(text = subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+        Switch(checked = checked, onCheckedChange = onCheckedChange)
+    }
+}
+
+@Composable
+private fun SettingWarningCard(message: String) {
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.errorContainer,
+            contentColor = MaterialTheme.colorScheme.onErrorContainer
+        ),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier.padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.bodyLarge
+            Icon(
+                imageVector = Icons.Default.Warning,
+                contentDescription = "Warning",
+                modifier = Modifier.size(24.dp)
             )
             Text(
-                text = subtitle,
+                text = message,
                 style = MaterialTheme.typography.bodySmall
             )
         }
+    }
+}
 
-        Switch(
-            checked = checked,
-            onCheckedChange = onCheckedChange
-        )
+@Composable
+private fun SettingFolderRow(
+    title: String,
+    currentPath: String,
+    onSelect: () -> Unit,
+    onReset: () -> Unit,
+    resetLabel: String
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(text = title, style = MaterialTheme.typography.bodyLarge)
+        Text(text = currentPath, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.secondary)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Button(onClick = onSelect, modifier = Modifier.weight(1f)) { Text("Select Folder") }
+            OutlinedButton(onClick = onReset, modifier = Modifier.weight(1f)) { Text(resetLabel) }
+        }
     }
 }
 
@@ -548,51 +276,157 @@ private fun DialogSettingRow(
     value: String,
     onClick: () -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 4.dp)
+    Surface(
+        onClick = onClick,
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.small
     ) {
-        Button(
-            onClick = onClick,
-            modifier = Modifier.fillMaxWidth()
+        Row(
+            modifier = Modifier.padding(vertical = 12.dp, horizontal = 4.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.bodyLarge
-                )
-                Text(
-                    text = value,
-                    style = MaterialTheme.typography.bodySmall
-                )
+            Column(modifier = Modifier.weight(1f)) {
+                Text(text = title, style = MaterialTheme.typography.bodyLarge)
+                Text(text = value, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
             }
         }
     }
 }
 
-private fun NightModeSetting.toReadableLabel(): String {
-    return when (this) {
-        NightModeSetting.ALWAYS -> "Always"
-        NightModeSetting.AUTOMATIC -> "Automatic"
-        NightModeSetting.ONLY_LOW_BATTERY -> "Only low battery"
-        NightModeSetting.NEVER -> "Never"
+private sealed class SettingsDialog {
+    data class NightMode(val current: NightModeSetting) : SettingsDialog()
+    data class Prefix(val current: String) : SettingsDialog()
+    data class Suffix(val current: String) : SettingsDialog()
+    data class SharedProcessingMode(val current: ProcessingMode) : SettingsDialog()
+    data class SharedOutputAction(val current: SharedInputOutputAction) : SettingsDialog()
+}
+
+@Composable
+private fun HandleSettingsDialog(
+    dialog: SettingsDialog,
+    onDismiss: () -> Unit,
+    onNightModeChanged: (NightModeSetting) -> Unit,
+    onPrefixChanged: (String) -> Unit,
+    onSuffixChanged: (String) -> Unit,
+    onProcessingModeChanged: (ProcessingMode) -> Unit,
+    onOutputActionChanged: (SharedInputOutputAction) -> Unit
+) {
+    when (dialog) {
+        is SettingsDialog.Prefix -> TextFieldDialog(
+            title = "Default Prefix",
+            initialValue = dialog.current,
+            onConfirm = onPrefixChanged,
+            onDismiss = onDismiss
+        )
+        is SettingsDialog.Suffix -> TextFieldDialog(
+            title = "Default Suffix",
+            initialValue = dialog.current,
+            onConfirm = onSuffixChanged,
+            onDismiss = onDismiss
+        )
+        is SettingsDialog.NightMode -> SingleSelectDialog(
+            title = "Night Mode",
+            options = NightModeSetting.entries,
+            selected = dialog.current,
+            labelProvider = { it.toReadableLabel() },
+            onConfirm = onNightModeChanged,
+            onDismiss = onDismiss
+        )
+        is SettingsDialog.SharedProcessingMode -> SingleSelectDialog(
+            title = "Metadata Action",
+            options = ProcessingMode.entries,
+            selected = dialog.current,
+            labelProvider = { it.toReadableLabel() },
+            onConfirm = onProcessingModeChanged,
+            onDismiss = onDismiss
+        )
+        is SettingsDialog.SharedOutputAction -> SingleSelectDialog(
+            title = "Output Action",
+            options = SharedInputOutputAction.entries,
+            selected = dialog.current,
+            labelProvider = { it.toReadableLabel() },
+            onConfirm = onOutputActionChanged,
+            onDismiss = onDismiss
+        )
     }
 }
 
-private fun ProcessingMode.toReadableLabel(): String {
-    return when (this) {
-        ProcessingMode.POISON_METADATA -> "Poison metadata"
-        ProcessingMode.REMOVE_METADATA -> "Remove metadata"
-    }
+@Composable
+private fun TextFieldDialog(
+    title: String,
+    initialValue: String,
+    onConfirm: (String) -> Unit,
+    onDismiss: () -> Unit
+) {
+    var value by remember { mutableStateOf(initialValue) }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(title) },
+        text = {
+            OutlinedTextField(
+                value = value,
+                onValueChange = { value = it },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true
+            )
+        },
+        confirmButton = { TextButton(onClick = { onConfirm(value); onDismiss() }) { Text("OK") } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } }
+    )
 }
 
-private fun SharedInputOutputAction.toReadableLabel(): String {
-    return when (this) {
-        SharedInputOutputAction.SAVE_TO_DEFAULT_FOLDER -> "Save to default folder"
-        SharedInputOutputAction.SAVE_TO_SHARED_FOLDER -> "Save to dedicated shared-files folder"
-        SharedInputOutputAction.SHARE_TO_ANOTHER_APP -> "Share to another app"
-    }
+@Composable
+private fun <T> SingleSelectDialog(
+    title: String,
+    options: List<T>,
+    selected: T,
+    labelProvider: (T) -> String,
+    onConfirm: (T) -> Unit,
+    onDismiss: () -> Unit
+) {
+    var currentSelection by remember { mutableStateOf(selected) }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(title) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                options.forEach { option ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .selectable(
+                                selected = currentSelection == option,
+                                onClick = { currentSelection = option }
+                            )
+                            .padding(vertical = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(selected = currentSelection == option, onClick = { currentSelection = option })
+                        Text(text = labelProvider(option), modifier = Modifier.padding(start = 8.dp))
+                    }
+                }
+            }
+        },
+        confirmButton = { TextButton(onClick = { onConfirm(currentSelection); onDismiss() }) { Text("OK") } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } }
+    )
+}
+
+// Labels
+private fun NightModeSetting.toReadableLabel() = when (this) {
+    NightModeSetting.ALWAYS -> "Always"
+    NightModeSetting.AUTOMATIC -> "Automatic"
+    NightModeSetting.ONLY_LOW_BATTERY -> "Only low battery"
+    NightModeSetting.NEVER -> "Never"
+}
+
+private fun ProcessingMode.toReadableLabel() = when (this) {
+    ProcessingMode.POISON_METADATA -> "Poison metadata (Fake info)"
+    ProcessingMode.REMOVE_METADATA -> "Remove metadata (Full strip)"
+}
+
+private fun SharedInputOutputAction.toReadableLabel() = when (this) {
+    SharedInputOutputAction.SAVE_TO_DEFAULT_FOLDER -> "Save to default folder"
+    SharedInputOutputAction.SAVE_TO_SHARED_FOLDER -> "Save to dedicated folder"
+    SharedInputOutputAction.SHARE_TO_ANOTHER_APP -> "Re-share sanitized files"
 }

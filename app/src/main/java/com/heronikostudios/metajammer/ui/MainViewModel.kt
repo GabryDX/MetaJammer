@@ -5,6 +5,10 @@ import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import com.heronikostudios.metajammer.data.FileRepository
 import com.heronikostudios.metajammer.data.MetadataRepository
 import com.heronikostudios.metajammer.data.SettingsRepository
@@ -15,13 +19,21 @@ import com.heronikostudios.metajammer.domain.model.NightModeSetting
 import com.heronikostudios.metajammer.domain.model.ProcessingMode
 import com.heronikostudios.metajammer.domain.model.SelectedFile
 import com.heronikostudios.metajammer.domain.model.SharedInputOutputAction
+import com.heronikostudios.metajammer.domain.model.ThumbnailHandling
 import com.heronikostudios.metajammer.domain.usecase.ProcessFileUseCase
 import com.heronikostudios.metajammer.domain.usecase.SaveFileUseCase
 import com.heronikostudios.metajammer.metadata.MetadataReplacementGenerator
+import com.heronikostudios.metajammer.util.SanitizationUtils
+import com.heronikostudios.metajammer.worker.MetadataProcessingWorker
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import timber.log.Timber
 import java.io.File
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
@@ -30,6 +42,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val fileRepository = FileRepository(appContext)
     private val metadataRepository = MetadataRepository(fileRepository)
     private val settingsRepository = SettingsRepository(appContext)
+    private val workManager = WorkManager.getInstance(appContext)
     private val processFileUseCase = ProcessFileUseCase(metadataRepository)
     private val saveFileUseCase = SaveFileUseCase(fileRepository)
 
@@ -43,6 +56,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val changePreview: StateFlow<Map<Uri, List<MetadataEntry>>> = _changePreview.asStateFlow()
 
     private val _replacementPlans = MutableStateFlow<Map<Uri, MetadataReplacementPlan>>(emptyMap())
+    val replacementPlans: StateFlow<Map<Uri, MetadataReplacementPlan>> = _replacementPlans.asStateFlow()
 
     private val _selectedMode = MutableStateFlow<ProcessingMode?>(null)
     val selectedMode: StateFlow<ProcessingMode?> = _selectedMode.asStateFlow()
@@ -62,7 +76,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _settingsInitialized = MutableStateFlow(false)
     val settingsInitialized: StateFlow<Boolean> = _settingsInitialized.asStateFlow()
 
+    private val _workInfo = MutableStateFlow<WorkInfo?>(null)
+    val workInfo: StateFlow<WorkInfo?> = _workInfo.asStateFlow()
+
     init {
+        fileRepository.clearCache()
         observeSettings()
     }
 
@@ -132,17 +150,31 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 _appSettings.value = _appSettings.value.copy(sharedFilesCustomPath = it)
             }
         }
+        viewModelScope.launch {
+            settingsRepository.thumbnailHandlingFlow.collect {
+                _appSettings.value = _appSettings.value.copy(thumbnailHandling = it)
+            }
+        }
+        viewModelScope.launch {
+            settingsRepository.allowInternetForMapFlow.collect {
+                _appSettings.value = _appSettings.value.copy(allowInternetForMap = it)
+            }
+        }
     }
 
     fun setIncomingUris(uris: List<Uri>) {
-        val files = uris.distinct().map(fileRepository::getSelectedFile)
-        clearProcessedFiles()
-        _selectedFiles.value = files
-        _metadataPreview.value = emptyMap()
-        _changePreview.value = emptyMap()
-        _replacementPlans.value = emptyMap()
-        _selectedMode.value = null
-        loadMetadataPreview(files)
+        viewModelScope.launch {
+            val files = withContext(Dispatchers.IO) {
+                uris.distinct().map(fileRepository::getSelectedFile)
+            }
+            clearTempFiles()
+            _selectedFiles.value = files
+            _metadataPreview.value = emptyMap()
+            _changePreview.value = emptyMap()
+            _replacementPlans.value = emptyMap()
+            _selectedMode.value = null
+            loadMetadataPreview(files)
+        }
     }
 
     fun clearSelection() {
@@ -151,18 +183,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _changePreview.value = emptyMap()
         _replacementPlans.value = emptyMap()
         _selectedMode.value = null
-        clearProcessedFiles()
+        clearTempFiles()
     }
 
     private fun loadMetadataPreview(files: List<SelectedFile>) {
         viewModelScope.launch {
             runCatching {
-                files.associate { file ->
-                    file.uri to metadataRepository.readMetadata(file)
+                withContext(Dispatchers.IO) {
+                    files.associate { file ->
+                        file.uri to metadataRepository.readMetadata(file)
+                    }
                 }
             }.onSuccess {
                 _metadataPreview.value = it
             }.onFailure {
+                Timber.e(it, "Failed to read metadata for files")
                 _message.value = "Failed to read metadata: ${it.message}"
             }
         }
@@ -170,11 +205,28 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setProcessingMode(mode: ProcessingMode) {
         _selectedMode.value = mode
-        _replacementPlans.value = if (mode == ProcessingMode.POISON_METADATA) {
-            _selectedFiles.value.associate { it.uri to MetadataReplacementGenerator.generatePlan() }
-        } else {
-            emptyMap()
+        if (mode == ProcessingMode.POISON_METADATA && _replacementPlans.value.isEmpty()) {
+            _replacementPlans.value = _selectedFiles.value.associate { it.uri to MetadataReplacementGenerator.generatePlan() }
+        } else if (mode != ProcessingMode.POISON_METADATA) {
+            _replacementPlans.value = emptyMap()
         }
+        generateChangePreview()
+    }
+
+    fun updatePlanLocation(uri: Uri, latitude: Double, longitude: Double) {
+        val currentPlans = _replacementPlans.value.toMutableMap()
+        val plan = currentPlans[uri] ?: MetadataReplacementGenerator.generatePlan()
+
+        val latitudeRef = if (latitude >= 0) "N" else "S"
+        val longitudeRef = if (longitude >= 0) "E" else "W"
+
+        currentPlans[uri] = plan.copy(
+            latitude = latitude,
+            longitude = longitude,
+            latitudeRef = latitudeRef,
+            longitudeRef = longitudeRef
+        )
+        _replacementPlans.value = currentPlans
         generateChangePreview()
     }
 
@@ -272,30 +324,75 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             return
         }
 
+        if (files.size > 5) {
+            enqueueBackgroundProcessing(files, mode)
+            return
+        }
+
         viewModelScope.launch {
             _processing.value = true
             runCatching {
-                files.map { selectedFile ->
-                    val plan = _replacementPlans.value[selectedFile.uri]
-                    selectedFile to processFileUseCase(
-                        selectedFile = selectedFile,
-                        processingMode = mode,
-                        keepOrientation = _appSettings.value.keepImageOrientation,
-                        replacementPlan = plan
-                    )
+                withContext(Dispatchers.IO) {
+                    files.map { selectedFile ->
+                        val plan = _replacementPlans.value[selectedFile.uri]
+                        selectedFile to processFileUseCase(
+                            selectedFile = selectedFile,
+                            processingMode = mode,
+                            keepOrientation = _appSettings.value.keepImageOrientation,
+                            thumbnailHandling = _appSettings.value.thumbnailHandling,
+                            replacementPlan = plan
+                        )
+                    }
                 }
             }.onSuccess {
                 _processedFiles.value = it
                 _message.value = "Processing complete"
             }.onFailure {
+                Timber.e(it, "Manual processing failed")
                 _message.value = "Processing failed: ${it.message}"
             }
             _processing.value = false
         }
     }
 
+    private fun enqueueBackgroundProcessing(files: List<SelectedFile>, mode: ProcessingMode) {
+        val plans = _replacementPlans.value.mapKeys { it.key.toString() }
+        val plansFile = File(appContext.cacheDir, "processing_plans_${System.currentTimeMillis()}.json")
+        plansFile.writeText(Json.encodeToString(plans))
+
+        val inputData = Data.Builder()
+            .putStringArray(MetadataProcessingWorker.KEY_INPUT_URIS, files.map { it.uri.toString() }.toTypedArray())
+            .putString(MetadataProcessingWorker.KEY_MODE, mode.name)
+            .putBoolean(MetadataProcessingWorker.KEY_KEEP_ORIENTATION, _appSettings.value.keepImageOrientation)
+            .putString(MetadataProcessingWorker.KEY_THUMBNAIL_HANDLING, _appSettings.value.thumbnailHandling.name)
+            .putString(MetadataProcessingWorker.KEY_PLANS_FILE_PATH, plansFile.absolutePath)
+            .putString(MetadataProcessingWorker.KEY_SAVING_PATH, _appSettings.value.defaultSavingPath)
+            .putString(MetadataProcessingWorker.KEY_DEFAULT_PREFIX, _appSettings.value.defaultPrefix)
+            .putString(MetadataProcessingWorker.KEY_DEFAULT_SUFFIX, _appSettings.value.defaultSuffix)
+            .putBoolean(MetadataProcessingWorker.KEY_USE_RANDOM_NAMES, _appSettings.value.useRandomFileNames)
+            .build()
+
+        val workRequest = OneTimeWorkRequestBuilder<MetadataProcessingWorker>()
+            .setInputData(inputData)
+            .build()
+
+        workManager.enqueue(workRequest)
+
+        viewModelScope.launch {
+            workManager.getWorkInfoByIdFlow(workRequest.id).collect { info ->
+                _workInfo.value = info
+                if (info != null && info.state == WorkInfo.State.SUCCEEDED) {
+                    val savedUris = info.outputData.getStringArray("saved_uris")
+                    _message.value = "Background processing complete. ${savedUris?.size ?: 0} files saved."
+                } else if (info != null && info.state == WorkInfo.State.FAILED) {
+                    _message.value = "Background processing failed."
+                }
+            }
+        }
+    }
+
     fun autoHandleSharedInput(
-        onShareFileReady: (File, String?) -> Unit
+        onShareFilesReady: (List<File>, String?) -> Unit
     ) {
         val files = _selectedFiles.value
         if (files.isEmpty()) {
@@ -314,17 +411,25 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             _replacementPlans.value = emptyMap()
         }
 
+        if (files.size > 5) {
+            enqueueBackgroundProcessing(files, mode)
+            return
+        }
+
         viewModelScope.launch {
             _processing.value = true
             runCatching {
-                val results = files.map { selectedFile ->
-                    val plan = _replacementPlans.value[selectedFile.uri]
-                    selectedFile to processFileUseCase(
-                        selectedFile = selectedFile,
-                        processingMode = mode,
-                        keepOrientation = keepOrientation,
-                        replacementPlan = plan
-                    )
+                val results = withContext(Dispatchers.IO) {
+                    files.map { selectedFile ->
+                        val plan = _replacementPlans.value[selectedFile.uri]
+                        selectedFile to processFileUseCase(
+                            selectedFile = selectedFile,
+                            processingMode = mode,
+                            keepOrientation = keepOrientation,
+                            thumbnailHandling = _appSettings.value.thumbnailHandling,
+                            replacementPlan = plan
+                        )
+                    }
                 }
                 _processedFiles.value = results
 
@@ -342,14 +447,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     }
 
                     SharedInputOutputAction.SHARE_TO_ANOTHER_APP -> {
-                        val first = getFirstProcessedFileForSharing()
-                            ?: throw IllegalStateException("No processed file available for sharing")
-                        onShareFileReady(first.second, first.first.mimeType)
+                        if (_processedFiles.value.isEmpty()) {
+                            throw IllegalStateException("No processed files available for sharing")
+                        }
+                        val processedFilesList = _processedFiles.value.map { it.second }
+                        val firstMime = _processedFiles.value.first().first.mimeType
+                        val allSameMime = _processedFiles.value.all { it.first.mimeType == firstMime }
+                        onShareFilesReady(processedFilesList, if (allSameMime) firstMime else "*/*")
                     }
                 }
             }.onSuccess {
                 _message.value = "Shared files handled automatically"
             }.onFailure {
+                Timber.e(it, "Automatic shared file handling failed")
                 _message.value = "Automatic handling failed: ${it.message}"
             }
 
@@ -358,6 +468,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun saveProcessedFilesToDefault(): List<Uri> {
+        // Since this involves I/O, it's safer on Dispatchers.IO, but currently 
+        // it's called from Main and returns a value. 
+        // We'll leave the call as is for now as it's relatively light MediaStore I/O, 
+        // but ideally use a Flow or deferred result.
         val results = _processedFiles.value.mapNotNull { (selectedFile, processedFile) ->
             saveFileUseCase.saveToDefaultFolder(
                 sourceFile = processedFile,
@@ -483,6 +597,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         settingsRepository.setSharedFilesOutputAction(action)
     }
 
+    fun setThumbnailHandling(handling: ThumbnailHandling) = launchSettingUpdate {
+        settingsRepository.setThumbnailHandling(handling)
+    }
+
+    fun setAllowInternetForMap(allowed: Boolean) = launchSettingUpdate {
+        settingsRepository.setAllowInternetForMap(allowed)
+    }
+
     private fun launchSettingUpdate(block: suspend () -> Unit) {
         viewModelScope.launch { block() }
     }
@@ -491,16 +613,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _message.value = null
     }
 
-    fun clearProcessedFiles() {
+    fun clearTempFiles() {
         _processedFiles.value.forEach { (_, file) -> runCatching { file.delete() } }
         _processedFiles.value = emptyList()
+        fileRepository.clearCache()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        clearTempFiles()
     }
 
     private fun buildOutputName(originalName: String): String {
         val settings = _appSettings.value
-        
-        // Sanitize base name to remove path traversal or illegal characters
-        fun sanitize(name: String): String = name.replace(Regex("[^a-zA-Z0-9._-]"), "_")
 
         val dotIndex = originalName.lastIndexOf('.')
         val base = if (dotIndex > 0) originalName.substring(0, dotIndex) else originalName
@@ -509,13 +634,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         val finalBase = if (settings.useRandomFileNames) {
             "mj_${System.currentTimeMillis()}"
         } else {
-            val prefix = sanitize(settings.defaultPrefix)
-            val suffix = sanitize(settings.defaultSuffix)
-            val sanitizedBase = sanitize(base)
+            val prefix = SanitizationUtils.sanitizeSimple(settings.defaultPrefix)
+            val suffix = SanitizationUtils.sanitizeSimple(settings.defaultSuffix)
+            val sanitizedBase = SanitizationUtils.sanitizeSimple(base)
             "$prefix$sanitizedBase$suffix"
         }
 
-        val extension = sanitize(ext)
+        val extension = SanitizationUtils.sanitizeSimple(ext)
         return "${finalBase}_processed$extension"
     }
 }
