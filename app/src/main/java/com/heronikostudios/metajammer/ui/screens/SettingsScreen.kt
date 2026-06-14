@@ -7,10 +7,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.heronikostudios.metajammer.domain.model.*
 
@@ -98,11 +101,20 @@ fun SettingsScreen(
                 onClick = { activeDialog = SettingsDialog.Suffix(settings.defaultSuffix) }
             )
 
-            DialogSettingRow(
-                title = "Embedded thumbnail",
-                value = settings.thumbnailHandling.toReadableLabel(),
-                onClick = { activeDialog = SettingsDialog.Thumbnail(settings.thumbnailHandling) }
+            SettingSwitchRow(
+                title = "Keep original thumbnails",
+                subtitle = "If the file contains an embedded thumbnail, preserve it as-is. If disabled, any existing thumbnail will be removed for maximum privacy.",
+                checked = settings.thumbnailHandling == ThumbnailHandling.KEEP_ORIGINAL,
+                onCheckedChange = { isChecked ->
+                    onThumbnailHandlingChanged(if (isChecked) ThumbnailHandling.KEEP_ORIGINAL else ThumbnailHandling.REMOVE)
+                }
             )
+
+            if (settings.thumbnailHandling == ThumbnailHandling.KEEP_ORIGINAL) {
+                SettingWarningCard(
+                    message = "Warning: Keeping original thumbnails may leak metadata (location, device info) even if main tags are removed."
+                )
+            }
 
             SettingSwitchRow(
                 title = "Enable map picker",
@@ -160,16 +172,16 @@ fun SettingsScreen(
     }
 
     // Centralized Dialog Controller
-    activeDialog?.let { dialog ->
+    val currentDialog = activeDialog
+    if (currentDialog != null) {
         HandleSettingsDialog(
-            dialog = dialog,
-            onDismiss = { activeDialog = null },
+            dialog = currentDialog,
+            onDismiss = { if (activeDialog != null) activeDialog = null },
             onNightModeChanged = onNightModeChanged,
             onPrefixChanged = onDefaultPrefixChanged,
             onSuffixChanged = onDefaultSuffixChanged,
             onProcessingModeChanged = onSharedFilesProcessingModeChanged,
-            onOutputActionChanged = onSharedFilesOutputActionChanged,
-            onThumbnailHandlingChanged = onThumbnailHandlingChanged
+            onOutputActionChanged = onSharedFilesOutputActionChanged
         )
     }
 }
@@ -210,6 +222,33 @@ private fun SettingSwitchRow(
             Text(text = subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         Switch(checked = checked, onCheckedChange = onCheckedChange)
+    }
+}
+
+@Composable
+private fun SettingWarningCard(message: String) {
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.errorContainer,
+            contentColor = MaterialTheme.colorScheme.onErrorContainer
+        ),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier.padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Default.Warning,
+                contentDescription = "Warning",
+                modifier = Modifier.size(24.dp)
+            )
+            Text(
+                text = message,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
     }
 }
 
@@ -260,7 +299,6 @@ private sealed class SettingsDialog {
     data class Suffix(val current: String) : SettingsDialog()
     data class SharedProcessingMode(val current: ProcessingMode) : SettingsDialog()
     data class SharedOutputAction(val current: SharedInputOutputAction) : SettingsDialog()
-    data class Thumbnail(val current: ThumbnailHandling) : SettingsDialog()
 }
 
 @Composable
@@ -271,8 +309,7 @@ private fun HandleSettingsDialog(
     onPrefixChanged: (String) -> Unit,
     onSuffixChanged: (String) -> Unit,
     onProcessingModeChanged: (ProcessingMode) -> Unit,
-    onOutputActionChanged: (SharedInputOutputAction) -> Unit,
-    onThumbnailHandlingChanged: (ThumbnailHandling) -> Unit
+    onOutputActionChanged: (SharedInputOutputAction) -> Unit
 ) {
     when (dialog) {
         is SettingsDialog.Prefix -> TextFieldDialog(
@@ -309,14 +346,6 @@ private fun HandleSettingsDialog(
             selected = dialog.current,
             labelProvider = { it.toReadableLabel() },
             onConfirm = onOutputActionChanged,
-            onDismiss = onDismiss
-        )
-        is SettingsDialog.Thumbnail -> SingleSelectDialog(
-            title = "Embedded Thumbnail",
-            options = ThumbnailHandling.entries,
-            selected = dialog.current,
-            labelProvider = { it.toReadableLabel() },
-            onConfirm = onThumbnailHandlingChanged,
             onDismiss = onDismiss
         )
     }
@@ -400,9 +429,4 @@ private fun SharedInputOutputAction.toReadableLabel() = when (this) {
     SharedInputOutputAction.SAVE_TO_DEFAULT_FOLDER -> "Save to default folder"
     SharedInputOutputAction.SAVE_TO_SHARED_FOLDER -> "Save to dedicated folder"
     SharedInputOutputAction.SHARE_TO_ANOTHER_APP -> "Re-share sanitized files"
-}
-
-private fun ThumbnailHandling.toReadableLabel() = when (this) {
-    ThumbnailHandling.REMOVE -> "Remove (Maximum Privacy)"
-    ThumbnailHandling.KEEP_SCRUBBED -> "Keep (Metadata cleared)"
 }
