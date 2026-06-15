@@ -315,6 +315,7 @@ fun MetaJammerApp(
                         processing = processing,
                         workInfo = viewModel.workInfo.collectAsStateWithLifecycle().value,
                         onModeSelected = viewModel::setProcessingMode,
+                        onRegeneratePlans = viewModel::regeneratePoisonPlans,
                         onProcess = viewModel::processFiles,
                         onNext = {
                             if (processedFiles.isNotEmpty()) navigateTo(AppStep.OUTPUT)

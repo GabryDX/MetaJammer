@@ -31,6 +31,7 @@ fun ProcessingScreen(
     processing: Boolean,
     workInfo: WorkInfo?,
     onModeSelected: (ProcessingMode) -> Unit,
+    onRegeneratePlans: () -> Unit,
     onProcess: () -> Unit,
     onNext: () -> Unit,
     onEditLocation: (Uri) -> Unit,
@@ -65,6 +66,15 @@ fun ProcessingScreen(
                 }
 
                 Text("Selected: ${selectedMode?.name ?: "None"}")
+
+                if (selectedMode == ProcessingMode.POISON_METADATA) {
+                    Button(
+                        onClick = onRegeneratePlans,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Regenerate All Random Plans")
+                    }
+                }
             }
         }
 
