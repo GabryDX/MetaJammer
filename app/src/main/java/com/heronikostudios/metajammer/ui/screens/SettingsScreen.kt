@@ -35,6 +35,7 @@ fun SettingsScreen(
     onSharedFilesCustomPathSelected: (Uri?) -> Unit,
     onThumbnailHandlingChanged: (ThumbnailHandling) -> Unit,
     onAllowInternetForMapChanged: (Boolean) -> Unit,
+    onLanguageChanged: (AppLanguage) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val folderPicker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { 
@@ -163,6 +164,12 @@ fun SettingsScreen(
                 onClick = { activeDialog = SettingsDialog.NightMode(settings.nightMode) }
             )
 
+            DialogSettingRow(
+                title = stringResource(R.string.setting_language_title),
+                value = settings.language.toReadableLabel(),
+                onClick = { activeDialog = SettingsDialog.Language(settings.language) }
+            )
+
             SettingSwitchRow(
                 title = stringResource(R.string.setting_oled_mode_title),
                 subtitle = stringResource(R.string.setting_oled_mode_sub),
@@ -182,7 +189,8 @@ fun SettingsScreen(
             onPrefixChanged = onDefaultPrefixChanged,
             onSuffixChanged = onDefaultSuffixChanged,
             onProcessingModeChanged = onSharedFilesProcessingModeChanged,
-            onOutputActionChanged = onSharedFilesOutputActionChanged
+            onOutputActionChanged = onSharedFilesOutputActionChanged,
+            onLanguageChanged = onLanguageChanged
         )
     }
 }
@@ -300,6 +308,7 @@ private sealed class SettingsDialog {
     data class Suffix(val current: String) : SettingsDialog()
     data class SharedProcessingMode(val current: ProcessingMode) : SettingsDialog()
     data class SharedOutputAction(val current: SharedInputOutputAction) : SettingsDialog()
+    data class Language(val current: AppLanguage) : SettingsDialog()
 }
 
 @Composable
@@ -310,7 +319,8 @@ private fun HandleSettingsDialog(
     onPrefixChanged: (String) -> Unit,
     onSuffixChanged: (String) -> Unit,
     onProcessingModeChanged: (ProcessingMode) -> Unit,
-    onOutputActionChanged: (SharedInputOutputAction) -> Unit
+    onOutputActionChanged: (SharedInputOutputAction) -> Unit,
+    onLanguageChanged: (AppLanguage) -> Unit
 ) {
     when (dialog) {
         is SettingsDialog.Prefix -> TextFieldDialog(
@@ -347,6 +357,15 @@ private fun HandleSettingsDialog(
             selected = dialog.current,
             labelProvider = { it.toReadableLabel() },
             onConfirm = onOutputActionChanged,
+            onDismiss = onDismiss
+        )
+
+        is SettingsDialog.Language -> SingleSelectDialog(
+            title = stringResource(R.string.setting_language_title),
+            options = AppLanguage.entries,
+            selected = dialog.current,
+            labelProvider = { it.toReadableLabel() },
+            onConfirm = onLanguageChanged,
             onDismiss = onDismiss
         )
     }
@@ -433,4 +452,14 @@ private fun SharedInputOutputAction.toReadableLabel() = when (this) {
     SharedInputOutputAction.SAVE_TO_DEFAULT_FOLDER -> stringResource(R.string.output_action_default_folder)
     SharedInputOutputAction.SAVE_TO_SHARED_FOLDER -> stringResource(R.string.output_action_shared_folder)
     SharedInputOutputAction.SHARE_TO_ANOTHER_APP -> stringResource(R.string.output_action_reshare)
+}
+
+@Composable
+private fun AppLanguage.toReadableLabel() = when (this) {
+    AppLanguage.SYSTEM -> stringResource(R.string.language_system)
+    AppLanguage.ENGLISH -> stringResource(R.string.language_en)
+    AppLanguage.SPANISH -> stringResource(R.string.language_es)
+    AppLanguage.ITALIAN -> stringResource(R.string.language_it)
+    AppLanguage.FRENCH -> stringResource(R.string.language_fr)
+    AppLanguage.GERMAN -> stringResource(R.string.language_de)
 }

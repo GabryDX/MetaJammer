@@ -105,6 +105,7 @@
     <string name="setting_clear_folder">Clear Dedicated Folder</string>
 
     <string name="setting_night_mode_title">Night mode</string>
+    <string name="setting_language_title">Language</string>
     <string name="setting_oled_mode_title">OLED mode</string>
     <string name="setting_oled_mode_sub">Use darker black tones for supported dark themes</string>
 
@@ -113,6 +114,13 @@
     <string name="night_mode_automatic">Automatic</string>
     <string name="night_mode_low_battery">Only low battery</string>
     <string name="night_mode_never">Never</string>
+
+    <string name="language_system">System Default</string>
+    <string name="language_en">English</string>
+    <string name="language_es">Español</string>
+    <string name="language_it">Italiano</string>
+    <string name="language_fr">Français</string>
+    <string name="language_de">Deutsch</string>
 
     <string name="processing_mode_poison">Poison metadata (Fake info)</string>
     <string name="processing_mode_remove">Remove metadata (Full strip)</string>

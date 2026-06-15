@@ -105,6 +105,7 @@
     <string name="setting_clear_folder">Cancella cartella dedicata</string>
 
     <string name="setting_night_mode_title">Modalità notte</string>
+    <string name="setting_language_title">Lingua</string>
     <string name="setting_oled_mode_title">Modalità OLED</string>
     <string name="setting_oled_mode_sub">Usa toni di nero più scuri per i temi scuri supportati</string>
 
@@ -113,6 +114,13 @@
     <string name="night_mode_automatic">Automatico</string>
     <string name="night_mode_low_battery">Solo batteria scarica</string>
     <string name="night_mode_never">Mai</string>
+
+    <string name="language_system">Predefinita di sistema</string>
+    <string name="language_en">Inglese</string>
+    <string name="language_es">Spagnolo</string>
+    <string name="language_it">Italiano</string>
+    <string name="language_fr">Francese</string>
+    <string name="language_de">Tedesco</string>
 
     <string name="processing_mode_poison">Avvelena metadati (Info false)</string>
     <string name="processing_mode_remove">Rimuovi metadati (Pulizia totale)</string>

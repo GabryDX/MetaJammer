@@ -5,7 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
@@ -51,7 +51,7 @@ import com.heronikostudios.metajammer.ui.screens.SettingsScreen
 import com.heronikostudios.metajammer.ui.theme.MetaJammerTheme
 import com.heronikostudios.metajammer.R
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
 
     private var sharedUris by mutableStateOf<List<Uri>>(emptyList())
 
@@ -415,6 +415,7 @@ fun MetaJammerApp(
                         onSharedFilesCustomPathSelected = viewModel::persistAndSetSharedFilesCustomPath,
                         onThumbnailHandlingChanged = viewModel::setThumbnailHandling,
                         onAllowInternetForMapChanged = viewModel::setAllowInternetForMap,
+                        onLanguageChanged = viewModel::setLanguage,
                         modifier = Modifier.weight(1f)
                     )
                 }

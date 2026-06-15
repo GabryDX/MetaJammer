@@ -19,7 +19,7 @@ android {
     }
 
     androidResources {
-        localeFilters += "en"
+        localeFilters += listOf("en", "es", "it", "fr", "de")
     }
 
     buildTypes {
@@ -56,6 +56,7 @@ kotlin {
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
 
+    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.lifecycle.runtime.ktx)

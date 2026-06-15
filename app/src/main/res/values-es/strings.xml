@@ -105,6 +105,7 @@
     <string name="setting_clear_folder">Limpiar carpeta dedicada</string>
 
     <string name="setting_night_mode_title">Modo noche</string>
+    <string name="setting_language_title">Idioma</string>
     <string name="setting_oled_mode_title">Modo OLED</string>
     <string name="setting_oled_mode_sub">Usar tonos negros más oscuros para los temas oscuros compatibles</string>
 
@@ -113,6 +114,13 @@
     <string name="night_mode_automatic">Automático</string>
     <string name="night_mode_low_battery">Solo con batería baja</string>
     <string name="night_mode_never">Nunca</string>
+
+    <string name="language_system">Predeterminado del sistema</string>
+    <string name="language_en">Inglés</string>
+    <string name="language_es">Español</string>
+    <string name="language_it">Italiano</string>
+    <string name="language_fr">Francés</string>
+    <string name="language_de">Alemán</string>
 
     <string name="processing_mode_poison">Envenenar metadatos (Info falsa)</string>
     <string name="processing_mode_remove">Eliminar metadatos (Limpieza total)</string>
