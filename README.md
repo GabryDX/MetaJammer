@@ -9,23 +9,30 @@
 ## Key Features
 
 - **🛡️ Deep Metadata Stripping:** More than just EXIF. MetaJammer targets XMP, GPS coordinates, hardware serial numbers, and embedded thumbnails to ensure no "leaks" remain.
-- **🧪 Metadata Poisoning:** Don't just remove data—confuse it. Generate realistic but fake metadata (camera models, dates, locations) to blend in.
+- **🧪 Metadata Poisoning:** Don't just remove data—confuse it. Generate highly realistic fake metadata (camera models, exposure settings, software versions, and custom descriptions) to blend in.
+- **🔍 Metadata Preview:** Inspect the existing metadata of your files before processing them to see exactly what information is being exposed.
 - **🗺️ Interactive Map Picker:** Visually choose a "fake" location on an OpenStreetMap interface for your poisoned metadata.
 - **⚡ Quick Scrub & Share:** A "truly invisible" workflow. Share a file to MetaJammer, let it auto-process, and immediately re-open the share sheet with the clean version.
 - **📦 Background Batch Processing:** Reliable processing for 50+ high-resolution files at once using Android WorkManager, complete with system notifications.
 - **📂 Flexible Output:** Save to custom folders via SAF, use standard MediaStore collections, or share directly to other apps.
-- **🖼️ Multi-Format Support:** Full compatibility with modern image formats (JPEG, WebP, HEIF/HEIC) and video containers (MP4, MOV).
-- **🎨 Modern & Accessible UI:** Built with Jetpack Compose and Material 3, featuring Dynamic Color support, a dedicated OLED black mode, and advanced theme scheduling.
+- **🖼️ Multi-Format Support:** Full compatibility with modern image formats (JPEG, WebP, HEIF/HEIC) and video containers (MP4, MOV). Support for both stripping and poisoning across all formats.
+- **🎨 Modern & Accessible UI:** Built with Jetpack Compose and Material 3, featuring Dynamic Color support, a dedicated OLED black mode, and battery-aware theme scheduling.
+- **🌍 Global Reach:** Fully localized in 20+ languages including English, Arabic, German, Greek, Spanish, Persian, French, Hindi, Indonesian, Italian, Japanese, Korean, Dutch, Polish, Portuguese, Russian, Thai, Turkish, Ukrainian, Vietnamese, and Chinese.
 
 ## Privacy & Security
 
 MetaJammer is built on the **Principle of Least Privilege**:
 
 - **Zero Broad Permissions:** The app requires NO `READ_EXTERNAL_STORAGE` or `WRITE_EXTERNAL_STORAGE` permissions. It uses modern Scoped Storage and SAF.
+- **100% FOSS:** Built entirely with Free and Open Source Software. No proprietary SDKs, trackers, or "phone-home" analytics.
 - **Opt-in Internet:** Internet access is strictly restricted to the optional Map Picker and is only active after explicit user consent.
 - **Hardened I/O:** Every filename is sanitized and processing is isolated to specific subdirectories to prevent path-traversal or unauthorized access.
 - **No Cloud Leaks:** Android Auto-Backup is disabled to ensure unstripped metadata never leaves your device during processing.
 - **Automatic Cleanup:** All temporary processing residue is programmatically wiped from the cache after every session.
+
+## FOSS & Transparency
+
+MetaJammer is committed to transparency and user trust. A comprehensive [FOSS Compliance Audit](foss_audit.md) is available to verify that no proprietary or non-free components are used in the project.
 
 ## Getting Started
 
@@ -53,7 +60,7 @@ To verify the authenticity and integrity of MetaJammer APKs, you can use [AppVer
 
 ## License
 
-ISC License
+This project is licensed under the [ISC License](LICENSE.txt).
 
 ---
 
