@@ -31,10 +31,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import timber.log.Timber
 import java.io.File
+import androidx.core.net.toUri
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -446,7 +446,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     if (path.isNullOrBlank()) {
                         throw IllegalStateException("No shared-files folder configured")
                     }
-                    saveProcessedFilesToCustom(Uri.parse(path))
+                    saveProcessedFilesToCustom(path.toUri())
                 }
 
                 SharedInputOutputAction.SHARE_TO_ANOTHER_APP -> {

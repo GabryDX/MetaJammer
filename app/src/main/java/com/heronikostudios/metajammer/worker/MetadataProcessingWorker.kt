@@ -3,7 +3,6 @@ package com.heronikostudios.metajammer.worker
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.net.Uri
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.CoroutineWorker
@@ -20,6 +19,7 @@ import com.heronikostudios.metajammer.util.SanitizationUtils
 import kotlinx.serialization.json.Json
 import timber.log.Timber
 import java.io.File
+import androidx.core.net.toUri
 
 class MetadataProcessingWorker(
     context: Context,
@@ -64,7 +64,7 @@ class MetadataProcessingWorker(
                 Json.decodeFromString<Map<String, MetadataReplacementPlan>>(json)
             }.onFailure {
                 Timber.e(it, "Failed to load replacement plans from %s", plansFilePath)
-            }.getOrDefault(emptyMap<String, MetadataReplacementPlan>())
+            }.getOrDefault(emptyMap())
         } else {
             emptyMap()
         }
@@ -75,7 +75,7 @@ class MetadataProcessingWorker(
         val savedUris = mutableListOf<String>()
 
         inputUriStrings.forEachIndexed { index, uriString ->
-            val uri = Uri.parse(uriString)
+            val uri = uriString.toUri()
             val selectedFile = fileRepository.getSelectedFile(uri)
             val plan = plans[uriString]
 
@@ -154,6 +154,7 @@ class MetadataProcessingWorker(
             NotificationManagerCompat.from(applicationContext).notify(NOTIFICATION_ID + 1, notification)
         } catch (e: SecurityException) {
             // Permission not granted
+            Timber.e(e, "Failed to show completion notification: permission not granted")
         }
     }
 
