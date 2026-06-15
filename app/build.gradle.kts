@@ -13,7 +13,7 @@ android {
         minSdk = 33
         targetSdk = 37
         versionCode = 1
-        versionName = "0.2.0"
+        versionName = "0.2.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -34,8 +34,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     buildFeatures {
@@ -49,6 +49,7 @@ kotlin {
         // Optional with built-in Kotlin, since it defaults from targetCompatibility,
         // but keeping it explicit is fine if your setup supports it.
         // jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
     }
 }
 

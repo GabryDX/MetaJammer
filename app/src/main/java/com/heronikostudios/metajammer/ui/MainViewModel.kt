@@ -31,10 +31,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import timber.log.Timber
 import java.io.File
+import androidx.core.net.toUri
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -164,17 +164,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setIncomingUris(uris: List<Uri>) {
         viewModelScope.launch {
-            val files = withContext(Dispatchers.IO) {
-                uris.distinct().map(fileRepository::getSelectedFile)
-            }
-            clearTempFiles()
-            _selectedFiles.value = files
-            _metadataPreview.value = emptyMap()
-            _changePreview.value = emptyMap()
-            _replacementPlans.value = emptyMap()
-            _selectedMode.value = null
-            loadMetadataPreview(files)
+            setIncomingUrisSuspend(uris)
         }
+    }
+
+    suspend fun setIncomingUrisSuspend(uris: List<Uri>) {
+        val files = withContext(Dispatchers.IO) {
+            uris.distinct().map(fileRepository::getSelectedFile)
+        }
+        clearTempFiles()
+        _selectedFiles.value = files
+        _metadataPreview.value = emptyMap()
+        _changePreview.value = emptyMap()
+        _replacementPlans.value = emptyMap()
+        _selectedMode.value = null
+        loadMetadataPreview(files)
     }
 
     fun clearSelection() {
@@ -391,7 +395,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun autoHandleSharedInput(
+    suspend fun autoHandleSharedInput(
         onShareFilesReady: (List<File>, String?) -> Unit
     ) {
         val files = _selectedFiles.value
@@ -416,55 +420,53 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             return
         }
 
-        viewModelScope.launch {
-            _processing.value = true
-            runCatching {
-                val results = withContext(Dispatchers.IO) {
-                    files.map { selectedFile ->
-                        val plan = _replacementPlans.value[selectedFile.uri]
-                        selectedFile to processFileUseCase(
-                            selectedFile = selectedFile,
-                            processingMode = mode,
-                            keepOrientation = keepOrientation,
-                            thumbnailHandling = _appSettings.value.thumbnailHandling,
-                            replacementPlan = plan
-                        )
-                    }
+        _processing.value = true
+        runCatching {
+            val results = withContext(Dispatchers.IO) {
+                files.map { selectedFile ->
+                    val plan = _replacementPlans.value[selectedFile.uri]
+                    selectedFile to processFileUseCase(
+                        selectedFile = selectedFile,
+                        processingMode = mode,
+                        keepOrientation = keepOrientation,
+                        thumbnailHandling = _appSettings.value.thumbnailHandling,
+                        replacementPlan = plan
+                    )
                 }
-                _processedFiles.value = results
-
-                when (_appSettings.value.sharedFilesOutputAction) {
-                    SharedInputOutputAction.SAVE_TO_DEFAULT_FOLDER -> {
-                        saveProcessedFilesToDefault()
-                    }
-
-                    SharedInputOutputAction.SAVE_TO_SHARED_FOLDER -> {
-                        val path = _appSettings.value.sharedFilesCustomPath
-                        if (path.isNullOrBlank()) {
-                            throw IllegalStateException("No shared-files folder configured")
-                        }
-                        saveProcessedFilesToCustom(Uri.parse(path))
-                    }
-
-                    SharedInputOutputAction.SHARE_TO_ANOTHER_APP -> {
-                        if (_processedFiles.value.isEmpty()) {
-                            throw IllegalStateException("No processed files available for sharing")
-                        }
-                        val processedFilesList = _processedFiles.value.map { it.second }
-                        val firstMime = _processedFiles.value.first().first.mimeType
-                        val allSameMime = _processedFiles.value.all { it.first.mimeType == firstMime }
-                        onShareFilesReady(processedFilesList, if (allSameMime) firstMime else "*/*")
-                    }
-                }
-            }.onSuccess {
-                _message.value = "Shared files handled automatically"
-            }.onFailure {
-                Timber.e(it, "Automatic shared file handling failed")
-                _message.value = "Automatic handling failed: ${it.message}"
             }
+            _processedFiles.value = results
 
-            _processing.value = false
+            when (_appSettings.value.sharedFilesOutputAction) {
+                SharedInputOutputAction.SAVE_TO_DEFAULT_FOLDER -> {
+                    saveProcessedFilesToDefault()
+                }
+
+                SharedInputOutputAction.SAVE_TO_SHARED_FOLDER -> {
+                    val path = _appSettings.value.sharedFilesCustomPath
+                    if (path.isNullOrBlank()) {
+                        throw IllegalStateException("No shared-files folder configured")
+                    }
+                    saveProcessedFilesToCustom(path.toUri())
+                }
+
+                SharedInputOutputAction.SHARE_TO_ANOTHER_APP -> {
+                    if (_processedFiles.value.isEmpty()) {
+                        throw IllegalStateException("No processed files available for sharing")
+                    }
+                    val processedFilesList = _processedFiles.value.map { it.second }
+                    val firstMime = _processedFiles.value.first().first.mimeType
+                    val allSameMime = _processedFiles.value.all { it.first.mimeType == firstMime }
+                    onShareFilesReady(processedFilesList, if (allSameMime) firstMime else "*/*")
+                }
+            }
+        }.onSuccess {
+            _message.value = "Shared files handled automatically"
+        }.onFailure {
+            Timber.e(it, "Automatic shared file handling failed")
+            _message.value = "Automatic handling failed: ${it.message}"
         }
+
+        _processing.value = false
     }
 
     fun saveProcessedFilesToDefault(): List<Uri> {
