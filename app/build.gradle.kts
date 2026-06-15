@@ -13,13 +13,13 @@ android {
         minSdk = 33
         targetSdk = 37
         versionCode = 1
-        versionName = "0.2.2"
+        versionName = "0.2.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     androidResources {
-        localeFilters += "en"
+        localeFilters += listOf("en", "es", "it", "fr", "de", "zh", "hi", "pt", "ru", "el", "ar", "ja", "in", "tr", "ko", "vi", "th", "pl", "nl", "uk", "fa")
     }
 
     buildTypes {
@@ -56,6 +56,7 @@ kotlin {
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
 
+    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.lifecycle.runtime.ktx)

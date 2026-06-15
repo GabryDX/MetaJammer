@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.heronikostudios.metajammer.domain.model.AppLanguage
 import com.heronikostudios.metajammer.domain.model.NightModeSetting
 import com.heronikostudios.metajammer.domain.model.ProcessingMode
 import com.heronikostudios.metajammer.domain.model.SharedInputOutputAction
@@ -32,6 +33,7 @@ class SettingsRepository(private val context: Context) {
         private val SHARED_FILES_CUSTOM_PATH = stringPreferencesKey("shared_files_custom_path")
         private val THUMBNAIL_HANDLING = stringPreferencesKey("thumbnail_handling")
         private val ALLOW_INTERNET_FOR_MAP = booleanPreferencesKey("allow_internet_for_map")
+        private val LANGUAGE = stringPreferencesKey("language")
     }
 
     val useRandomFileNamesFlow: Flow<Boolean> =
@@ -158,5 +160,16 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setAllowInternetForMap(allowed: Boolean) {
         context.dataStore.edit { it[ALLOW_INTERNET_FOR_MAP] = allowed }
+    }
+
+    val languageFlow: Flow<AppLanguage> =
+        context.dataStore.data.map { preferences ->
+            preferences[LANGUAGE]
+                ?.let { runCatching { AppLanguage.valueOf(it) }.getOrNull() }
+                ?: AppLanguage.SYSTEM
+        }
+
+    suspend fun setLanguage(language: AppLanguage) {
+        context.dataStore.edit { it[LANGUAGE] = language.name }
     }
 }

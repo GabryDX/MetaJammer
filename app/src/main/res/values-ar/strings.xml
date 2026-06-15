@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MetaJammer</string>
+    <string name="notification_channel_name">معالجة الملفات</string>
+    <string name="notification_processing_title">جاري معالجة الملفات</string>
+    <string name="notification_processing_message">جاري تجريد البيانات الوصفية من %1$d ملفات...</string>
+    <string name="notification_complete_title">اكتملت المعالجة</string>
+    <string name="notification_complete_message">تمت معالجة %1$d ملفات بنجاح.</string>
+
+    <!-- General -->
+    <string name="ok">موافق</string>
+    <string name="cancel">إلغاء</string>
+    <string name="back">رجوع</string>
+    <string name="continue_label">استمرار</string>
+    <string name="save">حفظ</string>
+    <string name="share">مشاركة</string>
+    <string name="dismiss">تجاهل</string>
+    <string name="warning">تحذير</string>
+    <string name="none">لا يوجد</string>
+    <string name="unknown">غير معروف</string>
+
+    <!-- HomeScreen -->
+    <string name="hero_title">احمِ خصوصيتك</string>
+    <string name="hero_subtitle">قم بتنظيف أو استبدال البيانات الوصفية الحساسة قبل مشاركة ملفاتك.</string>
+    <string name="feature_images_video_title">الصور والفيديو</string>
+    <string name="feature_images_video_desc">دعم كامل لتجريد البيانات الوصفية من الصور وإعادة دمج الفيديوهات لإزالة التتبع.</string>
+    <string name="feature_poisoning_title">تسميم البيانات الوصفية</string>
+    <string name="feature_poisoning_desc">لا تقم فقط بإزالة البيانات - استبدلها ببيانات مزيفة واقعية للحفاظ على الخصوصية وإرباك المتتبعين.</string>
+    <string name="feature_background_title">المعالجة في الخلفية</string>
+    <string name="feature_background_desc">معالجة مئات الملفات بكفاءة في الخلفية بينما تقوم بأشياء أخرى.</string>
+    <string name="feature_on_device_title">الخصوصية على الجهاز</string>
+    <string name="feature_on_device_desc">تتم جميع العمليات محليًا على جهازك. ملفاتك لا تغادر MetaJammer أبدًا.</string>
+    <string name="pro_tip_gallery">نصيحة: يمكنك مشاركة الملفات مباشرة من تطبيق المعرض إلى MetaJammer.</string>
+    <string name="select_files">حدد الملفات</string>
+    <string name="select_more_files">حدد المزيد من الملفات</string>
+    <string name="clear_selection">مسح التحديد</string>
+    <string name="files_selected">تم تحديد %1$d ملفات</string>
+    <string name="total_size">الحجم الإجمالي: %1$s</string>
+    <string name="size_mb">%.1f ميجابايت</string>
+    <string name="size_kb">%.1f كيلوبايت</string>
+    <string name="size_bytes">%1$d بايت</string>
+
+    <!-- MetadataPreviewScreen -->
+    <string name="metadata_preview">معاينة البيانات الوصفية</string>
+    <string name="file_type">النوع: %1$s</string>
+    <string name="no_metadata_found">لم يتم العثور على بيانات وصفية</string>
+
+    <!-- ProcessingScreen -->
+    <string name="process_files_title">معالجة الملفات</string>
+    <string name="pick_one_option">اختر خيارًا واحدًا:</string>
+    <string name="poison_metadata">تسميم البيانات الوصفية</string>
+    <string name="remove_metadata">إزالة البيانات الوصفية</string>
+    <string name="selected_mode">المحدد: %1$s</string>
+    <string name="regenerate_plans">إعادة إنشاء جميع الخطط العشوائية</string>
+    <string name="preview_of_changes">معاينة التغييرات</string>
+    <string name="no_preview_available">المعاينة غير متاحة</string>
+    <string name="change_location_map">تغيير الموقع على الخريطة</string>
+    <string name="process_files">معالجة الملفات</string>
+    <string name="processing_foreground">المعالجة في المقدمة...</string>
+    <string name="background_progress">التقدم في الخلفية: %1$d%%</string>
+    <string name="continue_to_output">الاستمرار في خيارات الإخراج</string>
+
+    <!-- LocationPickerScreen -->
+    <string name="pick_location">اختر الموقع</string>
+    <string name="confirm_location">تأكيد الموقع</string>
+
+    <!-- OutputOptionsScreen -->
+    <string name="output_options">خيارات الإخراج</string>
+    <string name="saving_will_trigger_sharing">سيؤدي الحفظ أيضًا إلى تفعيل المشاركة.</string>
+    <string name="choose_save_or_share">اختر ما إذا كنت تريد الحفظ أو مشاركة النتيجة المعالجة.</string>
+    <string name="save_to_default_folder">حفظ في المجلد الافتراضي</string>
+    <string name="save_to_custom_folder">حفظ في مجلد مخصص</string>
+
+    <!-- SettingsScreen -->
+    <string name="settings">الإعدادات</string>
+    <string name="category_file_management">إدارة الملفات</string>
+    <string name="category_image_file">صورة / ملف</string>
+    <string name="category_shared_files">سلوك الملفات المشاركة</string>
+    <string name="category_ui">واجهة المستخدم</string>
+
+    <string name="setting_random_names_title">استخدام أسماء ملفات عشوائية</string>
+    <string name="setting_random_names_sub">إنشاء أسماء إخراج عشوائية بدلاً من استخدام اسم الملف الأصلي</string>
+    <string name="setting_default_path_title">مسار الحفظ الافتراضي</string>
+    <string name="setting_reset_path">إعادة التعيين إلى Pictures/MetaJammer</string>
+    <string name="setting_select_folder">حدد المجلد</string>
+
+    <string name="setting_keep_orientation_title">الحفاظ على اتجاه الصورة</string>
+    <string name="setting_keep_orientation_sub">الحفاظ على البيانات الوصفية لاتجاه الصورة عندما يكون ذلك ممكنًا</string>
+    <string name="setting_share_default_title">مشاركة النتيجة كافتراضي</string>
+    <string name="setting_share_default_sub">سيؤدي الحفظ أيضًا إلى تفعيل المشاركة</string>
+    <string name="setting_prefix_title">البادئة الافتراضية</string>
+    <string name="setting_suffix_title">اللاحقة الافتراضية</string>
+    <string name="setting_not_set">لم يتم التعيين</string>
+    <string name="setting_keep_thumbnails_title">الحفاظ على الصور المصغرة الأصلية</string>
+    <string name="setting_keep_thumbnails_sub">إذا كان الملف يحتوي على صورة مصغرة مدمجة، فاحتفظ بها كما هي. إذا تم تعطيله، فسيتم إزالة أي صورة مصغرة موجودة لأقصى قدر من الخصوصية.</string>
+    <string name="setting_thumbnails_warning">تحذير: قد يؤدي الاحتفاظ بالصور المصغرة الأصلية إلى تسريب بيانات وصفية (الموقع، معلومات الجهاز) حتى إذا تم إزالة العلامات الرئيسية.</string>
+    <string name="setting_enable_map_title">تمكين منتقي الخريطة</string>
+    <string name="setting_enable_map_sub">السماح للتطبيق بالاتصال بالإنترنت لإظهار OpenStreetMap لاختيار الموقع</string>
+
+    <string name="setting_quick_scrub_title">المسح السريع والمشاركة</string>
+    <string name="setting_quick_scrub_sub">تجريد البيانات الوصفية تلقائيًا وإعادة فتح صفحة المشاركة للملفات المشتركة</string>
+    <string name="setting_metadata_action_title">إجراء البيانات الوصفية</string>
+    <string name="setting_output_action_title">إجراء الإخراج</string>
+    <string name="setting_dedicated_folder_title">مجلد مخصص للملفات المشتركة</string>
+    <string name="setting_no_folder_selected">لم يتم تحديد مجلد مخصص</string>
+    <string name="setting_clear_folder">مسح المجلد المخصص</string>
+
+    <string name="setting_night_mode_title">الوضع الليلي</string>
+    <string name="setting_language_title">اللغة</string>
+    <string name="setting_oled_mode_title">وضع OLED</string>
+    <string name="setting_oled_mode_sub">استخدم درجات لون أسود أغمق للسمات الداكنة المدعومة</string>
+
+    <!-- Enums -->
+    <string name="night_mode_always">دائمًا</string>
+    <string name="night_mode_automatic">تلقائي</string>
+    <string name="night_mode_low_battery">فقط عند انخفاض البطارية</string>
+    <string name="night_mode_never">أبدًا</string>
+
+    <string name="language_system">System Default (افتراضي النظام)</string>
+    <string name="language_en">English (الإنجليزية)</string>
+    <string name="language_es">Español (الإسبانية)</string>
+    <string name="language_it">Italiano (الإيطالية)</string>
+    <string name="language_fr">Français (الفرنسية)</string>
+    <string name="language_de">Deutsch (الألمانية)</string>
+    <string name="language_zh">中文 (简体) (الصينية)</string>
+    <string name="language_hi">हिन्दी (الهندية)</string>
+    <string name="language_pt">Português (البرتغالية)</string>
+    <string name="language_ru">Русский (الروسية)</string>
+    <string name="language_el">Ελληνικά (اليونانية)</string>
+    <string name="language_ar">العربية (العربية)</string>
+    <string name="language_ja">日本語 (اليابانية)</string>
+    <string name="language_in">Bahasa Indonesia (الإندونيسية)</string>
+    <string name="language_tr">Türkçe (التركية)</string>
+    <string name="language_ko">한국어 (الكورية)</string>
+    <string name="language_vi">Tiếng Việt (الفيتنامية)</string>
+    <string name="language_th">ไทย (التايلاندية)</string>
+    <string name="language_pl">Polski (البولندية)</string>
+    <string name="language_nl">Nederlands (الهولندية)</string>
+    <string name="language_uk">Українська (الأوكرانية)</string>
+    <string name="language_fa">فارسی (الفارسية)</string>
+
+    <string name="processing_mode_poison">تسميم البيانات الوصفية (معلومات وهمية)</string>
+    <string name="processing_mode_remove">إزالة البيانات الوصفية (تجريد كامل)</string>
+
+    <string name="output_action_default_folder">حفظ في المجلد الافتراضي</string>
+    <string name="output_action_shared_folder">حفظ في المجلد المخصص</string>
+    <string name="output_action_reshare">إعادة مشاركة الملفات المنقحة</string>
+
+    <!-- Dialogs/Permissions -->
+    <string name="map_permission_title">منتقي الخريطة والوصول إلى الإنترنت</string>
+    <string name="map_permission_message">لإظهار خريطة لاختيار الموقع، يحتاج MetaJammer للاتصال بالإنترنت لتحميل مربعات الخرائط من OpenStreetMap. \n\nإذا رفضت، سيستمر التطبيق في العمل بشكل مثالي لجميع ميزات تجريد البيانات الوصفية وتسميمها، ولكنك لن تتمكن من اختيار المواقع بصريًا على الخريطة.</string>
+    <string name="allow_open_map">السماح وفتح الخريطة</string>
+    <string name="not_now">ليس الآن</string>
+
+    <string name="notification_permission_title">ابق على اطلاع</string>
+    <string name="notification_permission_message">يمكن لـ MetaJammer إظهار إشعارات لإبقائك على اطلاع دائم بتقدم مجموعات الملفات الكبيرة أثناء معالجتها في الخلفية. \n\nهذا مفيد بشكل خاص إذا كنت تريد التبديل إلى تطبيق آخر بينما ينتهي MetaJammer من عمله.</string>
+</resources>

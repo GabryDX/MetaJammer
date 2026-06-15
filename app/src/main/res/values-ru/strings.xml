@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MetaJammer</string>
+    <string name="notification_channel_name">Обработка файлов</string>
+    <string name="notification_processing_title">Обработка файлов</string>
+    <string name="notification_processing_message">Удаление метаданных из %1$d файлов...</string>
+    <string name="notification_complete_title">Обработка завершена</string>
+    <string name="notification_complete_message">Успешно обработано %1$d файлов.</string>
+
+    <!-- General -->
+    <string name="ok">ОК</string>
+    <string name="cancel">Отмена</string>
+    <string name="back">Назад</string>
+    <string name="continue_label">Продолжить</string>
+    <string name="save">Сохранить</string>
+    <string name="share">Поделиться</string>
+    <string name="dismiss">Закрыть</string>
+    <string name="warning">Предупреждение</string>
+    <string name="none">Нет</string>
+    <string name="unknown">неизвестно</string>
+
+    <!-- HomeScreen -->
+    <string name="hero_title">Защитите свою конфиденциальность</string>
+    <string name="hero_subtitle">Очистите или замените конфиденциальные метаданные перед отправкой файлов.</string>
+    <string name="feature_images_video_title">Изображения и видео</string>
+    <string name="feature_images_video_desc">Полная поддержка удаления метаданных из фотографий и ремуксирования видео для удаления отслеживания.</string>
+    <string name="feature_poisoning_title">Подмена метаданных</string>
+    <string name="feature_poisoning_desc">Не просто удаляйте данные — заменяйте их реалистичными подделками, чтобы сохранить конфиденциальность и запутать трекеры.</string>
+    <string name="feature_background_title">Фоновая обработка</string>
+    <string name="feature_background_desc">Эффективно обрабатывайте сотни файлов в фоновом режиме, пока вы занимаетесь другими делами.</string>
+    <string name="feature_on_device_title">Конфиденциальность на устройстве</string>
+    <string name="feature_on_device_desc">Вся обработка происходит локально на вашем устройстве. Ваши файлы никогда не покидают MetaJammer.</string>
+    <string name="pro_tip_gallery">Совет: вы можете отправлять файлы напрямую из приложения «Галерея» в MetaJammer.</string>
+    <string name="select_files">Выбрать файлы</string>
+    <string name="select_more_files">Выбрать еще файлы</string>
+    <string name="clear_selection">Очистить выбор</string>
+    <string name="files_selected">Выбрано файлов: %1$d</string>
+    <string name="total_size">Общий размер: %1$s</string>
+    <string name="size_mb">%.1f МБ</string>
+    <string name="size_kb">%.1f КБ</string>
+    <string name="size_bytes">%1$d байт</string>
+
+    <!-- MetadataPreviewScreen -->
+    <string name="metadata_preview">Просмотр метаданных</string>
+    <string name="file_type">Тип: %1$s</string>
+    <string name="no_metadata_found">Метаданные не найдены</string>
+
+    <!-- ProcessingScreen -->
+    <string name="process_files_title">Обработка файлов</string>
+    <string name="pick_one_option">Выберите вариант:</string>
+    <string name="poison_metadata">Подменить метаданные</string>
+    <string name="remove_metadata">Удалить метаданные</string>
+    <string name="selected_mode">Выбрано: %1$s</string>
+    <string name="regenerate_plans">Перегенерировать все случайные планы</string>
+    <string name="preview_of_changes">Предпросмотр изменений</string>
+    <string name="no_preview_available">Предпросмотр недоступен</string>
+    <string name="change_location_map">Изменить местоположение на карте</string>
+    <string name="process_files">Обработать файлы</string>
+    <string name="processing_foreground">Обработка на переднем плане...</string>
+    <string name="background_progress">Фоновый прогресс: %1$d%%</string>
+    <string name="continue_to_output">Перейти к параметрам вывода</string>
+
+    <!-- LocationPickerScreen -->
+    <string name="pick_location">Выбрать местоположение</string>
+    <string name="confirm_location">Подтвердить местоположение</string>
+
+    <!-- OutputOptionsScreen -->
+    <string name="output_options">Параметры вывода</string>
+    <string name="saving_will_trigger_sharing">Сохранение также инициирует отправку.</string>
+    <string name="choose_save_or_share">Выберите, сохранить или поделиться результатом.</string>
+    <string name="save_to_default_folder">Сохранить в папку по умолчанию</string>
+    <string name="save_to_custom_folder">Сохранить в выбранную папку</string>
+
+    <!-- SettingsScreen -->
+    <string name="settings">Настройки</string>
+    <string name="category_file_management">Управление файлами</string>
+    <string name="category_image_file">Изображение / Файл</string>
+    <string name="category_shared_files">Поведение общих файлов</string>
+    <string name="category_ui">Интерфейс</string>
+
+    <string name="setting_random_names_title">Случайные имена файлов</string>
+    <string name="setting_random_names_sub">Генерировать случайные имена вместо использования оригинальных</string>
+    <string name="setting_default_path_title">Путь сохранения по умолчанию</string>
+    <string name="setting_reset_path">Сбросить на Pictures/MetaJammer</string>
+    <string name="setting_select_folder">Выбрать папку</string>
+
+    <string name="setting_keep_orientation_title">Сохранять ориентацию изображения</string>
+    <string name="setting_keep_orientation_sub">По возможности сохранять метаданные ориентации изображения</string>
+    <string name="setting_share_default_title">Делиться результатом по умолчанию</string>
+    <string name="setting_share_default_sub">Сохранение также инициирует отправку</string>
+    <string name="setting_prefix_title">Префикс по умолчанию</string>
+    <string name="setting_suffix_title">Суффикс по умолчанию</string>
+    <string name="setting_not_set">Не установлено</string>
+    <string name="setting_keep_thumbnails_title">Сохранять оригинальные миниатюры</string>
+    <string name="setting_keep_thumbnails_sub">Если файл содержит встроенную миниатюру, сохранять ее как есть. Если отключено, любая существующая миниатюра будет удалена для максимальной конфиденциальности.</string>
+    <string name="setting_thumbnails_warning">Предупреждение: сохранение оригинальных миниатюр может привести к утечке метаданных (местоположение, инфо об устройстве), даже если основные теги удалены.</string>
+    <string name="setting_enable_map_title">Включить выбор на карте</string>
+    <string name="setting_enable_map_sub">Разрешить приложению подключаться к Интернету для отображения OpenStreetMap при выборе местоположения</string>
+
+    <string name="setting_quick_scrub_title">Быстрая очистка и отправка</string>
+    <string name="setting_quick_scrub_sub">Автоматически удалять метаданные и открывать меню отправки для общих файлов</string>
+    <string name="setting_metadata_action_title">Действие с метаданными</string>
+    <string name="setting_output_action_title">Действие вывода</string>
+    <string name="setting_dedicated_folder_title">Специальная папка для общих файлов</string>
+    <string name="setting_no_folder_selected">Папка не выбрана</string>
+    <string name="setting_clear_folder">Очистить специальную папку</string>
+
+    <string name="setting_night_mode_title">Ночной режим</string>
+    <string name="setting_language_title">Язык</string>
+    <string name="setting_oled_mode_title">OLED-режим</string>
+    <string name="setting_oled_mode_sub">Использовать более глубокий черный цвет для поддерживаемых темных тем</string>
+
+    <!-- Enums -->
+    <string name="night_mode_always">Всегда</string>
+    <string name="night_mode_automatic">Автоматически</string>
+    <string name="night_mode_low_battery">Только при низком заряде</string>
+    <string name="night_mode_never">Никогда</string>
+
+    <string name="language_system">System Default (Системный по умолчанию)</string>
+    <string name="language_en">English (Английский)</string>
+    <string name="language_es">Español (Испанский)</string>
+    <string name="language_it">Italiano (Итальянский)</string>
+    <string name="language_fr">Français (Французский)</string>
+    <string name="language_de">Deutsch (Немецкий)</string>
+    <string name="language_zh">中文 (简体) (Китайский (упрощенный))</string>
+    <string name="language_hi">हिन्दी (Хинди)</string>
+    <string name="language_pt">Português (Португальский)</string>
+    <string name="language_ru">Русский (Русский)</string>
+    <string name="language_el">Ελληνικά (Греческий)</string>
+    <string name="language_ar">العربية (Арабский)</string>
+    <string name="language_ja">日本語 (Японский)</string>
+    <string name="language_in">Bahasa Indonesia (Индонезийский)</string>
+    <string name="language_tr">Türkçe (Турецкий)</string>
+    <string name="language_ko">한국어 (Корейский)</string>
+    <string name="language_vi">Tiếng Việt (Вьетнамский)</string>
+    <string name="language_th">ไทย (Тайский)</string>
+    <string name="language_pl">Polski (Польский)</string>
+    <string name="language_nl">Nederlands (Нидерландский)</string>
+    <string name="language_uk">Українська (Украинский)</string>
+    <string name="language_fa">فارسی (Персидский)</string>
+
+    <string name="processing_mode_poison">Подменить метаданные (фейковые данные)</string>
+    <string name="processing_mode_remove">Удалить метаданные (полная очистка)</string>
+
+    <string name="output_action_default_folder">Сохранить в папку по умолчанию</string>
+    <string name="output_action_shared_folder">Сохранить в специальную папку</string>
+    <string name="output_action_reshare">Повторно отправить очищенные файлы</string>
+
+    <!-- Dialogs/Permissions -->
+    <string name="map_permission_title">Выбор на карте и доступ в Интернет</string>
+    <string name="map_permission_message">Чтобы показать карту для выбора местоположения, MetaJammer должен подключиться к Интернету для загрузки фрагментов карты из OpenStreetMap. \n\nЕсли вы откажетесь, приложение будет продолжать отлично работать для удаления и подмены метаданных, но вы не сможете выбирать местоположение визуально на карте.</string>
+    <string name="allow_open_map">Разрешить и открыть карту</string>
+    <string name="not_now">Не сейчас</string>
+
+    <string name="notification_permission_title">Будьте в курсе</string>
+    <string name="notification_permission_message">MetaJammer может показывать уведомления, чтобы держать вас в курсе прогресса обработки больших партий файлов в фоновом режиме. \n\nЭто особенно полезно, если вы хотите переключиться на другое приложение, пока MetaJammer завершает свою работу.</string>
+</resources>

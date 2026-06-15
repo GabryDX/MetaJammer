@@ -18,6 +18,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
+import com.heronikostudios.metajammer.R
 import com.heronikostudios.metajammer.domain.model.MetadataEntry
 import com.heronikostudios.metajammer.domain.model.ProcessingMode
 import com.heronikostudios.metajammer.domain.model.SelectedFile
@@ -49,30 +51,30 @@ fun ProcessingScreen(
                 modifier = Modifier.padding(12.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text("Pick one option:")
+                Text(stringResource(R.string.pick_one_option))
 
                 Button(
                     onClick = { onModeSelected(ProcessingMode.POISON_METADATA) },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Poison Metadata")
+                    Text(stringResource(R.string.poison_metadata))
                 }
 
                 Button(
                     onClick = { onModeSelected(ProcessingMode.REMOVE_METADATA) },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Remove Metadata")
+                    Text(stringResource(R.string.remove_metadata))
                 }
 
-                Text("Selected: ${selectedMode?.name ?: "None"}")
+                Text(stringResource(R.string.selected_mode, selectedMode?.name ?: stringResource(R.string.none)))
 
                 if (selectedMode == ProcessingMode.POISON_METADATA) {
                     Button(
                         onClick = onRegeneratePlans,
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("Regenerate All Random Plans")
+                        Text(stringResource(R.string.regenerate_plans))
                     }
                 }
             }
@@ -80,7 +82,7 @@ fun ProcessingScreen(
 
         if (selectedMode != null) {
             Text(
-                text = "Preview of Changes",
+                text = stringResource(R.string.preview_of_changes),
                 style = MaterialTheme.typography.titleMedium
             )
 
@@ -96,7 +98,7 @@ fun ProcessingScreen(
                                 style = MaterialTheme.typography.titleMedium
                             )
                             Text(
-                                text = "Type: ${file.mimeType ?: "unknown"}",
+                                text = stringResource(R.string.file_type, file.mimeType ?: stringResource(R.string.unknown)),
                                 style = MaterialTheme.typography.bodySmall
                             )
 
@@ -105,7 +107,7 @@ fun ProcessingScreen(
                             val entries = changePreview[file.uri].orEmpty()
 
                             if (entries.isEmpty()) {
-                                Text("No preview available")
+                                Text(stringResource(R.string.no_preview_available))
                             } else {
                                 entries.forEach { entry ->
                                     Text(
@@ -119,7 +121,7 @@ fun ProcessingScreen(
                                         onClick = { onEditLocation(file.uri) },
                                         modifier = Modifier.padding(top = 8.dp)
                                     ) {
-                                        Text("Change Location on Map")
+                                        Text(stringResource(R.string.change_location_map))
                                     }
                                 }
                             }
@@ -134,7 +136,7 @@ fun ProcessingScreen(
             enabled = !processing && selectedMode != null,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Process Files")
+            Text(stringResource(R.string.process_files))
         }
 
         if (processing) {
@@ -143,7 +145,7 @@ fun ProcessingScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 CircularProgressIndicator()
-                Text("Processing in foreground...", style = MaterialTheme.typography.bodySmall)
+                Text(stringResource(R.string.processing_foreground), style = MaterialTheme.typography.bodySmall)
             }
         }
 
@@ -159,7 +161,7 @@ fun ProcessingScreen(
                         progress = { progress / 100f },
                         modifier = Modifier.fillMaxWidth()
                     )
-                    Text("Background Progress: $progress%", style = MaterialTheme.typography.bodySmall)
+                    Text(stringResource(R.string.background_progress, progress), style = MaterialTheme.typography.bodySmall)
                 }
             }
         }
@@ -169,7 +171,7 @@ fun ProcessingScreen(
                 onClick = onNext,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Continue to Output Options")
+                Text(stringResource(R.string.continue_to_output))
             }
         }
     }

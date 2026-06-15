@@ -16,6 +16,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
+import com.heronikostudios.metajammer.R
 import com.heronikostudios.metajammer.domain.model.MetadataEntry
 import com.heronikostudios.metajammer.domain.model.SelectedFile
 
@@ -45,7 +47,7 @@ fun MetadataPreviewScreen(
                             style = MaterialTheme.typography.titleMedium
                         )
                         Text(
-                            text = "Type: ${file.mimeType ?: "unknown"}",
+                            text = stringResource(R.string.file_type, file.mimeType ?: stringResource(R.string.unknown)),
                             style = MaterialTheme.typography.bodySmall
                         )
 
@@ -54,7 +56,7 @@ fun MetadataPreviewScreen(
                         val entries = metadataPreview[file.uri].orEmpty()
 
                         if (entries.isEmpty()) {
-                            Text("No metadata found")
+                            Text(stringResource(R.string.no_metadata_found))
                         } else {
                             entries.forEach { entry ->
                                 Text(
@@ -72,14 +74,14 @@ fun MetadataPreviewScreen(
             onClick = onContinue,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Continue")
+            Text(stringResource(R.string.continue_label))
         }
 
         Button(
             onClick = onBack,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Back")
+            Text(stringResource(R.string.back))
         }
     }
 }

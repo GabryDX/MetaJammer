@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MetaJammer</string>
+    <string name="notification_channel_name">Bestandsverwerking</string>
+    <string name="notification_processing_title">Bestanden verwerken</string>
+    <string name="notification_processing_message">Metadata verwijderen van %1$d bestanden...</string>
+    <string name="notification_complete_title">Verwerking voltooid</string>
+    <string name="notification_complete_message">%1$d bestanden succesvol verwerkt.</string>
+
+    <!-- General -->
+    <string name="ok">OK</string>
+    <string name="cancel">Annuleren</string>
+    <string name="back">Terug</string>
+    <string name="continue_label">Doorgaan</string>
+    <string name="save">Opslaan</string>
+    <string name="share">Delen</string>
+    <string name="dismiss">Sluiten</string>
+    <string name="warning">Waarschuwing</string>
+    <string name="none">Geen</string>
+    <string name="unknown">onbekend</string>
+
+    <!-- HomeScreen -->
+    <string name="hero_title">Bescherm je privacy</string>
+    <string name="hero_subtitle">Wis of vervang gevoelige metadata voordat je je bestanden deelt.</string>
+    <string name="feature_images_video_title">Afbeeldingen &amp; Video</string>
+    <string name="feature_images_video_desc">Volledige ondersteuning voor het verwijderen van metadata uit foto\'s en het remuxen van video\'s om tracking te voorkomen.</string>
+    <string name="feature_poisoning_title">Metadata Vergiftiging</string>
+    <string name="feature_poisoning_desc">Verwijder niet alleen gegevens, maar vervang ze door realistische neppe informatie om je privacy te beschermen en trackers te misleiden.</string>
+    <string name="feature_background_title">Achtergrondverwerking</string>
+    <string name="feature_background_desc">Verwerk honderden bestanden efficiënt op de achtergrond terwijl je andere dingen doet.</string>
+    <string name="feature_on_device_title">Privacy op het apparaat</string>
+    <string name="feature_on_device_desc">Alle verwerking vindt lokaal plaats op je apparaat. Je bestanden verlaten MetaJammer nooit.</string>
+    <string name="pro_tip_gallery">Pro tip: Je kunt bestanden direct vanuit je Galerij-app delen met MetaJammer.</string>
+    <string name="select_files">Bestanden selecteren</string>
+    <string name="select_more_files">Selecteer meer bestanden</string>
+    <string name="clear_selection">Selectie wissen</string>
+    <string name="files_selected">%1$d bestanden geselecteerd</string>
+    <string name="total_size">Totale grootte: %1$s</string>
+    <string name="size_mb">%.1f MB</string>
+    <string name="size_kb">%.1f KB</string>
+    <string name="size_bytes">%1$d Bytes</string>
+
+    <!-- MetadataPreviewScreen -->
+    <string name="metadata_preview">Metadata voorbeeld</string>
+    <string name="file_type">Type: %1$s</string>
+    <string name="no_metadata_found">Geen metadata gevonden</string>
+
+    <!-- ProcessingScreen -->
+    <string name="process_files_title">Bestanden verwerken</string>
+    <string name="pick_one_option">Kies een optie:</string>
+    <string name="poison_metadata">Metadata vergiftigen</string>
+    <string name="remove_metadata">Metadata verwijderen</string>
+    <string name="selected_mode">Geselecteerd: %1$s</string>
+    <string name="regenerate_plans">Alle willekeurige plannen regenereren</string>
+    <string name="preview_of_changes">Voorbeeld van wijzigingen</string>
+    <string name="no_preview_available">Geen voorbeeld beschikbaar</string>
+    <string name="change_location_map">Locatie op de kaart wijzigen</string>
+    <string name="process_files">Bestanden verwerken</string>
+    <string name="processing_foreground">Verwerken op de voorgrond...</string>
+    <string name="background_progress">Voortgang achtergrond: %1$d%%</string>
+    <string name="continue_to_output">Doorgaan naar uitvoeropties</string>
+
+    <!-- LocationPickerScreen -->
+    <string name="pick_location">Locatie kiezen</string>
+    <string name="confirm_location">Locatie bevestigen</string>
+
+    <!-- OutputOptionsScreen -->
+    <string name="output_options">Uitvoeropties</string>
+    <string name="saving_will_trigger_sharing">Opslaan zal ook delen activeren.</string>
+    <string name="choose_save_or_share">Kies of je het verwerkte resultaat wilt opslaan of delen.</string>
+    <string name="save_to_default_folder">Opslaan in standaardmap</string>
+    <string name="save_to_custom_folder">Opslaan in aangepaste map</string>
+
+    <!-- SettingsScreen -->
+    <string name="settings">Instellingen</string>
+    <string name="category_file_management">Bestandsbeheer</string>
+    <string name="category_image_file">Afbeelding / Bestand</string>
+    <string name="category_shared_files">Gedrag gedeelde bestanden</string>
+    <string name="category_ui">UI</string>
+
+    <string name="setting_random_names_title">Willekeurige bestandsnamen gebruiken</string>
+    <string name="setting_random_names_sub">Genereer willekeurige uitvoernamen in plaats van de oorspronkelijke bestandsnaam</string>
+    <string name="setting_default_path_title">Standaard opslagpad</string>
+    <string name="setting_reset_path">Resetten naar Pictures/MetaJammer</string>
+    <string name="setting_select_folder">Map selecteren</string>
+
+    <string name="setting_keep_orientation_title">Beeldorientatie behouden</string>
+    <string name="setting_keep_orientation_sub">Metadata voor beeldoriëntatie behouden indien mogelijk</string>
+    <string name="setting_share_default_title">Resultaat standaard delen</string>
+    <string name="setting_share_default_sub">Opslaan zal ook delen activeren</string>
+    <string name="setting_prefix_title">Standaard voorvoegsel</string>
+    <string name="setting_suffix_title">Standaard achtervoegsel</string>
+    <string name="setting_not_set">Niet ingesteld</string>
+    <string name="setting_keep_thumbnails_title">Originele miniaturen behouden</string>
+    <string name="setting_keep_thumbnails_sub">Als het bestand een ingebedde miniatuur bevat, bewaar deze dan zoals hij is. Indien uitgeschakeld, wordt elke bestaande miniatuur verwijderd voor maximale privacy.</string>
+    <string name="setting_thumbnails_warning">Waarschuwing: Het bewaren van originele miniaturen kan metadata lekken (locatie, apparaatinformatie), zelfs als de hoofdtags zijn verwijderd.</string>
+    <string name="setting_enable_map_title">Kaartkiezer inschakelen</string>
+    <string name="setting_enable_map_sub">Toestaan dat de app verbinding maakt met internet om OpenStreetMap te tonen voor locatiekeuze</string>
+
+    <string name="setting_quick_scrub_title">Quick Scrub &amp; Share</string>
+    <string name="setting_quick_scrub_sub">Metadata automatisch verwijderen en het deelscherm opnieuw openen voor gedeelde bestanden</string>
+    <string name="setting_metadata_action_title">Metadata actie</string>
+    <string name="setting_output_action_title">Uitvoer actie</string>
+    <string name="setting_dedicated_folder_title">Speciale map voor gedeelde bestanden</string>
+    <string name="setting_no_folder_selected">Geen speciale map geselecteerd</string>
+    <string name="setting_clear_folder">Speciale map wissen</string>
+
+    <string name="setting_night_mode_title">Nachtmodus</string>
+    <string name="setting_language_title">Taal</string>
+    <string name="setting_oled_mode_title">OLED modus</string>
+    <string name="setting_oled_mode_sub">Gebruik diepere zwarttinten voor ondersteunde donkere thema\'s</string>
+
+    <!-- Enums -->
+    <string name="night_mode_always">Altijd</string>
+    <string name="night_mode_automatic">Automatisch</string>
+    <string name="night_mode_low_battery">Alleen bij lage batterij</string>
+    <string name="night_mode_never">Nooit</string>
+
+    <string name="language_system">System Default (Systeemstandaard)</string>
+    <string name="language_en">English (Engels)</string>
+    <string name="language_es">Español (Spaans)</string>
+    <string name="language_it">Italiano (Italiaans)</string>
+    <string name="language_fr">Français (Frans)</string>
+    <string name="language_de">Deutsch (Duits)</string>
+    <string name="language_zh">中文 (简体) (Chinees (Vereenvoudigd))</string>
+    <string name="language_hi">हिन्दी (Hindi)</string>
+    <string name="language_pt">Português (Portugees)</string>
+    <string name="language_ru">Русский (Russisch)</string>
+    <string name="language_el">Ελληνικά (Grieks)</string>
+    <string name="language_ar">العربية (Arabisch)</string>
+    <string name="language_ja">日本語 (Japans)</string>
+    <string name="language_in">Bahasa Indonesia (Indonesisch)</string>
+    <string name="language_tr">Türkçe (Turks)</string>
+    <string name="language_ko">한국어 (Koreaans)</string>
+    <string name="language_vi">Tiếng Việt (Vietnamees)</string>
+    <string name="language_th">ไทย (Thais)</string>
+    <string name="language_pl">Polski (Pools)</string>
+    <string name="language_nl">Nederlands (Nederlands)</string>
+    <string name="language_uk">Українська (Oekraïens)</string>
+    <string name="language_fa">فارسی (Perzisch)</string>
+
+    <string name="processing_mode_poison">Metadata vergiftigen (Fake info)</string>
+    <string name="processing_mode_remove">Metadata verwijderen (Volledig wissen)</string>
+
+    <string name="output_action_default_folder">Opslaan in standaardmap</string>
+    <string name="output_action_shared_folder">Opslaan in speciale map</string>
+    <string name="output_action_reshare">Opgeschone bestanden opnieuw delen</string>
+
+    <!-- Dialogs/Permissions -->
+    <string name="map_permission_title">Kaartkiezer &amp; internettoegang</string>
+    <string name="map_permission_message">Om een kaart te tonen voor het kiezen van een locatie, moet MetaJammer verbinding maken μετ het internet om kaarttegels van OpenStreetMap te laden. \n\nAls je weigert, blijft de app perfect werken voor alle functies voor het verwijderen en vergiftigen van metadata, maar kun je locaties niet visueel op een kaart kiezen.</string>
+    <string name="allow_open_map">Toestaan &amp; Kaart openen</string>
+    <string name="not_now">Niet nu</string>
+
+    <string name="notification_permission_title">Blijf op de hoogte</string>
+    <string name="notification_permission_message">MetaJammer kan meldingen weergeven om je op de hoogte te houden van de voortgang van grote bestandsbatches terwijl ze op de achtergrond worden verwerkt. \n\nDit is vooral handig als je naar een andere app wilt overschakelen terwijl MetaJammer klaar is met zijn werk.</string>
+</resources>

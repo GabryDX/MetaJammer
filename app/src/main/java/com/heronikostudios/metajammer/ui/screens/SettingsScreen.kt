@@ -14,6 +14,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
+import com.heronikostudios.metajammer.R
 import com.heronikostudios.metajammer.domain.model.*
 
 @Composable
@@ -33,6 +35,7 @@ fun SettingsScreen(
     onSharedFilesCustomPathSelected: (Uri?) -> Unit,
     onThumbnailHandlingChanged: (ThumbnailHandling) -> Unit,
     onAllowInternetForMapChanged: (Boolean) -> Unit,
+    onLanguageChanged: (AppLanguage) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val folderPicker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { 
@@ -52,10 +55,10 @@ fun SettingsScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        SettingsCategory(title = "File Management") {
+        SettingsCategory(title = stringResource(R.string.category_file_management)) {
             SettingSwitchRow(
-                title = "Use random file names",
-                subtitle = "Generate randomized output names instead of using the original file name",
+                title = stringResource(R.string.setting_random_names_title),
+                subtitle = stringResource(R.string.setting_random_names_sub),
                 checked = settings.useRandomFileNames,
                 onCheckedChange = onUseRandomFileNamesChanged
             )
@@ -63,25 +66,25 @@ fun SettingsScreen(
             HorizontalDivider()
 
             SettingFolderRow(
-                title = "Default saving path",
+                title = stringResource(R.string.setting_default_path_title),
                 currentPath = settings.defaultSavingPath ?: "Pictures/MetaJammer",
                 onSelect = { folderPicker.launch(null) },
                 onReset = { onDefaultSavingPathSelected(null) },
-                resetLabel = "Reset to Pictures/MetaJammer"
+                resetLabel = stringResource(R.string.setting_reset_path)
             )
         }
 
-        SettingsCategory(title = "Image / File") {
+        SettingsCategory(title = stringResource(R.string.category_image_file)) {
             SettingSwitchRow(
-                title = "Keep image orientation",
-                subtitle = "Preserve image orientation metadata when possible",
+                title = stringResource(R.string.setting_keep_orientation_title),
+                subtitle = stringResource(R.string.setting_keep_orientation_sub),
                 checked = settings.keepImageOrientation,
                 onCheckedChange = onKeepImageOrientationChanged
             )
 
             SettingSwitchRow(
-                title = "Share result as default",
-                subtitle = "Saving will also trigger sharing",
+                title = stringResource(R.string.setting_share_default_title),
+                subtitle = stringResource(R.string.setting_share_default_sub),
                 checked = settings.shareResultAsDefault,
                 onCheckedChange = onShareResultAsDefaultChanged
             )
@@ -89,20 +92,20 @@ fun SettingsScreen(
             HorizontalDivider()
 
             DialogSettingRow(
-                title = "Default Prefix",
-                value = settings.defaultPrefix.ifBlank { "Not set" },
+                title = stringResource(R.string.setting_prefix_title),
+                value = settings.defaultPrefix.ifBlank { stringResource(R.string.setting_not_set) },
                 onClick = { activeDialog = SettingsDialog.Prefix(settings.defaultPrefix) }
             )
 
             DialogSettingRow(
-                title = "Default Suffix",
-                value = settings.defaultSuffix.ifBlank { "Not set" },
+                title = stringResource(R.string.setting_suffix_title),
+                value = settings.defaultSuffix.ifBlank { stringResource(R.string.setting_not_set) },
                 onClick = { activeDialog = SettingsDialog.Suffix(settings.defaultSuffix) }
             )
 
             SettingSwitchRow(
-                title = "Keep original thumbnails",
-                subtitle = "If the file contains an embedded thumbnail, preserve it as-is. If disabled, any existing thumbnail will be removed for maximum privacy.",
+                title = stringResource(R.string.setting_keep_thumbnails_title),
+                subtitle = stringResource(R.string.setting_keep_thumbnails_sub),
                 checked = settings.thumbnailHandling == ThumbnailHandling.KEEP_ORIGINAL,
                 onCheckedChange = { isChecked ->
                     onThumbnailHandlingChanged(if (isChecked) ThumbnailHandling.KEEP_ORIGINAL else ThumbnailHandling.REMOVE)
@@ -111,59 +114,65 @@ fun SettingsScreen(
 
             if (settings.thumbnailHandling == ThumbnailHandling.KEEP_ORIGINAL) {
                 SettingWarningCard(
-                    message = "Warning: Keeping original thumbnails may leak metadata (location, device info) even if main tags are removed."
+                    message = stringResource(R.string.setting_thumbnails_warning)
                 )
             }
 
             SettingSwitchRow(
-                title = "Enable map picker",
-                subtitle = "Allow the app to connect to the internet to show OpenStreetMap for location selection",
+                title = stringResource(R.string.setting_enable_map_title),
+                subtitle = stringResource(R.string.setting_enable_map_sub),
                 checked = settings.allowInternetForMap,
                 onCheckedChange = onAllowInternetForMapChanged
             )
         }
 
-        SettingsCategory(title = "Shared Files Behavior") {
+        SettingsCategory(title = stringResource(R.string.category_shared_files)) {
             SettingSwitchRow(
-                title = "Quick Scrub & Share",
-                subtitle = "Automatically strip metadata and re-open Share Sheet for shared files",
+                title = stringResource(R.string.setting_quick_scrub_title),
+                subtitle = stringResource(R.string.setting_quick_scrub_sub),
                 checked = settings.autoHandleSharedFiles,
                 onCheckedChange = onAutoHandleSharedFilesChanged
             )
 
             DialogSettingRow(
-                title = "Metadata action",
+                title = stringResource(R.string.setting_metadata_action_title),
                 value = settings.sharedFilesProcessingMode.toReadableLabel(),
                 onClick = { activeDialog = SettingsDialog.SharedProcessingMode(settings.sharedFilesProcessingMode) }
             )
 
             DialogSettingRow(
-                title = "Output action",
+                title = stringResource(R.string.setting_output_action_title),
                 value = settings.sharedFilesOutputAction.toReadableLabel(),
                 onClick = { activeDialog = SettingsDialog.SharedOutputAction(settings.sharedFilesOutputAction) }
             )
 
             if (settings.sharedFilesOutputAction == SharedInputOutputAction.SAVE_TO_SHARED_FOLDER) {
                 SettingFolderRow(
-                    title = "Dedicated shared-files folder",
-                    currentPath = settings.sharedFilesCustomPath ?: "No dedicated folder selected",
+                    title = stringResource(R.string.setting_dedicated_folder_title),
+                    currentPath = settings.sharedFilesCustomPath ?: stringResource(R.string.setting_no_folder_selected),
                     onSelect = { sharedFolderPicker.launch(null) },
                     onReset = { onSharedFilesCustomPathSelected(null) },
-                    resetLabel = "Clear Dedicated Folder"
+                    resetLabel = stringResource(R.string.setting_clear_folder)
                 )
             }
         }
 
-        SettingsCategory(title = "UI") {
+        SettingsCategory(title = stringResource(R.string.category_ui)) {
             DialogSettingRow(
-                title = "Night mode",
+                title = stringResource(R.string.setting_night_mode_title),
                 value = settings.nightMode.toReadableLabel(),
                 onClick = { activeDialog = SettingsDialog.NightMode(settings.nightMode) }
             )
 
+            DialogSettingRow(
+                title = stringResource(R.string.setting_language_title),
+                value = settings.language.toReadableLabel(),
+                onClick = { activeDialog = SettingsDialog.Language(settings.language) }
+            )
+
             SettingSwitchRow(
-                title = "OLED mode",
-                subtitle = "Use darker black tones for supported dark themes",
+                title = stringResource(R.string.setting_oled_mode_title),
+                subtitle = stringResource(R.string.setting_oled_mode_sub),
                 checked = settings.oledMode,
                 onCheckedChange = onOledModeChanged
             )
@@ -180,7 +189,8 @@ fun SettingsScreen(
             onPrefixChanged = onDefaultPrefixChanged,
             onSuffixChanged = onDefaultSuffixChanged,
             onProcessingModeChanged = onSharedFilesProcessingModeChanged,
-            onOutputActionChanged = onSharedFilesOutputActionChanged
+            onOutputActionChanged = onSharedFilesOutputActionChanged,
+            onLanguageChanged = onLanguageChanged
         )
     }
 }
@@ -240,7 +250,7 @@ private fun SettingWarningCard(message: String) {
         ) {
             Icon(
                 imageVector = Icons.Default.Warning,
-                contentDescription = "Warning",
+                contentDescription = stringResource(R.string.warning),
                 modifier = Modifier.size(24.dp)
             )
             Text(
@@ -263,7 +273,7 @@ private fun SettingFolderRow(
         Text(text = title, style = MaterialTheme.typography.bodyLarge)
         Text(text = currentPath, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.secondary)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Button(onClick = onSelect, modifier = Modifier.weight(1f)) { Text("Select Folder") }
+            Button(onClick = onSelect, modifier = Modifier.weight(1f)) { Text(stringResource(R.string.setting_select_folder)) }
             OutlinedButton(onClick = onReset, modifier = Modifier.weight(1f)) { Text(resetLabel) }
         }
     }
@@ -298,6 +308,7 @@ private sealed class SettingsDialog {
     data class Suffix(val current: String) : SettingsDialog()
     data class SharedProcessingMode(val current: ProcessingMode) : SettingsDialog()
     data class SharedOutputAction(val current: SharedInputOutputAction) : SettingsDialog()
+    data class Language(val current: AppLanguage) : SettingsDialog()
 }
 
 @Composable
@@ -308,23 +319,24 @@ private fun HandleSettingsDialog(
     onPrefixChanged: (String) -> Unit,
     onSuffixChanged: (String) -> Unit,
     onProcessingModeChanged: (ProcessingMode) -> Unit,
-    onOutputActionChanged: (SharedInputOutputAction) -> Unit
+    onOutputActionChanged: (SharedInputOutputAction) -> Unit,
+    onLanguageChanged: (AppLanguage) -> Unit
 ) {
     when (dialog) {
         is SettingsDialog.Prefix -> TextFieldDialog(
-            title = "Default Prefix",
+            title = stringResource(R.string.setting_prefix_title),
             initialValue = dialog.current,
             onConfirm = onPrefixChanged,
             onDismiss = onDismiss
         )
         is SettingsDialog.Suffix -> TextFieldDialog(
-            title = "Default Suffix",
+            title = stringResource(R.string.setting_suffix_title),
             initialValue = dialog.current,
             onConfirm = onSuffixChanged,
             onDismiss = onDismiss
         )
         is SettingsDialog.NightMode -> SingleSelectDialog(
-            title = "Night Mode",
+            title = stringResource(R.string.setting_night_mode_title),
             options = NightModeSetting.entries,
             selected = dialog.current,
             labelProvider = { it.toReadableLabel() },
@@ -332,7 +344,7 @@ private fun HandleSettingsDialog(
             onDismiss = onDismiss
         )
         is SettingsDialog.SharedProcessingMode -> SingleSelectDialog(
-            title = "Metadata Action",
+            title = stringResource(R.string.setting_metadata_action_title),
             options = ProcessingMode.entries,
             selected = dialog.current,
             labelProvider = { it.toReadableLabel() },
@@ -340,11 +352,20 @@ private fun HandleSettingsDialog(
             onDismiss = onDismiss
         )
         is SettingsDialog.SharedOutputAction -> SingleSelectDialog(
-            title = "Output Action",
+            title = stringResource(R.string.setting_output_action_title),
             options = SharedInputOutputAction.entries,
             selected = dialog.current,
             labelProvider = { it.toReadableLabel() },
             onConfirm = onOutputActionChanged,
+            onDismiss = onDismiss
+        )
+
+        is SettingsDialog.Language -> SingleSelectDialog(
+            title = stringResource(R.string.setting_language_title),
+            options = AppLanguage.entries,
+            selected = dialog.current,
+            labelProvider = { it.toReadableLabel() },
+            onConfirm = onLanguageChanged,
             onDismiss = onDismiss
         )
     }
@@ -369,8 +390,8 @@ private fun TextFieldDialog(
                 singleLine = true
             )
         },
-        confirmButton = { TextButton(onClick = { onConfirm(value); onDismiss() }) { Text("OK") } },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } }
+        confirmButton = { TextButton(onClick = { onConfirm(value); onDismiss() }) { Text(stringResource(R.string.ok)) } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } }
     )
 }
 
@@ -379,7 +400,7 @@ private fun <T> SingleSelectDialog(
     title: String,
     options: List<T>,
     selected: T,
-    labelProvider: (T) -> String,
+    labelProvider: @Composable (T) -> String,
     onConfirm: (T) -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -388,7 +409,9 @@ private fun <T> SingleSelectDialog(
         onDismissRequest = onDismiss,
         title = { Text(title) },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Column(
+                modifier = Modifier.verticalScroll(rememberScrollState())
+            ) {
                 options.forEach { option ->
                     Row(
                         modifier = Modifier
@@ -397,7 +420,7 @@ private fun <T> SingleSelectDialog(
                                 selected = currentSelection == option,
                                 onClick = { currentSelection = option }
                             )
-                            .padding(vertical = 8.dp),
+                            .padding(vertical = 4.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         RadioButton(selected = currentSelection == option, onClick = { currentSelection = option })
@@ -406,26 +429,55 @@ private fun <T> SingleSelectDialog(
                 }
             }
         },
-        confirmButton = { TextButton(onClick = { onConfirm(currentSelection); onDismiss() }) { Text("OK") } },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } }
+        confirmButton = { TextButton(onClick = { onConfirm(currentSelection); onDismiss() }) { Text(stringResource(R.string.ok)) } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } }
     )
 }
 
 // Labels
+@Composable
 private fun NightModeSetting.toReadableLabel() = when (this) {
-    NightModeSetting.ALWAYS -> "Always"
-    NightModeSetting.AUTOMATIC -> "Automatic"
-    NightModeSetting.ONLY_LOW_BATTERY -> "Only low battery"
-    NightModeSetting.NEVER -> "Never"
+    NightModeSetting.ALWAYS -> stringResource(R.string.night_mode_always)
+    NightModeSetting.AUTOMATIC -> stringResource(R.string.night_mode_automatic)
+    NightModeSetting.ONLY_LOW_BATTERY -> stringResource(R.string.night_mode_low_battery)
+    NightModeSetting.NEVER -> stringResource(R.string.night_mode_never)
 }
 
+@Composable
 private fun ProcessingMode.toReadableLabel() = when (this) {
-    ProcessingMode.POISON_METADATA -> "Poison metadata (Fake info)"
-    ProcessingMode.REMOVE_METADATA -> "Remove metadata (Full strip)"
+    ProcessingMode.POISON_METADATA -> stringResource(R.string.processing_mode_poison)
+    ProcessingMode.REMOVE_METADATA -> stringResource(R.string.processing_mode_remove)
 }
 
+@Composable
 private fun SharedInputOutputAction.toReadableLabel() = when (this) {
-    SharedInputOutputAction.SAVE_TO_DEFAULT_FOLDER -> "Save to default folder"
-    SharedInputOutputAction.SAVE_TO_SHARED_FOLDER -> "Save to dedicated folder"
-    SharedInputOutputAction.SHARE_TO_ANOTHER_APP -> "Re-share sanitized files"
+    SharedInputOutputAction.SAVE_TO_DEFAULT_FOLDER -> stringResource(R.string.output_action_default_folder)
+    SharedInputOutputAction.SAVE_TO_SHARED_FOLDER -> stringResource(R.string.output_action_shared_folder)
+    SharedInputOutputAction.SHARE_TO_ANOTHER_APP -> stringResource(R.string.output_action_reshare)
+}
+
+@Composable
+private fun AppLanguage.toReadableLabel() = when (this) {
+    AppLanguage.SYSTEM -> stringResource(R.string.language_system)
+    AppLanguage.ENGLISH -> stringResource(R.string.language_en)
+    AppLanguage.SPANISH -> stringResource(R.string.language_es)
+    AppLanguage.ITALIAN -> stringResource(R.string.language_it)
+    AppLanguage.FRENCH -> stringResource(R.string.language_fr)
+    AppLanguage.GERMAN -> stringResource(R.string.language_de)
+    AppLanguage.CHINESE -> stringResource(R.string.language_zh)
+    AppLanguage.HINDI -> stringResource(R.string.language_hi)
+    AppLanguage.PORTUGUESE -> stringResource(R.string.language_pt)
+    AppLanguage.RUSSIAN -> stringResource(R.string.language_ru)
+    AppLanguage.GREEK -> stringResource(R.string.language_el)
+    AppLanguage.ARABIC -> stringResource(R.string.language_ar)
+    AppLanguage.JAPANESE -> stringResource(R.string.language_ja)
+    AppLanguage.INDONESIAN -> stringResource(R.string.language_in)
+    AppLanguage.TURKISH -> stringResource(R.string.language_tr)
+    AppLanguage.KOREAN -> stringResource(R.string.language_ko)
+    AppLanguage.VIETNAMESE -> stringResource(R.string.language_vi)
+    AppLanguage.THAI -> stringResource(R.string.language_th)
+    AppLanguage.POLISH -> stringResource(R.string.language_pl)
+    AppLanguage.DUTCH -> stringResource(R.string.language_nl)
+    AppLanguage.UKRAINIAN -> stringResource(R.string.language_uk)
+    AppLanguage.PERSIAN -> stringResource(R.string.language_fa)
 }

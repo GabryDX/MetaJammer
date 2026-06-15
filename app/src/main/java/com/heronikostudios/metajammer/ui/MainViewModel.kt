@@ -12,14 +12,9 @@ import androidx.work.WorkManager
 import com.heronikostudios.metajammer.data.FileRepository
 import com.heronikostudios.metajammer.data.MetadataRepository
 import com.heronikostudios.metajammer.data.SettingsRepository
-import com.heronikostudios.metajammer.domain.model.AppSettings
-import com.heronikostudios.metajammer.domain.model.MetadataEntry
-import com.heronikostudios.metajammer.domain.model.MetadataReplacementPlan
-import com.heronikostudios.metajammer.domain.model.NightModeSetting
-import com.heronikostudios.metajammer.domain.model.ProcessingMode
-import com.heronikostudios.metajammer.domain.model.SelectedFile
-import com.heronikostudios.metajammer.domain.model.SharedInputOutputAction
-import com.heronikostudios.metajammer.domain.model.ThumbnailHandling
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
+import com.heronikostudios.metajammer.domain.model.*
 import com.heronikostudios.metajammer.domain.usecase.ProcessFileUseCase
 import com.heronikostudios.metajammer.domain.usecase.SaveFileUseCase
 import com.heronikostudios.metajammer.metadata.MetadataReplacementGenerator
@@ -159,6 +154,29 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             settingsRepository.allowInternetForMapFlow.collect {
                 _appSettings.value = _appSettings.value.copy(allowInternetForMap = it)
             }
+        }
+        viewModelScope.launch {
+            settingsRepository.languageFlow.collect { language ->
+                _appSettings.value = _appSettings.value.copy(language = language)
+                applyLanguage(language)
+            }
+        }
+    }
+
+    private fun applyLanguage(language: AppLanguage) {
+        Timber.d("Applying language: $language (code: ${language.code})")
+        val appLocale: LocaleListCompat = if (language == AppLanguage.SYSTEM) {
+            LocaleListCompat.getEmptyLocaleList()
+        } else {
+            LocaleListCompat.forLanguageTags(language.code)
+        }
+
+        val currentLocales = AppCompatDelegate.getApplicationLocales()
+        if (currentLocales != appLocale) {
+            Timber.d("Setting application locales to $appLocale")
+            AppCompatDelegate.setApplicationLocales(appLocale)
+        } else {
+            Timber.d("Locales already set to $appLocale")
         }
     }
 
@@ -605,6 +623,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setAllowInternetForMap(allowed: Boolean) = launchSettingUpdate {
         settingsRepository.setAllowInternetForMap(allowed)
+    }
+
+    fun setLanguage(language: AppLanguage) = launchSettingUpdate {
+        settingsRepository.setLanguage(language)
     }
 
     private fun launchSettingUpdate(block: suspend () -> Unit) {

@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MetaJammer</string>
+    <string name="notification_channel_name">Processamento de Ficheiros</string>
+    <string name="notification_processing_title">A Processar Ficheiros</string>
+    <string name="notification_processing_message">A remover metadados de %1$d ficheiros...</string>
+    <string name="notification_complete_title">Processamento Concluído</string>
+    <string name="notification_complete_message">%1$d ficheiros processados com sucesso.</string>
+
+    <!-- General -->
+    <string name="ok">OK</string>
+    <string name="cancel">Cancelar</string>
+    <string name="back">Voltar</string>
+    <string name="continue_label">Continuar</string>
+    <string name="save">Guardar</string>
+    <string name="share">Partilhar</string>
+    <string name="dismiss">Descartar</string>
+    <string name="warning">Aviso</string>
+    <string name="none">Nenhum</string>
+    <string name="unknown">desconhecido</string>
+
+    <!-- HomeScreen -->
+    <string name="hero_title">Proteja a sua Privacidade</string>
+    <string name="hero_subtitle">Limpe ou substitua metadados sensíveis antes de partilhar os seus ficheiros.</string>
+    <string name="feature_images_video_title">Imagens e Vídeo</string>
+    <string name="feature_images_video_desc">Suporte total para remover metadados de fotos e remisturar vídeos para remover rastreio.</string>
+    <string name="feature_poisoning_title">Envenenamento de Metadados</string>
+    <string name="feature_poisoning_desc">Não remova apenas os dados—substitua-os por falsificações realistas para preservar a privacidade e confundir os rastreadores.</string>
+    <string name="feature_background_title">Processamento em Segundo Plano</string>
+    <string name="feature_background_desc">Processe centenas de ficheiros eficientemente em segundo plano enquanto faz outras coisas.</string>
+    <string name="feature_on_device_title">Privacidade no Dispositivo</string>
+    <string name="feature_on_device_desc">Todo o processamento ocorre localmente no seu dispositivo. Os seus ficheiros nunca saem do MetaJammer.</string>
+    <string name="pro_tip_gallery">Dica: Pode partilhar ficheiros diretamente da sua aplicação Galeria para o MetaJammer.</string>
+    <string name="select_files">Selecionar Ficheiros</string>
+    <string name="select_more_files">Selecionar Mais Ficheiros</string>
+    <string name="clear_selection">Limpar Seleção</string>
+    <string name="files_selected">%1$d Ficheiros Selecionados</string>
+    <string name="total_size">Tamanho total: %1$s</string>
+    <string name="size_mb">%.1f MB</string>
+    <string name="size_kb">%.1f KB</string>
+    <string name="size_bytes">%1$d Bytes</string>
+
+    <!-- MetadataPreviewScreen -->
+    <string name="metadata_preview">Pré-visualização de Metadados</string>
+    <string name="file_type">Tipo: %1$s</string>
+    <string name="no_metadata_found">Nenhum metadado encontrado</string>
+
+    <!-- ProcessingScreen -->
+    <string name="process_files_title">Processar Ficheiros</string>
+    <string name="pick_one_option">Escolha uma opção:</string>
+    <string name="poison_metadata">Envenenar Metadados</string>
+    <string name="remove_metadata">Remover Metadados</string>
+    <string name="selected_mode">Selecionado: %1$s</string>
+    <string name="regenerate_plans">Regenerar Todos os Planos Aleatórios</string>
+    <string name="preview_of_changes">Pré-visualização de Alterações</string>
+    <string name="no_preview_available">Nenhuma pré-visualização disponível</string>
+    <string name="change_location_map">Alterar Localização no Mapa</string>
+    <string name="process_files">Processar Ficheiros</string>
+    <string name="processing_foreground">A processar em primeiro plano...</string>
+    <string name="background_progress">Progresso em Segundo Plano: %1$d%%</string>
+    <string name="continue_to_output">Continuar para Opções de Saída</string>
+
+    <!-- LocationPickerScreen -->
+    <string name="pick_location">Escolher Localização</string>
+    <string name="confirm_location">Confirmar Localização</string>
+
+    <!-- OutputOptionsScreen -->
+    <string name="output_options">Opções de Saída</string>
+    <string name="saving_will_trigger_sharing">Guardar também irá ativar a partilha.</string>
+    <string name="choose_save_or_share">Escolha se deseja guardar ou partilhar o resultado processado.</string>
+    <string name="save_to_default_folder">Guardar na Pasta Predefinida</string>
+    <string name="save_to_custom_folder">Guardar numa Pasta Personalizada</string>
+
+    <!-- SettingsScreen -->
+    <string name="settings">Definições</string>
+    <string name="category_file_management">Gestão de Ficheiros</string>
+    <string name="category_image_file">Imagem / Ficheiro</string>
+    <string name="category_shared_files">Comportamento de Ficheiros Partilhados</string>
+    <string name="category_ui">Interface</string>
+
+    <string name="setting_random_names_title">Usar nomes de ficheiro aleatórios</string>
+    <string name="setting_random_names_sub">Gerar nomes de saída aleatórios em vez de usar o nome original do ficheiro</string>
+    <string name="setting_default_path_title">Caminho de gravação predefinido</string>
+    <string name="setting_reset_path">Repor para Pictures/MetaJammer</string>
+    <string name="setting_select_folder">Selecionar Pasta</string>
+
+    <string name="setting_keep_orientation_title">Manter orientação da imagem</string>
+    <string name="setting_keep_orientation_sub">Preservar metadados de orientação da imagem quando possível</string>
+    <string name="setting_share_default_title">Partilhar resultado por predefinição</string>
+    <string name="setting_share_default_sub">Guardar também irá ativar a partilha</string>
+    <string name="setting_prefix_title">Prefixo Predefinido</string>
+    <string name="setting_suffix_title">Sufixo Predefinido</string>
+    <string name="setting_not_set">Não definido</string>
+    <string name="setting_keep_thumbnails_title">Manter miniaturas originais</string>
+    <string name="setting_keep_thumbnails_sub">Se o ficheiro contiver uma miniatura incorporada, preserve-a como está. Se desativado, qualquer miniatura existente será removida para máxima privacidade.</string>
+    <string name="setting_thumbnails_warning">Aviso: Manter as miniaturas originais pode revelar metadados (localização, informações do dispositivo) mesmo que as etiquetas principais sejam removidas.</string>
+    <string name="setting_enable_map_title">Ativar seletor de mapa</string>
+    <string name="setting_enable_map_sub">Permitir que a aplicação se ligue à internet para mostrar o OpenStreetMap para seleção de localização</string>
+
+    <string name="setting_quick_scrub_title">Limpeza Rápida e Partilha</string>
+    <string name="setting_quick_scrub_sub">Remover automaticamente metadados e reabrir o menu de partilha para ficheiros partilhados</string>
+    <string name="setting_metadata_action_title">Ação de metadados</string>
+    <string name="setting_output_action_title">Ação de saída</string>
+    <string name="setting_dedicated_folder_title">Pasta dedicada para ficheiros partilhados</string>
+    <string name="setting_no_folder_selected">Nenhuma pasta dedicada selecionada</string>
+    <string name="setting_clear_folder">Limpar Pasta Dedicada</string>
+
+    <string name="setting_night_mode_title">Modo noturno</string>
+    <string name="setting_language_title">Idioma</string>
+    <string name="setting_oled_mode_title">Modo OLED</string>
+    <string name="setting_oled_mode_sub">Usar tons de preto mais escuros para temas escuros suportados</string>
+
+    <!-- Enums -->
+    <string name="night_mode_always">Sempre</string>
+    <string name="night_mode_automatic">Automático</string>
+    <string name="night_mode_low_battery">Apenas com bateria fraca</string>
+    <string name="night_mode_never">Nunca</string>
+
+    <string name="language_system">System Default (Predefinição do Sistema)</string>
+    <string name="language_en">English (Inglês)</string>
+    <string name="language_es">Español (Espanhol)</string>
+    <string name="language_it">Italiano (Italiano)</string>
+    <string name="language_fr">Français (Francês)</string>
+    <string name="language_de">Deutsch (Alemão)</string>
+    <string name="language_zh">中文 (简体) (Chinês (Simplificado))</string>
+    <string name="language_hi">हिन्दी (Hindi)</string>
+    <string name="language_pt">Português (Português)</string>
+    <string name="language_ru">Русский (Russo)</string>
+    <string name="language_el">Ελληνικά (Grego)</string>
+    <string name="language_ar">العربية (Árabe)</string>
+    <string name="language_ja">日本語 (Japonês)</string>
+    <string name="language_in">Bahasa Indonesia (Indonésio)</string>
+    <string name="language_tr">Türkçe (Turco)</string>
+    <string name="language_ko">한국어 (Coreano)</string>
+    <string name="language_vi">Tiếng Việt (Vietnamita)</string>
+    <string name="language_th">ไทย (Tailandês)</string>
+    <string name="language_pl">Polski (Polaco)</string>
+    <string name="language_nl">Nederlands (Holandês)</string>
+    <string name="language_uk">Українська (Ucraniano)</string>
+    <string name="language_fa">فارسی (Persa)</string>
+
+    <string name="processing_mode_poison">Envenenar metadados (Informação falsa)</string>
+    <string name="processing_mode_remove">Remover metadados (Limpeza total)</string>
+
+    <string name="output_action_default_folder">Guardar na pasta predefinida</string>
+    <string name="output_action_shared_folder">Guardar na pasta dedicada</string>
+    <string name="output_action_reshare">Re-partilhar ficheiros limpos</string>
+
+    <!-- Dialogs/Permissions -->
+    <string name="map_permission_title">Seletor de Mapa e Acesso à Internet</string>
+    <string name="map_permission_message">Para mostrar um mapa para a escolha da localização, o MetaJammer precisa de se ligar à internet para carregar os mapas do OpenStreetMap. \n\nSe recusar, a aplicação continuará a funcionar perfeitamente para todas as funcionalidades de remoção e envenenamento de metadados, mas não poderá escolher localizações visualmente num mapa.</string>
+    <string name="allow_open_map">Permitir e Abrir Mapa</string>
+    <string name="not_now">Agora Não</string>
+
+    <string name="notification_permission_title">Mantenha-se Informado</string>
+    <string name="notification_permission_message">O MetaJammer pode mostrar notificações para o manter atualizado sobre o progresso de grandes lotes de ficheiros enquanto são processados em segundo plano. \n\nIsto é especialmente útil se desejar mudar para outra aplicação enquanto o MetaJammer termina o seu trabalho.</string>
+</resources>

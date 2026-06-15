@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MetaJammer</string>
+    <string name="notification_channel_name">Pemrosesan Berkas</string>
+    <string name="notification_processing_title">Memproses Berkas</string>
+    <string name="notification_processing_message">Menghapus metadata dari %1$d berkas...</string>
+    <string name="notification_complete_title">Pemrosesan Selesai</string>
+    <string name="notification_complete_message">Berhasil memproses %1$d berkas.</string>
+
+    <!-- General -->
+    <string name="ok">OK</string>
+    <string name="cancel">Batal</string>
+    <string name="back">Kembali</string>
+    <string name="continue_label">Lanjutkan</string>
+    <string name="save">Simpan</string>
+    <string name="share">Bagikan</string>
+    <string name="dismiss">Tutup</string>
+    <string name="warning">Peringatan</string>
+    <string name="none">Tidak ada</string>
+    <string name="unknown">tidak diketahui</string>
+
+    <!-- HomeScreen -->
+    <string name="hero_title">Lindungi Privasi Anda</string>
+    <string name="hero_subtitle">Bersihkan atau ganti metadata sensitif sebelum membagikan berkas Anda.</string>
+    <string name="feature_images_video_title">Gambar &amp; Video</string>
+    <string name="feature_images_video_desc">Dukungan penuh untuk menghapus metadata dari foto dan melakukan remuxing video untuk menghapus pelacakan.</string>
+    <string name="feature_poisoning_title">Peracunan Metadata</string>
+    <string name="feature_poisoning_desc">Jangan hanya menghapus data—ganti dengan data palsu yang realistis untuk menjaga privasi dan membingungkan pelacak.</string>
+    <string name="feature_background_title">Pemrosesan Latar Belakang</string>
+    <string name="feature_background_desc">Proses ratusan berkas secara efisien di latar belakang sementara Anda melakukan hal lain.</string>
+    <string name="feature_on_device_title">Privasi di Perangkat</string>
+    <string name="feature_on_device_desc">Semua pemrosesan terjadi secara lokal di perangkat Anda. Berkas Anda tidak pernah meninggalkan MetaJammer.</string>
+    <string name="pro_tip_gallery">Tips: Anda dapat membagikan berkas langsung dari aplikasi Galeri ke MetaJammer.</string>
+    <string name="select_files">Pilih Berkas</string>
+    <string name="select_more_files">Pilih Lebih Banyak Berkas</string>
+    <string name="clear_selection">Hapus Pilihan</string>
+    <string name="files_selected">%1$d Berkas Dipilih</string>
+    <string name="total_size">Ukuran total: %1$s</string>
+    <string name="size_mb">%.1f MB</string>
+    <string name="size_kb">%.1f KB</string>
+    <string name="size_bytes">%1$d Byte</string>
+
+    <!-- MetadataPreviewScreen -->
+    <string name="metadata_preview">Pratinjau Metadata</string>
+    <string name="file_type">Tipe: %1$s</string>
+    <string name="no_metadata_found">Metadata tidak ditemukan</string>
+
+    <!-- ProcessingScreen -->
+    <string name="process_files_title">Proses Berkas</string>
+    <string name="pick_one_option">Pilih satu opsi:</string>
+    <string name="poison_metadata">Racuni Metadata</string>
+    <string name="remove_metadata">Hapus Metadata</string>
+    <string name="selected_mode">Dipilih: %1$s</string>
+    <string name="regenerate_plans">Buat Ulang Semua Rencana Acak</string>
+    <string name="preview_of_changes">Pratinjau Perubahan</string>
+    <string name="no_preview_available">Pratinjau tidak tersedia</string>
+    <string name="change_location_map">Ubah Lokasi di Peta</string>
+    <string name="process_files">Proses Berkas</string>
+    <string name="processing_foreground">Memproses di latar depan...</string>
+    <string name="background_progress">Kemajuan Latar Belakang: %1$d%%</string>
+    <string name="continue_to_output">Lanjutkan ke Opsi Output</string>
+
+    <!-- LocationPickerScreen -->
+    <string name="pick_location">Pilih Lokasi</string>
+    <string name="confirm_location">Konfirmasi Lokasi</string>
+
+    <!-- OutputOptionsScreen -->
+    <string name="output_options">Opsi Output</string>
+    <string name="saving_will_trigger_sharing">Menyimpan juga akan memicu pembagian.</string>
+    <string name="choose_save_or_share">Pilih apakah akan menyimpan atau membagikan hasil yang diproses.</string>
+    <string name="save_to_default_folder">Simpan ke Folder Default</string>
+    <string name="save_to_custom_folder">Simpan ke Folder Kustom</string>
+
+    <!-- SettingsScreen -->
+    <string name="settings">Pengaturan</string>
+    <string name="category_file_management">Manajemen Berkas</string>
+    <string name="category_image_file">Gambar / Berkas</string>
+    <string name="category_shared_files">Perilaku Berkas yang Dibagikan</string>
+    <string name="category_ui">UI</string>
+
+    <string name="setting_random_names_title">Gunakan nama berkas acak</string>
+    <string name="setting_random_names_sub">Hasilkan nama output acak alih-alih menggunakan nama berkas asli</string>
+    <string name="setting_default_path_title">Jalur penyimpanan default</string>
+    <string name="setting_reset_path">Atur ulang ke Pictures/MetaJammer</string>
+    <string name="setting_select_folder">Pilih Folder</string>
+
+    <string name="setting_keep_orientation_title">Pertahankan orientasi gambar</string>
+    <string name="setting_keep_orientation_sub">Pertahankan metadata orientasi gambar jika memungkinkan</string>
+    <string name="setting_share_default_title">Bagikan hasil sebagai default</string>
+    <string name="setting_share_default_sub">Menyimpan juga akan memicu pembagian</string>
+    <string name="setting_prefix_title">Awalan Default</string>
+    <string name="setting_suffix_title">Akhiran Default</string>
+    <string name="setting_not_set">Belum diatur</string>
+    <string name="setting_keep_thumbnails_title">Pertahankan thumbnail asli</string>
+    <string name="setting_keep_thumbnails_sub">Jika berkas berisi thumbnail tersemat, pertahankan apa adanya. Jika dinonaktifkan, thumbnail apa pun yang ada akan dihapus untuk privasi maksimum.</string>
+    <string name="setting_thumbnails_warning">Peringatan: Mempertahankan thumbnail asli dapat membocorkan metadata (lokasi, info perangkat) meskipun tag utama telah dihapus.</string>
+    <string name="setting_enable_map_title">Aktifkan pemilih peta</string>
+    <string name="setting_enable_map_sub">Izinkan aplikasi terhubung ke internet untuk menampilkan OpenStreetMap untuk pemilihan lokasi</string>
+
+    <string name="setting_quick_scrub_title">Pembersihan Cepat &amp; Bagikan</string>
+    <string name="setting_quick_scrub_sub">Hapus metadata secara otomatis dan buka kembali Lembar Berbagi untuk berkas yang dibagikan</string>
+    <string name="setting_metadata_action_title">Tindakan metadata</string>
+    <string name="setting_output_action_title">Tindakan output</string>
+    <string name="setting_dedicated_folder_title">Folder khusus berkas yang dibagikan</string>
+    <string name="setting_no_folder_selected">Tidak ada folder khusus yang dipilih</string>
+    <string name="setting_clear_folder">Hapus Folder Khusus</string>
+
+    <string name="setting_night_mode_title">Mode malam</string>
+    <string name="setting_language_title">Bahasa</string>
+    <string name="setting_oled_mode_title">Mode OLED</string>
+    <string name="setting_oled_mode_sub">Gunakan nada hitam yang lebih gelap untuk tema gelap yang didukung</string>
+
+    <!-- Enums -->
+    <string name="night_mode_always">Selalu</string>
+    <string name="night_mode_automatic">Otomatis</string>
+    <string name="night_mode_low_battery">Hanya saat baterai lemah</string>
+    <string name="night_mode_never">Jangan pernah</string>
+
+    <string name="language_system">System Default (Default Sistem)</string>
+    <string name="language_en">English (Inggris)</string>
+    <string name="language_es">Español (Spanyol)</string>
+    <string name="language_it">Italiano (Italia)</string>
+    <string name="language_fr">Français (Prancis)</string>
+    <string name="language_de">Deutsch (Jerman)</string>
+    <string name="language_zh">中文 (简体) (Tionghoa (Sederhana))</string>
+    <string name="language_hi">हिन्दी (Hindi)</string>
+    <string name="language_pt">Português (Portugis)</string>
+    <string name="language_ru">Русский (Rusia)</string>
+    <string name="language_el">Ελληνικά (Yunani)</string>
+    <string name="language_ar">العربية (Arab)</string>
+    <string name="language_ja">日本語 (Jepang)</string>
+    <string name="language_in">Bahasa Indonesia (Bahasa Indonesia)</string>
+    <string name="language_tr">Türkçe (Turki)</string>
+    <string name="language_ko">한국어 (Korea)</string>
+    <string name="language_vi">Tiếng Việt (Vietnam)</string>
+    <string name="language_th">ไทย (Thailand)</string>
+    <string name="language_pl">Polski (Polandia)</string>
+    <string name="language_nl">Nederlands (Belanda)</string>
+    <string name="language_uk">Українська (Ukraina)</string>
+    <string name="language_fa">فارسی (Persia)</string>
+
+    <string name="processing_mode_poison">Racuni metadata (Info palsu)</string>
+    <string name="processing_mode_remove">Hapus metadata (Pembersihan total)</string>
+
+    <string name="output_action_default_folder">Simpan ke folder default</string>
+    <string name="output_action_shared_folder">Simpan ke folder khusus</string>
+    <string name="output_action_reshare">Bagikan ulang berkas yang sudah dibersihkan</string>
+
+    <!-- Dialogs/Permissions -->
+    <string name="map_permission_title">Pemilih Peta &amp; Akses Internet</string>
+    <string name="map_permission_message">Untuk menampilkan peta guna memilih lokasi, MetaJammer perlu terhubung ke internet untuk memuat ubin peta dari OpenStreetMap. \n\nJika Anda menolak, aplikasi akan terus berfungsi dengan sempurna untuk semua fitur penghapusan dan peracunan metadata, tetapi Anda tidak akan dapat memilih lokasi secara visual di peta.</string>
+    <string name="allow_open_map">Izinkan &amp; Buka Peta</string>
+    <string name="not_now">Nanti Saja</string>
+
+    <string name="notification_permission_title">Tetap Terinformasi</string>
+    <string name="notification_permission_message">MetaJammer dapat menampilkan notifikasi untuk memberi tahu Anda tentang kemajuan batch berkas besar saat diproses di latar belakang. \n\nIni sangat berguna jika Anda ingin beralih ke aplikasi lain saat MetaJammer menyelesaikan tugasnya.</string>
+</resources>

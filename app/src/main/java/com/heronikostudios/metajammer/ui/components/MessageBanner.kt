@@ -16,6 +16,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
+import androidx.compose.ui.res.stringResource
+import com.heronikostudios.metajammer.R
+
 @Composable
 fun MessageBanner(
     message: String,
@@ -45,7 +48,7 @@ fun MessageBanner(
         IconButton(onClick = onDismiss) {
             Icon(
                 imageVector = Icons.Default.Close,
-                contentDescription = "Dismiss",
+                contentDescription = stringResource(R.string.dismiss),
                 tint = MaterialTheme.colorScheme.onPrimaryContainer
             )
         }

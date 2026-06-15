@@ -15,6 +15,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
+import androidx.compose.ui.res.stringResource
+import com.heronikostudios.metajammer.R
+
 @Composable
 fun OutputOptionsScreen(
     shareResultAsDefault: Boolean,
@@ -37,9 +40,9 @@ fun OutputOptionsScreen(
     ) {
         Text(
             text = if (shareResultAsDefault) {
-                "Saving will also trigger sharing."
+                stringResource(R.string.saving_will_trigger_sharing)
             } else {
-                "Choose whether to save or share the processed result."
+                stringResource(R.string.choose_save_or_share)
             },
             style = MaterialTheme.typography.bodyMedium
         )
@@ -48,21 +51,21 @@ fun OutputOptionsScreen(
             onClick = onSaveDefault,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Save to Default Folder")
+            Text(stringResource(R.string.save_to_default_folder))
         }
 
         Button(
             onClick = { folderPicker.launch(null) },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Save to Custom Folder")
+            Text(stringResource(R.string.save_to_custom_folder))
         }
 
         Button(
             onClick = onShareOnly,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Share")
+            Text(stringResource(R.string.share))
         }
     }
 }

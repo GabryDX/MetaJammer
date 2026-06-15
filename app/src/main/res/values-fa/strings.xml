@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MetaJammer</string>
+    <string name="notification_channel_name">پردازش فایل</string>
+    <string name="notification_processing_title">در حال پردازش فایل‌ها</string>
+    <string name="notification_processing_message">در حال پاکسازی متادیتا از %1$d فایل...</string>
+    <string name="notification_complete_title">پردازش کامل شد</string>
+    <string name="notification_complete_message">%1$d فایل با موفقیت پردازش شد.</string>
+
+    <!-- General -->
+    <string name="ok">تأیید</string>
+    <string name="cancel">لغو</string>
+    <string name="back">بازگشت</string>
+    <string name="continue_label">ادامه</string>
+    <string name="save">ذخیره</string>
+    <string name="share">اشتراک‌گذاری</string>
+    <string name="dismiss">بستن</string>
+    <string name="warning">هشدار</string>
+    <string name="none">هیچ‌کدام</string>
+    <string name="unknown">نامشخص</string>
+
+    <!-- HomeScreen -->
+    <string name="hero_title">از حریم خصوصی خود محافظت کنید</string>
+    <string name="hero_subtitle">قبل از به اشتراک گذاری فایل‌های خود، متادیتای حساس را پاک یا جایگزین کنید.</string>
+    <string name="feature_images_video_title">تصاویر و ویدیو</string>
+    <string name="feature_images_video_desc">پشتیبانی کامل از پاکسازی متادیتا از عکس‌ها و بازسازی ویدیوها برای حذف ردیابی.</string>
+    <string name="feature_poisoning_title">مسموم‌سازی متادیتا</string>
+    <string name="feature_poisoning_desc">فقط داده‌ها را حذف نکنید؛ آن‌ها را با داده‌های جعلی واقع‌گرایانه جایگزین کنید تا حریم خصوصی حفظ شود و ردیاب‌ها گمراه شوند.</string>
+    <string name="feature_background_title">پردازش در پس‌زمینه</string>
+    <string name="feature_background_desc">صدها فایل را به‌طور موثر در پس‌زمینه پردازش کنید در حالی که به کارهای دیگر خود می‌رسید.</string>
+    <string name="feature_on_device_title">حریم خصوصی در دستگاه</string>
+    <string name="feature_on_device_desc">تمام پردازش‌ها به‌صورت محلی در دستگاه شما انجام می‌شود. فایل‌های شما هرگز MetaJammer را ترک نمی‌کنند.</string>
+    <string name="pro_tip_gallery">نکته: می‌توانید فایل‌ها را مستقیماً از گالری خود در MetaJammer به اشتراک بگذارید.</string>
+    <string name="select_files">انتخاب فایل‌ها</string>
+    <string name="select_more_files">انتخاب فایل‌های بیشتر</string>
+    <string name="clear_selection">پاک کردن انتخاب</string>
+    <string name="files_selected">%1$d فایل انتخاب شده</string>
+    <string name="total_size">حجم کل: %1$s</string>
+    <string name="size_mb">%.1f مگابایت</string>
+    <string name="size_kb">%.1f کیلوبایت</string>
+    <string name="size_bytes">%1$d بایت</string>
+
+    <!-- MetadataPreviewScreen -->
+    <string name="metadata_preview">پیش‌نمایش متادیتا</string>
+    <string name="file_type">نوع: %1$s</string>
+    <string name="no_metadata_found">متادیتایی یافت نشد</string>
+
+    <!-- ProcessingScreen -->
+    <string name="process_files_title">پردازش فایل‌ها</string>
+    <string name="pick_one_option">یک گزینه را انتخاب کنید:</string>
+    <string name="poison_metadata">مسموم‌سازی متادیتا</string>
+    <string name="remove_metadata">حذف متادیتا</string>
+    <string name="selected_mode">انتخاب شده: %1$s</string>
+    <string name="regenerate_plans">تولید مجدد تمام طرح‌های تصادفی</string>
+    <string name="preview_of_changes">پیش‌نمایش تغییرات</string>
+    <string name="no_preview_available">پیش‌نمایش در دسترس نیست</string>
+    <string name="change_location_map">تغییر مکان روی نقشه</string>
+    <string name="process_files">پردازش فایل‌ها</string>
+    <string name="processing_foreground">در حال پردازش در پیش‌زمینه...</string>
+    <string name="background_progress">پیشرفت پس‌زمینه: %1$d%%</string>
+    <string name="continue_to_output">ادامه به گزینه‌های خروجی</string>
+
+    <!-- LocationPickerScreen -->
+    <string name="pick_location">انتخاب مکان</string>
+    <string name="confirm_location">تأیید مکان</string>
+
+    <!-- OutputOptionsScreen -->
+    <string name="output_options">گزینه‌های خروجی</string>
+    <string name="saving_will_trigger_sharing">ذخیره‌سازی باعث فعال شدن اشتراک‌گذاری نیز می‌شود.</string>
+    <string name="choose_save_or_share">انتخاب کنید که نتیجه پردازش شده ذخیره شود یا به اشتراک گذاشته شود.</string>
+    <string name="save_to_default_folder">ذخیره در پوشه پیش‌فرض</string>
+    <string name="save_to_custom_folder">ذخیره در پوشه سفارشی</string>
+
+    <!-- SettingsScreen -->
+    <string name="settings">تنظیمات</string>
+    <string name="category_file_management">مدیریت فایل</string>
+    <string name="category_image_file">تصویر / فایل</string>
+    <string name="category_shared_files">رفتار فایل‌های به اشتراک گذاشته شده</string>
+    <string name="category_ui">رابط کاربری</string>
+
+    <string name="setting_random_names_title">استفاده از نام‌های فایل تصادفی</string>
+    <string name="setting_random_names_sub">تولید نام‌های خروجی تصادفی به جای استفاده از نام اصلی فایل</string>
+    <string name="setting_default_path_title">مسیر ذخیره‌سازی پیش‌فرض</string>
+    <string name="setting_reset_path">بازنشانی به Pictures/MetaJammer</string>
+    <string name="setting_select_folder">انتخاب پوشه</string>
+
+    <string name="setting_keep_orientation_title">حفظ جهت تصویر</string>
+    <string name="setting_keep_orientation_sub">در صورت امکان، متادیتای جهت تصویر حفظ شود</string>
+    <string name="setting_share_default_title">اشتراک‌گذاری نتیجه به‌صورت پیش‌فرض</string>
+    <string name="setting_share_default_sub">ذخیره‌سازی باعث فعال شدن اشتراک‌گذاری نیز می‌شود</string>
+    <string name="setting_prefix_title">پیشوند پیش‌فرض</string>
+    <string name="setting_suffix_title">پسوند پیش‌فرض</string>
+    <string name="setting_not_set">تنظیم نشده</string>
+    <string name="setting_keep_thumbnails_title">حفظ بندانگشتی‌های اصلی</string>
+    <string name="setting_keep_thumbnails_sub">اگر فایل حاوی تصویر بندانگشتی داخلی است، آن را به همان صورت حفظ کنید. در صورت غیرفعال بودن، برای حداکثر حریم خصوصی هرگونه تصویر بندانگشتی موجود حذف خواهد شد.</string>
+    <string name="setting_thumbnails_warning">هشدار: حفظ بندانگشتی‌های اصلی ممکن است باعث نشت متادیتا (مکان، اطلاعات دستگاه) شود، حتی اگر برچسب‌های اصلی حذف شده باشند.</string>
+    <string name="setting_enable_map_title">فعال‌سازی انتخابگر نقشه</string>
+    <string name="setting_enable_map_sub">اجازه به برنامه برای اتصال به اینترنت جهت نمایش نقشه برای انتخاب مکان</string>
+
+    <string name="setting_quick_scrub_title">پاکسازی سریع و اشتراک‌گذاری</string>
+    <string name="setting_quick_scrub_sub">حذف خودکار متادیتا و باز کردن مجدد صفحه اشتراک‌گذاری برای فایل‌های به اشتراک گذاشته شده</string>
+    <string name="setting_metadata_action_title">عملیات متادیتا</string>
+    <string name="setting_output_action_title">عملیات خروجی</string>
+    <string name="setting_dedicated_folder_title">پوشه اختصاصی فایل‌های مشترک</string>
+    <string name="setting_no_folder_selected">پوشه اختصاصی انتخاب نشده است</string>
+    <string name="setting_clear_folder">پاکسازی پوشه اختصاصی</string>
+
+    <string name="setting_night_mode_title">حالت شب</string>
+    <string name="setting_language_title">زبان</string>
+    <string name="setting_oled_mode_title">حالت OLED</string>
+    <string name="setting_oled_mode_sub">استفاده از رنگ‌های سیاه تیره‌تر برای تم‌های تیره پشتیبانی شده</string>
+
+    <!-- Enums -->
+    <string name="night_mode_always">همیشه</string>
+    <string name="night_mode_automatic">خودکار</string>
+    <string name="night_mode_low_battery">فقط هنگام کمبود باتری</string>
+    <string name="night_mode_never">هرگز</string>
+
+    <string name="language_system">System Default (پیش‌فرض سیستم)</string>
+    <string name="language_en">English (انگلیسی)</string>
+    <string name="language_es">Español (اسپانیایی)</string>
+    <string name="language_it">Italiano (ایتالیایی)</string>
+    <string name="language_fr">Français (فرانسوی)</string>
+    <string name="language_de">Deutsch (آلمانی)</string>
+    <string name="language_zh">中文 (简体) (چینی (ساده شده))</string>
+    <string name="language_hi">हिन्दी (هندی)</string>
+    <string name="language_pt">Português (پرتغالی)</string>
+    <string name="language_ru">Русский (روسی)</string>
+    <string name="language_el">Ελληνικά (یونانی)</string>
+    <string name="language_ar">العربية (عربی)</string>
+    <string name="language_ja">日本語 (ژاپنی)</string>
+    <string name="language_in">Bahasa Indonesia (اندونزیایی)</string>
+    <string name="language_tr">Türkçe (ترکی)</string>
+    <string name="language_ko">한국어 (کره‌ای)</string>
+    <string name="language_vi">Tiếng Việt (ویتنامی)</string>
+    <string name="language_th">ไทย (تایلندی)</string>
+    <string name="language_pl">Polski (لهستانی)</string>
+    <string name="language_nl">Nederlands (هلندی)</string>
+    <string name="language_uk">Українська (اوکراینی)</string>
+    <string name="language_fa">فارسی (فارسی)</string>
+
+    <string name="processing_mode_poison">مسموم‌سازی متادیتا (اطلاعات جعلی)</string>
+    <string name="processing_mode_remove">حذف متادیتا (پاکسازی کامل)</string>
+
+    <string name="output_action_default_folder">ذخیره در پوشه پیش‌فرض</string>
+    <string name="output_action_shared_folder">ذخیره در پوشه اختصاصی</string>
+    <string name="output_action_reshare">اشتراک‌گذاری مجدد فایل‌های پاکسازی شده</string>
+
+    <!-- Dialogs/Permissions -->
+    <string name="map_permission_title">انتخابگر نقشه و دسترسی به اینترنت</string>
+    <string name="map_permission_message">برای نمایش نقشه جهت انتخاب مکان، MetaJammer نیاز به اتصال به اینترنت برای بارگذاری کاشی‌های نقشه از OpenStreetMap دارد. \n\nاگر نپذیرید، برنامه به خوبی برای تمام ویژگی‌های حذف و مسموم‌سازی متادیتا به کار خود ادامه می‌دهد، اما نمی‌توانید مکان‌ها را به‌صورت بصری روی نقشه انتخاب کنید.</string>
+    <string name="allow_open_map">اجازه و باز کردن نقشه</string>
+    <string name="not_now">الان نه</string>
+
+    <string name="notification_permission_title">مطلع بمانید</string>
+    <string name="notification_permission_message">MetaJammer می‌تواند اعلان‌هایی را نشان دهد تا شما را از پیشرفت پردازش دسته‌های بزرگ فایل در پس‌زمینه مطلع سازد. \n\nاین ویژگی به‌ویژه زمانی مفید است که می‌خواهید در حین انجام کار MetaJammer، به برنامه دیگری بروید.</string>
+</resources>
