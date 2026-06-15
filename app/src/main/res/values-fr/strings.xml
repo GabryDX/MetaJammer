@@ -115,14 +115,30 @@
     <string name="night_mode_low_battery">Seulement batterie faible</string>
     <string name="night_mode_never">Jamais</string>
 
-    <string name="language_system">Par défaut du système</string>
-    <string name="language_en">Anglais</string>
-    <string name="language_es">Espagnol</string>
-    <string name="language_it">Italien</string>
-    <string name="language_fr">Français</string>
-    <string name="language_de">Allemand</string>
+    <string name="language_system">System Default (Par défaut du système)</string>
+    <string name="language_en">English (Anglais)</string>
+    <string name="language_es">Español (Espagnol)</string>
+    <string name="language_it">Italiano (Italien)</string>
+    <string name="language_fr">Français (Français)</string>
+    <string name="language_de">Deutsch (Allemand)</string>
+    <string name="language_zh">中文 (简体) (Chinois)</string>
+    <string name="language_hi">हिन्दी (Hindi)</string>
+    <string name="language_pt">Português (Portugais)</string>
+    <string name="language_ru">Русский (Russe)</string>
+    <string name="language_el">Ελληνικά (Grec)</string>
+    <string name="language_ar">العربية (Arabe)</string>
+    <string name="language_ja">日本語 (Japonais)</string>
+    <string name="language_in">Bahasa Indonesia (Indonésien)</string>
+    <string name="language_tr">Türkçe (Turc)</string>
+    <string name="language_ko">한국어 (Coréen)</string>
+    <string name="language_vi">Tiếng Việt (Vietnamien)</string>
+    <string name="language_th">ไทย (Thaïlandais)</string>
+    <string name="language_pl">Polski (Polonais)</string>
+    <string name="language_nl">Nederlands (Néerlandais)</string>
+    <string name="language_uk">Українська (Ukrainien)</string>
+    <string name="language_fa">فارسی (Persan)</string>
 
-    <string name="language_zh">中文 (简体)</string><string name="language_hi">हिन्दी</string><string name="language_pt">Português</string><string name="language_ru">Русский</string><string name="language_el">Ελληνικά</string><string name="language_ar">العربية</string><string name="language_ja">日本語</string><string name="language_in">Bahasa Indonesia</string><string name="language_tr">Türkçe</string><string name="language_ko">한국어</string><string name="language_vi">Tiếng Việt</string><string name="language_th">ไทย</string><string name="language_pl">Polski</string><string name="language_nl">Nederlands</string><string name="language_uk">Українська</string><string name="language_fa">فارسی</string><string name="processing_mode_poison">Empoisonner les métadonnées (Fausses infos)</string>
+    <string name="processing_mode_poison">Empoisonner les métadonnées (Fausses infos)</string>
     <string name="processing_mode_remove">Supprimer les métadonnées (Nettoyage complet)</string>
 
     <string name="output_action_default_folder">Enregistrer dans le dossier par défaut</string>

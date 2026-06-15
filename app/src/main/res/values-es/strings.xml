@@ -115,14 +115,29 @@
     <string name="night_mode_low_battery">Solo con batería baja</string>
     <string name="night_mode_never">Nunca</string>
 
-    <string name="language_system">Predeterminado del sistema</string>
-    <string name="language_en">Inglés</string>
-    <string name="language_es">Español</string>
-    <string name="language_it">Italiano</string>
-    <string name="language_fr">Francés</string>
-    <string name="language_de">Alemán</string>
+    <string name="language_system">System Default (Predeterminado del sistema)</string>
+    <string name="language_en">English (Inglés)</string>
+    <string name="language_es">Español (Español)</string>
+    <string name="language_it">Italiano (Italiano)</string>
+    <string name="language_fr">Français (Francés)</string>
+    <string name="language_de">Deutsch (Alemán)</string>
+    <string name="language_zh">中文 (简体) (Chino)</string>
+    <string name="language_hi">हिन्दी (Hindi)</string>
+    <string name="language_pt">Português (Portugués)</string>
+    <string name="language_ru">Русский (Ruso)</string>
+    <string name="language_el">Ελληνικά (Griego)</string>
+    <string name="language_ar">العربية (Árabe)</string>
+    <string name="language_ja">日本語 (Japonés)</string>
+    <string name="language_in">Bahasa Indonesia (Indonesio)</string>
+    <string name="language_tr">Türkçe (Turco)</string>
+    <string name="language_ko">한국어 (Coreano)</string>
+    <string name="language_vi">Tiếng Việt (Vietnamita)</string>
+    <string name="language_th">ไทย (Tailandés)</string>
+    <string name="language_pl">Polski (Polaco)</string>
+    <string name="language_nl">Nederlands (Holandés)</string>
+    <string name="language_uk">Українська (Ucraniano)</string>
+    <string name="language_fa">فارسی (Persa)</string>
 
-    <string name="language_zh">中文 (简体)</string><string name="language_hi">हिन्दी</string><string name="language_pt">Português</string><string name="language_ru">Русский</string><string name="language_el">Ελληνικά</string><string name="language_ar">العربية</string><string name="language_ja">日本語</string><string name="language_in">Bahasa Indonesia</string><string name="language_tr">Türkçe</string><string name="language_ko">한국어</string><string name="language_vi">Tiếng Việt</string><string name="language_th">ไทย</string><string name="language_pl">Polski</string><string name="language_nl">Nederlands</string><string name="language_uk">Українська</string><string name="language_fa">فارسی</string>
     <string name="processing_mode_poison">Envenenar metadatos (Info falsa)</string>
     <string name="processing_mode_remove">Eliminar metadatos (Limpieza total)</string>
 
