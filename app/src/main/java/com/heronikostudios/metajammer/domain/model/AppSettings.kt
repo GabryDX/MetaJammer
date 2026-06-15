@@ -6,7 +6,7 @@ data class AppSettings(
     val keepImageOrientation: Boolean = true,
     val shareResultAsDefault: Boolean = false,
     val defaultPrefix: String = "",
-    val defaultSuffix: String = "",
+    val defaultSuffix: String = "_processed",
     val nightMode: NightModeSetting = NightModeSetting.AUTOMATIC,
     val oledMode: Boolean = false,
     val autoHandleSharedFiles: Boolean = false,

@@ -17,6 +17,7 @@
     <string name="warning">Warning</string>
     <string name="none">None</string>
     <string name="unknown">unknown</string>
+    <string name="delete">Delete</string>
 
     <!-- HomeScreen -->
     <string name="hero_title">Protect Your Privacy</string>

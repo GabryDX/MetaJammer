@@ -39,4 +39,30 @@ object SanitizationUtils {
     fun sanitizeSimple(text: String): String {
         return text.replace(ILLEGAL_CHAR_REGEX, "_")
     }
+
+    /**
+     * Generates an output filename based on settings.
+     */
+    fun generateOutputName(
+        originalName: String,
+        useRandomFileNames: Boolean,
+        prefix: String,
+        suffix: String
+    ): String {
+        val dotIndex = originalName.lastIndexOf('.')
+        val base = if (dotIndex > 0) originalName.substring(0, dotIndex) else originalName
+        val ext = if (dotIndex > 0) originalName.substring(dotIndex) else ""
+
+        val finalBase = if (useRandomFileNames) {
+            "mj_${System.currentTimeMillis()}"
+        } else {
+            val sPrefix = sanitizeSimple(prefix)
+            val sSuffix = sanitizeSimple(suffix)
+            val sanitizedBase = sanitizeSimple(base)
+            "$sPrefix$sanitizedBase$sSuffix"
+        }
+
+        val extension = sanitizeSimple(ext)
+        return "$finalBase$extension"
+    }
 }

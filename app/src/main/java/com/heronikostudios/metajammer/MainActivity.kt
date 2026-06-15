@@ -289,6 +289,9 @@ fun MetaJammerApp(
                             viewModel.setIncomingUris(it)
                             navigateTo(AppStep.PREVIEW)
                         },
+                        onFileRemoved = {
+                            viewModel.removeFileFromSelection(it)
+                        },
                         onContinue = {
                             if (selectedFiles.isNotEmpty()) navigateTo(AppStep.PREVIEW)
                         },

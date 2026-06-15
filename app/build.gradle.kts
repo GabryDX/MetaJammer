@@ -74,6 +74,8 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.timber)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.video)
 
     testImplementation(libs.junit)
 
