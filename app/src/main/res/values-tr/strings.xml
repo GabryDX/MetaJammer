@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">MetaJammer</string>
+    <string name="hero_title">Gizliliğinizi Koruyun</string>
+    <string name="hero_subtitle">Dosyalarınızı paylaşmadan önce hassas meta verileri temizleyin veya değiştirin.</string>
+    <string name="select_files">Dosyaları Seç</string>
+    <string name="settings">Ayarlar</string>
+    <string name="setting_language_title">Dil</string>
+    <string name="language_system">Sistem Varsayılanı</string>
+    <string name="language_en">İngilizce</string>
+    <string name="language_es">İspanyolca</string>
+    <string name="language_it">İtalyanca</string>
+    <string name="language_fr">Fransızca</string>
+    <string name="language_de">Almanca</string>
+    <string name="language_zh">Çince (Basitleştirilmiş)</string>
+    <string name="language_hi">Hintçe</string>
+    <string name="language_pt">Portekizce</string>
+    <string name="language_ru">Rusça</string>
+    <string name="language_el">Yunanca</string>
+    <string name="language_ar">Arapça</string>
+    <string name="language_ja">Japonca</string>
+    <string name="language_in">Endoneζce</string>
+    <string name="language_tr">Türkçe</string>
+</resources>

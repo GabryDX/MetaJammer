@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">MetaJammer</string>
+    <string name="hero_title">保护您的隐私</string>
+    <string name="hero_subtitle">在共享文件之前清理或替换敏感元数据。</string>
+    <string name="select_files">选择文件</string>
+    <string name="settings">设置</string>
+    <string name="setting_language_title">语言</string>
+    <string name="language_system">系统默认</string>
+    <string name="language_en">英语</string>
+    <string name="language_es">西班牙语</string>
+    <string name="language_it">意大利语</string>
+    <string name="language_fr">法语</string>
+    <string name="language_de">德语</string>
+    <string name="language_zh">中文 (简体)</string>
+    <string name="language_hi">印地语</string>
+    <string name="language_pt">葡萄牙语</string>
+    <string name="language_ru">俄语</string>
+</resources>

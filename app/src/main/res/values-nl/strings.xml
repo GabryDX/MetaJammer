@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">MetaJammer</string>
+    <string name="hero_title">Bescherm je privacy</string>
+    <string name="hero_subtitle">Wis of vervang gevoelige metadata voordat je je bestanden deelt.</string>
+    <string name="select_files">Bestanden selecteren</string>
+    <string name="settings">Instellingen</string>
+    <string name="setting_language_title">Taal</string>
+    <string name="language_system">Systeemstandaard</string>
+    <string name="language_en">Engels</string>
+    <string name="language_es">Spaans</string>
+    <string name="language_it">Italiaans</string>
+    <string name="language_fr">Frans</string>
+    <string name="language_de">Duits</string>
+    <string name="language_zh">Chinees (Vereenvoudigd)</string>
+    <string name="language_hi">Hindi</string>
+    <string name="language_pt">Portugees</string>
+    <string name="language_ru">Russisch</string>
+    <string name="language_el">Grieks</string>
+    <string name="language_ar">Arabisch</string>
+    <string name="language_ja">Japans</string>
+    <string name="language_in">Indonesisch</string>
+    <string name="language_tr">Turks</string>
+    <string name="language_ko">Koreaans</string>
+    <string name="language_vi">Vietnamees</string>
+    <string name="language_th">Thais</string>
+    <string name="language_pl">Pools</string>
+    <string name="language_nl">Nederlands</string>
+    <string name="language_uk">Oekraïens</string>
+    <string name="language_fa">Perzisch</string>
+</resources>

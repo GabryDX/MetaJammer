@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">MetaJammer</string>
+    <string name="hero_title">Bảo vệ quyền riêng tư của bạn</string>
+    <string name="hero_subtitle">Dọn dẹp hoặc thay thế siêu dữ liệu nhạy cảm trước khi chia sẻ tệp của bạn.</string>
+    <string name="select_files">Chọn tệp</string>
+    <string name="settings">Cài đặt</string>
+    <string name="setting_language_title">Ngôn ngữ</string>
+    <string name="language_system">Mặc định hệ thống</string>
+    <string name="language_en">Tiếng Anh</string>
+    <string name="language_es">Tiếng Tây Ban Nha</string>
+    <string name="language_it">Tiếng Ý</string>
+    <string name="language_fr">Tiếng Pháp</string>
+    <string name="language_de">Tiếng Đức</string>
+    <string name="language_zh">Tiếng Trung (Giản thể)</string>
+    <string name="language_hi">Tiếng Hindi</string>
+    <string name="language_pt">Tiếng Bồ Đào Nha</string>
+    <string name="language_ru">Tiếng Nga</string>
+    <string name="language_el">Tiếng Hy Lạp</string>
+    <string name="language_ar">Tiếng Ả Rập</string>
+    <string name="language_ja">Tiếng Nhật</string>
+    <string name="language_in">Tiếng Indonesia</string>
+    <string name="language_tr">Tiếng Thổ Nhĩ Kỳ</string>
+    <string name="language_ko">Tiếng Hàn</string>
+    <string name="language_vi">Tiếng Việt</string>
+    <string name="language_th">Tiếng Thái</string>
+    <string name="language_pl">Tiếng Ba Lan</string>
+    <string name="language_nl">Tiếng Hà Lan</string>
+    <string name="language_uk">Tiếng Ukraina</string>
+    <string name="language_fa">Tiếng Ba Tư</string>
+</resources>

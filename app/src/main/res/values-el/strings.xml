@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">MetaJammer</string>
+    <string name="hero_title">Προστατέψτε την ιδιωτικότητά σας</string>
+    <string name="hero_subtitle">Καθαρίστε ή αντικαταστήστε ευαίσθητα μεταδεδομένα πριν μοιραστείτε τα αρχεία σας.</string>
+    <string name="select_files">Επιλογή αρχείων</string>
+    <string name="settings">Ρυθμίσεις</string>
+    <string name="setting_language_title">Γλώσσα</string>
+    <string name="language_system">Προεπιλογή συστήματος</string>
+    <string name="language_en">Αγγλικά</string>
+    <string name="language_es">Ισπανικά</string>
+    <string name="language_it">Ιταλικά</string>
+    <string name="language_fr">Γαλλικά</string>
+    <string name="language_de">Γερμανικά</string>
+    <string name="language_zh">Κινεζικά (Απλοποιημένα)</string>
+    <string name="language_hi">Χίντι</string>
+    <string name="language_pt">Πορτογαλικά</string>
+    <string name="language_ru">Ρωσικά</string>
+    <string name="language_el">Ελληνικά</string>
+    <string name="language_ar">Αραβικά</string>
+    <string name="language_ja">Ιαπωνικά</string>
+    <string name="language_in">Ινδονησιακά</string>
+    <string name="language_tr">Τουρκικά</string>
+</resources>

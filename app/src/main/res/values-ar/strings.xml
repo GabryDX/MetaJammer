@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">MetaJammer</string>
+    <string name="hero_title">حماية خصوصيتك</string>
+    <string name="hero_subtitle">قم بتنظيف أو استبدال البيانات الوصفية الحساسة πριν مشاركة ملفاتك.</string>
+    <string name="select_files">اختر الملفات</string>
+    <string name="settings">الإعدادات</string>
+    <string name="setting_language_title">اللغة</string>
+    <string name="language_system">تلقائي</string>
+    <string name="language_en">الإنجليزية</string>
+    <string name="language_es">الإσπανية</string>
+    <string name="language_it">الإيطالية</string>
+    <string name="language_fr">الفرنسية</string>
+    <string name="language_de">الألمانية</string>
+    <string name="language_zh">الصينية</string>
+    <string name="language_hi">الهندية</string>
+    <string name="language_pt">البرتغالية</string>
+    <string name="language_ru">الروسية</string>
+    <string name="language_el">اليونانية</string>
+    <string name="language_ar">العربية</string>
+    <string name="language_ja">اليαبانية</string>
+    <string name="language_in">الإندونيسية</string>
+    <string name="language_tr">التركية</string>
+</resources>

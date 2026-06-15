@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">MetaJammer</string>
+    <string name="hero_title">Lindungi Privasi Anda</string>
+    <string name="hero_subtitle">Bersihkan atau ganti metadata sensitif sebelum membagikan file Anda.</string>
+    <string name="select_files">Pilih File</string>
+    <string name="settings">Pengaturan</string>
+    <string name="setting_language_title">Bahasa</string>
+    <string name="language_system">Default Sistem</string>
+    <string name="language_en">Inggris</string>
+    <string name="language_es">Spanyol</string>
+    <string name="language_it">Italia</string>
+    <string name="language_fr">Prancis</string>
+    <string name="language_de">Jerman</string>
+    <string name="language_zh">Tionghoa (Sederhana)</string>
+    <string name="language_hi">Hindi</string>
+    <string name="language_pt">Portugis</string>
+    <string name="language_ru">Rusia</string>
+    <string name="language_el">Yunani</string>
+    <string name="language_ar">Arab</string>
+    <string name="language_ja">Jepang</string>
+    <string name="language_in">Bahasa Indonesia</string>
+    <string name="language_tr">Turki</string>
+</resources>

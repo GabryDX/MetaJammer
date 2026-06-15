@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">MetaJammer</string>
+    <string name="hero_title">Chroń swoją prywatność</string>
+    <string name="hero_subtitle">Wyczyść lub zastąp wrażliwe metadane przed udostępnieniem plików.</string>
+    <string name="select_files">Wybierz pliki</string>
+    <string name="settings">Ustawienia</string>
+    <string name="setting_language_title">Język</string>
+    <string name="language_system">Domyślny systemu</string>
+    <string name="language_en">Angielski</string>
+    <string name="language_es">Hiszpański</string>
+    <string name="language_it">Włoski</string>
+    <string name="language_fr">Francuski</string>
+    <string name="language_de">Niemiecki</string>
+    <string name="language_zh">Chiński (Uproszczony)</string>
+    <string name="language_hi">Hindi</string>
+    <string name="language_pt">Portugalski</string>
+    <string name="language_ru">Rosyjski</string>
+    <string name="language_el">Grecki</string>
+    <string name="language_ar">Arabski</string>
+    <string name="language_ja">Japoński</string>
+    <string name="language_in">Indonezyjski</string>
+    <string name="language_tr">Turecki</string>
+    <string name="language_ko">Koreański</string>
+    <string name="language_vi">Wietnamski</string>
+    <string name="language_th">Tajski</string>
+    <string name="language_pl">Polski</string>
+    <string name="language_nl">Holenderski</string>
+    <string name="language_uk">Ukraiński</string>
+    <string name="language_fa">Perski</string>
+</resources>

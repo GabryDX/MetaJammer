@@ -409,7 +409,10 @@ private fun <T> SingleSelectDialog(
         onDismissRequest = onDismiss,
         title = { Text(title) },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Column(
+                modifier = Modifier.verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
                 options.forEach { option ->
                     Row(
                         modifier = Modifier
@@ -462,4 +465,20 @@ private fun AppLanguage.toReadableLabel() = when (this) {
     AppLanguage.ITALIAN -> stringResource(R.string.language_it)
     AppLanguage.FRENCH -> stringResource(R.string.language_fr)
     AppLanguage.GERMAN -> stringResource(R.string.language_de)
+    AppLanguage.CHINESE -> stringResource(R.string.language_zh)
+    AppLanguage.HINDI -> stringResource(R.string.language_hi)
+    AppLanguage.PORTUGUESE -> stringResource(R.string.language_pt)
+    AppLanguage.RUSSIAN -> stringResource(R.string.language_ru)
+    AppLanguage.GREEK -> stringResource(R.string.language_el)
+    AppLanguage.ARABIC -> stringResource(R.string.language_ar)
+    AppLanguage.JAPANESE -> stringResource(R.string.language_ja)
+    AppLanguage.INDONESIAN -> stringResource(R.string.language_in)
+    AppLanguage.TURKISH -> stringResource(R.string.language_tr)
+    AppLanguage.KOREAN -> stringResource(R.string.language_ko)
+    AppLanguage.VIETNAMESE -> stringResource(R.string.language_vi)
+    AppLanguage.THAI -> stringResource(R.string.language_th)
+    AppLanguage.POLISH -> stringResource(R.string.language_pl)
+    AppLanguage.DUTCH -> stringResource(R.string.language_nl)
+    AppLanguage.UKRAINIAN -> stringResource(R.string.language_uk)
+    AppLanguage.PERSIAN -> stringResource(R.string.language_fa)
 }

@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">MetaJammer</string>
+    <string name="hero_title">ปกป้องความเป็นส่วนตัวของคุณ</string>
+    <string name="hero_subtitle">ล้างหรือแทนที่ข้อมูลเมตาที่ละเอียดอ่อนก่อนแชร์ไฟล์ของคุณ</string>
+    <string name="select_files">เลือกไฟล์</string>
+    <string name="settings">การตั้งค่า</string>
+    <string name="setting_language_title">ภาษา</string>
+    <string name="language_system">ค่าเริ่มต้นของระบบ</string>
+    <string name="language_en">อังกฤษ</string>
+    <string name="language_es">สเปน</string>
+    <string name="language_it">อิตาลี</string>
+    <string name="language_fr">ฝรั่งเศส</string>
+    <string name="language_de">เยอรมัน</string>
+    <string name="language_zh">จีน (ตัวย่อ)</string>
+    <string name="language_hi">ฮินดี</string>
+    <string name="language_pt">โปรตุเกส</string>
+    <string name="language_ru">รัสเซีย</string>
+    <string name="language_el">กรีก</string>
+    <string name="language_ar">อาหรับ</string>
+    <string name="language_ja">ญี่ปุ่น</string>
+    <string name="language_in">อินโดนีเซีย</string>
+    <string name="language_tr">ตุรกี</string>
+    <string name="language_ko">เกาหลี</string>
+    <string name="language_vi">เวียดนาม</string>
+    <string name="language_th">ไทย</string>
+    <string name="language_pl">โปแลนด์</string>
+    <string name="language_nl">ดัตช์</string>
+    <string name="language_uk">ยูเครน</string>
+    <string name="language_fa">เปอร์เซีย</string>
+</resources>

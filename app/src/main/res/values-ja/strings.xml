@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">MetaJammer</string>
+    <string name="hero_title">プライバシーを守る</string>
+    <string name="hero_subtitle">ファイルを共有する前に、機密性の高いメタデータをクリーンアップまたは置換します。</string>
+    <string name="select_files">ファイルを選択</string>
+    <string name="settings">設定</string>
+    <string name="setting_language_title">言語</string>
+    <string name="language_system">システムデフォルト</string>
+    <string name="language_en">英語</string>
+    <string name="language_es">スペイン語</string>
+    <string name="language_it">イタリア語</string>
+    <string name="language_fr">フランス語</string>
+    <string name="language_de">ドイツ語</string>
+    <string name="language_zh">中国語 (簡体字)</string>
+    <string name="language_hi">ヒンディー語</string>
+    <string name="language_pt">ポルトガル語</string>
+    <string name="language_ru">ロシア語</string>
+    <string name="language_el">ギリシャ語</string>
+    <string name="language_ar">アラビア語</string>
+    <string name="language_ja">日本語</string>
+    <string name="language_in">インドネシア語</string>
+    <string name="language_tr">トルコ語</string>
+</resources>

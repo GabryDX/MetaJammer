@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">MetaJammer</string>
+    <string name="hero_title">Proteja sua privacidade</string>
+    <string name="hero_subtitle">Limpe ou substitua metadados confidenciais antes de compartilhar seus arquivos.</string>
+    <string name="select_files">Selecionar arquivos</string>
+    <string name="settings">Configurações</string>
+    <string name="setting_language_title">Idioma</string>
+    <string name="language_system">Padrão do sistema</string>
+    <string name="language_en">Inglês</string>
+    <string name="language_es">Espanhol</string>
+    <string name="language_it">Italiano</string>
+    <string name="language_fr">Francês</string>
+    <string name="language_de">Alemão</string>
+    <string name="language_zh">Chinês (Simplificado)</string>
+    <string name="language_hi">Hindi</string>
+    <string name="language_pt">Português</string>
+    <string name="language_ru">Russo</string>
+</resources>

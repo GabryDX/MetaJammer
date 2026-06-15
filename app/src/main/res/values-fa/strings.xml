@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">MetaJammer</string>
+    <string name="hero_title">از حریم خصوصی خود محافظت کنید</string>
+    <string name="hero_subtitle">قبل از به اشتراک گذاری فایل های خود، متادیتای حساس را پاک یا جایگزین کنید.</string>
+    <string name="select_files">انتخاب فایل‌ها</string>
+    <string name="settings">تنظیمات</string>
+    <string name="setting_language_title">زبان</string>
+    <string name="language_system">پیش‌فرض سیستم</string>
+    <string name="language_en">انگلیسی</string>
+    <string name="language_es">اسپانیایی</string>
+    <string name="language_it">ایتالیایی</string>
+    <string name="language_fr">فرانسوی</string>
+    <string name="language_de">آلمانی</string>
+    <string name="language_zh">چینی (ساده شده)</string>
+    <string name="language_hi">هندی</string>
+    <string name="language_pt">پرتغالی</string>
+    <string name="language_ru">روسی</string>
+    <string name="language_el">یونانی</string>
+    <string name="language_ar">عربی</string>
+    <string name="language_ja">ژاپنی</string>
+    <string name="language_in">اندونزیایی</string>
+    <string name="language_tr">ترکی</string>
+    <string name="language_ko">کره‌ای</string>
+    <string name="language_vi">ویتنامی</string>
+    <string name="language_th">تایلندی</string>
+    <string name="language_pl">لهستانی</string>
+    <string name="language_nl">هلندی</string>
+    <string name="language_uk">اوکراینی</string>
+    <string name="language_fa">فارسی</string>
+</resources>

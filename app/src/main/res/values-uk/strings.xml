@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">MetaJammer</string>
+    <string name="hero_title">Захистіть свою приватність</string>
+    <string name="hero_subtitle">Очистіть або замініть чутливі метадані перед обміном файлами.</string>
+    <string name="select_files">Вибрати файли</string>
+    <string name="settings">Налаштування</string>
+    <string name="setting_language_title">Мова</string>
+    <string name="language_system">Системна за замовчуванням</string>
+    <string name="language_en">Англійська</string>
+    <string name="language_es">Іспанська</string>
+    <string name="language_it">Італійська</string>
+    <string name="language_fr">Французька</string>
+    <string name="language_de">Німецька</string>
+    <string name="language_zh">Китайська (спрощена)</string>
+    <string name="language_hi">Гінді</string>
+    <string name="language_pt">Португальська</string>
+    <string name="language_ru">Російська</string>
+    <string name="language_el">Грецька</string>
+    <string name="language_ar">Арабська</string>
+    <string name="language_ja">Японська</string>
+    <string name="language_in">Індонезійська</string>
+    <string name="language_tr">Турецька</string>
+    <string name="language_ko">Корейська</string>
+    <string name="language_vi">В\'єтнамська</string>
+    <string name="language_th">Тайська</string>
+    <string name="language_pl">Польська</string>
+    <string name="language_nl">Нідерландська</string>
+    <string name="language_uk">Українська</string>
+    <string name="language_fa">Перська</string>
+</resources>

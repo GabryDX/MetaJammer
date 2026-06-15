@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">MetaJammer</string>
+    <string name="hero_title">개인 정보 보호</string>
+    <string name="hero_subtitle">파일을 공유하기 전에 민감한 메타데이터를 정리하거나 교체하십시오.</string>
+    <string name="select_files">파일 선택</string>
+    <string name="settings">설정</string>
+    <string name="setting_language_title">언어</string>
+    <string name="language_system">시스템 기본값</string>
+    <string name="language_en">영어</string>
+    <string name="language_es">스페인어</string>
+    <string name="language_it">이탈리아어</string>
+    <string name="language_fr">프랑스어</string>
+    <string name="language_de">독일어</string>
+    <string name="language_zh">중국어 (간체)</string>
+    <string name="language_hi">힌디어</string>
+    <string name="language_pt">포르투갈어</string>
+    <string name="language_ru">러시아어</string>
+    <string name="language_el">그리스어</string>
+    <string name="language_ar">아랍어</string>
+    <string name="language_ja">일본어</string>
+    <string name="language_in">인도네시아어</string>
+    <string name="language_tr">터키어</string>
+    <string name="language_ko">한국어</string>
+    <string name="language_vi">베트남어</string>
+    <string name="language_th">태국어</string>
+    <string name="language_pl">폴란드어</string>
+    <string name="language_nl">네덜란드어</string>
+    <string name="language_uk">우크라이나어</string>
+    <string name="language_fa">페르시아어</string>
+</resources>

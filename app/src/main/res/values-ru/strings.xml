@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">MetaJammer</string>
+    <string name="hero_title">Защитите свою конфиденциальность</string>
+    <string name="hero_subtitle">Очистите или замените конфиденциальные метаданные перед отправкой файлов.</string>
+    <string name="select_files">Выбрать файлы</string>
+    <string name="settings">Настройки</string>
+    <string name="setting_language_title">Язык</string>
+    <string name="language_system">По умолчанию</string>
+    <string name="language_en">Английский</string>
+    <string name="language_es">Испанский</string>
+    <string name="language_it">Итальянский</string>
+    <string name="language_fr">Французский</string>
+    <string name="language_de">Немецкий</string>
+    <string name="language_zh">Китайский (упрощенный)</string>
+    <string name="language_hi">Хинди</string>
+    <string name="language_pt">Португальский</string>
+    <string name="language_ru">Русский</string>
+</resources>
