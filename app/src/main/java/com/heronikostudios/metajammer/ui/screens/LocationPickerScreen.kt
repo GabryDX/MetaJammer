@@ -138,8 +138,6 @@ fun LocationPickerScreen(
                         allowFileAccess = false
                         allowContentAccess = false
                         setGeolocationEnabled(false) // Not needed as we pick manually
-                        allowFileAccessFromFileURLs = false
-                        allowUniversalAccessFromFileURLs = false
                     }
                     
                     addJavascriptInterface(object {
