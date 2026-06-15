@@ -17,6 +17,7 @@ This document summarizes the audit performed to ensure that MetaJammer only uses
 | **Jetpack Compose UI** | `androidx.compose.ui:*` | Apache 2.0 | FOSS |
 | **Jetpack Compose Material3** | `androidx.compose.material3:material3` | Apache 2.0 | FOSS |
 | **AndroidX WorkManager** | `androidx.work:work-runtime-ktx` | Apache 2.0 | FOSS |
+| **Coil** | `io.coil-kt:coil-*` | Apache 2.0 | FOSS |
 | **Kotlinx Serialization** | `org.jetbrains.kotlinx:kotlinx-serialization-json` | Apache 2.0 | FOSS |
 | **Timber** | `com.jakewharton.timber:timber` | Apache 2.0 | FOSS |
 | **JUnit** | `junit:junit` | EPL 2.0 | FOSS |
