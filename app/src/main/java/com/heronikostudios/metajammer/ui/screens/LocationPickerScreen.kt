@@ -24,6 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 
+import androidx.compose.ui.res.stringResource
+import com.heronikostudios.metajammer.R
+
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun LocationPickerScreen(
@@ -168,7 +171,7 @@ fun LocationPickerScreen(
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 32.dp)
         ) {
-            Text("Confirm Location")
+            Text(stringResource(R.string.confirm_location))
         }
     }
 }

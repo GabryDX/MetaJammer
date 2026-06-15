@@ -38,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.res.stringResource
 import com.heronikostudios.metajammer.domain.usecase.ShareFileUseCase
 import com.heronikostudios.metajammer.ui.MainViewModel
 import com.heronikostudios.metajammer.ui.components.MessageBanner
@@ -48,6 +49,7 @@ import com.heronikostudios.metajammer.ui.screens.OutputOptionsScreen
 import com.heronikostudios.metajammer.ui.screens.ProcessingScreen
 import com.heronikostudios.metajammer.ui.screens.SettingsScreen
 import com.heronikostudios.metajammer.ui.theme.MetaJammerTheme
+import com.heronikostudios.metajammer.R
 
 class MainActivity : ComponentActivity() {
 
@@ -232,12 +234,12 @@ fun MetaJammerApp(
                 title = {
                     Text(
                         text = when (currentStep) {
-                            AppStep.HOME -> "MetaJammer"
-                            AppStep.PREVIEW -> "Metadata Preview"
-                            AppStep.PROCESS -> "Process Files"
-                            AppStep.LOCATION_PICKER -> "Pick Location"
-                            AppStep.OUTPUT -> "Output Options"
-                            AppStep.SETTINGS -> "Settings"
+                            AppStep.HOME -> stringResource(R.string.app_name)
+                            AppStep.PREVIEW -> stringResource(R.string.metadata_preview)
+                            AppStep.PROCESS -> stringResource(R.string.process_files_title)
+                            AppStep.LOCATION_PICKER -> stringResource(R.string.pick_location)
+                            AppStep.OUTPUT -> stringResource(R.string.output_options)
+                            AppStep.SETTINGS -> stringResource(R.string.settings)
                         },
                         style = when (currentStep) {
                             AppStep.HOME -> MaterialTheme.typography.headlineMedium
@@ -250,7 +252,7 @@ fun MetaJammerApp(
                         IconButton(onClick = { navigateBack() }) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "Back"
+                                contentDescription = stringResource(R.string.back)
                             )
                         }
                     }
@@ -259,7 +261,7 @@ fun MetaJammerApp(
                     IconButton(onClick = { currentStep = AppStep.SETTINGS }) {
                         Icon(
                             imageVector = Icons.Filled.Settings,
-                            contentDescription = "Settings"
+                            contentDescription = stringResource(R.string.settings)
                         )
                     }
                 }
@@ -422,12 +424,9 @@ fun MetaJammerApp(
         if (showInternetPermissionExplanation) {
             androidx.compose.material3.AlertDialog(
                 onDismissRequest = { showInternetPermissionExplanation = false },
-                title = { Text("Map Picker & Internet Access") },
+                title = { Text(stringResource(R.string.map_permission_title)) },
                 text = {
-                    Text(
-                        "To show a map for location picking, MetaJammer needs to connect to the internet to load map tiles from OpenStreetMap. \n\n" +
-                                "If you decline, the app will continue to work perfectly for all metadata stripping and poisoning features, but you won't be able to pick locations visually on a map."
-                    )
+                    Text(stringResource(R.string.map_permission_message))
                 },
                 confirmButton = {
                     androidx.compose.material3.TextButton(
@@ -437,7 +436,7 @@ fun MetaJammerApp(
                             navigateTo(AppStep.LOCATION_PICKER)
                         }
                     ) {
-                        Text("Allow & Open Map")
+                        Text(stringResource(R.string.allow_open_map))
                     }
                 },
                 dismissButton = {
@@ -446,7 +445,7 @@ fun MetaJammerApp(
                             showInternetPermissionExplanation = false
                         }
                     ) {
-                        Text("Not Now")
+                        Text(stringResource(R.string.not_now))
                     }
                 }
             )
@@ -455,12 +454,9 @@ fun MetaJammerApp(
         if (showNotificationPermissionExplanation) {
             androidx.compose.material3.AlertDialog(
                 onDismissRequest = { showNotificationPermissionExplanation = false },
-                title = { Text("Stay Informed") },
+                title = { Text(stringResource(R.string.notification_permission_title)) },
                 text = {
-                    Text(
-                        "MetaJammer can show notifications to keep you updated on the progress of large file batches while they process in the background. \n\n" +
-                                "This is especially useful if you want to switch to another app while MetaJammer finishes its work."
-                    )
+                    Text(stringResource(R.string.notification_permission_message))
                 },
                 confirmButton = {
                     androidx.compose.material3.TextButton(
@@ -469,7 +465,7 @@ fun MetaJammerApp(
                             notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                         }
                     ) {
-                        Text("Continue")
+                        Text(stringResource(R.string.continue_label))
                     }
                 },
                 dismissButton = {
@@ -478,7 +474,7 @@ fun MetaJammerApp(
                             showNotificationPermissionExplanation = false
                         }
                     ) {
-                        Text("Not Now")
+                        Text(stringResource(R.string.not_now))
                     }
                 }
             )

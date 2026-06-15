@@ -1,0 +1,132 @@
+<resources>
+    <string name="app_name">MetaJammer</string>
+    <string name="notification_channel_name">Elaborazione file</string>
+    <string name="notification_processing_title">Elaborazione file</string>
+    <string name="notification_processing_message">Rimozione dei metadati da %1$d file...</string>
+    <string name="notification_complete_title">Elaborazione completata</string>
+    <string name="notification_complete_message">Elaborati correttamente %1$d file.</string>
+
+    <!-- General -->
+    <string name="ok">OK</string>
+    <string name="cancel">Annulla</string>
+    <string name="back">Indietro</string>
+    <string name="continue_label">Continua</string>
+    <string name="save">Salva</string>
+    <string name="share">Condividi</string>
+    <string name="dismiss">Ignora</string>
+    <string name="warning">Avviso</string>
+    <string name="none">Nessuno</string>
+    <string name="unknown">sconosciuto</string>
+
+    <!-- HomeScreen -->
+    <string name="hero_title">Proteggi la tua privacy</string>
+    <string name="hero_subtitle">Pulisci o sostituisci i metadati sensibili prima di condividere i tuoi file.</string>
+    <string name="feature_images_video_title">Immagini e video</string>
+    <string name="feature_images_video_desc">Supporto completo per la rimozione dei metadati dalle foto e il remuxing dei video per rimuovere il tracciamento.</string>
+    <string name="feature_poisoning_title">Avvelenamento dei metadati</string>
+    <string name="feature_poisoning_desc">Non limitarti a rimuovere i dati: sostituiscili con falsi realistici per preservare la privacy e confondere i tracciatori.</string>
+    <string name="feature_background_title">Elaborazione in background</string>
+    <string name="feature_background_desc">Elabora centinaia di file in modo efficiente in background mentre fai altro.</string>
+    <string name="feature_on_device_title">Privacy sul dispositivo</string>
+    <string name="feature_on_device_desc">Tutte le elaborazioni avvengono localmente sul tuo dispositivo. I tuoi file non lasciano mai MetaJammer.</string>
+    <string name="pro_tip_gallery">Suggerimento: puoi condividere i file direttamente dalla tua app Galleria in MetaJammer.</string>
+    <string name="select_files">Seleziona file</string>
+    <string name="select_more_files">Seleziona altri file</string>
+    <string name="clear_selection">Cancella selezione</string>
+    <string name="files_selected">%1$d file selezionati</string>
+    <string name="total_size">Dimensione totale: %1$s</string>
+    <string name="size_mb">%.1f MB</string>
+    <string name="size_kb">%.1f KB</string>
+    <string name="size_bytes">%1$d Byte</string>
+
+    <!-- MetadataPreviewScreen -->
+    <string name="metadata_preview">Anteprima metadati</string>
+    <string name="file_type">Tipo: %1$s</string>
+    <string name="no_metadata_found">Nessun metadato trovato</string>
+
+    <!-- ProcessingScreen -->
+    <string name="process_files_title">Elabora file</string>
+    <string name="pick_one_option">Scegli un\'opzione:</string>
+    <string name="poison_metadata">Avvelena metadati</string>
+    <string name="remove_metadata">Rimuovi metadati</string>
+    <string name="selected_mode">Selezionato: %1$s</string>
+    <string name="regenerate_plans">Rigenera tutti i piani casuali</string>
+    <string name="preview_of_changes">Anteprima delle modifiche</string>
+    <string name="no_preview_available">Anteprima non disponibile</string>
+    <string name="change_location_map">Cambia posizione sulla mappa</string>
+    <string name="process_files">Elabora file</string>
+    <string name="processing_foreground">Elaborazione in primo piano...</string>
+    <string name="background_progress">Progresso in background: %1$d%%</string>
+    <string name="continue_to_output">Continua alle opzioni di output</string>
+
+    <!-- LocationPickerScreen -->
+    <string name="pick_location">Scegli posizione</string>
+    <string name="confirm_location">Conferma posizione</string>
+
+    <!-- OutputOptionsScreen -->
+    <string name="output_options">Opzioni di output</string>
+    <string name="saving_will_trigger_sharing">Il salvataggio attiverà anche la condivisione.</string>
+    <string name="choose_save_or_share">Scegli se salvare o condividere il risultato elaborato.</string>
+    <string name="save_to_default_folder">Salva nella cartella predefinita</string>
+    <string name="save_to_custom_folder">Salva in una cartella personalizzata</string>
+
+    <!-- SettingsScreen -->
+    <string name="settings">Impostazioni</string>
+    <string name="category_file_management">Gestione file</string>
+    <string name="category_image_file">Immagine / File</string>
+    <string name="category_shared_files">Comportamento file condivisi</string>
+    <string name="category_ui">Interfaccia utente</string>
+
+    <string name="setting_random_names_title">Usa nomi di file casuali</string>
+    <string name="setting_random_names_sub">Genera nomi di output casuali invece di usare il nome del file originale</string>
+    <string name="setting_default_path_title">Percorso di salvataggio predefinito</string>
+    <string name="setting_reset_path">Ripristina a Pictures/MetaJammer</string>
+    <string name="setting_select_folder">Seleziona cartella</string>
+
+    <string name="setting_keep_orientation_title">Mantieni orientamento immagine</string>
+    <string name="setting_keep_orientation_sub">Preserva i metadati dell\'orientamento dell\'immagine quando possibile</string>
+    <string name="setting_share_default_title">Condividi risultato come predefinito</string>
+    <string name="setting_share_default_sub">Il salvataggio attiverà anche la condivisione</string>
+    <string name="setting_prefix_title">Prefisso predefinito</string>
+    <string name="setting_suffix_title">Suffisso predefinito</string>
+    <string name="setting_not_set">Non impostato</string>
+    <string name="setting_keep_thumbnails_title">Mantieni miniature originali</string>
+    <string name="setting_keep_thumbnails_sub">Se il file contiene una miniatura incorporata, preservala così com\'è. Se disabilitato, qualsiasi miniatura esistente verrà rimossa per la massima privacy.</string>
+    <string name="setting_thumbnails_warning">Avviso: mantenere le miniature originali potrebbe far trapelare metadati (posizione, informazioni sul dispositivo) anche se i tag principali vengono rimossi.</string>
+    <string name="setting_enable_map_title">Abilita selettore mappa</string>
+    <string name="setting_enable_map_sub">Consenti all\'app di connettersi a Internet per mostrare OpenStreetMap per la selezione della posizione</string>
+
+    <string name="setting_quick_scrub_title">Pulizia rapida e condivisione</string>
+    <string name="setting_quick_scrub_sub">Rimuovi automaticamente i metadati e riapri la scheda di condivisione per i file condivisi</string>
+    <string name="setting_metadata_action_title">Azione metadati</string>
+    <string name="setting_output_action_title">Azione output</string>
+    <string name="setting_dedicated_folder_title">Cartella dedicata ai file condivisi</string>
+    <string name="setting_no_folder_selected">Nessuna cartella dedicata selezionata</string>
+    <string name="setting_clear_folder">Cancella cartella dedicata</string>
+
+    <string name="setting_night_mode_title">Modalità notte</string>
+    <string name="setting_oled_mode_title">Modalità OLED</string>
+    <string name="setting_oled_mode_sub">Usa toni di nero più scuri per i temi scuri supportati</string>
+
+    <!-- Enums -->
+    <string name="night_mode_always">Sempre</string>
+    <string name="night_mode_automatic">Automatico</string>
+    <string name="night_mode_low_battery">Solo batteria scarica</string>
+    <string name="night_mode_never">Mai</string>
+
+    <string name="processing_mode_poison">Avvelena metadati (Info false)</string>
+    <string name="processing_mode_remove">Rimuovi metadati (Pulizia totale)</string>
+
+    <string name="output_action_default_folder">Salva nella cartella predefinita</string>
+    <string name="output_action_shared_folder">Salva nella cartella dedicata</string>
+    <string name="output_action_reshare">Ri-condividi file sanificati</string>
+
+    <!-- Dialogs/Permissions -->
+    <string name="map_permission_title">Selettore mappa e accesso a Internet</string>
+    <string name="map_permission_message">Per mostrare una mappa per la scelta della posizione, MetaJammer deve connettersi a Internet per caricare i riquadri della mappa da OpenStreetMap. \n\nSe rifiuti, l\'app continuerà a funzionare perfettamente per tutte le funzioni di rimozione e avvelenamento dei metadati, ma non potrai scegliere le posizioni visivamente su una mappa.</string>
+    <string name="allow_open_map">Consenti e apri mappa</string>
+    <string name="not_now">Non ora</string>
+
+    <string name="notification_permission_title">Rimani informato</string>
+    <string name="notification_permission_message">MetaJammer può mostrare notifiche per tenerti aggiornato sul progresso di grandi lotti di file mentre vengono elaborati in background. \n\nQuesto è particolarmente utile se vuoi passare a un\'altra app mentre MetaJammer finisce il suo lavoro.</string>
+</resources>

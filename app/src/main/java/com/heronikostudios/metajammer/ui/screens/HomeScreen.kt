@@ -32,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
 import com.heronikostudios.metajammer.R
 import com.heronikostudios.metajammer.domain.model.SelectedFile
 import com.heronikostudios.metajammer.ui.theme.MetaJammerTheme
@@ -94,7 +95,7 @@ fun HomeScreen(
                     onClick = { pickerLauncher.launch(arrayOf("*/*")) },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(if (selectedFiles.isEmpty()) "Select Files" else "Select More Files")
+                    Text(if (selectedFiles.isEmpty()) stringResource(R.string.select_files) else stringResource(R.string.select_more_files))
                 }
 
                 if (selectedFiles.isNotEmpty()) {
@@ -102,14 +103,14 @@ fun HomeScreen(
                         onClick = onContinue,
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("Continue")
+                        Text(stringResource(R.string.continue_label))
                     }
 
                     OutlinedButton(
                         onClick = onClearSelection,
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("Clear Selection")
+                        Text(stringResource(R.string.clear_selection))
                     }
                 }
             }
@@ -133,13 +134,13 @@ private fun HeroSection() {
             tint = MaterialTheme.colorScheme.primary
         )
         Text(
-            text = "Protect Your Privacy",
+            text = stringResource(R.string.hero_title),
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onSurface
         )
         Text(
-            text = "Clean or replace sensitive metadata before sharing your files.",
+            text = stringResource(R.string.hero_subtitle),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = androidx.compose.ui.text.style.TextAlign.Center
@@ -152,23 +153,23 @@ private fun FeatureHighlights() {
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         FeatureItem(
             icon = painterResource(R.drawable.ic_movie),
-            title = "Images & Video",
-            description = "Full support for stripping metadata from photos and remuxing videos to remove tracking."
+            title = stringResource(R.string.feature_images_video_title),
+            description = stringResource(R.string.feature_images_video_desc)
         )
         FeatureItem(
             icon = painterResource(R.drawable.ic_bug_report),
-            title = "Metadata Poisoning",
-            description = "Don't just remove data—replace it with realistic fakes to preserve privacy and confuse trackers."
+            title = stringResource(R.string.feature_poisoning_title),
+            description = stringResource(R.string.feature_poisoning_desc)
         )
         FeatureItem(
             icon = painterResource(R.drawable.ic_batch_prediction),
-            title = "Background Processing",
-            description = "Process hundreds of files efficiently in the background while you do other things."
+            title = stringResource(R.string.feature_background_title),
+            description = stringResource(R.string.feature_background_desc)
         )
         FeatureItem(
             icon = Icons.Default.Lock,
-            title = "On-Device Privacy",
-            description = "All processing happens locally on your device. Your files never leave MetaJammer."
+            title = stringResource(R.string.feature_on_device_title),
+            description = stringResource(R.string.feature_on_device_desc)
         )
     }
 }
@@ -240,7 +241,7 @@ private fun TipCard() {
                 tint = MaterialTheme.colorScheme.primary
             )
             Text(
-                text = "Pro tip: You can share files directly from your Gallery app into MetaJammer.",
+                text = stringResource(R.string.pro_tip_gallery),
                 style = MaterialTheme.typography.bodyMedium
             )
         }
@@ -267,12 +268,12 @@ private fun SelectionSummary(
         ) {
             Column {
                 Text(
-                    text = "$count Files Selected",
+                    text = stringResource(R.string.files_selected, count),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
                 Text(
-                    text = "Total size: ${formatSize(totalSize)}",
+                    text = stringResource(R.string.total_size, formatSize(totalSize)),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
                 )
@@ -349,12 +350,13 @@ fun HomeScreenSelectedPreview() {
     }
 }
 
+@Composable
 private fun formatSize(bytes: Long): String {
     val kb = bytes / 1024.0
     val mb = kb / 1024.0
     return when {
-        mb >= 1.0 -> "%.1f MB".format(mb)
-        kb >= 1.0 -> "%.1f KB".format(kb)
-        else -> "$bytes Bytes"
+        mb >= 1.0 -> stringResource(R.string.size_mb, mb)
+        kb >= 1.0 -> stringResource(R.string.size_kb, kb)
+        else -> stringResource(R.string.size_bytes, bytes)
     }
 }
