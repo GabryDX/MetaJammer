@@ -1,5 +1,5 @@
-<resources>
-    <string name="app_name">MetaJammer</string>
+<?xml version='1.0' encoding='utf-8'?>
+<resources><string name="app_name">MetaJammer</string>
     <string name="notification_channel_name">Elaborazione file</string>
     <string name="notification_processing_title">Elaborazione file</string>
     <string name="notification_processing_message">Rimozione dei metadati da %1$d file...</string>
@@ -121,7 +121,22 @@
     <string name="language_it">Italiano</string>
     <string name="language_fr">Francese</string>
     <string name="language_de">Tedesco</string>
-
+    <string name="language_zh">中文 (简体)</string>
+    <string name="language_hi">हिन्दी</string>
+    <string name="language_pt">Português</string>
+    <string name="language_ru">Русский</string>
+    <string name="language_el">Ελληνικά</string>
+    <string name="language_ar">العربية</string>
+    <string name="language_ja">日本語</string>
+    <string name="language_in">Bahasa Indonesia</string>
+    <string name="language_tr">Türkçe</string>
+    <string name="language_ko">한국어</string>
+    <string name="language_vi">Tiếng Việt</string>
+    <string name="language_th">ไทย</string>
+    <string name="language_pl">Polski</string>
+    <string name="language_nl">Nederlands</string>
+    <string name="language_uk">Українська</string>
+    <string name="language_fa">فارسی</string>
     <string name="processing_mode_poison">Avvelena metadati (Info false)</string>
     <string name="processing_mode_remove">Rimuovi metadati (Pulizia totale)</string>
 
