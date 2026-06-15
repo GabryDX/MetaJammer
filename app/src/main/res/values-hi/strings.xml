@@ -1,131 +1,157 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="app_name">MetaJammer</string>
-    <string name="notification_channel_name">File Processing</string>
-    <string name="notification_processing_title">Processing Files</string>
-    <string name="notification_processing_message">Stripping metadata from %1$d files...</string>
-    <string name="notification_complete_title">Processing Complete</string>
-    <string name="notification_complete_message">Successfully processed %1$d files.</string>
-    <string name="ok">OK</string>
-    <string name="cancel">Cancel</string>
-    <string name="back">Back</string>
-    <string name="continue_label">Continue</string>
-    <string name="save">Save</string>
-    <string name="share">Share</string>
-    <string name="dismiss">Dismiss</string>
-    <string name="warning">Warning</string>
-    <string name="none">None</string>
-    <string name="unknown">unknown</string>
-    <string name="hero_title">अपनी गोपनीयता सुरक्षित रखें</string>
+    <string name="notification_channel_name">फ़ाइल प्रोसेसिंग</string>
+    <string name="notification_processing_title">फ़ाइलें प्रोसेस की जा रही हैं</string>
+    <string name="notification_processing_message">%1$d फ़ाइलों से मेटाडेटा हटाया जा रहा है...</string>
+    <string name="notification_complete_title">प्रोसेसिंग पूर्ण</string>
+    <string name="notification_complete_message">%1$d फ़ाइलें सफलतापूर्वक प्रोसेस की गईं।</string>
+
+    <!-- General -->
+    <string name="ok">ठीक है</string>
+    <string name="cancel">रद्द करें</string>
+    <string name="back">पीछे</string>
+    <string name="continue_label">जारी रखें</string>
+    <string name="save">सहेजें</string>
+    <string name="share">साझा करें</string>
+    <string name="dismiss">हटाएं</string>
+    <string name="warning">चेतावनी</string>
+    <string name="none">कोई नहीं</string>
+    <string name="unknown">अज्ञात</string>
+
+    <!-- HomeScreen -->
+    <string name="hero_title">अपनी गोपनीयता की रक्षा करें</string>
     <string name="hero_subtitle">अपनी फ़ाइलें साझा करने से पहले संवेदनशील मेटाडेटा साफ़ करें या बदलें।</string>
-    <string name="feature_images_video_title">Images &amp; Video</string>
-    <string name="feature_images_video_desc">Full support for stripping metadata from photos and remuxing videos to remove tracking.</string>
-    <string name="feature_poisoning_title">Metadata Poisoning</string>
-    <string name="feature_poisoning_desc">Don’t just remove data—replace it with realistic fakes to preserve privacy and confuse trackers.</string>
-    <string name="feature_background_title">Background Processing</string>
-    <string name="feature_background_desc">Process hundreds of files efficiently in the background while you do other things.</string>
-    <string name="feature_on_device_title">On-Device Privacy</string>
-    <string name="feature_on_device_desc">All processing happens locally on your device. Your files never leave MetaJammer.</string>
-    <string name="pro_tip_gallery">Pro tip: You can share files directly from your Gallery app into MetaJammer.</string>
+    <string name="feature_images_video_title">इमेज और वीडियो</string>
+    <string name="feature_images_video_desc">फ़ोटो से मेटाडेटा हटाने और ट्रैकिंग हटाने के लिए वीडियो को रीमक्स करने का पूर्ण समर्थन।</string>
+    <string name="feature_poisoning_title">मेटाडेटा पॉइज़निंग</string>
+    <string name="feature_poisoning_desc">केवल डेटा न हटाएं—गोपनीयता बनाए रखने और ट्रैकर्स को भ्रमित करने के लिए इसे यथार्थवादी नकली डेटा से बदलें।</string>
+    <string name="feature_background_title">बैकग्राउंड प्रोसेसिंग</string>
+    <string name="feature_background_desc">जब आप अन्य काम कर रहे हों तो बैकग्राउंड में सैकड़ों फ़ाइलों को कुशलतापूर्वक प्रोसेस करें।</string>
+    <string name="feature_on_device_title">डिवाइस पर गोपनीयता</string>
+    <string name="feature_on_device_desc">सभी प्रोसेसिंग आपके डिवाइस पर स्थानीय रूप से होती है। आपकी फ़ाइलें MetaJammer से बाहर कभी नहीं जाती हैं।</string>
+    <string name="pro_tip_gallery">प्रो टिप: आप अपनी गैलरी ऐप से सीधे MetaJammer में फ़ाइलें साझा कर सकते हैं।</string>
     <string name="select_files">फ़ाइलें चुनें</string>
-    <string name="select_more_files">Select More Files</string>
-    <string name="clear_selection">Clear Selection</string>
-    <string name="files_selected">%1$d Files Selected</string>
-    <string name="total_size">Total size: %1$s</string>
+    <string name="select_more_files">अधिक फ़ाइलें चुनें</string>
+    <string name="clear_selection">चयन साफ़ करें</string>
+    <string name="files_selected">%1$d फ़ाइलें चयनित</string>
+    <string name="total_size">कुल आकार: %1$s</string>
     <string name="size_mb">%.1f MB</string>
     <string name="size_kb">%.1f KB</string>
-    <string name="size_bytes">%1$d Bytes</string>
-    <string name="metadata_preview">Metadata Preview</string>
-    <string name="file_type">Type: %1$s</string>
-    <string name="no_metadata_found">No metadata found</string>
-    <string name="process_files_title">Process Files</string>
-    <string name="pick_one_option">Pick one option:</string>
-    <string name="poison_metadata">Poison Metadata</string>
-    <string name="remove_metadata">Remove Metadata</string>
-    <string name="selected_mode">Selected: %1$s</string>
-    <string name="regenerate_plans">Regenerate All Random Plans</string>
-    <string name="preview_of_changes">Preview of Changes</string>
-    <string name="no_preview_available">No preview available</string>
-    <string name="change_location_map">Change Location on Map</string>
-    <string name="process_files">Process Files</string>
-    <string name="processing_foreground">Processing in foreground...</string>
-    <string name="background_progress">Background Progress: %1$d%%</string>
-    <string name="continue_to_output">Continue to Output Options</string>
-    <string name="pick_location">Pick Location</string>
-    <string name="confirm_location">Confirm Location</string>
-    <string name="output_options">Output Options</string>
-    <string name="saving_will_trigger_sharing">Saving will also trigger sharing.</string>
-    <string name="choose_save_or_share">Choose whether to save or share the processed result.</string>
-    <string name="save_to_default_folder">Save to Default Folder</string>
-    <string name="save_to_custom_folder">Save to Custom Folder</string>
+    <string name="size_bytes">%1$d बाइट्स</string>
+
+    <!-- MetadataPreviewScreen -->
+    <string name="metadata_preview">मेटाडेटा पूर्वावलोकन</string>
+    <string name="file_type">प्रकार: %1$s</string>
+    <string name="no_metadata_found">कोई मेटाडेटा नहीं मिला</string>
+
+    <!-- ProcessingScreen -->
+    <string name="process_files_title">फ़ाइलें प्रोसेस करें</string>
+    <string name="pick_one_option">एक विकल्प चुनें:</string>
+    <string name="poison_metadata">मेटाडेटा पॉइज़न करें</string>
+    <string name="remove_metadata">मेटाडेटा हटाएं</string>
+    <string name="selected_mode">चयनित: %1$s</string>
+    <string name="regenerate_plans">सभी रैंडम प्लान फिर से जनरेट करें</string>
+    <string name="preview_of_changes">बदलावों का पूर्वावलोकन</string>
+    <string name="no_preview_available">कोई पूर्वावलोकन उपलब्ध नहीं है</string>
+    <string name="change_location_map">मैप पर स्थान बदलें</string>
+    <string name="process_files">फ़ाइलें प्रोसेस करें</string>
+    <string name="processing_foreground">फ़ोरग्राउंड में प्रोसेसिंग हो रही है...</string>
+    <string name="background_progress">बैकग्राउंड प्रगति: %1$d%%</string>
+    <string name="continue_to_output">आउटपुट विकल्पों पर जारी रखें</string>
+
+    <!-- LocationPickerScreen -->
+    <string name="pick_location">स्थान चुनें</string>
+    <string name="confirm_location">स्थान की पुष्टि करें</string>
+
+    <!-- OutputOptionsScreen -->
+    <string name="output_options">आउटपुट विकल्प</string>
+    <string name="saving_will_trigger_sharing">सहेजना शेयरिंग को भी ट्रिगर करेगा।</string>
+    <string name="choose_save_or_share">चुनें कि प्रोसेस किए गए परिणाम को सहेजना है या साझा करना है।</string>
+    <string name="save_to_default_folder">डिफ़ॉल्ट फ़ोल्डर में सहेजें</string>
+    <string name="save_to_custom_folder">कस्टम फ़ोल्डर में सहेजें</string>
+
+    <!-- SettingsScreen -->
     <string name="settings">सेटिंग्स</string>
-    <string name="category_file_management">File Management</string>
-    <string name="category_image_file">Image / File</string>
-    <string name="category_shared_files">Shared Files Behavior</string>
+    <string name="category_file_management">फ़ाइल प्रबंधन</string>
+    <string name="category_image_file">इमेज / फ़ाइल</string>
+    <string name="category_shared_files">साझा फ़ाइलों का व्यवहार</string>
     <string name="category_ui">UI</string>
-    <string name="setting_random_names_title">Use random file names</string>
-    <string name="setting_random_names_sub">Generate randomized output names instead of using the original file name</string>
-    <string name="setting_default_path_title">Default saving path</string>
-    <string name="setting_reset_path">Reset to Pictures/MetaJammer</string>
-    <string name="setting_select_folder">Select Folder</string>
-    <string name="setting_keep_orientation_title">Keep image orientation</string>
-    <string name="setting_keep_orientation_sub">Preserve image orientation metadata when possible</string>
-    <string name="setting_share_default_title">Share result as default</string>
-    <string name="setting_share_default_sub">Saving will also trigger sharing</string>
-    <string name="setting_prefix_title">Default Prefix</string>
-    <string name="setting_suffix_title">Default Suffix</string>
-    <string name="setting_not_set">Not set</string>
-    <string name="setting_keep_thumbnails_title">Keep original thumbnails</string>
-    <string name="setting_keep_thumbnails_sub">If the file contains an embedded thumbnail, preserve it as-is. If disabled, any existing thumbnail will be removed for maximum privacy.</string>
-    <string name="setting_thumbnails_warning">Warning: Keeping original thumbnails may leak metadata (location, device info) even if main tags are removed.</string>
-    <string name="setting_enable_map_title">Enable map picker</string>
-    <string name="setting_enable_map_sub">Allow the app to connect to the internet to show OpenStreetMap for location selection</string>
-    <string name="setting_quick_scrub_title">Quick Scrub &amp; Share</string>
-    <string name="setting_quick_scrub_sub">Automatically strip metadata and re-open Share Sheet for shared files</string>
-    <string name="setting_metadata_action_title">Metadata action</string>
-    <string name="setting_output_action_title">Output action</string>
-    <string name="setting_dedicated_folder_title">Dedicated shared-files folder</string>
-    <string name="setting_no_folder_selected">No dedicated folder selected</string>
-    <string name="setting_clear_folder">Clear Dedicated Folder</string>
-    <string name="setting_night_mode_title">Night mode</string>
+
+    <string name="setting_random_names_title">रैंडम फ़ाइल नामों का उपयोग करें</string>
+    <string name="setting_random_names_sub">मूल फ़ाइल नाम के बजाय रैंडम आउटपुट नाम जनरेट करें</string>
+    <string name="setting_default_path_title">डिफ़ॉल्ट सहेजने का पाथ</string>
+    <string name="setting_reset_path">Pictures/MetaJammer पर रीसेट करें</string>
+    <string name="setting_select_folder">फ़ोल्डर चुनें</string>
+
+    <string name="setting_keep_orientation_title">इमेज ओरिएंटेशन रखें</string>
+    <string name="setting_keep_orientation_sub">जब संभव हो तो इमेज ओरिएंटेशन मेटाडेटा सुरक्षित रखें</string>
+    <string name="setting_share_default_title">परिणाम को डिफ़ॉल्ट रूप से साझा करें</string>
+    <string name="setting_share_default_sub">सहेजना शेयरिंग को भी ट्रिगर करेगा</string>
+    <string name="setting_prefix_title">डिफ़ॉल्ट उपसर्ग (Prefix)</string>
+    <string name="setting_suffix_title">डिफ़ॉल्ट प्रत्यय (Suffix)</string>
+    <string name="setting_not_set">सेट नहीं है</string>
+    <string name="setting_keep_thumbnails_title">मूल थंबनेल रखें</string>
+    <string name="setting_keep_thumbnails_sub">यदि फ़ाइल में एम्बेडेड थंबनेल है, तो इसे वैसे ही रखें। यदि अक्षम है, तो अधिकतम गोपनीयता के लिए किसी भी मौजूदा थंबनेल को हटा दिया जाएगा।</string>
+    <string name="setting_thumbnails_warning">चेतावनी: मूल थंबनेल रखने से मेटाडेटा (स्थान, डिवाइस की जानकारी) लीक हो सकता है, भले ही मुख्य टैग हटा दिए गए हों।</string>
+    <string name="setting_enable_map_title">मैप पिकर सक्षम करें</string>
+    <string name="setting_enable_map_sub">स्थान चयन के लिए OpenStreetMap दिखाने हेतु ऐप को इंटरनेट से कनेक्ट करने की अनुमति दें</string>
+
+    <string name="setting_quick_scrub_title">क्विक स्क्रब और साझा करें</string>
+    <string name="setting_quick_scrub_sub">साझा की गई फ़ाइलों के लिए मेटाडेटा स्वचालित रूप से हटाएं और शेयर शीट फिर से खोलें</string>
+    <string name="setting_metadata_action_title">मेटाडेटा कार्रवाई</string>
+    <string name="setting_output_action_title">आउटपुट कार्रवाई</string>
+    <string name="setting_dedicated_folder_title">साझा फ़ाइलों के लिए समर्पित फ़ोल्डर</string>
+    <string name="setting_no_folder_selected">कोई समर्पित फ़ोल्डर चयनित नहीं है</string>
+    <string name="setting_clear_folder">समर्पित फ़ोल्डर साफ़ करें</string>
+
+    <string name="setting_night_mode_title">नाइट मोड</string>
     <string name="setting_language_title">भाषा</string>
-    <string name="setting_oled_mode_title">OLED mode</string>
-    <string name="setting_oled_mode_sub">Use darker black tones for supported dark themes</string>
-    <string name="night_mode_always">Always</string>
-    <string name="night_mode_automatic">Automatic</string>
-    <string name="night_mode_low_battery">Only low battery</string>
-    <string name="night_mode_never">Never</string>
-    <string name="language_system">System Default</string>
-    <string name="language_en">English</string>
-    <string name="language_es">Español</string>
-    <string name="language_it">Italiano</string>
-    <string name="language_fr">Français</string>
-    <string name="language_de">Deutsch</string>
-    <string name="language_zh">中文 (简体)</string>
+    <string name="setting_oled_mode_title">OLED मोड</string>
+    <string name="setting_oled_mode_sub">समर्थित डार्क थीम के लिए गहरे काले टोन का उपयोग करें</string>
+
+    <!-- Enums -->
+    <string name="night_mode_always">हमेशा</string>
+    <string name="night_mode_automatic">स्वचालित</string>
+    <string name="night_mode_low_battery">केवल कम बैटरी पर</string>
+    <string name="night_mode_never">कभी नहीं</string>
+
+    <string name="language_system">सिस्टम डिफ़ॉल्ट</string>
+    <string name="language_en">अंग्रेज़ी</string>
+    <string name="language_es">स्पेनिश</string>
+    <string name="language_it">इतालवी</string>
+    <string name="language_fr">फ्रेंच</string>
+    <string name="language_de">जर्मन</string>
+    <string name="language_zh">चीनी (सरलीकृत)</string>
     <string name="language_hi">हिन्दी</string>
-    <string name="language_pt">Português</string>
-    <string name="language_ru">Русский</string>
-    <string name="language_el">Ελληνικά</string>
-    <string name="language_ar">العربية</string>
-    <string name="language_ja">日本語</string>
-    <string name="language_in">Bahasa Indonesia</string>
-    <string name="language_tr">Türkçe</string>
-    <string name="language_ko">한국어</string>
-    <string name="language_vi">Tiếng Việt</string>
-    <string name="language_th">ไทย</string>
-    <string name="language_pl">Polski</string>
-    <string name="language_nl">Nederlands</string>
-    <string name="language_uk">Українська</string>
-    <string name="language_fa">فارسی</string>
-    <string name="processing_mode_poison">Poison metadata (Fake info)</string>
-    <string name="processing_mode_remove">Remove metadata (Full strip)</string>
-    <string name="output_action_default_folder">Save to default folder</string>
-    <string name="output_action_shared_folder">Save to dedicated folder</string>
-    <string name="output_action_reshare">Re-share sanitized files</string>
-    <string name="map_permission_title">Map Picker &amp; Internet Access</string>
-    <string name="map_permission_message">To show a map for location picking, MetaJammer needs to connect to the internet to load map tiles from OpenStreetMap. \n\nIf you decline, the app will continue to work perfectly for all metadata stripping and poisoning features, but you won’t be able to pick locations visually on a map.</string>
-    <string name="allow_open_map">Allow &amp; Open Map</string>
-    <string name="not_now">Not Now</string>
-    <string name="notification_permission_title">Stay Informed</string>
-    <string name="notification_permission_message">MetaJammer can show notifications to keep you updated on the progress of large file batches while they process in the background. \n\nThis is especially useful if you want to switch to another app while MetaJammer finishes its work.</string>
+    <string name="language_pt">पुर्तगाली</string>
+    <string name="language_ru">रूसी</string>
+    <string name="language_el">यूनानी</string>
+    <string name="language_ar">अरबी</string>
+    <string name="language_ja">जापानी</string>
+    <string name="language_in">इंडोनेशियाई</string>
+    <string name="language_tr">तुर्की</string>
+    <string name="language_ko">कोरियाई</string>
+    <string name="language_vi">वियतनामी</string>
+    <string name="language_th">थाई</string>
+    <string name="language_pl">पोलिश</string>
+    <string name="language_nl">डच</string>
+    <string name="language_uk">यूक्रेनी</string>
+    <string name="language_fa">फारसी</string>
+
+    <string name="processing_mode_poison">मेटाडेटा पॉइज़न करें (नकली जानकारी)</string>
+    <string name="processing_mode_remove">मेटाडेटा हटाएं (पूर्ण सफाई)</string>
+
+    <string name="output_action_default_folder">डिफ़ॉल्ट फ़ोल्डर में सहेजें</string>
+    <string name="output_action_shared_folder">समर्पित फ़ोल्डर में सहेजें</string>
+    <string name="output_action_reshare">स्वच्छ फ़ाइलों को फिर से साझा करें</string>
+
+    <!-- Dialogs/Permissions -->
+    <string name="map_permission_title">मैप पिकर और इंटरनेट एक्सेस</string>
+    <string name="map_permission_message">स्थान चुनने के लिए मैप दिखाने हेतु, MetaJammer को OpenStreetMap से मैप टाइल्स लोड करने के लिए इंटरनेट से जुड़ना होगा। \n\nयदि आप मना करते हैं, तो ऐप सभी मेटाडेटा हटाने और पॉइज़निंग सुविधाओं के लिए पूरी तरह से काम करना जारी रखेगा, लेकिन आप मैप पर विजुअल रूप से स्थान नहीं चुन पाएंगे।</string>
+    <string name="allow_open_map">अनुमति दें और मैप खोलें</string>
+    <string name="not_now">अभी नहीं</string>
+
+    <string name="notification_permission_title">सूचित रहें</string>
+    <string name="notification_permission_message">बैकग्राउंड में बड़ी फ़ाइलों के प्रोसेस होने के दौरान MetaJammer आपको प्रगति के बारे में अपडेट रखने के लिए सूचनाएं दिखा सकता है। \n\nयह विशेष रूप से तब उपयोगी होता है जब आप MetaJammer के अपना काम पूरा करने के दौरान किसी अन्य ऐप पर जाना चाहते हैं।</string>
 </resources>

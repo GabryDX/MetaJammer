@@ -1,131 +1,157 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="app_name">MetaJammer</string>
-    <string name="notification_channel_name">File Processing</string>
-    <string name="notification_processing_title">Processing Files</string>
-    <string name="notification_processing_message">Stripping metadata from %1$d files...</string>
-    <string name="notification_complete_title">Processing Complete</string>
-    <string name="notification_complete_message">Successfully processed %1$d files.</string>
-    <string name="ok">OK</string>
-    <string name="cancel">Cancel</string>
-    <string name="back">Back</string>
-    <string name="continue_label">Continue</string>
-    <string name="save">Save</string>
-    <string name="share">Share</string>
-    <string name="dismiss">Dismiss</string>
-    <string name="warning">Warning</string>
-    <string name="none">None</string>
-    <string name="unknown">unknown</string>
+    <string name="notification_channel_name">Обробка файлів</string>
+    <string name="notification_processing_title">Обробка файлів</string>
+    <string name="notification_processing_message">Видалення метаданих із %1$d файлів...</string>
+    <string name="notification_complete_title">Обробку завершено</string>
+    <string name="notification_complete_message">Успішно оброблено %1$d файлів.</string>
+
+    <!-- General -->
+    <string name="ok">ОК</string>
+    <string name="cancel">Скасувати</string>
+    <string name="back">Назад</string>
+    <string name="continue_label">Продовжити</string>
+    <string name="save">Зберегти</string>
+    <string name="share">Поділитися</string>
+    <string name="dismiss">Закрити</string>
+    <string name="warning">Попередження</string>
+    <string name="none">Немає</string>
+    <string name="unknown">невідомо</string>
+
+    <!-- HomeScreen -->
     <string name="hero_title">Захистіть свою приватність</string>
-    <string name="hero_subtitle">Очистіть або замініть чутливі метадані перед обміном файлами.</string>
-    <string name="feature_images_video_title">Images &amp; Video</string>
-    <string name="feature_images_video_desc">Full support for stripping metadata from photos and remuxing videos to remove tracking.</string>
-    <string name="feature_poisoning_title">Metadata Poisoning</string>
-    <string name="feature_poisoning_desc">Don’t just remove data—replace it with realistic fakes to preserve privacy and confuse trackers.</string>
-    <string name="feature_background_title">Background Processing</string>
-    <string name="feature_background_desc">Process hundreds of files efficiently in the background while you do other things.</string>
-    <string name="feature_on_device_title">On-Device Privacy</string>
-    <string name="feature_on_device_desc">All processing happens locally on your device. Your files never leave MetaJammer.</string>
-    <string name="pro_tip_gallery">Pro tip: You can share files directly from your Gallery app into MetaJammer.</string>
+    <string name="hero_subtitle">Очистіть або замініть конфіденційні метадані перед надсиланням файлів.</string>
+    <string name="feature_images_video_title">Зображення та відео</string>
+    <string name="feature_images_video_desc">Повна підтримка видалення метаданих із фотографій та ремуксування відео для видалення відстеження.</string>
+    <string name="feature_poisoning_title">Підміна метаданих</string>
+    <string name="feature_poisoning_desc">Не просто видаляйте дані — замінюйте їх реалістичними підробками, щоб зберегти приватність і заплутати трекери.</string>
+    <string name="feature_background_title">Фонова обробка</string>
+    <string name="feature_background_desc">Ефективно обробляйте сотні файлів у фоновому режимі, поки ви займаєтеся іншими справами.</string>
+    <string name="feature_on_device_title">Приватність на пристрої</string>
+    <string name="feature_on_device_desc">Уся обробка відбувається локально на вашому пристрої. Ваші файли ніколи не залишають MetaJammer.</string>
+    <string name="pro_tip_gallery">Порада: ви можете надсилати файли безпосередньо з програми «Галерея» в MetaJammer.</string>
     <string name="select_files">Вибрати файли</string>
-    <string name="select_more_files">Select More Files</string>
-    <string name="clear_selection">Clear Selection</string>
-    <string name="files_selected">%1$d Files Selected</string>
-    <string name="total_size">Total size: %1$s</string>
-    <string name="size_mb">%.1f MB</string>
-    <string name="size_kb">%.1f KB</string>
-    <string name="size_bytes">%1$d Bytes</string>
-    <string name="metadata_preview">Metadata Preview</string>
-    <string name="file_type">Type: %1$s</string>
-    <string name="no_metadata_found">No metadata found</string>
-    <string name="process_files_title">Process Files</string>
-    <string name="pick_one_option">Pick one option:</string>
-    <string name="poison_metadata">Poison Metadata</string>
-    <string name="remove_metadata">Remove Metadata</string>
-    <string name="selected_mode">Selected: %1$s</string>
-    <string name="regenerate_plans">Regenerate All Random Plans</string>
-    <string name="preview_of_changes">Preview of Changes</string>
-    <string name="no_preview_available">No preview available</string>
-    <string name="change_location_map">Change Location on Map</string>
-    <string name="process_files">Process Files</string>
-    <string name="processing_foreground">Processing in foreground...</string>
-    <string name="background_progress">Background Progress: %1$d%%</string>
-    <string name="continue_to_output">Continue to Output Options</string>
-    <string name="pick_location">Pick Location</string>
-    <string name="confirm_location">Confirm Location</string>
-    <string name="output_options">Output Options</string>
-    <string name="saving_will_trigger_sharing">Saving will also trigger sharing.</string>
-    <string name="choose_save_or_share">Choose whether to save or share the processed result.</string>
-    <string name="save_to_default_folder">Save to Default Folder</string>
-    <string name="save_to_custom_folder">Save to Custom Folder</string>
+    <string name="select_more_files">Вибрати ще файли</string>
+    <string name="clear_selection">Очистити вибір</string>
+    <string name="files_selected">Вибрано файлів: %1$d</string>
+    <string name="total_size">Загальний розмір: %1$s</string>
+    <string name="size_mb">%.1f МБ</string>
+    <string name="size_kb">%.1f КБ</string>
+    <string name="size_bytes">%1$d байт</string>
+
+    <!-- MetadataPreviewScreen -->
+    <string name="metadata_preview">Перегляд метаданих</string>
+    <string name="file_type">Тип: %1$s</string>
+    <string name="no_metadata_found">Метаданих не знайдено</string>
+
+    <!-- ProcessingScreen -->
+    <string name="process_files_title">Обробка файлів</string>
+    <string name="pick_one_option">Виберіть варіант:</string>
+    <string name="poison_metadata">Підмінити метадані</string>
+    <string name="remove_metadata">Видалити метадані</string>
+    <string name="selected_mode">Вибрано: %1$s</string>
+    <string name="regenerate_plans">Перегенерувати всі випадкові плани</string>
+    <string name="preview_of_changes">Перегляд змін</string>
+    <string name="no_preview_available">Перегляд недоступний</string>
+    <string name="change_location_map">Змінити місцезнаходження на карті</string>
+    <string name="process_files">Обробити файли</string>
+    <string name="processing_foreground">Обробка на передньому плані...</string>
+    <string name="background_progress">Фоновий прогрес: %1$d%%</string>
+    <string name="continue_to_output">Перейти до параметрів виводу</string>
+
+    <!-- LocationPickerScreen -->
+    <string name="pick_location">Вибрати місцезнаходження</string>
+    <string name="confirm_location">Підтвердити місцезнаходження</string>
+
+    <!-- OutputOptionsScreen -->
+    <string name="output_options">Параметри виводу</string>
+    <string name="saving_will_trigger_sharing">Збереження також ініціює надсилання.</string>
+    <string name="choose_save_or_share">Виберіть, чи зберегти, чи поділитися обробленим результатом.</string>
+    <string name="save_to_default_folder">Зберегти в папку за замовчуванням</string>
+    <string name="save_to_custom_folder">Зберегти в іншу папку</string>
+
+    <!-- SettingsScreen -->
     <string name="settings">Налаштування</string>
-    <string name="category_file_management">File Management</string>
-    <string name="category_image_file">Image / File</string>
-    <string name="category_shared_files">Shared Files Behavior</string>
-    <string name="category_ui">UI</string>
-    <string name="setting_random_names_title">Use random file names</string>
-    <string name="setting_random_names_sub">Generate randomized output names instead of using the original file name</string>
-    <string name="setting_default_path_title">Default saving path</string>
-    <string name="setting_reset_path">Reset to Pictures/MetaJammer</string>
-    <string name="setting_select_folder">Select Folder</string>
-    <string name="setting_keep_orientation_title">Keep image orientation</string>
-    <string name="setting_keep_orientation_sub">Preserve image orientation metadata when possible</string>
-    <string name="setting_share_default_title">Share result as default</string>
-    <string name="setting_share_default_sub">Saving will also trigger sharing</string>
-    <string name="setting_prefix_title">Default Prefix</string>
-    <string name="setting_suffix_title">Default Suffix</string>
-    <string name="setting_not_set">Not set</string>
-    <string name="setting_keep_thumbnails_title">Keep original thumbnails</string>
-    <string name="setting_keep_thumbnails_sub">If the file contains an embedded thumbnail, preserve it as-is. If disabled, any existing thumbnail will be removed for maximum privacy.</string>
-    <string name="setting_thumbnails_warning">Warning: Keeping original thumbnails may leak metadata (location, device info) even if main tags are removed.</string>
-    <string name="setting_enable_map_title">Enable map picker</string>
-    <string name="setting_enable_map_sub">Allow the app to connect to the internet to show OpenStreetMap for location selection</string>
-    <string name="setting_quick_scrub_title">Quick Scrub &amp; Share</string>
-    <string name="setting_quick_scrub_sub">Automatically strip metadata and re-open Share Sheet for shared files</string>
-    <string name="setting_metadata_action_title">Metadata action</string>
-    <string name="setting_output_action_title">Output action</string>
-    <string name="setting_dedicated_folder_title">Dedicated shared-files folder</string>
-    <string name="setting_no_folder_selected">No dedicated folder selected</string>
-    <string name="setting_clear_folder">Clear Dedicated Folder</string>
-    <string name="setting_night_mode_title">Night mode</string>
+    <string name="category_file_management">Керування файлами</string>
+    <string name="category_image_file">Зображення / Файл</string>
+    <string name="category_shared_files">Поведінка спільних файлів</string>
+    <string name="category_ui">Інтерфейс</string>
+
+    <string name="setting_random_names_title">Випадкові імена файлів</string>
+    <string name="setting_random_names_sub">Генерувати випадкові імена виводу замість використання оригінальних</string>
+    <string name="setting_default_path_title">Шлях збереження за замовчуванням</string>
+    <string name="setting_reset_path">Скинути до Pictures/MetaJammer</string>
+    <string name="setting_select_folder">Вибрати папку</string>
+
+    <string name="setting_keep_orientation_title">Зберігати орієнтацію зображення</string>
+    <string name="setting_keep_orientation_sub">За можливості зберігати метадані орієнтації зображення</string>
+    <string name="setting_share_default_title">Ділитися результатом за замовчуванням</string>
+    <string name="setting_share_default_sub">Збереження також ініціює надсилання</string>
+    <string name="setting_prefix_title">Префікс за замовчуванням</string>
+    <string name="setting_suffix_title">Суфікс за замовчуванням</string>
+    <string name="setting_not_set">Не встановлено</string>
+    <string name="setting_keep_thumbnails_title">Зберігати оригінальні ескізи</string>
+    <string name="setting_keep_thumbnails_sub">Якщо файл містить вбудований ескіз, зберігати його як є. Якщо вимкнено, будь-який існуючий ескіз буде видалено для максимальної приватності.</string>
+    <string name="setting_thumbnails_warning">Попередження: збереження оригінальних ескізів може призвести до витоку метаданих (місцезнаходження, інформація про пристрій), навіть якщо основні теги видалено.</string>
+    <string name="setting_enable_map_title">Увімкнути вибір на карті</string>
+    <string name="setting_enable_map_sub">Дозволити програмі підключатися до Інтернету для відображення OpenStreetMap при виборі місцезнаходження</string>
+
+    <string name="setting_quick_scrub_title">Швидке очищення та надсилання</string>
+    <string name="setting_quick_scrub_sub">Автоматично видаляти метадані та повторно відкривати меню надсилання для спільних файлів</string>
+    <string name="setting_metadata_action_title">Дія з метаданими</string>
+    <string name="setting_output_action_title">Дія виводу</string>
+    <string name="setting_dedicated_folder_title">Спеціальна папка для спільних файлів</string>
+    <string name="setting_no_folder_selected">Спеціальну папку не вибрано</string>
+    <string name="setting_clear_folder">Очистити спеціальну папку</string>
+
+    <string name="setting_night_mode_title">Нічний режим</string>
     <string name="setting_language_title">Мова</string>
-    <string name="setting_oled_mode_title">OLED mode</string>
-    <string name="setting_oled_mode_sub">Use darker black tones for supported dark themes</string>
-    <string name="night_mode_always">Always</string>
-    <string name="night_mode_automatic">Automatic</string>
-    <string name="night_mode_low_battery">Only low battery</string>
-    <string name="night_mode_never">Never</string>
-    <string name="language_system">System Default</string>
-    <string name="language_en">English</string>
-    <string name="language_es">Español</string>
-    <string name="language_it">Italiano</string>
-    <string name="language_fr">Français</string>
-    <string name="language_de">Deutsch</string>
-    <string name="language_zh">中文 (简体)</string>
-    <string name="language_hi">हिन्दी</string>
-    <string name="language_pt">Português</string>
-    <string name="language_ru">Русский</string>
-    <string name="language_el">Ελληνικά</string>
-    <string name="language_ar">العربية</string>
-    <string name="language_ja">日本語</string>
-    <string name="language_in">Bahasa Indonesia</string>
-    <string name="language_tr">Türkçe</string>
-    <string name="language_ko">한국어</string>
-    <string name="language_vi">Tiếng Việt</string>
-    <string name="language_th">ไทย</string>
-    <string name="language_pl">Polski</string>
-    <string name="language_nl">Nederlands</string>
+    <string name="setting_oled_mode_title">Режим OLED</string>
+    <string name="setting_oled_mode_sub">Використовувати глибші відтінки чорного для підтримуваних темних тем</string>
+
+    <!-- Enums -->
+    <string name="night_mode_always">Завжди</string>
+    <string name="night_mode_automatic">Автоматично</string>
+    <string name="night_mode_low_battery">Тільки при низькому заряді</string>
+    <string name="night_mode_never">Ніколи</string>
+
+    <string name="language_system">Системна за замовчуванням</string>
+    <string name="language_en">Англійська</string>
+    <string name="language_es">Іспанська</string>
+    <string name="language_it">Італійська</string>
+    <string name="language_fr">Французька</string>
+    <string name="language_de">Німецька</string>
+    <string name="language_zh">Китайська (спрощена)</string>
+    <string name="language_hi">Гінді</string>
+    <string name="language_pt">Португальська</string>
+    <string name="language_ru">Російська</string>
+    <string name="language_el">Грецька</string>
+    <string name="language_ar">Арабська</string>
+    <string name="language_ja">Японська</string>
+    <string name="language_in">Індонезійська</string>
+    <string name="language_tr">Турецька</string>
+    <string name="language_ko">Корейська</string>
+    <string name="language_vi">В\'єтнамська</string>
+    <string name="language_th">Тайська</string>
+    <string name="language_pl">Польська</string>
+    <string name="language_nl">Нідерландська</string>
     <string name="language_uk">Українська</string>
-    <string name="language_fa">فارسی</string>
-    <string name="processing_mode_poison">Poison metadata (Fake info)</string>
-    <string name="processing_mode_remove">Remove metadata (Full strip)</string>
-    <string name="output_action_default_folder">Save to default folder</string>
-    <string name="output_action_shared_folder">Save to dedicated folder</string>
-    <string name="output_action_reshare">Re-share sanitized files</string>
-    <string name="map_permission_title">Map Picker &amp; Internet Access</string>
-    <string name="map_permission_message">To show a map for location picking, MetaJammer needs to connect to the internet to load map tiles from OpenStreetMap. \n\nIf you decline, the app will continue to work perfectly for all metadata stripping and poisoning features, but you won’t be able to pick locations visually on a map.</string>
-    <string name="allow_open_map">Allow &amp; Open Map</string>
-    <string name="not_now">Not Now</string>
-    <string name="notification_permission_title">Stay Informed</string>
-    <string name="notification_permission_message">MetaJammer can show notifications to keep you updated on the progress of large file batches while they process in the background. \n\nThis is especially useful if you want to switch to another app while MetaJammer finishes its work.</string>
+    <string name="language_fa">Перська</string>
+
+    <string name="processing_mode_poison">Підмінити метадані (фейкові дані)</string>
+    <string name="processing_mode_remove">Видалити метадані (повне очищення)</string>
+
+    <string name="output_action_default_folder">Зберегти в папку за замовчуванням</string>
+    <string name="output_action_shared_folder">Зберегти в спеціальну папку</string>
+    <string name="output_action_reshare">Повторно надіслати очищені файли</string>
+
+    <!-- Dialogs/Permissions -->
+    <string name="map_permission_title">Вибір на карті та доступ до Інтернету</string>
+    <string name="map_permission_message">Щоб показати карту для вибору місцезнаходження, MetaJammer має підключитися до Інтернету для завантаження фрагментів карти з OpenStreetMap. \n\nЯкщо ви відмовитеся, програма продовжуватиме відмінно працювати для видалення та підміни метаданих, але ви не зможете вибирати місцезнаходження візуально на карті.</string>
+    <string name="allow_open_map">Дозволити та відкрити карту</string>
+    <string name="not_now">Не зараз</string>
+
+    <string name="notification_permission_title">Будьте в курсі</string>
+    <string name="notification_permission_message">MetaJammer може показувати сповіщення, щоб тримати вас у курсі прогресу обробки великих партій файлів у фоновому режимі. \n\nЦе особливо корисно, якщо ви хочете переключитися на іншу програму, поки MetaJammer завершує свою роботу.</string>
 </resources>
