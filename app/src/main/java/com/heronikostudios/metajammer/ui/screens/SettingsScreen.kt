@@ -410,8 +410,7 @@ private fun <T> SingleSelectDialog(
         title = { Text(title) },
         text = {
             Column(
-                modifier = Modifier.verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                modifier = Modifier.verticalScroll(rememberScrollState())
             ) {
                 options.forEach { option ->
                     Row(
@@ -421,7 +420,7 @@ private fun <T> SingleSelectDialog(
                                 selected = currentSelection == option,
                                 onClick = { currentSelection = option }
                             )
-                            .padding(vertical = 8.dp),
+                            .padding(vertical = 4.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         RadioButton(selected = currentSelection == option, onClick = { currentSelection = option })
