@@ -23,8 +23,8 @@
     <!-- HomeScreen -->
     <string name="hero_title">Bescherm je privacy</string>
     <string name="hero_subtitle">Wis of vervang gevoelige metadata voordat je bestanden deelt.</string>
-    <string name="feature_images_video_title">Afbeeldingen &amp; Video</string>
-    <string name="feature_images_video_desc">Volledige ondersteuning voor het strippen van metadata uit foto\'s en het remuxen van video\'s om tracking te verwijderen.</string>
+    <string name="feature_images_video_title">Afbeeldingen, Video, Audio &amp; PDF</string>
+    <string name="feature_images_video_desc">Volledige ondersteuning voor het verwijderen van metadata uit foto\'s, en het remuxen van video\'s, audio en PDF-documenten om tracking te verwijderen.</string>
     <string name="feature_poisoning_title">Metadata Vergiftiging</string>
     <string name="feature_poisoning_desc">Verwijder niet alleen gegevens—vervang ze door realistische vervalsingen om de privacy te waarborgen en trackers te misleiden.</string>
     <string name="feature_background_title">Achtergrondverwerking</string>
@@ -67,8 +67,8 @@
     <string name="help_item_video_body">Ondersteunde formaten: MP4, MOV.\n\nVolledige remuxing wordt ondersteund voor deze containers. Dit proces verwijdert GPS, datums en apparaat-atomen om uw privacy te beschermen.</string>
     <string name="help_item_image_title">Beeldverwerking</string>
     <string name="help_item_image_body">Ondersteunde formaten: JPG, PNG, WebP, HEIF.\n\nMetaJammer verwijdert EXIF-metadata van deze afbeeldingen. In de modus \"Poison\" worden gevoelige tags zoals GPS-coördinaten vervangen door realistische willekeurige gegevens.</string>
-    <string name="help_item_other_title">Andere bestanden</string>
-    <string name="help_item_other_body">Ondersteunde formaten: Momenteel geen.\n\nMetaJammer richt zich momenteel op mediabestanden. Toekomstige updates zullen ondersteuning voor PDF\'s en documenten bevatten. Blijf op de hoogte!</string>
+    <string name="help_item_other_title">PDF- &amp; documentverwerking</string>
+    <string name="help_item_other_body">Ondersteunde formaten: PDF.\n\nMetaJammer ondersteunt nu volledig PDF-documenten. U kunt metadata zoals Titel, Auteur, Onderwerp, Trefwoorden, Maker en Producent lezen, verwijderen en vervalsen (poison) om ervoor te zorgen dat uw documenten schoon zijn voordat u ze deelt.</string>
     <string name="help_report_issue_title">Meld een probleem</string>
     <string name="help_report_issue_body">Een bug gevonden of een verzoek voor een nieuwe functie? Meld het op onze GitHub-pagina.</string>
     <string name="help_open_github">GitHub Issues openen</string>

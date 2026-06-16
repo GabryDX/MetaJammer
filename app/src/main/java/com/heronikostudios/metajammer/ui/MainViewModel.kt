@@ -13,7 +13,6 @@ import com.heronikostudios.metajammer.data.FileRepository
 import com.heronikostudios.metajammer.data.MetadataRepository
 import com.heronikostudios.metajammer.data.SettingsRepository
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.exifinterface.media.ExifInterface
 import androidx.core.os.LocaleListCompat
 import com.heronikostudios.metajammer.domain.model.*
 import com.heronikostudios.metajammer.domain.usecase.ProcessFileUseCase
@@ -261,9 +260,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 
                 val useScramble = _appSettings.value.useNearbyScramble
                 selectedFile.uri to if (useScramble && lat != null && lon != null) {
-                    MetadataReplacementGenerator.generatePlan(lat, lon)
+                    MetadataReplacementGenerator.generatePlan(selectedFile.mimeType, lat, lon)
                 } else {
-                    MetadataReplacementGenerator.generatePlan()
+                    MetadataReplacementGenerator.generatePlan(selectedFile.mimeType)
                 }
             }
         } else if (mode != ProcessingMode.POISON_METADATA) {
@@ -274,7 +273,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun updatePlanLocation(uri: Uri, latitude: Double, longitude: Double) {
         val currentPlans = _replacementPlans.value.toMutableMap()
-        val plan = currentPlans[uri] ?: MetadataReplacementGenerator.generatePlan()
+        val file = _selectedFiles.value.find { it.uri == uri }
+        val plan = currentPlans[uri] ?: MetadataReplacementGenerator.generatePlan(file?.mimeType)
 
         val latitudeRef = if (latitude >= 0) "N" else "S"
         val longitudeRef = if (longitude >= 0) "E" else "W"
@@ -298,9 +298,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             
             val useScramble = _appSettings.value.useNearbyScramble
             selectedFile.uri to if (useScramble && lat != null && lon != null) {
-                MetadataReplacementGenerator.generatePlan(lat, lon)
+                MetadataReplacementGenerator.generatePlan(selectedFile.mimeType, lat, lon)
             } else {
-                MetadataReplacementGenerator.generatePlan()
+                MetadataReplacementGenerator.generatePlan(selectedFile.mimeType)
             }
         }
         generateChangePreview()
@@ -332,28 +332,56 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     if (plan == null) {
                         listOf(MetadataEntry("Info", "No replacement plan available"))
                     } else {
-                        val targetMap = linkedMapOf(
-                            "DateTime" to plan.dateTime,
-                            "DateTimeOriginal" to plan.dateTime,
-                            "DateTimeDigitized" to plan.dateTime,
-                            "Make" to plan.make,
-                            "Model" to plan.model,
-                            "Software" to plan.software,
-                            "ImageDescription" to plan.imageDescription,
-                            "UserComment" to plan.userComment,
-                            "PhotographicSensitivity" to plan.photographicSensitivity,
-                            "ExposureTime" to plan.exposureTime,
-                            "FNumber" to plan.fNumber,
-                            "FocalLength" to plan.focalLength,
-                            "WhiteBalance" to plan.whiteBalance,
-                            "Flash" to plan.flash,
-                            "GPSLatitude" to plan.latitude.toString(),
-                            "GPSLatitudeRef" to plan.latitudeRef,
-                            "GPSLongitude" to plan.longitude.toString(),
-                            "GPSLongitudeRef" to plan.longitudeRef
-                        )
+                        val targetMap = linkedMapOf<String, String>()
+                        val mime = file.mimeType ?: ""
 
-                        if (keepOrientation) {
+                        when {
+                            mime.startsWith("image/") -> {
+                                targetMap["DateTime"] = plan.dateTime
+                                targetMap["DateTimeOriginal"] = plan.dateTime
+                                targetMap["DateTimeDigitized"] = plan.dateTime
+                                targetMap["Make"] = plan.make
+                                targetMap["Model"] = plan.model
+                                targetMap["Software"] = plan.software
+                                targetMap["ImageDescription"] = plan.imageDescription
+                                targetMap["UserComment"] = plan.userComment
+                                targetMap["PhotographicSensitivity"] = plan.photographicSensitivity
+                                targetMap["ExposureTime"] = plan.exposureTime
+                                targetMap["FNumber"] = plan.fNumber
+                                targetMap["FocalLength"] = plan.focalLength
+                                targetMap["WhiteBalance"] = plan.whiteBalance
+                                targetMap["Flash"] = plan.flash
+                                targetMap["GPSLatitude"] = plan.latitude.toString()
+                                targetMap["GPSLatitudeRef"] = plan.latitudeRef
+                                targetMap["GPSLongitude"] = plan.longitude.toString()
+                                targetMap["GPSLongitudeRef"] = plan.longitudeRef
+                            }
+                            mime.startsWith("video/") -> {
+                                targetMap["Location"] = "${plan.latitude}, ${plan.longitude}"
+                                plan.title?.let { targetMap["Title"] = it }
+                                plan.artist?.let { targetMap["Director"] = it }
+                                plan.year?.let { targetMap["Year"] = it }
+                                plan.genre?.let { targetMap["Genre"] = it }
+                                plan.mediaDate?.let { targetMap["Date"] = it }
+                            }
+                            mime.startsWith("audio/") -> {
+                                targetMap["Location"] = "${plan.latitude}, ${plan.longitude}"
+                                plan.title?.let { targetMap["Title"] = it }
+                                plan.artist?.let { targetMap["Artist"] = it }
+                                plan.album?.let { targetMap["Album"] = it }
+                                plan.year?.let { targetMap["Year"] = it }
+                                plan.genre?.let { targetMap["Genre"] = it }
+                                plan.mediaDate?.let { targetMap["Date"] = it }
+                            }
+                            mime == "application/pdf" -> {
+                                plan.pdfTitle?.let { targetMap["Title"] = it }
+                                plan.author?.let { targetMap["Author"] = it }
+                                plan.creator?.let { targetMap["Creator"] = it }
+                                plan.producer?.let { targetMap["Producer"] = it }
+                            }
+                        }
+
+                        if (keepOrientation && mime.startsWith("image/")) {
                             currentMap["Orientation"]?.let { targetMap["Orientation"] = it }
                         }
 
@@ -472,18 +500,23 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         val keepOrientation = _appSettings.value.keepImageOrientation
 
         if (mode == ProcessingMode.POISON_METADATA) {
-            _replacementPlans.value = files.associate { selectedFile ->
-                val metadata = metadataRepository.readMetadata(selectedFile)
-                val lat = metadata.find { it.key == "GPSLatitude" }?.value?.toDoubleOrNull()
-                val lon = metadata.find { it.key == "GPSLongitude" }?.value?.toDoubleOrNull()
-                
-                val useScramble = _appSettings.value.useNearbyScramble
-                selectedFile.uri to if (useScramble && lat != null && lon != null) {
-                    MetadataReplacementGenerator.generatePlan(lat, lon)
-                } else {
-                    MetadataReplacementGenerator.generatePlan()
+            val newPlans = mutableMapOf<Uri, MetadataReplacementPlan>()
+            withContext(Dispatchers.IO) {
+                for (selectedFile in files) {
+                    val metadata = metadataRepository.readMetadata(selectedFile)
+                    val lat = metadata.find { it.key == "GPSLatitude" }?.value?.toDoubleOrNull()
+                    val lon = metadata.find { it.key == "GPSLongitude" }?.value?.toDoubleOrNull()
+
+                    val useScramble = _appSettings.value.useNearbyScramble
+                    val plan = if (useScramble && lat != null && lon != null) {
+                        MetadataReplacementGenerator.generatePlan(selectedFile.mimeType, lat, lon)
+                    } else {
+                        MetadataReplacementGenerator.generatePlan(selectedFile.mimeType)
+                    }
+                    newPlans[selectedFile.uri] = plan
                 }
             }
+            _replacementPlans.value = newPlans
         } else {
             _replacementPlans.value = emptyMap()
         }

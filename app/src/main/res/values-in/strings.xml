@@ -23,8 +23,8 @@
     <!-- HomeScreen -->
     <string name="hero_title">Lindungi Privasi Anda</string>
     <string name="hero_subtitle">Bersihkan atau ganti metadata sensitif sebelum membagikan file Anda.</string>
-    <string name="feature_images_video_title">Gambar &amp; Video</string>
-    <string name="feature_images_video_desc">Dukungan penuh untuk menghapus metadata dari foto dan melakukan remuxing pada video untuk menghapus pelacakan.</string>
+    <string name="feature_images_video_title">Gambar, Video, Audio &amp; PDF</string>
+    <string name="feature_images_video_desc">Dukungan penuh untuk menghapus metadata dari foto, dan melakukan remuxing video, audio, serta dokumen PDF untuk menghapus pelacakan.</string>
     <string name="feature_poisoning_title">Metadata Poisoning</string>
     <string name="feature_poisoning_desc">Jangan hanya menghapus data—ganti dengan data palsu yang realistis untuk menjaga privasi dan membingungkan pelacak.</string>
     <string name="feature_background_title">Pemrosesan Latar Belakang</string>
@@ -67,8 +67,8 @@
     <string name="help_item_video_body">Format yang didukung: MP4, MOV.\n\nRemuxing penuh didukung untuk kontainer ini. Proses ini menghapus GPS, tanggal, dan atom perangkat untuk melindungi privasi Anda.</string>
     <string name="help_item_image_title">Pemrosesan Gambar</string>
     <string name="help_item_image_body">Format yang didukung: JPG, PNG, WebP, HEIF.\n\nMetaJammer menghapus metadata EXIF dari gambar-gambar ini. Dalam mode \"Poison\", metadata sensitif seperti koordinat GPS diganti dengan data acak yang realistis.</string>
-    <string name="help_item_other_title">File Lainnya</string>
-    <string name="help_item_other_body">Format yang didukung: Belum ada.\n\nMetaJammer saat ini fokus pada file media. Pembaruan mendatang akan mencakup dukungan untuk PDF dan dokumen. Nantikan!</string>
+    <string name="help_item_other_title">Pemrosesan PDF &amp; Dokumen</string>
+    <string name="help_item_other_body">Format yang didukung: PDF.\n\nMetaJammer kini mendukung penuh dokumen PDF. Anda dapat membaca, menghapus, dan memalsukan (poison) metadata seperti Judul, Penulis, Subjek, Kata Kunci, Pembuat, dan Produser untuk memastikan dokumen Anda bersih sebelum dibagikan.</string>
     <string name="help_report_issue_title">Laporkan Masalah</string>
     <string name="help_report_issue_body">Menemukan bug atau memiliki permintaan fitur? Silakan laporkan di halaman GitHub kami.</string>
     <string name="help_open_github">Buka GitHub Issues</string>

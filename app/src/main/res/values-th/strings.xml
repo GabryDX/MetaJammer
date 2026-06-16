@@ -23,8 +23,8 @@
     <!-- HomeScreen -->
     <string name="hero_title">ปกป้องความเป็นส่วนตัวของคุณ</string>
     <string name="hero_subtitle">ล้างหรือเปลี่ยนข้อมูลเมตาที่ละเอียดอ่อนก่อนแชร์ไฟล์ของคุณ</string>
-    <string name="feature_images_video_title">รูปภาพและวิดีโอ</string>
-    <string name="feature_images_video_desc">รองรับการลบข้อมูลเมตาจากภาพถ่ายและรีมิกซ์วิดีโอเพื่อลบการติดตามอย่างสมบูรณ์</string>
+    <string name="feature_images_video_title">รูปภาพ, วิดีโอ, เสียง และ PDF</string>
+    <string name="feature_images_video_desc">รองรับการลบข้อมูลเมทาดาตาจากรูปภาพอย่างเต็มรูปแบบ รวมถึงการ remux วิดีโอ, เสียง และเอกสาร PDF เพื่อลบการติดตาม</string>
     <string name="feature_poisoning_title">การวางยาข้อมูลเมตา</string>
     <string name="feature_poisoning_desc">อย่าแค่ลบข้อมูล แต่ให้แทนที่ด้วยข้อมูลปลอมที่สมจริงเพื่อรักษาความเป็นส่วนตัวและทำให้ผู้ติดตามสับสน</string>
     <string name="feature_background_title">การประมวลผลเบื้องหลัง</string>
@@ -67,8 +67,8 @@
     <string name="help_item_video_body">Supported formats: MP4, MOV.\n\nFull re-muxing is supported for these containers. This process strips GPS, dates, and device atoms to protect your privacy.</string>
     <string name="help_item_image_title">Image Processing</string>
     <string name="help_item_image_body">Supported formats: JPG, PNG, WebP, HEIF.\n\nMetaJammer strips EXIF metadata from these images. In \"Poison\" mode, it replaces sensitive tags like GPS coordinates with realistic random data.</string>
-    <string name="help_item_other_title">Other Files</string>
-    <string name="help_item_other_body">Supported formats: None currently.\n\nMetaJammer currently focuses on media files. Future updates will include support for PDFs and documents. Stay tuned!</string>
+    <string name="help_item_other_title">การประมวลผล PDF และเอกสาร</string>
+    <string name="help_item_other_body">รูปแบบที่รองรับ: PDF\n\nตอนนี้ MetaJammer รองรับเอกสาร PDF อย่างเต็มรูปแบบแล้ว คุณสามารถอ่าน ลบ และวางยา (poison) ข้อมูลเมทาดาตา เช่น ชื่อเรื่อง, ผู้สร้าง, หัวข้อ, คำสำคัญ, ผู้สร้างสรรค์ และผู้ผลิต เพื่อให้แน่ใจว่าเอกสารของคุณสะอาดก่อนที่จะแชร์</string>
     <string name="help_report_issue_title">Report an Issue</string>
     <string name="help_report_issue_body">Found a bug or have a feature request? Please report it on our GitHub page.</string>
     <string name="help_open_github">Open GitHub Issues</string>

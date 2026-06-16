@@ -23,8 +23,8 @@
     <!-- HomeScreen -->
     <string name="hero_title">Защитите свою конфиденциальность</string>
     <string name="hero_subtitle">Очистите или замените конфиденциальные метаданные перед отправкой файлов.</string>
-    <string name="feature_images_video_title">Изображения и видео</string>
-    <string name="feature_images_video_desc">Полная поддержка удаления метаданных из фотографий и ремуксинга видео для удаления отслеживания.</string>
+    <string name="feature_images_video_title">Изображения, видео, аудио и PDF</string>
+    <string name="feature_images_video_desc">Полная поддержка удаления метаданных из фотографий, а также ремуксирования видео, аудио и PDF-документов для устранения слежки.</string>
     <string name="feature_poisoning_title">Отравление метаданных</string>
     <string name="feature_poisoning_desc">Не просто удаляйте данные — заменяйте их реалистичными подделками, чтобы сохранить конфиденциальность и запутать трекеры.</string>
     <string name="feature_background_title">Фоновая обработка</string>
@@ -67,8 +67,8 @@
     <string name="help_item_video_body">Поддерживаемые форматы: MP4, MOV.\n\nПолный ремуксинг поддерживается для этих контейнеров. Этот процесс удаляет GPS, даты и атомы устройства для защиты вашей конфиденциальности.</string>
     <string name="help_item_image_title">Обработка изображений</string>
     <string name="help_item_image_body">Поддерживаемые форматы: JPG, PNG, WebP, HEIF.\n\nMetaJammer удаляет метаданные EXIF из этих изображений. В режиме «Отравление» он заменяет конфиденциальные теги, такие как координаты GPS, реалистичными случайными данными.</string>
-    <string name="help_item_other_title">Другие файлы</string>
-    <string name="help_item_other_body">Поддерживаемые форматы: В данный момент нет.\n\nMetaJammer в настоящее время фокусируется на медиафайлах. Будущие обновления будут включать поддержку PDF и документов. Следите за обновлениями!</string>
+    <string name="help_item_other_title">Обработка PDF и документов</string>
+    <string name="help_item_other_body">Поддерживаемые форматы: PDF.\n\nMetaJammer теперь полностью поддерживает PDF-документы. Вы можете читать, удалять и подменять («отравлять») такие метаданные, как заголовок, автор, тема, ключевые слова, создатель и производитель, чтобы ваши документы были чистыми перед отправкой.</string>
     <string name="help_report_issue_title">Сообщить о проблеме</string>
     <string name="help_report_issue_body">Нашли ошибку или у вас есть предложение по функции? Пожалуйста, сообщите об этом на нашей странице GitHub.</string>
     <string name="help_open_github">Открыть GitHub Issues</string>

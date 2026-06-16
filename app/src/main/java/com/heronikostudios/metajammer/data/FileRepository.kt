@@ -194,6 +194,8 @@ class FileRepository(private val context: Context) {
         return File.createTempFile(prefix, suffix, sharedDir)
     }
 
+    fun createCacheFile(prefix: String, suffix: String?): File = createSharedTempFile(prefix, suffix)
+
     /**
      * Clears all temporary files in the 'shared' cache directory.
      */

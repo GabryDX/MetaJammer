@@ -23,8 +23,8 @@
     <!-- HomeScreen -->
     <string name="hero_title">プライバシーを守る</string>
     <string name="hero_subtitle">ファイルを共有する前に、機密性の高いメタデータをクリーンアップまたは置換します。</string>
-    <string name="feature_images_video_title">画像とビデオ</string>
-    <string name="feature_images_video_desc">写真からのメタデータ削除と、トラッキングを排除するためのビデオのリマックを完全にサポートしています。</string>
+    <string name="feature_images_video_title">画像、ビデオ、オーディオ、PDF</string>
+    <string name="feature_images_video_desc">写真からのメタデータ削除、および追跡を排除するためのビデオ、オーディオ、PDFドキュメントのリマックス（remuxing）を完全にサポートしています。</string>
     <string name="feature_poisoning_title">メタデータポイズニング</string>
     <string name="feature_poisoning_desc">単にデータを削除するだけでなく、現実的な偽のデータに置き換えることでプライバシーを保護し、トラッカーを混乱させます。</string>
     <string name="feature_background_title">バックグラウンド処理</string>
@@ -67,8 +67,8 @@
     <string name="help_item_video_body">サポートされている形式：MP4、MOV。\n\nこれらのコンテナの完全なリマックがサポートされています。このプロセスにより、プライバシーを保護するためにGPS、日付、およびデバイスアトムが削除されます。</string>
     <string name="help_item_image_title">画像処理</string>
     <string name="help_item_image_body">サポートされている形式：JPG, PNG, WebP, HEIF。\n\nMetaJammerはこれらの画像からEXIFメタデータを削除します。「ポイズン」モードでは、GPS座標などの機密タグを現実的なランダムデータに置き換えます。</string>
-    <string name="help_item_other_title">その他のファイル</string>
-    <string name="help_item_other_body">サポートされている形式：現在はなし。\n\nMetaJammerは現在、メディアファイルに焦点を当てています。将来のアップデートでは、PDFやドキュメントのサポートが含まれる予定です。ご期待ください！</string>
+    <string name="help_item_other_title">PDFおよびドキュメント処理</string>
+    <string name="help_item_other_body">サポートされている形式：PDF。\n\nMetaJammerはPDFドキュメントを完全にサポートしました。共有前にドキュメントがクリーンであることを確認するために、タイトル、作成者、件名、キーワード、作成者、プロデューサーなどのメタデータを読み取り、削除し、偽装（poison）させることができます。</string>
     <string name="help_report_issue_title">問題を報告する</string>
     <string name="help_report_issue_body">バグを見つけたか、機能のリクエストがありますか？GitHubページで報告してください。</string>
     <string name="help_open_github">GitHub Issuesを開く</string>

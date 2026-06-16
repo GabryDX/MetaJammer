@@ -23,8 +23,8 @@
     <!-- HomeScreen -->
     <string name="hero_title">Protejează-ți confidențialitatea</string>
     <string name="hero_subtitle">Curăță sau înlocuiește metadatele sensibile înainte de a-ți partaja fișierele.</string>
-    <string name="feature_images_video_title">Imagini și video</string>
-    <string name="feature_images_video_desc">Suport complet pentru eliminarea metadatelor din fotografii și remuxarea videoclipurilor pentru a elimina urmărirea.</string>
+    <string name="feature_images_video_title">Imagini, Video, Audio și PDF</string>
+    <string name="feature_images_video_desc">Suport complet pentru eliminarea metadatelor din fotografii și remuxarea videoclipurilor, fișierelor audio și documentelor PDF pentru a elimina urmărirea.</string>
     <string name="feature_poisoning_title">Alterarea metadatelor</string>
     <string name="feature_poisoning_desc">Nu doar șterge datele—înlocuiește-le cu unele false, dar realiste, pentru a-ți păstra confidențialitatea și a induce în eroare sistemele de urmărire.</string>
     <string name="feature_background_title">Procesare pe fundal</string>
@@ -67,8 +67,8 @@
     <string name="help_item_video_body">Formate suportate: MP4, MOV.\n\nRemuxarea completă este suportată pentru aceste containere. Acest proces elimină datele GPS, datele calendaristice și atomii de dispozitiv pentru a-ți proteja confidențialitatea.</string>
     <string name="help_item_image_title">Procesare imagini</string>
     <string name="help_item_image_body">Formate suportate: JPG, PNG, WebP, HEIF.\n\nMetaJammer elimină metadatele EXIF din aceste imagini. În modul \"Alterare\", acesta înlocuiește etichetele sensibile (cum ar fi coordonatele GPS) cu date aleatorii realiste.</string>
-    <string name="help_item_other_title">Alte fișiere</string>
-    <string name="help_item_other_body">Formate suportate: Momentan niciunul.\n\nMetaJammer se concentrează în prezent pe fișierele media. Actualizările viitoare vor include suport pentru PDF-uri și documente. Rămâi pe recepție!</string>
+    <string name="help_item_other_title">Procesare PDF și documente</string>
+    <string name="help_item_other_body">Formate acceptate: PDF.\n\nMetaJammer acceptă acum complet documentele PDF. Puteți citi, elimina și „otrăvi” (poison) metadatele precum Titlu, Autor, Subiect, Cuvinte cheie, Creator și Producător pentru a vă asigura că documentele sunt curate înainte de partajare.</string>
     <string name="help_report_issue_title">Raportează o problemă</string>
     <string name="help_report_issue_body">Ai găsit o eroare sau ai o sugestie de funcționalitate? Te rugăm să o raportezi pe pagina noastră de GitHub.</string>
     <string name="help_open_github">Deschide probleme GitHub</string>

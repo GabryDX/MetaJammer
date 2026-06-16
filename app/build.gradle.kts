@@ -76,6 +76,7 @@ dependencies {
     implementation(libs.timber)
     implementation(libs.coil.compose)
     implementation(libs.coil.video)
+    implementation(libs.pdfbox.android)
 
     testImplementation(libs.junit)
 

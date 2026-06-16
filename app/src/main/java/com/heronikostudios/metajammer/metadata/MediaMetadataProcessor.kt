@@ -6,27 +6,29 @@ import android.media.MediaFormat
 import android.media.MediaMuxer
 import android.net.Uri
 import com.heronikostudios.metajammer.data.FileRepository
+import com.heronikostudios.metajammer.domain.model.MetadataReplacementPlan
 import timber.log.Timber
 import java.io.File
 import java.nio.ByteBuffer
 
 /**
- * Handles metadata processing for video files by re-muxing the container.
- * This effectively strips location data and other atoms from MP4/MOV containers.
+ * Handles metadata processing for media files (Video and Audio) by re-muxing the container.
+ * This effectively strips location data and other atoms from MP4, MOV, and M4A containers.
  */
-class VideoMetadataProcessor(
+class MediaMetadataProcessor(
     private val fileRepository: FileRepository
 ) {
 
     fun removeMetadata(inputUri: Uri): File {
-        val inputFile = fileRepository.copyUriToCache(inputUri, prefix = "vid_in_", suffix = ".mp4")
-        val outputFile = fileRepository.createSharedTempFile("vid_clean_", ".mp4")
+        val extension = fileRepository.getExtension(inputUri)
+        val inputFile = fileRepository.copyUriToCache(inputUri, prefix = "media_in_", suffix = extension)
+        val outputFile = fileRepository.createSharedTempFile("media_clean_", extension)
         
         return try {
-            remuxVideo(inputFile, outputFile, null)
+            remuxMedia(inputFile, outputFile, null)
             outputFile
         } catch (e: Exception) {
-            Timber.e(e, "Error removing metadata from video")
+            Timber.e(e, "Error removing metadata from media")
             // Security: Delete output if failed and throw to prevent leaking original
             outputFile.delete()
             throw e
@@ -35,15 +37,16 @@ class VideoMetadataProcessor(
         }
     }
 
-    fun poisonMetadata(inputUri: Uri, latitude: Double, longitude: Double): File {
-        val inputFile = fileRepository.copyUriToCache(inputUri, prefix = "vid_in_", suffix = ".mp4")
-        val outputFile = fileRepository.createSharedTempFile("vid_poisoned_", ".mp4")
+    fun poisonMetadata(inputUri: Uri, plan: MetadataReplacementPlan): File {
+        val extension = fileRepository.getExtension(inputUri)
+        val inputFile = fileRepository.copyUriToCache(inputUri, prefix = "media_in_", suffix = extension)
+        val outputFile = fileRepository.createSharedTempFile("media_poisoned_", extension)
         
         return try {
-            remuxVideo(inputFile, outputFile, latitude to longitude)
+            remuxMedia(inputFile, outputFile, plan)
             outputFile
         } catch (e: Exception) {
-            Timber.e(e, "Error poisoning metadata in video")
+            Timber.e(e, "Error poisoning metadata in media")
             outputFile.delete()
             throw e
         } finally {
@@ -52,18 +55,18 @@ class VideoMetadataProcessor(
     }
 
     /**
-     * Re-muxes a video file to strip metadata atoms.
-     * Optionally sets a new location.
+     * Re-muxes a media file to strip metadata atoms.
+     * Optionally sets a new location and metadata.
      */
-    private fun remuxVideo(input: File, output: File, location: Pair<Double, Double>?) {
+    private fun remuxMedia(input: File, output: File, plan: MetadataReplacementPlan?) {
         val extractor = MediaExtractor()
         extractor.setDataSource(input.absolutePath)
 
         val muxer = MediaMuxer(output.absolutePath, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4)
 
         // Inject location if poisoning
-        location?.let { (lat, lon) ->
-            muxer.setLocation(lat.toFloat(), lon.toFloat())
+        plan?.let { 
+            muxer.setLocation(it.latitude.toFloat(), it.longitude.toFloat())
         }
 
         val trackCount = extractor.trackCount

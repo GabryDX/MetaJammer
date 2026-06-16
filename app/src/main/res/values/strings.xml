@@ -23,8 +23,8 @@
     <!-- HomeScreen -->
     <string name="hero_title">Protect Your Privacy</string>
     <string name="hero_subtitle">Clean or replace sensitive metadata before sharing your files.</string>
-    <string name="feature_images_video_title">Images &amp; Video</string>
-    <string name="feature_images_video_desc">Full support for stripping metadata from photos and remuxing videos to remove tracking.</string>
+    <string name="feature_images_video_title">Images, Video, Audio &amp; PDF</string>
+    <string name="feature_images_video_desc">Full support for stripping metadata from photos, and remuxing videos, audio, and PDF documents to remove tracking.</string>
     <string name="feature_poisoning_title">Metadata Poisoning</string>
     <string name="feature_poisoning_desc">Don’t just remove data—replace it with realistic fakes to preserve privacy and confuse trackers.</string>
     <string name="feature_background_title">Background Processing</string>
@@ -63,12 +63,12 @@
 
     <!-- HelpScreen -->
     <string name="help_title">Help &amp; Tutorials</string>
-    <string name="help_item_video_title">Video Processing</string>
-    <string name="help_item_video_body">Supported formats: MP4, MOV.\n\nFull re-muxing is supported for these containers. This process strips GPS, dates, and device atoms to protect your privacy.</string>
+    <string name="help_item_video_title">Video &amp; Audio Processing</string>
+    <string name="help_item_video_body">Supported formats: MP4, MOV, M4A, OGG.\n\nFull re-muxing is supported for these containers. This process strips GPS, dates, and device atoms to protect your privacy.</string>
     <string name="help_item_image_title">Image Processing</string>
     <string name="help_item_image_body">Supported formats: JPG, PNG, WebP, HEIF.\n\nMetaJammer strips EXIF metadata from these images. In \"Poison\" mode, it replaces sensitive tags like GPS coordinates with realistic random data.</string>
-    <string name="help_item_other_title">Other Files</string>
-    <string name="help_item_other_body">Supported formats: None currently.\n\nMetaJammer currently focuses on media files. Future updates will include support for PDFs and documents. Stay tuned!</string>
+    <string name="help_item_other_title">PDF &amp; Document Processing</string>
+    <string name="help_item_other_body">Supported formats: PDF.\n\nMetaJammer now fully supports PDF documents. You can read, remove, and poison metadata like Title, Author, Subject, Keywords, Creator, and Producer to ensure your documents are clean before sharing.</string>
     <string name="help_report_issue_title">Report an Issue</string>
     <string name="help_report_issue_body">Found a bug or have a feature request? Please report it on our GitHub page.</string>
     <string name="help_open_github">Open GitHub Issues</string>

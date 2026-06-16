@@ -23,8 +23,8 @@
     <!-- HomeScreen -->
     <string name="hero_title">Захистіть свою приватність</string>
     <string name="hero_subtitle">Очистіть або замініть конфіденційні метадані перед надсиланням файлів.</string>
-    <string name="feature_images_video_title">Зображення та відео</string>
-    <string name="feature_images_video_desc">Повна підтримка видалення метаданих із фотографій та ремуксингу відео для видалення відстеження.</string>
+    <string name="feature_images_video_title">Зображення, відео, аудіо та PDF</string>
+    <string name="feature_images_video_desc">Повна підтримка видалення метаданих із фотографій, а також ремуксингу відео, аудіо та документів PDF для усунення відстеження.</string>
     <string name="feature_poisoning_title">Отруєння метаданих</string>
     <string name="feature_poisoning_desc">Не просто видаляйте дані — замінюйте їх реалістичними підробками, щоб зберегти приватність і заплутати трекери.</string>
     <string name="feature_background_title">Фонова обробка</string>
@@ -67,8 +67,8 @@
     <string name="help_item_video_body">Підтримувані формати: MP4, MOV.\n\nПовний ремуксинг підтримується для цих контейнерів. Цей процес видаляє GPS, дати та атоми пристрою, щоб захистити вашу конфіденційність.</string>
     <string name="help_item_image_title">Обробка зображень</string>
     <string name="help_item_image_body">Підтримувані формати: JPG, PNG, WebP, HEIF.\n\nMetaJammer видаляє метадані EXIF з цих зображень. У режимі «Отруєння» він замінює конфіденційні теги, такі як координати GPS, реалістичними випадковими даними.</string>
-    <string name="help_item_other_title">Інші файли</string>
-    <string name="help_item_other_body">Підтримувані формати: Наразі немає.\n\nMetaJammer зараз зосереджений на медіафайлах. Майбутні оновлення включатимуть підтримку PDF та документів. Слідкуйте за оновленнями!</string>
+    <string name="help_item_other_title">Обробка PDF та документів</string>
+    <string name="help_item_other_body">Формати, що підтримуються: PDF.\n\nMetaJammer тепер повністю підтримує документи PDF. Ви можете читати, видаляти та підміняти («отруювати») метадані, такі як заголовок, автор, тема, ключові слова, автор і виробник, щоб переконатися, що ваші документи чисті перед поширенням.</string>
     <string name="help_report_issue_title">Повідомити про проблему</string>
     <string name="help_report_issue_body">Знайшли помилку або маєте пропозицію щодо функції? Будь ласка, повідомте про це на нашій сторінці GitHub.</string>
     <string name="help_open_github">Відкрити GitHub Issues</string>

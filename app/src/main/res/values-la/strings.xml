@@ -23,8 +23,8 @@
     <!-- HomeScreen -->
     <string name="hero_title">Tuam Privatiam Protege</string>
     <string name="hero_subtitle">Munda vel muta metadata sensitiva antequam fasciculos tuos communicas.</string>
-    <string name="feature_images_video_title">Imagines &amp; Videophonia</string>
-    <string name="feature_images_video_desc">Plena sustentatio ad metadata tollenda ex photographematis et videophoniis remuxandis.</string>
+    <string name="feature_images_video_title">Imagines, Videogrammata, Auditus et PDF</string>
+    <string name="feature_images_video_desc">Plena subsidia ad metadatorum ex photographematis detrahendum, et ad videogrammata, auditus, et documenta PDF remuscendum ad vestigia tollenda.</string>
     <string name="feature_poisoning_title">Metadata Venenum</string>
     <string name="feature_poisoning_desc">Noli modo data tollere—ea cum falsis verisimilibus muta ut privatiam serves.</string>
     <string name="feature_background_title">Processus in Occulto</string>
@@ -67,8 +67,8 @@
     <string name="help_item_video_body">Formae sustentatae: MP4, MOV.\n\nHaec ratio GPS, dies, et instrumenti data tollit.</string>
     <string name="help_item_image_title">Processus Imaginis</string>
     <string name="help_item_image_body">Formae sustentatae: JPG, PNG, WebP, HEIF.\n\nMetaJammer metadata EXIF ex his imaginibus tollit.</string>
-    <string name="help_item_other_title">Alii Fasciculi</string>
-    <string name="help_item_other_body">Formae sustentatae: Nullae in praesentia.\n\nMetaJammer nunc in fasciculis mediis intendit.</string>
+    <string name="help_item_other_title">PDF et Documentorum Processio</string>
+    <string name="help_item_other_body">Formae fultae: PDF.\n\nMetaJammer nunc documenta PDF plene sustinet. Potes legere, tollere, et \"venenare\" (poison) metadata sicut Titulum, Auctorem, Argumentum, Verba Clavia, Creatorem, et Produtorem ut documenta tua munda sint antequam dividantur.</string>
     <string name="help_report_issue_title">Rem Deferre</string>
     <string name="help_report_issue_body">Si mendam invenisti, quaesumus in pagina GitHub deferre.</string>
     <string name="help_open_github">GitHub Aperire</string>
