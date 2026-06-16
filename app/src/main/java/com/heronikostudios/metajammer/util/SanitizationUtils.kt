@@ -54,7 +54,8 @@ object SanitizationUtils {
         val ext = if (dotIndex > 0) originalName.substring(dotIndex) else ""
 
         val finalBase = if (useRandomFileNames) {
-            "mj_${System.currentTimeMillis()}"
+            val randomPart = (1000..9999).random()
+            "mj_${System.currentTimeMillis()}_$randomPart"
         } else {
             val sPrefix = sanitizeSimple(prefix)
             val sSuffix = sanitizeSimple(suffix)

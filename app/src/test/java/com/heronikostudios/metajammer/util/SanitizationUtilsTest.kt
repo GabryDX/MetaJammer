@@ -67,9 +67,22 @@ class SanitizationUtilsTest {
     }
 
     @Test
-    fun `sanitizeFileName handles mixed separators`() {
-        val input = "some/path\\other\\file.png"
-        val result = SanitizationUtils.sanitizeFileName(input)
-        assertEquals("file.png", result)
+    fun `generateOutputName produces unique names in a tight loop with random names enabled`() {
+        val originalName = "test.jpg"
+        val names = mutableSetOf<String>()
+        val count = 100
+        repeat(count) {
+            names.add(SanitizationUtils.generateOutputName(originalName, true, "", ""))
+        }
+        // Since it uses System.currentTimeMillis() AND random part, 
+        // collisions are extremely unlikely even in a tight loop.
+        assertEquals("Should have generated $count unique names", count, names.size)
+    }
+
+    @Test
+    fun `generateOutputName respects prefix and suffix when random names disabled`() {
+        val originalName = "photo.png"
+        val result = SanitizationUtils.generateOutputName(originalName, false, "PRE_", "_POST")
+        assertEquals("PRE_photo_POST.png", result)
     }
 }

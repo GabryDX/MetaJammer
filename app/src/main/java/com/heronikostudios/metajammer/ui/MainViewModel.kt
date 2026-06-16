@@ -24,6 +24,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
@@ -81,49 +82,49 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun observeSettings() {
         viewModelScope.launch {
-            settingsRepository.useRandomFileNamesFlow.collect {
-                _appSettings.value = _appSettings.value.copy(useRandomFileNames = it)
+            settingsRepository.useRandomFileNamesFlow.collect { value ->
+                _appSettings.update { it.copy(useRandomFileNames = value) }
             }
         }
         viewModelScope.launch {
-            settingsRepository.defaultSavingPathFlow.collect {
-                _appSettings.value = _appSettings.value.copy(defaultSavingPath = it)
+            settingsRepository.defaultSavingPathFlow.collect { value ->
+                _appSettings.update { it.copy(defaultSavingPath = value) }
             }
         }
         viewModelScope.launch {
-            settingsRepository.keepImageOrientationFlow.collect {
-                _appSettings.value = _appSettings.value.copy(keepImageOrientation = it)
+            settingsRepository.keepImageOrientationFlow.collect { value ->
+                _appSettings.update { it.copy(keepImageOrientation = value) }
             }
         }
         viewModelScope.launch {
-            settingsRepository.shareResultAsDefaultFlow.collect {
-                _appSettings.value = _appSettings.value.copy(shareResultAsDefault = it)
+            settingsRepository.shareResultAsDefaultFlow.collect { value ->
+                _appSettings.update { it.copy(shareResultAsDefault = value) }
             }
         }
         viewModelScope.launch {
-            settingsRepository.defaultPrefixFlow.collect {
-                _appSettings.value = _appSettings.value.copy(defaultPrefix = it)
+            settingsRepository.defaultPrefixFlow.collect { value ->
+                _appSettings.update { it.copy(defaultPrefix = value) }
             }
         }
         viewModelScope.launch {
-            settingsRepository.defaultSuffixFlow.collect {
-                _appSettings.value = _appSettings.value.copy(defaultSuffix = it)
+            settingsRepository.defaultSuffixFlow.collect { value ->
+                _appSettings.update { it.copy(defaultSuffix = value) }
             }
         }
         viewModelScope.launch {
-            settingsRepository.nightModeFlow.collect {
-                _appSettings.value = _appSettings.value.copy(nightMode = it)
+            settingsRepository.nightModeFlow.collect { value ->
+                _appSettings.update { it.copy(nightMode = value) }
             }
         }
         viewModelScope.launch {
-            settingsRepository.oledModeFlow.collect {
-                _appSettings.value = _appSettings.value.copy(oledMode = it)
+            settingsRepository.oledModeFlow.collect { value ->
+                _appSettings.update { it.copy(oledMode = value) }
             }
         }
         viewModelScope.launch {
             var firstEmission = true
-            settingsRepository.autoHandleSharedFilesFlow.collect {
-                _appSettings.value = _appSettings.value.copy(autoHandleSharedFiles = it)
+            settingsRepository.autoHandleSharedFilesFlow.collect { value ->
+                _appSettings.update { it.copy(autoHandleSharedFiles = value) }
                 if (firstEmission) {
                     _settingsInitialized.value = true
                     firstEmission = false
@@ -131,38 +132,38 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
         viewModelScope.launch {
-            settingsRepository.sharedFilesProcessingModeFlow.collect {
-                _appSettings.value = _appSettings.value.copy(sharedFilesProcessingMode = it)
+            settingsRepository.sharedFilesProcessingModeFlow.collect { value ->
+                _appSettings.update { it.copy(sharedFilesProcessingMode = value) }
             }
         }
         viewModelScope.launch {
-            settingsRepository.sharedFilesOutputActionFlow.collect {
-                _appSettings.value = _appSettings.value.copy(sharedFilesOutputAction = it)
+            settingsRepository.sharedFilesOutputActionFlow.collect { value ->
+                _appSettings.update { it.copy(sharedFilesOutputAction = value) }
             }
         }
         viewModelScope.launch {
-            settingsRepository.sharedFilesCustomPathFlow.collect {
-                _appSettings.value = _appSettings.value.copy(sharedFilesCustomPath = it)
+            settingsRepository.sharedFilesCustomPathFlow.collect { value ->
+                _appSettings.update { it.copy(sharedFilesCustomPath = value) }
             }
         }
         viewModelScope.launch {
-            settingsRepository.thumbnailHandlingFlow.collect {
-                _appSettings.value = _appSettings.value.copy(thumbnailHandling = it)
+            settingsRepository.thumbnailHandlingFlow.collect { value ->
+                _appSettings.update { it.copy(thumbnailHandling = value) }
             }
         }
         viewModelScope.launch {
-            settingsRepository.allowInternetForMapFlow.collect {
-                _appSettings.value = _appSettings.value.copy(allowInternetForMap = it)
+            settingsRepository.allowInternetForMapFlow.collect { value ->
+                _appSettings.update { it.copy(allowInternetForMap = value) }
             }
         }
         viewModelScope.launch {
-            settingsRepository.useNearbyScrambleFlow.collect {
-                _appSettings.value = _appSettings.value.copy(useNearbyScramble = it)
+            settingsRepository.useNearbyScrambleFlow.collect { value ->
+                _appSettings.update { it.copy(useNearbyScramble = value) }
             }
         }
         viewModelScope.launch {
             settingsRepository.languageFlow.collect { language ->
-                _appSettings.value = _appSettings.value.copy(language = language)
+                _appSettings.update { it.copy(language = language) }
                 applyLanguage(language)
             }
         }
@@ -560,9 +561,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         throw IllegalStateException("No processed files available for sharing")
                     }
                     val processedFilesList = _processedFiles.value.map { it.second }
-                    val firstMime = _processedFiles.value.first().first.mimeType
-                    val allSameMime = _processedFiles.value.all { it.first.mimeType == firstMime }
-                    onShareFilesReady(processedFilesList, if (allSameMime) firstMime else "*/*")
+                    val selectedFilesList = _processedFiles.value.map { it.first }
+                    
+                    val nicelyNamedFiles = withContext(Dispatchers.IO) {
+                        prepareFilesForSharing(processedFilesList, selectedFilesList)
+                    }
+
+                    val firstMime = selectedFilesList.first().mimeType
+                    val allSameMime = selectedFilesList.all { it.mimeType == firstMime }
+                    onShareFilesReady(nicelyNamedFiles, if (allSameMime) firstMime else "*/*")
                 }
             }
         }.onSuccess {
@@ -613,8 +620,36 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         return results
     }
 
-    fun getFirstProcessedFileForSharing(): Pair<SelectedFile, File>? =
-        _processedFiles.value.firstOrNull()
+    suspend fun getProcessedFilesForSharing(): List<File> = withContext(Dispatchers.IO) {
+        val pairs = _processedFiles.value
+        if (pairs.isEmpty()) return@withContext emptyList()
+        
+        val processedFilesList = pairs.map { it.second }
+        val selectedFilesList = pairs.map { it.first }
+        
+        prepareFilesForSharing(processedFilesList, selectedFilesList)
+    }
+
+    private fun prepareFilesForSharing(processedFiles: List<File>, selectedFiles: List<SelectedFile>): List<File> {
+        val sharedDir = File(appContext?.cacheDir, "shared/outgoing_${System.currentTimeMillis()}")
+        if (!sharedDir.exists()) {
+            sharedDir.mkdirs()
+        }
+
+        return processedFiles.mapIndexed { index, file ->
+            val selectedFile = selectedFiles[index]
+            val niceName = buildOutputName(selectedFile.displayName)
+            val sharedFile = File(sharedDir, niceName)
+            
+            runCatching {
+                file.copyTo(sharedFile, overwrite = true)
+            }.onFailure {
+                Timber.e(it, "Failed to copy file for sharing: %s", niceName)
+            }
+            
+            sharedFile
+        }
+    }
 
     fun persistAndSetDefaultSavingPath(uri: Uri?) {
         if (uri == null) {

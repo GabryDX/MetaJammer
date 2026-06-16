@@ -34,6 +34,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -48,6 +49,7 @@ import com.heronikostudios.metajammer.ui.screens.HelpScreen
 import com.heronikostudios.metajammer.ui.screens.HomeScreen
 import com.heronikostudios.metajammer.ui.screens.LocationPickerScreen
 import com.heronikostudios.metajammer.ui.screens.MetadataPreviewScreen
+import kotlinx.coroutines.launch
 import com.heronikostudios.metajammer.ui.screens.OutputOptionsScreen
 import com.heronikostudios.metajammer.ui.screens.ProcessingScreen
 import com.heronikostudios.metajammer.ui.screens.SettingsScreen
@@ -148,6 +150,7 @@ fun MetaJammerApp(
 ) {
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
     val shareFileUseCase = remember { ShareFileUseCase() }
 
     val selectedFiles by viewModel.selectedFiles.collectAsStateWithLifecycle()
@@ -388,42 +391,52 @@ fun MetaJammerApp(
                     OutputOptionsScreen(
                         shareResultAsDefault = appSettings.shareResultAsDefault,
                         onSaveDefault = {
-                            val firstProcessed = processedFiles.firstOrNull()
-                            val savedUris = viewModel.saveProcessedFilesToDefault()
+                            coroutineScope.launch {
+                                val firstProcessed = processedFiles.firstOrNull()
+                                val savedUris = viewModel.saveProcessedFilesToDefault()
 
-                            if (appSettings.shareResultAsDefault) {
-                                val firstSavedUri = savedUris.firstOrNull()
-                                if (firstSavedUri != null && firstProcessed != null) {
-                                    shareFileUseCase.shareUri(
-                                        context = context,
-                                        uri = firstSavedUri,
-                                        mimeType = firstProcessed.first.mimeType
-                                    )
+                                if (appSettings.shareResultAsDefault) {
+                                    val firstSavedUri = savedUris.firstOrNull()
+                                    if (firstSavedUri != null && firstProcessed != null) {
+                                        shareFileUseCase.shareUri(
+                                            context = context,
+                                            uri = firstSavedUri,
+                                            mimeType = firstProcessed.first.mimeType
+                                        )
+                                    }
                                 }
                             }
                         },
                         onSaveCustom = { treeUri ->
-                            val firstProcessed = processedFiles.firstOrNull()
-                            val savedUris = viewModel.saveProcessedFilesToCustom(treeUri)
+                            coroutineScope.launch {
+                                val firstProcessed = processedFiles.firstOrNull()
+                                val savedUris = viewModel.saveProcessedFilesToCustom(treeUri)
 
-                            if (appSettings.shareResultAsDefault) {
-                                val firstSavedUri = savedUris.firstOrNull()
-                                if (firstSavedUri != null && firstProcessed != null) {
-                                    shareFileUseCase.shareUri(
-                                        context = context,
-                                        uri = firstSavedUri,
-                                        mimeType = firstProcessed.first.mimeType
-                                    )
+                                if (appSettings.shareResultAsDefault) {
+                                    val firstSavedUri = savedUris.firstOrNull()
+                                    if (firstSavedUri != null && firstProcessed != null) {
+                                        shareFileUseCase.shareUri(
+                                            context = context,
+                                            uri = firstSavedUri,
+                                            mimeType = firstProcessed.first.mimeType
+                                        )
+                                    }
                                 }
                             }
                         },
                         onShareOnly = {
-                            viewModel.getFirstProcessedFileForSharing()?.let { (selectedFile, file) ->
-                                shareFileUseCase.shareFile(
-                                    context = context,
-                                    file = file,
-                                    mimeType = selectedFile.mimeType
-                                )
+                            coroutineScope.launch {
+                                val filesToShare = viewModel.getProcessedFilesForSharing()
+                                if (filesToShare.isNotEmpty()) {
+                                    val firstProcessedMime = processedFiles.firstOrNull()?.first?.mimeType
+                                    val allSameMime = processedFiles.all { it.first.mimeType == firstProcessedMime }
+                                    
+                                    shareFileUseCase.shareFiles(
+                                        context = context,
+                                        files = filesToShare,
+                                        mimeType = if (allSameMime) firstProcessedMime else "*/*"
+                                    )
+                                }
                             }
                         },
                         modifier = Modifier.weight(1f)
