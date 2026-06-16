@@ -56,6 +56,10 @@
     <string name="no_preview_available">No preview available</string>
     <string name="change_location_map">Change Location on Map</string>
     <string name="process_files">Process Files</string>
+    <string name="video_note_title">Video Processing</string>
+    <string name="video_note_body">Full re-muxing is supported for MP4/MOV containers. This process strips GPS, dates, and device atoms to protect your privacy.</string>
+    <string name="help_tutorials_title">Help &amp; Tutorials</string>
+    <string name="help">Help</string>
     <string name="processing_foreground">Processing in foreground...</string>
     <string name="background_progress">Background Progress: %1$d%%</string>
     <string name="continue_to_output">Continue to Output Options</string>

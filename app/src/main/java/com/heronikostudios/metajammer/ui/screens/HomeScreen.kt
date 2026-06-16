@@ -31,6 +31,7 @@ import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,6 +49,7 @@ import coil.request.ImageRequest
 import com.heronikostudios.metajammer.R
 import com.heronikostudios.metajammer.domain.model.SelectedFile
 import com.heronikostudios.metajammer.ui.theme.MetaJammerTheme
+import androidx.core.net.toUri
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -97,14 +99,13 @@ fun HomeScreen(
                 items = selectedFiles,
                 key = { it.uri.toString() }
             ) { file ->
-                val dismissState = rememberSwipeToDismissBoxState(
-                    confirmValueChange = {
-                        if (it == SwipeToDismissBoxValue.EndToStart) {
-                            onFileRemoved(file)
-                            true
-                        } else false
+                val dismissState = rememberSwipeToDismissBoxState()
+
+                LaunchedEffect(dismissState.currentValue) {
+                    if (dismissState.currentValue == SwipeToDismissBoxValue.EndToStart) {
+                        onFileRemoved(file)
                     }
-                )
+                }
 
                 SwipeToDismissBox(
                     state = dismissState,
@@ -393,8 +394,8 @@ fun HomeScreenSelectedPreview() {
     MetaJammerTheme {
         HomeScreen(
             selectedFiles = listOf(
-                SelectedFile(Uri.EMPTY, "image.jpg", "image/jpeg", 1024 * 500),
-                SelectedFile(Uri.EMPTY, "video.mp4", "video/mp4", 1024 * 1024 * 10)
+                SelectedFile("content://media/external/images/media/1".toUri(), "image.jpg", "image/jpeg", 1024 * 500),
+                SelectedFile("content://media/external/video/media/2".toUri(), "video.mp4", "video/mp4", 1024 * 1024 * 10)
             ),
             onFilesPicked = {},
             onFileRemoved = {},

@@ -122,9 +122,6 @@ class MetadataRepository(
             Timber.e(it, "Failed to read video metadata for %s", selectedFile.uri)
         }
 
-        entries.add(MetadataEntry("Status", "Full re-muxing supported for MP4/MOV containers."))
-        entries.add(MetadataEntry("Privacy", "This process strips GPS, dates, and device atoms."))
-
         return entries
     }
 
