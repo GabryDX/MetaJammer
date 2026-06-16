@@ -244,7 +244,7 @@ fun MetaJammerApp(
                             AppStep.LOCATION_PICKER -> stringResource(R.string.pick_location)
                             AppStep.OUTPUT -> stringResource(R.string.output_options)
                             AppStep.SETTINGS -> stringResource(R.string.settings)
-                            AppStep.HELP -> stringResource(R.string.help_tutorials_title)
+                            AppStep.HELP -> stringResource(R.string.help_title)
                         },
                         style = when (currentStep) {
                             AppStep.HOME -> MaterialTheme.typography.headlineMedium

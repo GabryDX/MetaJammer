@@ -53,41 +53,41 @@ fun HelpScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
-            text = stringResource(R.string.help_tutorials_title),
+            text = stringResource(R.string.help_title),
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold
         )
 
         HelpItem(
             icon = painterResource(R.drawable.ic_photo_library),
-            title = stringResource(R.string.image_processing_title),
-            body = stringResource(R.string.image_processing_body)
+            title = stringResource(R.string.help_item_image_title),
+            body = stringResource(R.string.help_item_image_body)
         )
 
         HelpItem(
             icon = painterResource(R.drawable.ic_movie),
-            title = stringResource(R.string.video_note_title),
-            body = stringResource(R.string.video_note_body)
+            title = stringResource(R.string.help_item_video_title),
+            body = stringResource(R.string.help_item_video_body)
         )
 
         HelpItem(
             icon = painterResource(R.drawable.ic_security),
-            title = stringResource(R.string.other_files_title),
-            body = stringResource(R.string.other_files_body)
+            title = stringResource(R.string.help_item_other_title),
+            body = stringResource(R.string.help_item_other_body)
         )
 
         HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
         HelpItem(
             icon = painterResource(R.drawable.ic_bug_report),
-            title = stringResource(R.string.report_issue_title),
-            body = stringResource(R.string.report_issue_body),
+            title = stringResource(R.string.help_report_issue_title),
+            body = stringResource(R.string.help_report_issue_body),
             action = {
                 Button(
                     onClick = onReportIssue,
                     modifier = Modifier.padding(top = 8.dp)
                 ) {
-                    Text(stringResource(R.string.open_github))
+                    Text(stringResource(R.string.help_open_github))
                 }
             }
         )
@@ -95,7 +95,7 @@ fun HelpScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = stringResource(R.string.app_version, versionName),
+            text = stringResource(R.string.help_app_version, versionName),
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.align(Alignment.CenterHorizontally)
