@@ -1,11 +1,11 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MetaJammer</string>
     <string name="notification_channel_name">การประมวลผลไฟล์</string>
     <string name="notification_processing_title">กำลังประมวลผลไฟล์</string>
     <string name="notification_processing_message">กำลังลบข้อมูลเมตาจาก %1$d ไฟล์...</string>
-    <string name="notification_complete_title">การประมวลผลเสร็จสมบูรณ์</string>
-    <string name="notification_complete_message">ประมวลผล %1$d ไฟล์สำเร็จแล้ว</string>
+    <string name="notification_complete_title">ประมวลผลเสร็จสิ้น</string>
+    <string name="notification_complete_message">ประมวลผล %1$d ไฟล์สำเร็จ</string>
 
     <!-- General -->
     <string name="ok">ตกลง</string>
@@ -17,25 +17,26 @@
     <string name="dismiss">ยกเลิก</string>
     <string name="warning">คำเตือน</string>
     <string name="none">ไม่มี</string>
-    <string name="unknown">ไม่รู้จัก</string>
+    <string name="unknown">ไม่ทราบ</string>
+    <string name="delete">ลบ</string>
 
     <!-- HomeScreen -->
     <string name="hero_title">ปกป้องความเป็นส่วนตัวของคุณ</string>
     <string name="hero_subtitle">ล้างหรือเปลี่ยนข้อมูลเมตาที่ละเอียดอ่อนก่อนแชร์ไฟล์ของคุณ</string>
     <string name="feature_images_video_title">รูปภาพและวิดีโอ</string>
-    <string name="feature_images_video_desc">รองรับการลบข้อมูลเมตาจากภาพถ่ายและการรีมิกซ์วิดีโอเพื่อลบการติดตามอย่างสมบูรณ์</string>
+    <string name="feature_images_video_desc">รองรับการลบข้อมูลเมตาจากภาพถ่ายและรีมิกซ์วิดีโอเพื่อลบการติดตามอย่างสมบูรณ์</string>
     <string name="feature_poisoning_title">การวางยาข้อมูลเมตา</string>
     <string name="feature_poisoning_desc">อย่าแค่ลบข้อมูล แต่ให้แทนที่ด้วยข้อมูลปลอมที่สมจริงเพื่อรักษาความเป็นส่วนตัวและทำให้ผู้ติดตามสับสน</string>
     <string name="feature_background_title">การประมวลผลเบื้องหลัง</string>
     <string name="feature_background_desc">ประมวลผลไฟล์หลายร้อยไฟล์อย่างมีประสิทธิภาพในเบื้องหลังขณะที่คุณทำอย่างอื่น</string>
     <string name="feature_on_device_title">ความเป็นส่วนตัวบนอุปกรณ์</string>
-    <string name="feature_on_device_desc">การประมวลผลทั้งหมดเกิดขึ้นภายในอุปกรณ์ของคุณ ไฟล์ของคุณจะไม่ถูกส่งออกจาก MetaJammer</string>
-    <string name="pro_tip_gallery">เคล็ดลับ: คุณสามารถแชร์ไฟล์โดยตรงจากแอปแกลเลอรีไปยัง MetaJammer ได้</string>
+    <string name="feature_on_device_desc">การประมวลผลทั้งหมดเกิดขึ้นภายในอุปกรณ์ของคุณ ไฟล์ของคุณจะไม่ถูกส่งออกนอก MetaJammer</string>
+    <string name="pro_tip_gallery">เคล็ดลับ: คุณสามารถแชร์ไฟล์จากแอปแกลเลอรีของคุณเข้าสู่ MetaJammer ได้โดยตรง</string>
     <string name="select_files">เลือกไฟล์</string>
     <string name="select_more_files">เลือกไฟล์เพิ่มเติม</string>
     <string name="clear_selection">ล้างการเลือก</string>
     <string name="files_selected">เลือกแล้ว %1$d ไฟล์</string>
-    <string name="total_size">ขนาดทั้งหมด: %1$s</string>
+    <string name="total_size">ขนาดรวม: %1$s</string>
     <string name="size_mb">%.1f MB</string>
     <string name="size_kb">%.1f KB</string>
     <string name="size_bytes">%1$d ไบต์</string>
@@ -53,12 +54,26 @@
     <string name="selected_mode">เลือกแล้ว: %1$s</string>
     <string name="regenerate_plans">สร้างแผนสุ่มใหม่ทั้งหมด</string>
     <string name="preview_of_changes">ตัวอย่างการเปลี่ยนแปลง</string>
-    <string name="no_preview_available">ไม่มีตัวอย่างให้ดู</string>
+    <string name="no_preview_available">ไม่มีตัวอย่าง</string>
     <string name="change_location_map">เปลี่ยนตำแหน่งบนแผนที่</string>
     <string name="process_files">ประมวลผลไฟล์</string>
     <string name="processing_foreground">กำลังประมวลผลในเบื้องหน้า...</string>
     <string name="background_progress">ความคืบหน้าเบื้องหลัง: %1$d%%</string>
-    <string name="continue_to_output">ไปยังตัวเลือกการส่งออก</string>
+    <string name="continue_to_output">ไปที่ตัวเลือกการส่งออก</string>
+
+    <!-- HelpScreen -->
+    <string name="help_title">Help &amp; Tutorials</string>
+    <string name="help_item_video_title">Video Processing</string>
+    <string name="help_item_video_body">Supported formats: MP4, MOV.\n\nFull re-muxing is supported for these containers. This process strips GPS, dates, and device atoms to protect your privacy.</string>
+    <string name="help_item_image_title">Image Processing</string>
+    <string name="help_item_image_body">Supported formats: JPG, PNG.\n\nMetaJammer strips EXIF metadata from these images. In \"Poison\" mode, it replaces sensitive tags like GPS coordinates with realistic random data.</string>
+    <string name="help_item_other_title">Other Files</string>
+    <string name="help_item_other_body">Supported formats: None currently.\n\nMetaJammer currently focuses on media files. Future updates will include support for PDFs and documents. Stay tuned!</string>
+    <string name="help_report_issue_title">Report an Issue</string>
+    <string name="help_report_issue_body">Found a bug or have a feature request? Please report it on our GitHub page.</string>
+    <string name="help_open_github">Open GitHub Issues</string>
+    <string name="help_app_version">Version: %1$s</string>
+    <string name="help">Help</string>
 
     <!-- LocationPickerScreen -->
     <string name="pick_location">เลือกตำแหน่ง</string>
@@ -66,10 +81,10 @@
 
     <!-- OutputOptionsScreen -->
     <string name="output_options">ตัวเลือกการส่งออก</string>
-    <string name="saving_will_trigger_sharing">การบันทึกจะกระตุ้นการแชร์ด้วย</string>
-    <string name="choose_save_or_share">เลือกว่าจะบันทึกหรือแชร์ผลลัพธ์ที่ประมวลผลแล้ว</string>
-    <string name="save_to_default_folder">บันทึกไปยังโฟลเดอร์เริ่มต้น</string>
-    <string name="save_to_custom_folder">บันทึกไปยังโฟลเดอร์ที่กำหนดเอง</string>
+    <string name="saving_will_trigger_sharing">การบันทึกจะเปิดการแชร์ด้วย</string>
+    <string name="choose_save_or_share">เลือกว่าจะบันทึกหรือแชร์ผลลัพธ์</string>
+    <string name="save_to_default_folder">บันทึกลงในโฟลเดอร์เริ่มต้น</string>
+    <string name="save_to_custom_folder">บันทึกลงในโฟลเดอร์ที่กำหนดเอง</string>
 
     <!-- SettingsScreen -->
     <string name="settings">การตั้งค่า</string>
@@ -80,25 +95,25 @@
 
     <string name="setting_random_names_title">ใช้ชื่อไฟล์แบบสุ่ม</string>
     <string name="setting_random_names_sub">สร้างชื่อไฟล์ส่งออกแบบสุ่มแทนการใช้ชื่อไฟล์เดิม</string>
-    <string name="setting_default_path_title">เส้นทางบันทึกเริ่มต้น</string>
+    <string name="setting_default_path_title">เส้นทางการบันทึกเริ่มต้น</string>
     <string name="setting_reset_path">รีเซ็ตเป็น Pictures/MetaJammer</string>
     <string name="setting_select_folder">เลือกโฟลเดอร์</string>
 
-    <string name="setting_keep_orientation_title">คงการวางแนวรูปภาพ</string>
-    <string name="setting_keep_orientation_sub">รักษาข้อมูลเมตาการวางแนวรูปภาพเมื่อเป็นไปได้</string>
+    <string name="setting_keep_orientation_title">คงทิศทางของภาพ</string>
+    <string name="setting_keep_orientation_sub">รักษาข้อมูลเมตาเกี่ยวกับทิศทางของภาพหากเป็นไปได้</string>
     <string name="setting_share_default_title">แชร์ผลลัพธ์เป็นค่าเริ่มต้น</string>
-    <string name="setting_share_default_sub">การบันทึกจะกระตุ้นการแชร์ด้วย</string>
+    <string name="setting_share_default_sub">การบันทึกจะเปิดการแชร์ด้วย</string>
     <string name="setting_prefix_title">คำนำหน้าเริ่มต้น</string>
     <string name="setting_suffix_title">คำต่อท้ายเริ่มต้น</string>
     <string name="setting_not_set">ไม่ได้ตั้งค่า</string>
     <string name="setting_keep_thumbnails_title">คงรูปภาพตัวอย่างเดิม</string>
-    <string name="setting_keep_thumbnails_sub">หากไฟล์มีรูปภาพตัวอย่างฝังอยู่ ให้คงไว้ตามเดิม หากปิดใช้งาน รูปภาพตัวอย่างที่มีอยู่จะถูกลบออกเพื่อความเป็นส่วนตัวสูงสุด</string>
-    <string name="setting_thumbnails_warning">คำเตือน: การคงรูปภาพตัวอย่างเดิมไว้อาจทำให้ข้อมูลเมตา (ตำแหน่ง, ข้อมูลอุปกรณ์) รั่วไหลได้ แม้ว่าจะลบแท็กหลักออกแล้วก็ตาม</string>
+    <string name="setting_keep_thumbnails_sub">หากไฟล์มีรูปภาพตัวอย่างฝังอยู่ ให้คงไว้เหมือนเดิม หากปิดใช้งาน รูปภาพตัวอย่างที่มีอยู่จะถูกลบออกเพื่อความเป็นส่วนตัวสูงสุด</string>
+    <string name="setting_thumbnails_warning">คำเตือน: การคงรูปภาพตัวอย่างเดิมอาจทำให้ข้อมูลเมตาหลุดรอด (ตำแหน่ง, ข้อมูลอุปกรณ์) แม้ว่าจะลบแท็กหลักออกแล้วก็ตาม</string>
     <string name="setting_enable_map_title">เปิดใช้งานตัวเลือกแผนที่</string>
     <string name="setting_enable_map_sub">อนุญาตให้แอปเชื่อมต่ออินเทอร์เน็ตเพื่อแสดง OpenStreetMap สำหรับการเลือกตำแหน่ง</string>
 
-    <string name="setting_quick_scrub_title">ล้างด่วนและแชร์</string>
-    <string name="setting_quick_scrub_sub">ลบข้อมูลเมตาโดยอัตโนมัติและเปิดหน้าการแชร์อีกครั้งสำหรับไฟล์ที่ถูกแชร์</string>
+    <string name="setting_quick_scrub_title">ล้างข้อมูลและแชร์อย่างรวดเร็ว</string>
+    <string name="setting_quick_scrub_sub">ลบข้อมูลเมตาโดยอัตโนมัติและเปิดหน้าการแชร์อีกครั้งสำหรับไฟล์ที่แชร์</string>
     <string name="setting_metadata_action_title">การดำเนินการข้อมูลเมตา</string>
     <string name="setting_output_action_title">การดำเนินการส่งออก</string>
     <string name="setting_dedicated_folder_title">โฟลเดอร์เฉพาะสำหรับไฟล์ที่แชร์</string>
@@ -111,7 +126,7 @@
     <string name="setting_oled_mode_sub">ใช้โทนสีดำที่เข้มขึ้นสำหรับธีมมืดที่รองรับ</string>
 
     <!-- Enums -->
-    <string name="night_mode_always">เสมอ</string>
+    <string name="night_mode_always">ตลอดเวลา</string>
     <string name="night_mode_automatic">อัตโนมัติ</string>
     <string name="night_mode_low_battery">เมื่อแบตเตอรี่ต่ำเท่านั้น</string>
     <string name="night_mode_never">ไม่เลย</string>
@@ -120,16 +135,16 @@
     <string name="language_en">English (อังกฤษ)</string>
     <string name="language_es">Español (สเปน)</string>
     <string name="language_it">Italiano (อิตาลี)</string>
-    <string name="language_fr">Français (ฝรั่งเศส)</string>
+    <string name="language_fr">Français (ฝรั่งเศσ)</string>
     <string name="language_de">Deutsch (เยอรมัน)</string>
-    <string name="language_zh">中文 (简体) (จีน (ตัวย่อ))</string>
+    <string name="language_zh">中文 (简体) (จีน)</string>
     <string name="language_hi">हिन्दी (ฮินดี)</string>
     <string name="language_pt">Português (โปรตุเกส)</string>
     <string name="language_ru">Русский (รัสเซีย)</string>
     <string name="language_el">Ελληνικά (กรีก)</string>
     <string name="language_ar">العربية (อาหรับ)</string>
     <string name="language_ja">日本語 (ญี่ปุ่น)</string>
-    <string name="language_in">Bahasa Indonesia (อินโดนีเซีย)</string>
+    <string name="language_id">Bahasa Indonesia (อินโดนีเซีย)</string>
     <string name="language_tr">Türkçe (ตุรกี)</string>
     <string name="language_ko">한국어 (เกาหลี)</string>
     <string name="language_vi">Tiếng Việt (เวียดนาม)</string>
@@ -138,20 +153,22 @@
     <string name="language_nl">Nederlands (ดัตช์)</string>
     <string name="language_uk">Українська (ยูเครน)</string>
     <string name="language_fa">فارسی (เปอร์เซีย)</string>
+    <string name="language_he">עברית (ฮีบรู)</string>
+    <string name="language_la">Latina (ละติน)</string>
 
     <string name="processing_mode_poison">วางยาข้อมูลเมตา (ข้อมูลปลอม)</string>
     <string name="processing_mode_remove">ลบข้อมูลเมตา (ล้างทั้งหมด)</string>
 
-    <string name="output_action_default_folder">บันทึกไปยังโฟลเดอร์เริ่มต้น</string>
-    <string name="output_action_shared_folder">บันทึกไปยังโฟลเดอร์เฉพาะ</string>
-    <string name="output_action_reshare">แชร์ไฟล์ที่ล้างแล้วอีกครั้ง</string>
+    <string name="output_action_default_folder">บันทึกลงในโฟลเดอร์เริ่มต้น</string>
+    <string name="output_action_shared_folder">บันทึกลงในโฟลเดอร์เฉพาะ</string>
+    <string name="output_action_reshare">แชร์ไฟล์ที่ล้างข้อมูลแล้วอีกครั้ง</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">ตัวเลือกแผนที่และการเข้าถึงอินเทอร์เน็ต</string>
-    <string name="map_permission_message">เพื่อแสดงแผนที่สำหรับการเลือกตำแหน่ง MetaJammer จำเป็นต้องเชื่อมต่ออินเทอร์เน็ตเพื่อโหลดข้อมูลแผนที่จาก OpenStreetMap \n\nหากคุณปฏิเสธ แอปจะยังคงทำงานได้อย่างสมบูรณ์สำหรับฟีเจอร์ลบและวางยาข้อมูลเมตา แต่คุณจะไม่สามารถเลือกตำแหน่งบนแผนที่ได้</string>
+    <string name="map_permission_message">หากต้องการแสดงแผนที่สำหรับการเลือกตำแหน่ง MetaJammer จำเป็นต้องเชื่อมต่ออินเทอร์เน็ตเพื่อโหลดไทล์แผนที่จาก OpenStreetMap \n\nหากคุณปฏิเสธ แอปจะยังคงทำงานได้อย่างสมบูรณ์สำหรับคุณสมบัติการลบข้อมูลเมตาและการวางยาทั้งหมด แต่คุณจะไม่สามารถเลือกตำแหน่งบนแผนที่ได้</string>
     <string name="allow_open_map">อนุญาตและเปิดแผนที่</string>
     <string name="not_now">ไม่ใช่ตอนนี้</string>
 
-    <string name="notification_permission_title">รับข้อมูลข่าวสาร</string>
-    <string name="notification_permission_message">MetaJammer สามารถแสดงการแจ้งเตือนเพื่อแจ้งความคืบหน้าของการประมวลผลไฟล์จำนวนมากขณะทำงานในเบื้องหลัง \n\nสิ่งนี้มีประโยชน์มากหากคุณต้องการเปลี่ยนไปใช้แอปอื่นในขณะที่ MetaJammer กำลังทำงานจนเสร็จ</string>
+    <string name="notification_permission_title">รับทราบข้อมูลอยู่เสมอ</string>
+    <string name="notification_permission_message">MetaJammer สามารถแสดงการแจ้งเตือนเพื่อให้คุณทราบถึงความคืบหน้าของการประมวลผลไฟล์จำนวนมากในเบื้องหลัง \n\nซึ่งมีประโยชน์อย่างยิ่งหากคุณต้องการสลับไปใช้แอปอื่นในขณะที่ MetaJammer ทำงานเสร็จสิ้น</string>
 </resources>

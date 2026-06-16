@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MetaJammer</string>
     <string name="notification_channel_name">Przetwarzanie plików</string>
@@ -14,22 +14,23 @@
     <string name="continue_label">Kontynuuj</string>
     <string name="save">Zapisz</string>
     <string name="share">Udostępnij</string>
-    <string name="dismiss">Odrzuć</string>
+    <string name="dismiss">Zamknij</string>
     <string name="warning">Ostrzeżenie</string>
     <string name="none">Brak</string>
     <string name="unknown">nieznany</string>
+    <string name="delete">Usuń</string>
 
     <!-- HomeScreen -->
     <string name="hero_title">Chroń swoją prywatność</string>
     <string name="hero_subtitle">Wyczyść lub zastąp wrażliwe metadane przed udostępnieniem plików.</string>
     <string name="feature_images_video_title">Obrazy i wideo</string>
-    <string name="feature_images_video_desc">Pełne wsparcie dla usuwania metadanych ze zdjęć i remiksowania wideo w celu usunięcia śledzenia.</string>
+    <string name="feature_images_video_desc">Pełne wsparcie dla usuwania metadanych ze zdjęć i remuxingu wideo w celu usunięcia śledzenia.</string>
     <string name="feature_poisoning_title">Zatruwanie metadanych</string>
-    <string name="feature_poisoning_desc">Nie tylko usuwaj dane – zastępuj je realistycznymi fałszywkami, aby zachować prywatność i zmylić trackery.</string>
+    <string name="feature_poisoning_desc">Nie tylko usuwaj dane — zastępuj je realistycznymi fałszywkami, aby zachować prywatność i zmylić trackery.</string>
     <string name="feature_background_title">Przetwarzanie w tle</string>
-    <string name="feature_background_desc">Wydajnie przetwarzaj setki plików w tle, wykonując w tym czasie inne czynności.</string>
+    <string name="feature_background_desc">Wydajnie przetwarzaj setki plików w tle, podczas gdy Ty zajmujesz się czymś innym.</string>
     <string name="feature_on_device_title">Prywatność na urządzeniu</string>
-    <string name="feature_on_device_desc">Całe przetwarzanie odbywa się lokalnie na Twoim urządzeniu. Twoje pliki nigdy nie opuszczają MetaJammer.</string>
+    <string name="feature_on_device_desc">Całe przetwarzanie odbywa się lokalnie na Twoim urządzeniu. Twoje pliki nigdy nie opuszczają aplikacji MetaJammer.</string>
     <string name="pro_tip_gallery">Wskazówka: Możesz udostępniać pliki bezpośrednio z aplikacji Galeria do MetaJammer.</string>
     <string name="select_files">Wybierz pliki</string>
     <string name="select_more_files">Wybierz więcej plików</string>
@@ -58,7 +59,21 @@
     <string name="process_files">Przetwarzaj pliki</string>
     <string name="processing_foreground">Przetwarzanie na pierwszym planie...</string>
     <string name="background_progress">Postęp w tle: %1$d%%</string>
-    <string name="continue_to_output">Przejdź do opcji wyjściowych</string>
+    <string name="continue_to_output">Kontynuuj do opcji wyjściowych</string>
+
+    <!-- HelpScreen -->
+    <string name="help_title">Pomoc i poradniki</string>
+    <string name="help_item_video_title">Przetwarzanie wideo</string>
+    <string name="help_item_video_body">Obsługiwane formaty: MP4, MOV.\n\nPełny remuxing jest obsługiwany dla tych kontenerów. Proces ten usuwa dane GPS, daty i atomy urządzenia, aby chronić Twoją prywatność.</string>
+    <string name="help_item_image_title">Przetwarzanie obrazów</string>
+    <string name="help_item_image_body">Obsługiwane formaty: JPG, PNG.\n\nMetaJammer usuwa metadane EXIF z tych obrazów. W trybie „Zatruwanie” zastępuje wrażliwe tagi, takie jak współrzędne GPS, realistycznymi losowymi danymi.</string>
+    <string name="help_item_other_title">Inne pliki</string>
+    <string name="help_item_other_body">Obsługiwane formaty: Obecnie brak.\n\nMetaJammer koncentruje się obecnie na plikach multimedialnych. Przyszłe aktualizacje obejmą obsługę plików PDF i dokumentów. Bądź na bieżąco!</string>
+    <string name="help_report_issue_title">Zgłoś problem</string>
+    <string name="help_report_issue_body">Znalazłeś błąd lub masz propozycję nowej funkcji? Zgłoś to na naszej stronie GitHub.</string>
+    <string name="help_open_github">Otwórz zgłoszenia na GitHub</string>
+    <string name="help_app_version">Wersja: %1$s</string>
+    <string name="help">Pomoc</string>
 
     <!-- LocationPickerScreen -->
     <string name="pick_location">Wybierz lokalizację</string>
@@ -68,8 +83,8 @@
     <string name="output_options">Opcje wyjściowe</string>
     <string name="saving_will_trigger_sharing">Zapisanie spowoduje również udostępnienie.</string>
     <string name="choose_save_or_share">Wybierz, czy chcesz zapisać, czy udostępnić przetworzony wynik.</string>
-    <string name="save_to_default_folder">Zapisz w folderze domyślnym</string>
-    <string name="save_to_custom_folder">Zapisz w folderze niestandardowym</string>
+    <string name="save_to_default_folder">Zapisz w domyślnym folderze</string>
+    <string name="save_to_custom_folder">Zapisz w niestandardowym folderze</string>
 
     <!-- SettingsScreen -->
     <string name="settings">Ustawienia</string>
@@ -81,39 +96,39 @@
     <string name="setting_random_names_title">Używaj losowych nazw plików</string>
     <string name="setting_random_names_sub">Generuj losowe nazwy wyjściowe zamiast używać oryginalnej nazwy pliku</string>
     <string name="setting_default_path_title">Domyślna ścieżka zapisu</string>
-    <string name="setting_reset_path">Przywróć Pictures/MetaJammer</string>
+    <string name="setting_reset_path">Resetuj do Pictures/MetaJammer</string>
     <string name="setting_select_folder">Wybierz folder</string>
 
     <string name="setting_keep_orientation_title">Zachowaj orientację obrazu</string>
-    <string name="setting_keep_orientation_sub">Zachowaj metadane orientacji obrazu, gdy jest to możliwe</string>
+    <string name="setting_keep_orientation_sub">Zachowaj metadane orientacji obrazu, jeśli to możliwe</string>
     <string name="setting_share_default_title">Udostępniaj wynik domyślnie</string>
     <string name="setting_share_default_sub">Zapisanie spowoduje również udostępnienie</string>
     <string name="setting_prefix_title">Domyślny prefiks</string>
     <string name="setting_suffix_title">Domyślny sufiks</string>
     <string name="setting_not_set">Nie ustawiono</string>
     <string name="setting_keep_thumbnails_title">Zachowaj oryginalne miniatury</string>
-    <string name="setting_keep_thumbnails_sub">Jeśli plik zawiera osadzoną miniaturę, zachowaj ją bez zmian. Jeśli wyłączone, każda istniejąca miniatura zostanie usunięta dla maksymalnej prywatności.</string>
-    <string name="setting_thumbnails_warning">Ostrzeżenie: Zachowanie oryginalnych miniatur może spowodować wyciek metadanych (lokalizacja, informacje o urządzeniu), nawet jeśli główne tagi zostaną usunięte.</string>
+    <string name="setting_keep_thumbnails_sub">Jeśli plik zawiera osadzoną miniaturę, zachowaj ją w niezmienionej formie. Jeśli opcja jest wyłączona, wszelkie istniejące miniatury zostaną usunięte dla maksymalnej prywatności.</string>
+    <string name="setting_thumbnails_warning">Ostrzeżenie: Zachowanie oryginalnych miniatur może ujawnić metadane (lokalizacja, informacje o urządzeniu), nawet jeśli główne tagi zostaną usunięte.</string>
     <string name="setting_enable_map_title">Włącz wybór na mapie</string>
-    <string name="setting_enable_map_sub">Zezwalaj aplikacji na łączenie się z Internetem w celu wyświetlania map OpenStreetMap do wyboru lokalizacji</string>
+    <string name="setting_enable_map_sub">Pozwól aplikacji na połączenie z internetem w celu wyświetlenia OpenStreetMap do wyboru lokalizacji</string>
 
     <string name="setting_quick_scrub_title">Szybkie czyszczenie i udostępnianie</string>
-    <string name="setting_quick_scrub_sub">Automatycznie usuwaj metadane i ponownie otwieraj menu udostępniania dla udostępnionych plików</string>
-    <string name="setting_metadata_action_title">Działanie na metadanych</string>
-    <string name="setting_output_action_title">Działanie wyjściowe</string>
-    <string name="setting_dedicated_folder_title">Dedykowany folder udostępnionych plików</string>
+    <string name="setting_quick_scrub_sub">Automatycznie usuwaj metadane i ponownie otwieraj arkusz udostępniania dla udostępnionych plików</string>
+    <string name="setting_metadata_action_title">Działanie dla metadanych</string>
+    <string name="setting_output_action_title">Działanie dla wyjścia</string>
+    <string name="setting_dedicated_folder_title">Dedykowany folder dla udostępnionych plików</string>
     <string name="setting_no_folder_selected">Nie wybrano dedykowanego folderu</string>
     <string name="setting_clear_folder">Wyczyść dedykowany folder</string>
 
     <string name="setting_night_mode_title">Tryb nocny</string>
     <string name="setting_language_title">Język</string>
     <string name="setting_oled_mode_title">Tryb OLED</string>
-    <string name="setting_oled_mode_sub">Używaj głębszej czerni w obsługiwanych ciemnych motywach</string>
+    <string name="setting_oled_mode_sub">Używaj głębszych odcieni czerni dla wspieranych ciemnych motywów</string>
 
     <!-- Enums -->
     <string name="night_mode_always">Zawsze</string>
     <string name="night_mode_automatic">Automatycznie</string>
-    <string name="night_mode_low_battery">Tylko przy słabej baterii</string>
+    <string name="night_mode_low_battery">Tylko przy niskim poziomie baterii</string>
     <string name="night_mode_never">Nigdy</string>
 
     <string name="language_system">System Default (Domyślny systemowy)</string>
@@ -122,14 +137,14 @@
     <string name="language_it">Italiano (Włoski)</string>
     <string name="language_fr">Français (Francuski)</string>
     <string name="language_de">Deutsch (Niemiecki)</string>
-    <string name="language_zh">中文 (简体) (Chiński (uproszczony))</string>
+    <string name="language_zh">中文 (简体) (Chiński)</string>
     <string name="language_hi">हिन्दी (Hindi)</string>
     <string name="language_pt">Português (Portugalski)</string>
     <string name="language_ru">Русский (Rosyjski)</string>
     <string name="language_el">Ελληνικά (Grecki)</string>
     <string name="language_ar">العربية (Arabski)</string>
     <string name="language_ja">日本語 (Japoński)</string>
-    <string name="language_in">Bahasa Indonesia (Indonezyjski)</string>
+    <string name="language_id">Bahasa Indonesia (Indonezyjski)</string>
     <string name="language_tr">Türkçe (Turecki)</string>
     <string name="language_ko">한국어 (Koreański)</string>
     <string name="language_vi">Tiếng Việt (Wietnamski)</string>
@@ -138,20 +153,22 @@
     <string name="language_nl">Nederlands (Holenderski)</string>
     <string name="language_uk">Українська (Ukraiński)</string>
     <string name="language_fa">فارسی (Perski)</string>
+    <string name="language_he">עברית (Hebrajski)</string>
+    <string name="language_la">Latina (Łacina)</string>
 
     <string name="processing_mode_poison">Zatruj metadane (fałszywe info)</string>
     <string name="processing_mode_remove">Usuń metadane (pełne czyszczenie)</string>
 
     <string name="output_action_default_folder">Zapisz w domyślnym folderze</string>
     <string name="output_action_shared_folder">Zapisz w dedykowanym folderze</string>
-    <string name="output_action_reshare">Udostępnij ponownie oczyszczone pliki</string>
+    <string name="output_action_reshare">Udostępnij ponownie wyczyszczone pliki</string>
 
     <!-- Dialogs/Permissions -->
-    <string name="map_permission_title">Wybór na mapie i dostęp do Internetu</string>
-    <string name="map_permission_message">Aby wyświetlić mapę do wyboru lokalizacji, MetaJammer musi połączyć się z Internetem, aby załadować kafelki mapy z OpenStreetMap. \n\nJeśli odmówisz, aplikacja będzie nadal działać idealnie w zakresie wszystkich funkcji usuwania i zatruwania metadanych, ale nie będziesz mógł wizualnie wybierać lokalizacji na mapie.</string>
+    <string name="map_permission_title">Wybór na mapie i dostęp do internetu</string>
+    <string name="map_permission_message">Aby wyświetlić mapę do wyboru lokalizacji, MetaJammer musi połączyć się z internetem w celu pobrania kafelków mapy z OpenStreetMap. \n\nJeśli odmówisz, aplikacja nadal będzie działać idealnie w zakresie wszystkich funkcji usuwania i zatruwania metadanych, ale nie będziesz mógł wybierać lokalizacji wizualnie na mapie.</string>
     <string name="allow_open_map">Zezwól i otwórz mapę</string>
     <string name="not_now">Nie teraz</string>
 
     <string name="notification_permission_title">Bądź na bieżąco</string>
-    <string name="notification_permission_message">MetaJammer może wyświetlać powiadomienia, aby informować Cię o postępie przetwarzania dużych partii plików w tle. \n\nJest to szczególnie przydatne, jeśli chcesz przełączyć się na inną aplikację, podczas gdy MetaJammer kończy pracę.</string>
+    <string name="notification_permission_message">MetaJammer może wyświetlać powiadomienia, aby informować Cię o postępie przetwarzania dużych partii plików w tle. \n\nJest to szczególnie przydatne, gdy chcesz przełączyć się do innej aplikacji, podczas gdy MetaJammer kończy swoją pracę.</string>
 </resources>

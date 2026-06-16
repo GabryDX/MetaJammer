@@ -22,7 +22,9 @@ enum class AppLanguage(val code: String) {
     POLISH("pl"),
     DUTCH("nl"),
     UKRAINIAN("uk"),
-    PERSIAN("fa");
+    PERSIAN("fa"),
+    HEBREW("he"),
+    LATIN("la");
 
     companion object {
         fun fromCode(code: String): AppLanguage {

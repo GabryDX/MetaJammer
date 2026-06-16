@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MetaJammer</string>
+    <string name="notification_channel_name">עיבוד קבצים</string>
+    <string name="notification_processing_title">מעבד קבצים</string>
+    <string name="notification_processing_message">מנקה מטא-דאטה מ-%1$d קבצים...</string>
+    <string name="notification_complete_title">העיבוד הושלם</string>
+    <string name="notification_complete_message">עובדו בהצלחה %1$d קבצים.</string>
+
+    <!-- General -->
+    <string name="ok">אישור</string>
+    <string name="cancel">ביטול</string>
+    <string name="back">חזור</string>
+    <string name="continue_label">המשך</string>
+    <string name="save">שמור</string>
+    <string name="share">שתף</string>
+    <string name="dismiss">התעלם</string>
+    <string name="warning">אזהרה</string>
+    <string name="none">ללא</string>
+    <string name="unknown">לא ידוע</string>
+    <string name="delete">מחק</string>
+
+    <!-- HomeScreen -->
+    <string name="hero_title">הגן על הפרטיות שלך</string>
+    <string name="hero_subtitle">נקה או החלף מטא-דאטה רגיש לפני שיתוף הקבצים שלך.</string>
+    <string name="feature_images_video_title">תמונות ווידאו</string>
+    <string name="feature_images_video_desc">תמיכה מלאה בניקוי מטא-דאטה מתמונות ועיבוד מחדש של סרטונים להסרת מעקב.</string>
+    <string name="feature_poisoning_title">הרעלת מטא-דאטה</string>
+    <string name="feature_poisoning_desc">אל תסתפק בהסרת נתונים - החלף אותם בנתונים מזויפים מציאותיים כדי לשמור על פרטיות ולבלבל עוקבים.</string>
+    <string name="feature_background_title">עיבוד ברקע</string>
+    <string name="feature_background_desc">עבד מאות קבצים ביעילות ברקע בזמן שאתה עושה דברים אחרים.</string>
+    <string name="feature_on_device_title">פרטיות במכשיר</string>
+    <string name="feature_on_device_desc">כל העיבוד מתבצע באופן מקומי במכשיר שלך. הקבצים שלך לעולם לא עוזבים את MetaJammer.</string>
+    <string name="pro_tip_gallery">טיפ: ניתן לשתף קבצים ישירות מאפליקציית הגלריה ל-MetaJammer.</string>
+    <string name="select_files">בחר קבצים</string>
+    <string name="select_more_files">בחר קבצים נוספים</string>
+    <string name="clear_selection">נקה בחירה</string>
+    <string name="files_selected">%1$d קבצים נבחרו</string>
+    <string name="total_size">גודל כולל: %1$s</string>
+    <string name="size_mb">%.1f MB</string>
+    <string name="size_kb">%.1f KB</string>
+    <string name="size_bytes">%1$d בתים</string>
+
+    <!-- MetadataPreviewScreen -->
+    <string name="metadata_preview">תצוגה מקדימה של מטא-דאטה</string>
+    <string name="file_type">סוג: %1$s</string>
+    <string name="no_metadata_found">לא נמצא מטא-דאטה</string>
+
+    <!-- ProcessingScreen -->
+    <string name="process_files_title">עבד קבצים</string>
+    <string name="pick_one_option">בחר אפשרות אחת:</string>
+    <string name="poison_metadata">הרעל מטא-דאטה</string>
+    <string name="remove_metadata">הסר מטא-דאטה</string>
+    <string name="selected_mode">נבחר: %1$s</string>
+    <string name="regenerate_plans">צור מחדש את כל התוכניות האקראיות</string>
+    <string name="preview_of_changes">תצוגה מקדימה של שינויים</string>
+    <string name="no_preview_available">אין תצוגה מקדימה זמינה</string>
+    <string name="change_location_map">שנה מיקום במפה</string>
+    <string name="process_files">עבד קבצים</string>
+    <string name="processing_foreground">מעבד בקדמה...</string>
+    <string name="background_progress">התקדמות ברקע: %1$d%%</string>
+    <string name="continue_to_output">המשך לאפשרויות פלט</string>
+
+    <!-- HelpScreen -->
+    <string name="help_title">עזרה ומדריכים</string>
+    <string name="help_item_video_title">עיבוד וידאו</string>
+    <string name="help_item_video_body">פורמטים נתמכים: MP4, MOV.\n\nתהליך זה מסיר GPS, תאריכים ונתוני מכשיר כדי להגן על פרטיותך.</string>
+    <string name="help_item_image_title">עיבוד תמונה</string>
+    <string name="help_item_image_body">פורמטים נתמכים: JPG, PNG.\n\nMetaJammer מסיר מטא-דאטה EXIF מתמונות אלו. במצב \"הרעלה\", הוא מחליף תגיות רגישות בנתונים אקראיים מציאותיים.</string>
+    <string name="help_item_other_title">קבצים אחרים</string>
+    <string name="help_item_other_body">פורמטים נתמכים: אין כרגע.\n\nMetaJammer מתמקד כרגע בקבצי מדיה. עדכונים עתידיים יכללו תמיכה ב-PDF ומסמכים.</string>
+    <string name="help_report_issue_title">דווח על בעיה</string>
+    <string name="help_report_issue_body">מצאת באג או יש לך בקשה לתכונה חדשה? אנא דווח עליה בדף ה-GitHub שלנו.</string>
+    <string name="help_open_github">פתח בעיות ב-GitHub</string>
+    <string name="help_app_version">גרסה: %1$s</string>
+    <string name="help">עזרה</string>
+
+    <!-- LocationPickerScreen -->
+    <string name="pick_location">בחר מיקום</string>
+    <string name="confirm_location">אשר מיקום</string>
+
+    <!-- OutputOptionsScreen -->
+    <string name="output_options">אפשרויות פלט</string>
+    <string name="saving_will_trigger_sharing">שמירה תפעיל גם שיתוף.</string>
+    <string name="choose_save_or_share">בחר אם לשמור או לשתף את התוצאה המעובדת.</string>
+    <string name="save_to_default_folder">שמור לתיקיית ברירת המחדל</string>
+    <string name="save_to_custom_folder">שמור לתיקייה מותאמת אישית</string>
+
+    <!-- SettingsScreen -->
+    <string name="settings">הגדרות</string>
+    <string name="category_file_management">ניהול קבצים</string>
+    <string name="category_image_file">תמונה / קובץ</string>
+    <string name="category_shared_files">התנהגות קבצים משותפים</string>
+    <string name="category_ui">ממשק משתמש</string>
+
+    <string name="setting_random_names_title">השתמש בשמות קבצים אקראיים</string>
+    <string name="setting_random_names_sub">צור שמות פלט אקראיים במקום להשתמש בשם הקובץ המקורי</string>
+    <string name="setting_default_path_title">נתיב שמירה כברירת מחדל</string>
+    <string name="setting_reset_path">אפס ל-Pictures/MetaJammer</string>
+    <string name="setting_select_folder">בחר תיקייה</string>
+
+    <string name="setting_keep_orientation_title">שמור על כיוון התמונה</string>
+    <string name="setting_keep_orientation_sub">שמור על מטא-דאטה של כיוון התמונה במידת האפשר</string>
+    <string name="setting_share_default_title">שתף תוצאה כברירת מחדל</string>
+    <string name="setting_share_default_sub">שמירה תפעיל גם שיתוף</string>
+    <string name="setting_prefix_title">קידומת ברירת מחדל</string>
+    <string name="setting_suffix_title">סיומת ברירת מחדל</string>
+    <string name="setting_not_set">לא הוגדר</string>
+    <string name="setting_keep_thumbnails_title">שמור תמונות ממוזערות מקוריות</string>
+    <string name="setting_keep_thumbnails_sub">אם הקובץ מכיל תמונה ממוזערת מוטמעת, שמור עליה כפי שהיא.</string>
+    <string name="setting_thumbnails_warning">אזהרה: שמירה על תמונות ממוזערות מקוריות עלולה להדליף מטא-דאטה.</string>
+    <string name="setting_enable_map_title">אפשר בחירת מפה</string>
+    <string name="setting_enable_map_sub">אפשר לאפליקציה להתחבר לאינטרנט כדי להציג את OpenStreetMap</string>
+
+    <string name="setting_quick_scrub_title">ניקוי מהיר ושיתוף</string>
+    <string name="setting_quick_scrub_sub">נקה מטא-דאטה באופן אוטומטי ופתח מחדש את תפריט השיתוף</string>
+    <string name="setting_metadata_action_title">פעולת מטא-דאטה</string>
+    <string name="setting_output_action_title">פעולת פלט</string>
+    <string name="setting_dedicated_folder_title">תיקייה ייעודית לקבצים משותפים</string>
+    <string name="setting_no_folder_selected">לא נבחרה תיקייה ייעודית</string>
+    <string name="setting_clear_folder">נקה תיקייה ייעודית</string>
+
+    <string name="setting_night_mode_title">מצב לילה</string>
+    <string name="setting_language_title">שפה</string>
+    <string name="setting_oled_mode_title">מצב OLED</string>
+    <string name="setting_oled_mode_sub">השתמש בגווני שחור כהים יותר עבור ערכות נושא כהות נתמכות</string>
+
+    <!-- Enums -->
+    <string name="night_mode_always">תמיד</string>
+    <string name="night_mode_automatic">אוטומטי</string>
+    <string name="night_mode_low_battery">רק בסוללה חלשה</string>
+    <string name="night_mode_never">לעולם לא</string>
+
+    <string name="language_system">ברירת מחדל של המערכת (System Default)</string>
+    <string name="language_en">English (אנגלית)</string>
+    <string name="language_es">Español (ספרדית)</string>
+    <string name="language_it">Italiano (איטלקית)</string>
+    <string name="language_fr">Français (צרפתית)</string>
+    <string name="language_de">Deutsch (גרמנית)</string>
+    <string name="language_zh">中文 (简体) (סינית)</string>
+    <string name="language_hi">हिन्दी (הינדי)</string>
+    <string name="language_pt">Português (פורטוגזית)</string>
+    <string name="language_ru">Русский (רוסית)</string>
+    <string name="language_el">Ελληνικά (יוונית)</string>
+    <string name="language_ar">العربية (ערבית)</string>
+    <string name="language_ja">日本語 (יפנית)</string>
+    <string name="language_id">Bahasa Indonesia (אינדונזית)</string>
+    <string name="language_tr">Türkçe (טורקית)</string>
+    <string name="language_ko">한국어 (קוריאנית)</string>
+    <string name="language_vi">Tiếng Việt (וייטנאמית)</string>
+    <string name="language_th">ไทย (תאילנדית)</string>
+    <string name="language_pl">Polski (פולנית)</string>
+    <string name="language_nl">Nederlands (הולנדית)</string>
+    <string name="language_uk">Українська (אוקראינית)</string>
+    <string name="language_fa">فارسی (פרסית)</string>
+    <string name="language_he">עברית (עברית)</string>
+    <string name="language_la">Latina (לטינית)</string>
+
+    <string name="processing_mode_poison">הרעל מטא-דאטה (מידע מזויף)</string>
+    <string name="processing_mode_remove">הסר מטא-דאטה (ניקוי מלא)</string>
+
+    <string name="output_action_default_folder">שמור לתיקיית ברירת המחדל</string>
+    <string name="output_action_shared_folder">שמור לתיקייה ייעודית</string>
+    <string name="output_action_reshare">שתף מחדש קבצים נקיים</string>
+
+    <!-- Dialogs/Permissions -->
+    <string name="map_permission_title">בחירת מפה וגישה לאינטרנט</string>
+    <string name="map_permission_message">כדי להציג מפה לבחירת מיקום, MetaJammer צריכה להתחבר לאינטרנט...</string>
+    <string name="allow_open_map">אפשר ופתח מפה</string>
+    <string name="not_now">לא עכשיו</string>
+
+    <string name="notification_permission_title">הישאר מעודכן</string>
+    <string name="notification_permission_message">MetaJammer יכולה להציג התראות כדי לעדכן אותך בהתקדמות...</string>
+</resources>

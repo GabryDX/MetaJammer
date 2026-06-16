@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MetaJammer</string>
     <string name="notification_channel_name">File Processing</string>
@@ -143,7 +144,7 @@
     <string name="language_el">Ελληνικά (Greek)</string>
     <string name="language_ar">العربية (Arabic)</string>
     <string name="language_ja">日本語 (Japanese)</string>
-    <string name="language_in">Bahasa Indonesia (Indonesian)</string>
+    <string name="language_id">Bahasa Indonesia (Indonesian)</string>
     <string name="language_tr">Türkçe (Turkish)</string>
     <string name="language_ko">한국어 (Korean)</string>
     <string name="language_vi">Tiếng Việt (Vietnamese)</string>
@@ -152,6 +153,8 @@
     <string name="language_nl">Nederlands (Dutch)</string>
     <string name="language_uk">Українська (Ukrainian)</string>
     <string name="language_fa">فارسی (Persian)</string>
+    <string name="language_he">עברית (Hebrew)</string>
+    <string name="language_la">Latina (Latin)</string>
 
     <string name="processing_mode_poison">Poison metadata (Fake info)</string>
     <string name="processing_mode_remove">Remove metadata (Full strip)</string>

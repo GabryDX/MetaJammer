@@ -1,9 +1,9 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MetaJammer</string>
     <string name="notification_channel_name">Dosya İşleme</string>
     <string name="notification_processing_title">Dosyalar İşleniyor</string>
-    <string name="notification_processing_message">%1$d dosyadan metaveriler temizleniyor...</string>
+    <string name="notification_processing_message">%1$d dosyadan metadata temizleniyor...</string>
     <string name="notification_complete_title">İşlem Tamamlandı</string>
     <string name="notification_complete_message">%1$d dosya başarıyla işlendi.</string>
 
@@ -16,21 +16,22 @@
     <string name="share">Paylaş</string>
     <string name="dismiss">Kapat</string>
     <string name="warning">Uyarı</string>
-    <string name="none">Hiçbiri</string>
+    <string name="none">Yok</string>
     <string name="unknown">bilinmiyor</string>
+    <string name="delete">Sil</string>
 
     <!-- HomeScreen -->
     <string name="hero_title">Gizliliğinizi Koruyun</string>
-    <string name="hero_subtitle">Dosyalarınızı paylaşmadan önce hassas metaverileri temizleyin veya değiştirin.</string>
-    <string name="feature_images_video_title">Görüntü ve Video</string>
-    <string name="feature_images_video_desc">Fotoğraflardan metaveri temizleme ve takibi kaldırmak için videoları yeniden paketleme desteği.</string>
-    <string name="feature_poisoning_title">Metaveri Zehirleme</string>
-    <string name="feature_poisoning_desc">Sadece verileri silmeyin; gizliliği korumak ve izleyicileri şaşırtmak için onları gerçekçi sahteleriyle değiştirin.</string>
+    <string name="hero_subtitle">Dosyalarınızı paylaşmadan önce hassas metadataları temizleyin veya değiştirin.</string>
+    <string name="feature_images_video_title">Resimler ve Videolar</string>
+    <string name="feature_images_video_desc">Fotoğraflardan metadata temizleme ve takibi kaldırmak için videoları yeniden remuxing yapma konusunda tam destek.</string>
+    <string name="feature_poisoning_title">Metadata Zehirleme</string>
+    <string name="feature_poisoning_desc">Sadece verileri silmekle kalmayın; gizliliği korumak ve takipçileri şaşırtmak için bunları gerçekçi sahte verilerle değiştirin.</string>
     <string name="feature_background_title">Arka Plan İşleme</string>
-    <string name="feature_background_desc">Yüzlerce dosyayı siz başka işlerle uğraşırken arka planda verimli bir şekilde işleyin.</string>
+    <string name="feature_background_desc">Siz başka işlerle uğraşırken arka planda yüzlerce dosyayı verimli bir şekilde işleyin.</string>
     <string name="feature_on_device_title">Cihaz İçi Gizlilik</string>
-    <string name="feature_on_device_desc">Tüm işlemler yerel olarak cihazınızda gerçekleşir. Dosyalarınız asla MetaJammer dışına çıkmaz.</string>
-    <string name="pro_tip_gallery">İpucu: Dosyaları doğrudan Galeri uygulamanızdan MetaJammer\'a paylaşabilirsiniz.</string>
+    <string name="feature_on_device_desc">Tüm işlemler cihazınızda yerel olarak gerçekleşir. Dosyalarınız MetaJammer dışına asla çıkmaz.</string>
+    <string name="pro_tip_gallery">İpucu: Dosyaları Galeri uygulamanızdan doğrudan MetaJammer\'a paylaşabilirsiniz.</string>
     <string name="select_files">Dosyaları Seç</string>
     <string name="select_more_files">Daha Fazla Dosya Seç</string>
     <string name="clear_selection">Seçimi Temizle</string>
@@ -41,17 +42,17 @@
     <string name="size_bytes">%1$d Bayt</string>
 
     <!-- MetadataPreviewScreen -->
-    <string name="metadata_preview">Metaveri Önizleme</string>
+    <string name="metadata_preview">Metadata Önizleme</string>
     <string name="file_type">Tür: %1$s</string>
-    <string name="no_metadata_found">Metaveri bulunamadı</string>
+    <string name="no_metadata_found">Metadata bulunamadı</string>
 
     <!-- ProcessingScreen -->
     <string name="process_files_title">Dosyaları İşle</string>
     <string name="pick_one_option">Bir seçenek belirleyin:</string>
-    <string name="poison_metadata">Metaveriyi Zehirle</string>
-    <string name="remove_metadata">Metaveriyi Kaldır</string>
-    <string name="selected_mode">Seçili: %1$s</string>
-    <string name="regenerate_plans">Tüm Rastgele Planları Yenile</string>
+    <string name="poison_metadata">Metadataları Zehirle</string>
+    <string name="remove_metadata">Metadataları Kaldır</string>
+    <string name="selected_mode">Seçilen: %1$s</string>
+    <string name="regenerate_plans">Tüm Rastgele Planları Yeniden Oluştur</string>
     <string name="preview_of_changes">Değişikliklerin Önizlemesi</string>
     <string name="no_preview_available">Önizleme mevcut değil</string>
     <string name="change_location_map">Haritada Konumu Değiştir</string>
@@ -60,13 +61,27 @@
     <string name="background_progress">Arka Plan İlerlemesi: %1$d%%</string>
     <string name="continue_to_output">Çıktı Seçeneklerine Devam Et</string>
 
+    <!-- HelpScreen -->
+    <string name="help_title">Yardım ve Eğitimler</string>
+    <string name="help_item_video_title">Video İşleme</string>
+    <string name="help_item_video_body">Desteklenen formatlar: MP4, MOV.\n\nBu kapsayıcılar için tam remuxing desteklenir. Bu işlem, gizliliğinizi korumak için GPS, tarih ve cihaz atomlarını kaldırır.</string>
+    <string name="help_item_image_title">Görüntü İşleme</string>
+    <string name="help_item_image_body">Desteklenen formatlar: JPG, PNG.\n\nMetaJammer bu görüntülerden EXIF metadatalarını temizler. \"Zehirleme\" modunda, GPS koordinatları gibi hassas etiketleri gerçekçi rastgele verilerle değiştirir.</string>
+    <string name="help_item_other_title">Diğer Dosyalar</string>
+    <string name="help_item_other_body">Desteklenen formatlar: Şu an için yok.\n\nMetaJammer şu anda medya dosyalarına odaklanmaktadır. Gelecek güncellemeler PDF ve belge desteğini içerecektir. Takipte kalın!</string>
+    <string name="help_report_issue_title">Sorun Bildir</string>
+    <string name="help_report_issue_body">Bir hata mı buldunuz veya bir özellik isteğiniz mi var? Lütfen GitHub sayfamızda bildirin.</string>
+    <string name="help_open_github">GitHub Sorunlarını Aç</string>
+    <string name="help_app_version">Versiyon: %1$s</string>
+    <string name="help">Yardım</string>
+
     <!-- LocationPickerScreen -->
     <string name="pick_location">Konum Seç</string>
     <string name="confirm_location">Konumu Onayla</string>
 
     <!-- OutputOptionsScreen -->
     <string name="output_options">Çıktı Seçenekleri</string>
-    <string name="saving_will_trigger_sharing">Kaydetmek aynı zamanda paylaşımı da tetikleyecektir.</string>
+    <string name="saving_will_trigger_sharing">Kaydetmek paylaşımı da tetikleyecektir.</string>
     <string name="choose_save_or_share">İşlenen sonucun kaydedilmesini mi yoksa paylaşılmasını mı istediğinizi seçin.</string>
     <string name="save_to_default_folder">Varsayılan Klasöre Kaydet</string>
     <string name="save_to_custom_folder">Özel Klasöre Kaydet</string>
@@ -74,34 +89,34 @@
     <!-- SettingsScreen -->
     <string name="settings">Ayarlar</string>
     <string name="category_file_management">Dosya Yönetimi</string>
-    <string name="category_image_file">Görüntü / Dosya</string>
+    <string name="category_image_file">Resim / Dosya</string>
     <string name="category_shared_files">Paylaşılan Dosya Davranışı</string>
     <string name="category_ui">Kullanıcı Arayüzü</string>
 
     <string name="setting_random_names_title">Rastgele dosya adları kullan</string>
     <string name="setting_random_names_sub">Orijinal dosya adını kullanmak yerine rastgele çıktı adları oluşturun</string>
     <string name="setting_default_path_title">Varsayılan kaydetme yolu</string>
-    <string name="setting_reset_path">Pictures/MetaJammer\'a Sıfırla</string>
+    <string name="setting_reset_path">Resimler/MetaJammer klasörüne sıfırla</string>
     <string name="setting_select_folder">Klasör Seç</string>
 
-    <string name="setting_keep_orientation_title">Görüntü yönünü koru</string>
-    <string name="setting_keep_orientation_sub">Mümkün olduğunda görüntü yönü metaverilerini koru</string>
+    <string name="setting_keep_orientation_title">Resim yönünü koru</string>
+    <string name="setting_keep_orientation_sub">Mümkün olduğunda resim yönü metadatalarını koru</string>
     <string name="setting_share_default_title">Sonucu varsayılan olarak paylaş</string>
-    <string name="setting_share_default_sub">Kaydetmek aynı zamanda paylaşımı da tetikleyecektir</string>
-    <string name="setting_prefix_title">Varsayılan Ön ek</string>
-    <string name="setting_suffix_title">Varsayılan Son ek</string>
+    <string name="setting_share_default_sub">Kaydetmek paylaşımı da tetikleyecektir</string>
+    <string name="setting_prefix_title">Varsayılan Önek</string>
+    <string name="setting_suffix_title">Varsayılan Sonek</string>
     <string name="setting_not_set">Ayarlanmadı</string>
     <string name="setting_keep_thumbnails_title">Orijinal küçük resimleri koru</string>
-    <string name="setting_keep_thumbnails_sub">Dosya gömülü bir küçük resim içeriyorsa olduğu gibi koru. Devre dışı bırakılırsa, maksimum gizlilik için mevcut tüm küçük resimler kaldırılacaktır.</string>
-    <string name="setting_thumbnails_warning">Uyarı: Orijinal küçük resimleri tutmak, ana etiketler kaldırılsa bile metaveri (konum, cihaz bilgisi) sızdırabilir.</string>
+    <string name="setting_keep_thumbnails_sub">Dosya gömülü bir küçük resim içeriyorsa, olduğu gibi koru. Devre dışı bırakılırsa, maksimum gizlilik için mevcut küçük resimler kaldırılacaktır.</string>
+    <string name="setting_thumbnails_warning">Uyarı: Orijinal küçük resimlerin korunması, ana etiketler kaldırılsa bile metadata (konum, cihaz bilgisi) sızdırabilir.</string>
     <string name="setting_enable_map_title">Harita seçiciyi etkinleştir</string>
-    <string name="setting_enable_map_sub">Uygulamanın konum seçimi için OpenStreetMap\'i göstermek üzere internete bağlanmasına izin ver</string>
+    <string name="setting_enable_map_sub">Konum seçimi için OpenStreetMap\'i göstermek üzere uygulamanın internete bağlanmasına izin ver</string>
 
     <string name="setting_quick_scrub_title">Hızlı Temizle ve Paylaş</string>
-    <string name="setting_quick_scrub_sub">Paylaşılan dosyalar için metaveriyi otomatik olarak temizle ve Paylaşım Sayfasını yeniden aç</string>
-    <string name="setting_metadata_action_title">Metaveri işlemi</string>
-    <string name="setting_output_action_title">Çıktı işlemi</string>
-    <string name="setting_dedicated_folder_title">Özel paylaşılan dosyalar klasörü</string>
+    <string name="setting_quick_scrub_sub">Paylaşılan dosyalar için metadataları otomatik olarak temizle ve Paylaşım Sayfasını yeniden aç</string>
+    <string name="setting_metadata_action_title">Metadata eylemi</string>
+    <string name="setting_output_action_title">Çıktı eylemi</string>
+    <string name="setting_dedicated_folder_title">Paylaşılan dosyalar için özel klasör</string>
     <string name="setting_no_folder_selected">Özel klasör seçilmedi</string>
     <string name="setting_clear_folder">Özel Klasörü Temizle</string>
 
@@ -113,7 +128,7 @@
     <!-- Enums -->
     <string name="night_mode_always">Her zaman</string>
     <string name="night_mode_automatic">Otomatik</string>
-    <string name="night_mode_low_battery">Sadece düşük pilde</string>
+    <string name="night_mode_low_battery">Sadece düşük pil</string>
     <string name="night_mode_never">Asla</string>
 
     <string name="language_system">System Default (Sistem Varsayılanı)</string>
@@ -122,36 +137,38 @@
     <string name="language_it">Italiano (İtalyanca)</string>
     <string name="language_fr">Français (Fransızca)</string>
     <string name="language_de">Deutsch (Almanca)</string>
-    <string name="language_zh">中文 (简体) (Çince (Basitleştirilmiş))</string>
+    <string name="language_zh">中文 (简体) (Çince)</string>
     <string name="language_hi">हिन्दी (Hintçe)</string>
     <string name="language_pt">Português (Portekizce)</string>
     <string name="language_ru">Русский (Rusça)</string>
     <string name="language_el">Ελληνικά (Yunanca)</string>
     <string name="language_ar">العربية (Arapça)</string>
     <string name="language_ja">日本語 (Japonca)</string>
-    <string name="language_in">Bahasa Indonesia (Endonezce)</string>
+    <string name="language_id">Bahasa Indonesia (Endonezce)</string>
     <string name="language_tr">Türkçe (Türkçe)</string>
     <string name="language_ko">한국어 (Korece)</string>
     <string name="language_vi">Tiếng Việt (Vietnamca)</string>
     <string name="language_th">ไทย (Tayca)</string>
-    <string name="language_pl">Polski (Lehçe)</string>
+    <string name="language_pl">Polski (Polonyaca)</string>
     <string name="language_nl">Nederlands (Hollandaca)</string>
     <string name="language_uk">Українська (Ukraynaca)</string>
     <string name="language_fa">فارسی (Farsça)</string>
+    <string name="language_he">עברית (İbranice)</string>
+    <string name="language_la">Latina (Latince)</string>
 
-    <string name="processing_mode_poison">Metaveriyi zehirle (Sahte bilgi)</string>
-    <string name="processing_mode_remove">Metaveriyi kaldır (Tam temizlik)</string>
+    <string name="processing_mode_poison">Metadataları zehirle (Sahte bilgi)</string>
+    <string name="processing_mode_remove">Metadataları kaldır (Tam temizlik)</string>
 
     <string name="output_action_default_folder">Varsayılan klasöre kaydet</string>
     <string name="output_action_shared_folder">Özel klasöre kaydet</string>
-    <string name="output_action_reshare">Temizlenmiş dosyaları tekrar paylaş</string>
+    <string name="output_action_reshare">Temizlenen dosyaları yeniden paylaş</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">Harita Seçici ve İnternet Erişimi</string>
-    <string name="map_permission_message">Konum seçimi için bir harita göstermek amacıyla MetaJammer\'ın OpenStreetMap\'ten harita karoları yüklemek için internete bağlanması gerekir. \n\nReddederseniz, uygulama tüm metaveri temizleme ve zehirleme özellikleri için kusursuz çalışmaya devam eder ancak konumları harita üzerinde görsel olarak seçemezsiniz.</string>
+    <string name="map_permission_message">Konum seçimi için bir harita göstermek üzere MetaJammer\'ın OpenStreetMap\'ten harita karoları yüklemek için internete bağlanması gerekir. \n\nReddederseniz, uygulama tüm metadata temizleme ve zehirleme özellikleri için kusursuz çalışmaya devam eder ancak harita üzerinde görsel olarak konum seçemezsiniz.</string>
     <string name="allow_open_map">İzin Ver ve Haritayı Aç</string>
     <string name="not_now">Şimdi Değil</string>
 
     <string name="notification_permission_title">Haberdar Olun</string>
-    <string name="notification_permission_message">MetaJammer, arka planda işlenen büyük dosya yığınlarının ilerlemesi hakkında sizi güncel tutmak için bildirimler gösterebilir. \n\nBu, özellikle MetaJammer işini bitirirken başka bir uygulamaya geçmek istiyorsanız yararlıdır.</string>
+    <string name="notification_permission_message">MetaJammer, arka planda işlenirken büyük dosya gruplarının ilerlemesi hakkında sizi bilgilendirmek için bildirimler gösterebilir. \n\nBu, özellikle MetaJammer işini bitirirken başka bir uygulamaya geçmek istediğinizde kullanışlıdır.</string>
 </resources>

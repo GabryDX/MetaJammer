@@ -1,5 +1,6 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources><string name="app_name">MetaJammer</string>
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MetaJammer</string>
     <string name="notification_channel_name">Procesamiento de archivos</string>
     <string name="notification_processing_title">Procesando archivos</string>
     <string name="notification_processing_message">Eliminando metadatos de %1$d archivos...</string>
@@ -17,6 +18,7 @@
     <string name="warning">Advertencia</string>
     <string name="none">Ninguno</string>
     <string name="unknown">desconocido</string>
+    <string name="delete">Eliminar</string>
 
     <!-- HomeScreen -->
     <string name="hero_title">Protege tu privacidad</string>
@@ -24,7 +26,7 @@
     <string name="feature_images_video_title">Imágenes y vídeo</string>
     <string name="feature_images_video_desc">Soporte completo para eliminar metadatos de fotos y remezclar vídeos para eliminar el seguimiento.</string>
     <string name="feature_poisoning_title">Envenenamiento de metadatos</string>
-    <string name="feature_poisoning_desc">No solo elimines datos: reemplázalos con información falsa realista para preservar la privacidad y confundir a los rastreadores.</string>
+    <string name="feature_poisoning_desc">No te limites a borrar datos: sustitúyelos por información falsa realista para proteger tu privacidad y despistar a los rastreadores.</string>
     <string name="feature_background_title">Procesamiento en segundo plano</string>
     <string name="feature_background_desc">Procesa cientos de archivos de manera eficiente en segundo plano mientras haces otras cosas.</string>
     <string name="feature_on_device_title">Privacidad en el dispositivo</string>
@@ -58,6 +60,20 @@
     <string name="processing_foreground">Procesando en primer plano...</string>
     <string name="background_progress">Progreso en segundo plano: %1$d%%</string>
     <string name="continue_to_output">Continuar con opciones de salida</string>
+
+    <!-- HelpScreen -->
+    <string name="help_title">Ayuda y tutoriales</string>
+    <string name="help_item_video_title">Procesamiento de vídeo</string>
+    <string name="help_item_video_body">Formatos compatibles: MP4, MOV.\n\nSe admite el "remuxing" (remezcla) completo para estos contenedores. Este proceso elimina el GPS, las fechas y los átomos del dispositivo para proteger tu privacidad.</string>
+    <string name="help_item_image_title">Procesamiento de imágenes</string>
+    <string name="help_item_image_body">Formatos compatibles: JPG, PNG.\n\nMetaJammer elimina los metadatos EXIF de estas imágenes. En el modo \"Envenenar\", reemplaza las etiquetas sensibles como las coordenadas GPS con datos aleatorios realistas.</string>
+    <string name="help_item_other_title">Otros archivos</string>
+    <string name="help_item_other_body">Formatos compatibles: Ninguno actualmente.\n\nMetaJammer se centra actualmente en archivos multimedia. Las futuras actualizaciones incluirán soporte para PDF y documentos. ¡Mantente atento!</string>
+    <string name="help_report_issue_title">Informar de un problema</string>
+    <string name="help_report_issue_body">¿Has encontrado un error o tienes una petición de funcionalidad? Por favor, infórmanos en nuestra página de GitHub.</string>
+    <string name="help_open_github">Abrir problemas en GitHub</string>
+    <string name="help_app_version">Versión: %1$s</string>
+    <string name="help">Ayuda</string>
 
     <!-- LocationPickerScreen -->
     <string name="pick_location">Elegir ubicación</string>
@@ -128,7 +144,7 @@
     <string name="language_el">Ελληνικά (Griego)</string>
     <string name="language_ar">العربية (Árabe)</string>
     <string name="language_ja">日本語 (Japonés)</string>
-    <string name="language_in">Bahasa Indonesia (Indonesio)</string>
+    <string name="language_id">Bahasa Indonesia (Indonesio)</string>
     <string name="language_tr">Türkçe (Turco)</string>
     <string name="language_ko">한국어 (Coreano)</string>
     <string name="language_vi">Tiếng Việt (Vietnamita)</string>
@@ -137,6 +153,8 @@
     <string name="language_nl">Nederlands (Holandés)</string>
     <string name="language_uk">Українська (Ucraniano)</string>
     <string name="language_fa">فارسی (Persa)</string>
+    <string name="language_he">עברית (Hebreo)</string>
+    <string name="language_la">Latina (Latín)</string>
 
     <string name="processing_mode_poison">Envenenar metadatos (Info falsa)</string>
     <string name="processing_mode_remove">Eliminar metadatos (Limpieza total)</string>
