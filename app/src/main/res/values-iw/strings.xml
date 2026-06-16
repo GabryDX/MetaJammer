@@ -66,7 +66,7 @@
     <string name="help_item_video_title">עיבוד וידאו</string>
     <string name="help_item_video_body">פורמטים נתמכים: MP4, MOV.\n\nתהליך זה מסיר GPS, תאריכים ונתוני מכשיר כדי להגן על פרטיותך.</string>
     <string name="help_item_image_title">עיבוד תמונה</string>
-    <string name="help_item_image_body">פורמטים נתמכים: JPG, PNG.\n\nMetaJammer מסיר מטא-דאטה EXIF מתמונות אלו. במצב \"הרעלה\", הוא מחליף תגיות רגישות בנתונים אקראיים מציאותיים.</string>
+    <string name="help_item_image_body">פורמטים נתמכים: JPG, PNG, WebP, HEIF.\n\nMetaJammer מסיר מטא-דאטה EXIF מתמונות אלו. במצב \"הרעלה\", הוא מחליף תגיות רגישות בנתונים אקראיים מציאותיים.</string>
     <string name="help_item_other_title">קבצים אחרים</string>
     <string name="help_item_other_body">פורמטים נתמכים: אין כרגע.\n\nMetaJammer מתמקד כרגע בקבצי מדיה. עדכונים עתידיים יכללו תמיכה ב-PDF ומסמכים.</string>
     <string name="help_report_issue_title">דווח על בעיה</string>

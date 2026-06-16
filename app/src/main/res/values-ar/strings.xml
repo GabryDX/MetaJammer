@@ -66,7 +66,7 @@
     <string name="help_item_video_title">معالجة الفيديو</string>
     <string name="help_item_video_body">التنسيقات المدعومة: MP4, MOV.\n\nيتم دعم إعادة دمج الحاويات بالكامل لهذه الملفات. تقوم هذه العملية بإزالة بيانات GPS والتواريخ ومعلومات الجهاز لحماية خصوصيتك.</string>
     <string name="help_item_image_title">معالجة الصور</string>
-    <string name="help_item_image_body">التنسيقات المدعومة: JPG, PNG.\n\nيقوم MetaJammer بإزالة بيانات EXIF من هذه الصور. في وضع \"التسميم\" (Poison)، يستبدل العلامات الحساسة مثل إحداثيات GPS ببيانات عشوائية واقعية.</string>
+    <string name="help_item_image_body">التنسيقات المدعومة: JPG, PNG, WebP, HEIF.\n\nيقوم MetaJammer بإزالة بيانات EXIF من هذه الصور. في وضع \"التسميم\" (Poison)، يستبدل العلامات الحساسة مثل إحداثيات GPS ببيانات عشوائية واقعية.</string>
     <string name="help_item_other_title">ملفات أخرى</string>
     <string name="help_item_other_body">التنسيقات المدعومة: لا يوجد حالياً.\n\nيركز MetaJammer حالياً على ملفات الوسائط. ستشمل التحديثات المستقبلية دعم ملفات PDF والمستندات. ابقوا على اطلاع!</string>
     <string name="help_report_issue_title">الإبلاغ عن مشكلة</string>

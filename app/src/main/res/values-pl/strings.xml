@@ -66,7 +66,7 @@
     <string name="help_item_video_title">Przetwarzanie wideo</string>
     <string name="help_item_video_body">Obsługiwane formaty: MP4, MOV.\n\nPełny remuxing jest obsługiwany dla tych kontenerów. Proces ten usuwa dane GPS, daty i atomy urządzenia, aby chronić Twoją prywatność.</string>
     <string name="help_item_image_title">Przetwarzanie obrazów</string>
-    <string name="help_item_image_body">Obsługiwane formaty: JPG, PNG.\n\nMetaJammer usuwa metadane EXIF z tych obrazów. W trybie „Zatruwanie” zastępuje wrażliwe tagi, takie jak współrzędne GPS, realistycznymi losowymi danymi.</string>
+    <string name="help_item_image_body">Obsługiwane formaty: JPG, PNG, WebP, HEIF.\n\nMetaJammer usuwa metadane EXIF z tych obrazów. W trybie „Zatruwanie” zastępuje wrażliwe tagi, takie jak współrzędne GPS, realistycznymi losowymi danymi.</string>
     <string name="help_item_other_title">Inne pliki</string>
     <string name="help_item_other_body">Obsługiwane formaty: Obecnie brak.\n\nMetaJammer koncentruje się obecnie na plikach multimedialnych. Przyszłe aktualizacje obejmą obsługę plików PDF i dokumentów. Bądź na bieżąco!</string>
     <string name="help_report_issue_title">Zgłoś problem</string>

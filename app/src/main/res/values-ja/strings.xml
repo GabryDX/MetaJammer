@@ -66,7 +66,7 @@
     <string name="help_item_video_title">ビデオ処理</string>
     <string name="help_item_video_body">サポートされている形式：MP4、MOV。\n\nこれらのコンテナの完全なリマックがサポートされています。このプロセスにより、プライバシーを保護するためにGPS、日付、およびデバイスアトムが削除されます。</string>
     <string name="help_item_image_title">画像処理</string>
-    <string name="help_item_image_body">サポートされている形式：JPG、PNG。\n\nMetaJammerはこれらの画像からEXIFメタデータを削除します。「ポイズン」モードでは、GPS座標などの機密タグを現実的なランダムデータに置き換えます。</string>
+    <string name="help_item_image_body">サポートされている形式：JPG, PNG, WebP, HEIF。\n\nMetaJammerはこれらの画像からEXIFメタデータを削除します。「ポイズン」モードでは、GPS座標などの機密タグを現実的なランダムデータに置き換えます。</string>
     <string name="help_item_other_title">その他のファイル</string>
     <string name="help_item_other_body">サポートされている形式：現在はなし。\n\nMetaJammerは現在、メディアファイルに焦点を当てています。将来のアップデートでは、PDFやドキュメントのサポートが含まれる予定です。ご期待ください！</string>
     <string name="help_report_issue_title">問題を報告する</string>

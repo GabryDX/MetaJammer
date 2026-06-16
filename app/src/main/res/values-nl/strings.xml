@@ -66,7 +66,7 @@
     <string name="help_item_video_title">Videoverwerking</string>
     <string name="help_item_video_body">Ondersteunde formaten: MP4, MOV.\n\nVolledige remuxing wordt ondersteund voor deze containers. Dit proces verwijdert GPS, datums en apparaat-atomen om uw privacy te beschermen.</string>
     <string name="help_item_image_title">Beeldverwerking</string>
-    <string name="help_item_image_body">Ondersteunde formaten: JPG, PNG.\n\nMetaJammer verwijdert EXIF-metadata van deze afbeeldingen. In de modus \"Poison\" worden gevoelige tags zoals GPS-coördinaten vervangen door realistische willekeurige gegevens.</string>
+    <string name="help_item_image_body">Ondersteunde formaten: JPG, PNG, WebP, HEIF.\n\nMetaJammer verwijdert EXIF-metadata van deze afbeeldingen. In de modus \"Poison\" worden gevoelige tags zoals GPS-coördinaten vervangen door realistische willekeurige gegevens.</string>
     <string name="help_item_other_title">Andere bestanden</string>
     <string name="help_item_other_body">Ondersteunde formaten: Momenteel geen.\n\nMetaJammer richt zich momenteel op mediabestanden. Toekomstige updates zullen ondersteuning voor PDF\'s en documenten bevatten. Blijf op de hoogte!</string>
     <string name="help_report_issue_title">Meld een probleem</string>

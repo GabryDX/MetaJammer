@@ -66,7 +66,7 @@
     <string name="help_item_video_title">视频处理</string>
     <string name="help_item_video_body">支持的格式：MP4, MOV。\n\n这些格式支持完整的“重混”(Remuxing) 过程。该过程会删除 GPS、日期和设备信息，以保护您的隐私。</string>
     <string name="help_item_image_title">图像处理</string>
-    <string name="help_item_image_body">支持的格式：JPG, PNG。\n\nMetaJammer 会从这些图像中删除 EXIF 元数据。在“投毒”模式下，它会将 GPS 坐标等敏感标签替换为现实的随机数据。</string>
+    <string name="help_item_image_body">支持的格式：JPG, PNG, WebP, HEIF。\n\nMetaJammer 会从这些图像中删除 EXIF 元数据。在“投毒”模式下，它会将 GPS 坐标等敏感标签替换为现实的随机数据。</string>
     <string name="help_item_other_title">其他文件</string>
     <string name="help_item_other_body">支持的格式：目前没有。\n\nMetaJammer 目前专注于媒体文件。未来的更新将包括对 PDF 和文档的支持。敬请关注！</string>
     <string name="help_report_issue_title">报告问题</string>

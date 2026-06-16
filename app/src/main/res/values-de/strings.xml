@@ -66,7 +66,7 @@
     <string name="help_item_video_title">Videoverarbeitung</string>
     <string name="help_item_video_body">Unterstützte Formate: MP4, MOV.\n\nVollständiges Remuxing wird für diese Container unterstützt. Dieser Vorgang entfernt GPS, Daten und Geräteatome, um Ihre Privatsphäre zu schützen.</string>
     <string name="help_item_image_title">Bildverarbeitung</string>
-    <string name="help_item_image_body">Unterstützte Formate: JPG, PNG.\n\nMetaJammer entfernt EXIF-Metadaten aus diesen Bildern. Im Modus „Vergiften“ werden sensible Tags wie GPS-Koordinaten durch realistische Zufallsdaten ersetzt.</string>
+    <string name="help_item_image_body">Unterstützte Formate: JPG, PNG, WebP, HEIF.\n\nMetaJammer entfernt EXIF-Metadaten aus diesen Bildern. Im Modus „Vergiften“ werden sensible Tags wie GPS-Koordinaten durch realistische Zufallsdaten ersetzt.</string>
     <string name="help_item_other_title">Andere Dateien</string>
     <string name="help_item_other_body">Unterstützte Formate: Derzeit keine.\n\nMetaJammer konzentriert sich aktuell auf Mediendateien. Zukünftige Updates werden Unterstützung für PDFs und Dokumente enthalten. Bleiben Sie auf dem Laufenden!</string>
     <string name="help_report_issue_title">Ein Problem melden</string>

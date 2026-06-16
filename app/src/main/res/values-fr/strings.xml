@@ -66,7 +66,7 @@
     <string name="help_item_video_title">Traitement vidéo</string>
     <string name="help_item_video_body">Formats pris en charge : MP4, MOV.\n\nLe remuxage complet est pris en charge pour ces conteneurs. Ce processus supprime le GPS, les dates et les atomes de l\'appareil pour protéger votre vie privée.</string>
     <string name="help_item_image_title">Traitement d\'image</string>
-    <string name="help_item_image_body">Formats pris en charge : JPG, PNG.\n\nMetaJammer supprime les métadonnées EXIF de ces images. En mode \"Poison\", il remplace les balises sensibles telles que les coordonnées GPS par des données aléatoires réalistes.</string>
+    <string name="help_item_image_body">Formats pris en charge : JPG, PNG, WebP, HEIF.\n\nMetaJammer supprime les métadonnées EXIF de ces images. En mode \"Poison\", il remplace les balises sensibles telles que les coordonnées GPS par des données aléatoires réalistes.</string>
     <string name="help_item_other_title">Autres fichiers</string>
     <string name="help_item_other_body">Formats pris en charge : Aucun pour le moment.\n\nMetaJammer se concentre actuellement sur les fichiers multimédias. Les prochaines mises à jour incluront la prise en charge des PDF et des documents. Restez à l\'écoute !</string>
     <string name="help_report_issue_title">Signaler un problème</string>

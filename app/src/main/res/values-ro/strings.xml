@@ -66,7 +66,7 @@
     <string name="help_item_video_title">Procesare video</string>
     <string name="help_item_video_body">Formate suportate: MP4, MOV.\n\nRemuxarea completă este suportată pentru aceste containere. Acest proces elimină datele GPS, datele calendaristice și atomii de dispozitiv pentru a-ți proteja confidențialitatea.</string>
     <string name="help_item_image_title">Procesare imagini</string>
-    <string name="help_item_image_body">Formate suportate: JPG, PNG.\n\nMetaJammer elimină metadatele EXIF din aceste imagini. În modul \"Alterare\", acesta înlocuiește etichetele sensibile (cum ar fi coordonatele GPS) cu date aleatorii realiste.</string>
+    <string name="help_item_image_body">Formate suportate: JPG, PNG, WebP, HEIF.\n\nMetaJammer elimină metadatele EXIF din aceste imagini. În modul \"Alterare\", acesta înlocuiește etichetele sensibile (cum ar fi coordonatele GPS) cu date aleatorii realiste.</string>
     <string name="help_item_other_title">Alte fișiere</string>
     <string name="help_item_other_body">Formate suportate: Momentan niciunul.\n\nMetaJammer se concentrează în prezent pe fișierele media. Actualizările viitoare vor include suport pentru PDF-uri și documente. Rămâi pe recepție!</string>
     <string name="help_report_issue_title">Raportează o problemă</string>

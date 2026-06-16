@@ -66,7 +66,7 @@
     <string name="help_item_video_title">동영상 처리</string>
     <string name="help_item_video_body">지원되는 형식: MP4, MOV.\n\n이러한 컨테이너에 대해 전체 리먹싱이 지원됩니다. 이 프로세스는 개인 정보를 보호하기 위해 GPS, 날짜 및 장치 원자를 제거합니다.</string>
     <string name="help_item_image_title">이미지 처리</string>
-    <string name="help_item_image_body">지원되는 형식: JPG, PNG.\n\nMetaJammer는 이러한 이미지에서 EXIF 메타데이터를 제거합니다. \"포이즌\" 모드에서는 GPS 좌표와 같은 민감한 태그를 실제와 유사한 무작위 데이터로 대체합니다.</string>
+    <string name="help_item_image_body">지원되는 형식: JPG, PNG, WebP, HEIF.\n\nMetaJammer는 이러한 이미지에서 EXIF 메타데이터를 제거합니다. \"포이즌\" 모드에서는 GPS 좌표와 같은 민감한 태그를 실제와 유사한 무작위 데이터로 대체합니다.</string>
     <string name="help_item_other_title">기타 파일</string>
     <string name="help_item_other_body">지원되는 형식: 현재 없음.\n\nMetaJammer는 현재 미디어 파일에 집중하고 있습니다. 향후 업데이트에는 PDF 및 문서에 대한 지원이 포함될 예정입니다. 기대해 주세요!</string>
     <string name="help_report_issue_title">문제 보고</string>

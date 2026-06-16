@@ -66,7 +66,7 @@
     <string name="help_item_video_title">Обработка видео</string>
     <string name="help_item_video_body">Поддерживаемые форматы: MP4, MOV.\n\nПолный ремуксинг поддерживается для этих контейнеров. Этот процесс удаляет GPS, даты и атомы устройства для защиты вашей конфиденциальности.</string>
     <string name="help_item_image_title">Обработка изображений</string>
-    <string name="help_item_image_body">Поддерживаемые форматы: JPG, PNG.\n\nMetaJammer удаляет метаданные EXIF из этих изображений. В режиме «Отравление» он заменяет конфиденциальные теги, такие как координаты GPS, реалистичными случайными данными.</string>
+    <string name="help_item_image_body">Поддерживаемые форматы: JPG, PNG, WebP, HEIF.\n\nMetaJammer удаляет метаданные EXIF из этих изображений. В режиме «Отравление» он заменяет конфиденциальные теги, такие как координаты GPS, реалистичными случайными данными.</string>
     <string name="help_item_other_title">Другие файлы</string>
     <string name="help_item_other_body">Поддерживаемые форматы: В данный момент нет.\n\nMetaJammer в настоящее время фокусируется на медиафайлах. Будущие обновления будут включать поддержку PDF и документов. Следите за обновлениями!</string>
     <string name="help_report_issue_title">Сообщить о проблеме</string>

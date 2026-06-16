@@ -66,7 +66,7 @@
     <string name="help_item_video_title">Pemrosesan Video</string>
     <string name="help_item_video_body">Format yang didukung: MP4, MOV.\n\nRemuxing penuh didukung untuk kontainer ini. Proses ini menghapus GPS, tanggal, dan atom perangkat untuk melindungi privasi Anda.</string>
     <string name="help_item_image_title">Pemrosesan Gambar</string>
-    <string name="help_item_image_body">Format yang didukung: JPG, PNG.\n\nMetaJammer menghapus metadata EXIF dari gambar-gambar ini. Dalam mode \"Poison\", metadata sensitif seperti koordinat GPS diganti dengan data acak yang realistis.</string>
+    <string name="help_item_image_body">Format yang didukung: JPG, PNG, WebP, HEIF.\n\nMetaJammer menghapus metadata EXIF dari gambar-gambar ini. Dalam mode \"Poison\", metadata sensitif seperti koordinat GPS diganti dengan data acak yang realistis.</string>
     <string name="help_item_other_title">File Lainnya</string>
     <string name="help_item_other_body">Format yang didukung: Belum ada.\n\nMetaJammer saat ini fokus pada file media. Pembaruan mendatang akan mencakup dukungan untuk PDF dan dokumen. Nantikan!</string>
     <string name="help_report_issue_title">Laporkan Masalah</string>
