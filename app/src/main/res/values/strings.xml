@@ -60,6 +60,16 @@
     <string name="video_note_body">Full re-muxing is supported for MP4/MOV containers. This process strips GPS, dates, and device atoms to protect your privacy.</string>
     <string name="help_tutorials_title">Help &amp; Tutorials</string>
     <string name="help">Help</string>
+
+    <!-- HelpScreen Expanded -->
+    <string name="image_processing_title">Image Processing</string>
+    <string name="image_processing_body">MetaJammer strips EXIF metadata from JPG and PNG images. In \"Poison\" mode, it replaces sensitive tags like GPS coordinates with realistic random data.</string>
+    <string name="other_files_title">Other Files</string>
+    <string name="other_files_body">MetaJammer currently focuses on media files. Future updates will include support for PDFs and documents. Stay tuned!</string>
+    <string name="report_issue_title">Report an Issue</string>
+    <string name="report_issue_body">Found a bug or have a feature request? Please report it on our GitHub page.</string>
+    <string name="open_github">Open GitHub Issues</string>
+    <string name="app_version">Version: %1$s</string>
     <string name="processing_foreground">Processing in foreground...</string>
     <string name="background_progress">Background Progress: %1$d%%</string>
     <string name="continue_to_output">Continue to Output Options</string>

@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import androidx.core.net.toUri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.compose.BackHandler
@@ -51,7 +52,6 @@ import com.heronikostudios.metajammer.ui.screens.OutputOptionsScreen
 import com.heronikostudios.metajammer.ui.screens.ProcessingScreen
 import com.heronikostudios.metajammer.ui.screens.SettingsScreen
 import com.heronikostudios.metajammer.ui.theme.MetaJammerTheme
-import com.heronikostudios.metajammer.R
 
 class MainActivity : AppCompatActivity() {
 
@@ -317,6 +317,12 @@ fun MetaJammerApp(
                 AppStep.HELP -> {
                     HelpScreen(
                         onBack = { navigateBack() },
+                        onReportIssue = {
+                            runCatching {
+                                val intent = Intent(Intent.ACTION_VIEW, "https://github.com/GabryDX/MetaJammer/issues".toUri())
+                                context.startActivity(intent)
+                            }
+                        },
                         modifier = Modifier.weight(1f)
                     )
                 }
