@@ -60,8 +60,18 @@ class MetadataProcessingWorker(
 
         val plans: Map<String, MetadataReplacementPlan> = if (plansFilePath != null) {
             runCatching {
-                val json = File(plansFilePath).readText()
-                Json.decodeFromString<Map<String, MetadataReplacementPlan>>(json)
+                val file = File(plansFilePath)
+                val cacheDir = applicationContext.cacheDir
+                
+                // Security check: ensure the plans file is within the app's cache directory
+                // and it's not a symlink pointing elsewhere.
+                if (file.canonicalPath.startsWith(cacheDir.canonicalPath)) {
+                    val json = file.readText()
+                    Json.decodeFromString<Map<String, MetadataReplacementPlan>>(json)
+                } else {
+                    Timber.e("Security Alert: Unauthorized plans file path attempt: %s", plansFilePath)
+                    emptyMap()
+                }
             }.onFailure {
                 Timber.e(it, "Failed to load replacement plans from %s", plansFilePath)
             }.getOrDefault(emptyMap())

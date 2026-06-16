@@ -58,4 +58,18 @@ class SanitizationUtilsTest {
         val result = SanitizationUtils.sanitizeSimple(input)
         assertEquals("my-prefix_", result)
     }
+
+    @Test
+    fun `sanitizeFileName handles complex path traversal`() {
+        val input = "folder/../folder2/filename.txt"
+        val result = SanitizationUtils.sanitizeFileName(input)
+        assertEquals("filename.txt", result)
+    }
+
+    @Test
+    fun `sanitizeFileName handles mixed separators`() {
+        val input = "some/path\\other\\file.png"
+        val result = SanitizationUtils.sanitizeFileName(input)
+        assertEquals("file.png", result)
+    }
 }

@@ -60,6 +60,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Security: Protect against tapjacking (overlay) attacks
+        // This ensures the app doesn't receive touches if it's being obscured by another window
+        findViewById<android.view.View>(android.R.id.content)?.filterTouchesWhenObscured = true
+
         enableEdgeToEdge()
         sharedUris = extractSharedUris(intent)
 
