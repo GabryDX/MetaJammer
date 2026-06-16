@@ -140,11 +140,12 @@
     <string name="language_zh">中文 (简体) (Tiếng Trung)</string>
     <string name="language_hi">हिन्दी (Tiếng Hindi)</string>
     <string name="language_pt">Português (Tiếng Bồ Đào Nha)</string>
+    <string name="language_ro">Română (Tiếng Rumani)</string>
     <string name="language_ru">Русский (Tiếng Nga)</string>
     <string name="language_el">Ελληνικά (Tiếng Hy Lạp)</string>
     <string name="language_ar">العربية (Tiếng Ả Rập)</string>
     <string name="language_ja">日本語 (Tiếng Nhật)</string>
-    <string name="language_id">Bahasa Indonesia (Tiếng Indonesia)</string>
+    <string name="language_in">Bahasa Indonesia (Tiếng Indonesia)</string>
     <string name="language_tr">Türkçe (Tiếng Thổ Nhĩ Kỳ)</string>
     <string name="language_ko">한국어 (Tiếng Hàn)</string>
     <string name="language_vi">Tiếng Việt (Tiếng Việt)</string>
@@ -153,7 +154,7 @@
     <string name="language_nl">Nederlands (Tiếng Hà Lan)</string>
     <string name="language_uk">Українська (Tiếng Ukraina)</string>
     <string name="language_fa">فارسی (Tiếng Ba Tư)</string>
-    <string name="language_he">עברית (Tiếng Do Thái)</string>
+    <string name="language_iw">עברית (Tiếng Do Thái)</string>
     <string name="language_la">Latina (Tiếng La-tinh)</string>
 
     <string name="processing_mode_poison">Đầu độc siêu dữ liệu (Thông tin giả)</string>

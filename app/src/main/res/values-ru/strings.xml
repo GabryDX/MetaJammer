@@ -140,11 +140,12 @@
     <string name="language_zh">中文 (简体) (Китайский)</string>
     <string name="language_hi">हिन्दी (Хинди)</string>
     <string name="language_pt">Português (Португальский)</string>
+    <string name="language_ro">Română (Румынский)</string>
     <string name="language_ru">Русский (Русский)</string>
     <string name="language_el">Ελληνικά (Греческий)</string>
     <string name="language_ar">العربية (Арабский)</string>
     <string name="language_ja">日本語 (Японский)</string>
-    <string name="language_id">Bahasa Indonesia (Индонезийский)</string>
+    <string name="language_in">Bahasa Indonesia (Индонезийский)</string>
     <string name="language_tr">Türkçe (Турецкий)</string>
     <string name="language_ko">한국어 (Корейский)</string>
     <string name="language_vi">Tiếng Việt (Вьетнамский)</string>
@@ -153,7 +154,7 @@
     <string name="language_nl">Nederlands (Голландский)</string>
     <string name="language_uk">Українська (Украинский)</string>
     <string name="language_fa">فارسی (Персидский)</string>
-    <string name="language_he">עברית (Иврит)</string>
+    <string name="language_iw">עברית (Иврит)</string>
     <string name="language_la">Latina (Латынь)</string>
 
     <string name="processing_mode_poison">Отравление метаданных (Ложная инфо)</string>

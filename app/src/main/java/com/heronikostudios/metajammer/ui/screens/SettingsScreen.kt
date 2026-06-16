@@ -471,7 +471,7 @@ private fun AppLanguage.toReadableLabel() = when (this) {
     AppLanguage.GREEK -> stringResource(R.string.language_el)
     AppLanguage.ARABIC -> stringResource(R.string.language_ar)
     AppLanguage.JAPANESE -> stringResource(R.string.language_ja)
-    AppLanguage.INDONESIAN -> stringResource(R.string.language_id)
+    AppLanguage.INDONESIAN -> stringResource(R.string.language_in)
     AppLanguage.TURKISH -> stringResource(R.string.language_tr)
     AppLanguage.KOREAN -> stringResource(R.string.language_ko)
     AppLanguage.VIETNAMESE -> stringResource(R.string.language_vi)
@@ -480,6 +480,7 @@ private fun AppLanguage.toReadableLabel() = when (this) {
     AppLanguage.DUTCH -> stringResource(R.string.language_nl)
     AppLanguage.UKRAINIAN -> stringResource(R.string.language_uk)
     AppLanguage.PERSIAN -> stringResource(R.string.language_fa)
-    AppLanguage.HEBREW -> stringResource(R.string.language_he)
+    AppLanguage.HEBREW -> stringResource(R.string.language_iw)
     AppLanguage.LATIN -> stringResource(R.string.language_la)
+    AppLanguage.ROMANIAN -> stringResource(R.string.language_ro)
 }

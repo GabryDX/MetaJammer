@@ -140,11 +140,12 @@
     <string name="language_zh">中文 (简体) (Çince)</string>
     <string name="language_hi">हिन्दी (Hintçe)</string>
     <string name="language_pt">Português (Portekizce)</string>
+    <string name="language_ro">Română (Rumence)</string>
     <string name="language_ru">Русский (Rusça)</string>
     <string name="language_el">Ελληνικά (Yunanca)</string>
     <string name="language_ar">العربية (Arapça)</string>
     <string name="language_ja">日本語 (Japonca)</string>
-    <string name="language_id">Bahasa Indonesia (Endonezce)</string>
+    <string name="language_in">Bahasa Indonesia (Endonezce)</string>
     <string name="language_tr">Türkçe (Türkçe)</string>
     <string name="language_ko">한국어 (Korece)</string>
     <string name="language_vi">Tiếng Việt (Vietnamca)</string>
@@ -153,7 +154,7 @@
     <string name="language_nl">Nederlands (Hollandaca)</string>
     <string name="language_uk">Українська (Ukraynaca)</string>
     <string name="language_fa">فارسی (Farsça)</string>
-    <string name="language_he">עברית (İbranice)</string>
+    <string name="language_iw">עברית (İbranice)</string>
     <string name="language_la">Latina (Latince)</string>
 
     <string name="processing_mode_poison">Metadataları zehirle (Sahte bilgi)</string>

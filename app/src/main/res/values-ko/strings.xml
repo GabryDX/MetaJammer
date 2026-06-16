@@ -140,11 +140,12 @@
     <string name="language_zh">中文 (简体) (중국어)</string>
     <string name="language_hi">हिन्दी (힌디어)</string>
     <string name="language_pt">Português (포르투갈어)</string>
+    <string name="language_ro">Română (루마니아어)</string>
     <string name="language_ru">Русский (러시아어)</string>
     <string name="language_el">Ελληνικά (그리스어)</string>
     <string name="language_ar">العربية (아랍어)</string>
     <string name="language_ja">日本語 (일본어)</string>
-    <string name="language_id">Bahasa Indonesia (인도네시아어)</string>
+    <string name="language_in">Bahasa Indonesia (인도네시아어)</string>
     <string name="language_tr">Türkçe (터키어)</string>
     <string name="language_ko">한국어 (한국어)</string>
     <string name="language_vi">Tiếng Việt (베트남어)</string>
@@ -153,7 +154,7 @@
     <string name="language_nl">Nederlands (네덜란드어)</string>
     <string name="language_uk">Українська (우크라이나어)</string>
     <string name="language_fa">Persian (페르시아어)</string>
-    <string name="language_he">עברית (히브리어)</string>
+    <string name="language_iw">עברית (히브리어)</string>
     <string name="language_la">Latina (라틴어)</string>
 
     <string name="processing_mode_poison">메타데이터 포이즌 (가짜 정보)</string>

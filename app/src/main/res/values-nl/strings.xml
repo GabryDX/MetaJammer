@@ -140,11 +140,12 @@
     <string name="language_zh">中文 (简体) (Chinees)</string>
     <string name="language_hi">हिन्दी (Hindi)</string>
     <string name="language_pt">Português (Portugees)</string>
+    <string name="language_ro">Română (Roemeens)</string>
     <string name="language_ru">Русский (Russisch)</string>
     <string name="language_el">Ελληνικά (Grieks)</string>
     <string name="language_ar">العربية (Arabisch)</string>
     <string name="language_ja">日本語 (Japans)</string>
-    <string name="language_id">Bahasa Indonesia (Indonesisch)</string>
+    <string name="language_in">Bahasa Indonesia (Indonesisch)</string>
     <string name="language_tr">Türkçe (Turks)</string>
     <string name="language_ko">한국어 (Koreaans)</string>
     <string name="language_vi">Tiếng Việt (Vietnamees)</string>
@@ -153,7 +154,7 @@
     <string name="language_nl">Nederlands (Nederlands)</string>
     <string name="language_uk">Українська (Oekraïens)</string>
     <string name="language_fa">Persian (Perzisch)</string>
-    <string name="language_he">עברית (Hebreeuws)</string>
+    <string name="language_iw">עברית (Hebreeuws)</string>
     <string name="language_la">Latina (Latijn)</string>
 
     <string name="processing_mode_poison">Metadata vergiftigen (Valse info)</string>

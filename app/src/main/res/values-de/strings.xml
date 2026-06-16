@@ -140,11 +140,12 @@
     <string name="language_zh">中文 (简体) (Chinesisch)</string>
     <string name="language_hi">हिन्दी (Hindi)</string>
     <string name="language_pt">Português (Portugiesisch)</string>
+    <string name="language_ro">Română (Rumänisch)</string>
     <string name="language_ru">Русский (Russisch)</string>
     <string name="language_el">Ελληνικά (Griechisch)</string>
     <string name="language_ar">العربية (Arabisch)</string>
     <string name="language_ja">日本語 (Japanisch)</string>
-    <string name="language_id">Bahasa Indonesia (Indonesisch)</string>
+    <string name="language_in">Bahasa Indonesia (Indonesisch)</string>
     <string name="language_tr">Türkçe (Türkisch)</string>
     <string name="language_ko">한국어 (Koreanisch)</string>
     <string name="language_vi">Tiếng Việt (Vietnamesisch)</string>
@@ -153,7 +154,7 @@
     <string name="language_nl">Nederlands (Niederländisch)</string>
     <string name="language_uk">Українська (Ukrainisch)</string>
     <string name="language_fa">فارسی (Persisch)</string>
-    <string name="language_he">עברית (Hebräisch)</string>
+    <string name="language_iw">עברית (Hebräisch)</string>
     <string name="language_la">Latina (Latein)</string>
 
     <string name="processing_mode_poison">Metadaten vergiften (Fake-Infos)</string>
