@@ -111,6 +111,8 @@
     <string name="setting_thumbnails_warning">警告：保留原始缩略图可能会泄露元数据（位置、设备信息），即使删除了主标签也是如此。</string>
     <string name="setting_enable_map_title">启用地图选择器</string>
     <string name="setting_enable_map_sub">允许应用连接互联网以显示 OpenStreetMap 以进行位置选择</string>
+    <string name="setting_nearby_scramble_title">使用本地化中毒</string>
+    <string name="setting_nearby_scramble_sub">中毒元数据时，随机化原始位置附近的坐标，而不是完全随机的点</string>
 
     <string name="setting_quick_scrub_title">快速清理并分享</string>
     <string name="setting_quick_scrub_sub">自动删除元数据并为分享的文件重新打开分享列表</string>

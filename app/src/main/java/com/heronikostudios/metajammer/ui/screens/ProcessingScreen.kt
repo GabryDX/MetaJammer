@@ -104,16 +104,29 @@ fun ProcessingScreen(
 
                             HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
-                            val entries = changePreview[file.uri].orEmpty()
+                            val currentEntries = changePreview[file.uri].orEmpty()
 
-                            if (entries.isEmpty()) {
+                            if (currentEntries.isEmpty()) {
                                 Text(stringResource(R.string.no_preview_available))
                             } else {
-                                entries.forEach { entry ->
-                                    Text(
-                                        text = "${entry.key}: ${entry.value}",
-                                        style = MaterialTheme.typography.bodySmall
-                                    )
+                                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    currentEntries.forEach { entry ->
+                                        Column(modifier = Modifier.fillMaxWidth()) {
+                                            Text(
+                                                text = entry.key,
+                                                style = MaterialTheme.typography.labelSmall,
+                                                color = MaterialTheme.colorScheme.primary
+                                            )
+                                            Text(
+                                                text = entry.value,
+                                                style = MaterialTheme.typography.bodySmall,
+                                                color = if (selectedMode == ProcessingMode.POISON_METADATA) 
+                                                    MaterialTheme.colorScheme.tertiary 
+                                                else 
+                                                    MaterialTheme.colorScheme.error
+                                            )
+                                        }
+                                    }
                                 }
                                 
                                 if (selectedMode == ProcessingMode.POISON_METADATA) {

@@ -111,6 +111,8 @@
     <string name="setting_thumbnails_warning">警告：元のサムネイルを保持すると、メインのタグが削除されていてもメタデータ（位置、デバイス情報）が漏洩する可能性があります。</string>
     <string name="setting_enable_map_title">マップピッカーを有効にする</string>
     <string name="setting_enable_map_sub">位置選択のためにOpenStreetMapを表示するため、アプリのインターネット接続を許可します</string>
+    <string name="setting_nearby_scramble_title">ローカライズされたポイズニングを使用する</string>
+    <string name="setting_nearby_scramble_sub">メタデータをポイズニングする際、完全にランダムな地点ではなく、元の場所の近くの座標をランダム化します</string>
 
     <string name="setting_quick_scrub_title">クイッククリーンと共有</string>
     <string name="setting_quick_scrub_sub">共有ファイルに対してメタデータを自動的に削除し、共有シートを再度開きます</string>

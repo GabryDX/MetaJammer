@@ -13,6 +13,7 @@ import com.heronikostudios.metajammer.data.FileRepository
 import com.heronikostudios.metajammer.data.MetadataRepository
 import com.heronikostudios.metajammer.data.SettingsRepository
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.exifinterface.media.ExifInterface
 import androidx.core.os.LocaleListCompat
 import com.heronikostudios.metajammer.domain.model.*
 import com.heronikostudios.metajammer.domain.usecase.ProcessFileUseCase
@@ -156,6 +157,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
         viewModelScope.launch {
+            settingsRepository.useNearbyScrambleFlow.collect {
+                _appSettings.value = _appSettings.value.copy(useNearbyScramble = it)
+            }
+        }
+        viewModelScope.launch {
             settingsRepository.languageFlow.collect { language ->
                 _appSettings.value = _appSettings.value.copy(language = language)
                 applyLanguage(language)
@@ -248,7 +254,18 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun setProcessingMode(mode: ProcessingMode) {
         _selectedMode.value = mode
         if (mode == ProcessingMode.POISON_METADATA && _replacementPlans.value.isEmpty()) {
-            _replacementPlans.value = _selectedFiles.value.associate { it.uri to MetadataReplacementGenerator.generatePlan() }
+            _replacementPlans.value = _selectedFiles.value.associate { selectedFile ->
+                val metadata = _metadataPreview.value[selectedFile.uri].orEmpty()
+                val lat = metadata.find { it.key == "GPSLatitude" }?.value?.toDoubleOrNull()
+                val lon = metadata.find { it.key == "GPSLongitude" }?.value?.toDoubleOrNull()
+                
+                val useScramble = _appSettings.value.useNearbyScramble
+                selectedFile.uri to if (useScramble && lat != null && lon != null) {
+                    MetadataReplacementGenerator.generatePlan(lat, lon)
+                } else {
+                    MetadataReplacementGenerator.generatePlan()
+                }
+            }
         } else if (mode != ProcessingMode.POISON_METADATA) {
             _replacementPlans.value = emptyMap()
         }
@@ -274,8 +291,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun regeneratePoisonPlans() {
         if (_selectedMode.value != ProcessingMode.POISON_METADATA) return
-        _replacementPlans.value = _selectedFiles.value.associate {
-            it.uri to MetadataReplacementGenerator.generatePlan()
+        _replacementPlans.value = _selectedFiles.value.associate { selectedFile ->
+            val metadata = _metadataPreview.value[selectedFile.uri].orEmpty()
+            val lat = metadata.find { it.key == "GPSLatitude" }?.value?.toDoubleOrNull()
+            val lon = metadata.find { it.key == "GPSLongitude" }?.value?.toDoubleOrNull()
+            
+            val useScramble = _appSettings.value.useNearbyScramble
+            selectedFile.uri to if (useScramble && lat != null && lon != null) {
+                MetadataReplacementGenerator.generatePlan(lat, lon)
+            } else {
+                MetadataReplacementGenerator.generatePlan()
+            }
         }
         generateChangePreview()
     }
@@ -446,8 +472,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         val keepOrientation = _appSettings.value.keepImageOrientation
 
         if (mode == ProcessingMode.POISON_METADATA) {
-            _replacementPlans.value = files.associate {
-                it.uri to MetadataReplacementGenerator.generatePlan()
+            _replacementPlans.value = files.associate { selectedFile ->
+                val metadata = metadataRepository.readMetadata(selectedFile)
+                val lat = metadata.find { it.key == "GPSLatitude" }?.value?.toDoubleOrNull()
+                val lon = metadata.find { it.key == "GPSLongitude" }?.value?.toDoubleOrNull()
+                
+                val useScramble = _appSettings.value.useNearbyScramble
+                selectedFile.uri to if (useScramble && lat != null && lon != null) {
+                    MetadataReplacementGenerator.generatePlan(lat, lon)
+                } else {
+                    MetadataReplacementGenerator.generatePlan()
+                }
             }
         } else {
             _replacementPlans.value = emptyMap()
@@ -643,6 +678,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setAllowInternetForMap(allowed: Boolean) = launchSettingUpdate {
         settingsRepository.setAllowInternetForMap(allowed)
+    }
+
+    fun setUseNearbyScramble(enabled: Boolean) = launchSettingUpdate {
+        settingsRepository.setUseNearbyScramble(enabled)
     }
 
     fun setLanguage(language: AppLanguage) = launchSettingUpdate {

@@ -35,6 +35,7 @@ fun SettingsScreen(
     onSharedFilesCustomPathSelected: (Uri?) -> Unit,
     onThumbnailHandlingChanged: (ThumbnailHandling) -> Unit,
     onAllowInternetForMapChanged: (Boolean) -> Unit,
+    onUseNearbyScrambleChanged: (Boolean) -> Unit,
     onLanguageChanged: (AppLanguage) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -123,6 +124,13 @@ fun SettingsScreen(
                 subtitle = stringResource(R.string.setting_enable_map_sub),
                 checked = settings.allowInternetForMap,
                 onCheckedChange = onAllowInternetForMapChanged
+            )
+
+            SettingSwitchRow(
+                title = stringResource(R.string.setting_nearby_scramble_title),
+                subtitle = stringResource(R.string.setting_nearby_scramble_sub),
+                checked = settings.useNearbyScramble,
+                onCheckedChange = onUseNearbyScrambleChanged
             )
         }
 

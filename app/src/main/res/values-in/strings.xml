@@ -111,6 +111,8 @@
     <string name="setting_thumbnails_warning">Peringatan: Mempertahankan thumbnail asli dapat membocorkan metadata (lokasi, info perangkat) bahkan jika tag utama dihapus.</string>
     <string name="setting_enable_map_title">Aktifkan pemilih peta</string>
     <string name="setting_enable_map_sub">Izinkan aplikasi terhubung ke internet untuk menampilkan OpenStreetMap untuk pemilihan lokasi</string>
+    <string name="setting_nearby_scramble_title">Gunakan peracunan terlokalisasi</string>
+    <string name="setting_nearby_scramble_sub">Saat meracuni metadata, acak koordinat di dekat lokasi asli, bukan titik yang sepenuhnya acak</string>
 
     <string name="setting_quick_scrub_title">Quick Scrub &amp; Bagikan</string>
     <string name="setting_quick_scrub_sub">Hapus metadata secara otomatis dan buka kembali Lembar Berbagi untuk file yang dibagikan</string>

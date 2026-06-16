@@ -111,6 +111,8 @@
     <string name="setting_thumbnails_warning">Προειδοποίηση: Η διατήρηση των αρχικών μικρογραφιών ενδέχεται να διαρρεύσει μεταδεδομένα (τοποθεσία, πληροφορίες συσκευής) ακόμα και αν αφαιρεθούν οι κύριες ετικέτες.</string>
     <string name="setting_enable_map_title">Ενεργοποίηση επιλογέα χάρτη</string>
     <string name="setting_enable_map_sub">Επιτρέψτε στην εφαρμογή να συνδεθεί στο διαδίκτυο για να εμφανίσει το OpenStreetMap για την επιλογή τοποθεσίας</string>
+    <string name="setting_nearby_scramble_title">Χρήση τοπικής δηλητηρίασης</string>
+    <string name="setting_nearby_scramble_sub">Κατά τη δηλητηρίαση μεταδεδομένων, τυχαιοποιήστε τις συντεταγμένες κοντά στην αρχική τοποθεσία αντί για ένα εντελώς τυχαίο σημείο</string>
 
     <string name="setting_quick_scrub_title">Γρήγορος καθαρισμός &amp; Κοινοποίηση</string>
     <string name="setting_quick_scrub_sub">Αυτόματη αφαίρεση μεταδεδομένων και εκ νέου άνοιγμα του φύλλου κοινοποίησης για κοινόχρηστα αρχεία</string>

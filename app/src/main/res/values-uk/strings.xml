@@ -111,6 +111,8 @@
     <string name="setting_thumbnails_warning">Попередження: збереження оригінальних мініатюр може призвести до витоку метаданих (місцезнаходження, інформація про пристрій), навіть якщо основні теги видалено.</string>
     <string name="setting_enable_map_title">Увімкнути вибір карти</string>
     <string name="setting_enable_map_sub">Дозволити додатку підключатися до Інтернету для відображення OpenStreetMap при виборі місцезнаходження</string>
+    <string name="setting_nearby_scramble_title">Використовувати локалізоване отруєння</string>
+    <string name="setting_nearby_scramble_sub">При отруєнні метаданих координати вибираються випадковим чином поруч із вихідним місцем розташування, а не в повністю випадковій точці</string>
 
     <string name="setting_quick_scrub_title">Швидке очищення та надсилання</string>
     <string name="setting_quick_scrub_sub">Автоматично видаляти метадані та повторно відкривати панель надсилання для спільних файлів</string>

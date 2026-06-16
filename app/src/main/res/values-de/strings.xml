@@ -111,6 +111,8 @@
     <string name="setting_thumbnails_warning">Warnung: Das Beibehalten von Original-Thumbnails kann Metadaten (Standort, Geräteinfo) preisgeben, auch wenn die Haupt-Tags entfernt wurden.</string>
     <string name="setting_enable_map_title">Karten-Picker aktivieren</string>
     <string name="setting_enable_map_sub">Der App erlauben, eine Verbindung zum Internet herzustellen, um OpenStreetMap für die Standortwahl anzuzeigen</string>
+    <string name="setting_nearby_scramble_title">Lokalisierte Vergiftung verwenden</string>
+    <string name="setting_nearby_scramble_sub">Bei der Vergiftung von Metadaten werden Koordinaten in der Nähe des ursprünglichen Standorts randomisiert, anstatt eines völlig zufälligen Punkts</string>
 
     <string name="setting_quick_scrub_title">Quick Scrub &amp; Share</string>
     <string name="setting_quick_scrub_sub">Metadaten automatisch entfernen und das Share-Sheet für geteilte Dateien erneut öffnen</string>

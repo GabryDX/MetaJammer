@@ -443,6 +443,7 @@ fun MetaJammerApp(
                         onSharedFilesCustomPathSelected = viewModel::persistAndSetSharedFilesCustomPath,
                         onThumbnailHandlingChanged = viewModel::setThumbnailHandling,
                         onAllowInternetForMapChanged = viewModel::setAllowInternetForMap,
+                        onUseNearbyScrambleChanged = viewModel::setUseNearbyScramble,
                         onLanguageChanged = viewModel::setLanguage,
                         modifier = Modifier.weight(1f)
                     )

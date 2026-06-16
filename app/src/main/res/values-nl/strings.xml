@@ -111,6 +111,8 @@
     <string name="setting_thumbnails_warning">Waarschuwing: Het behouden van originele miniaturen kan metadata lekken (locatie, apparaatinfo), zelfs als de belangrijkste tags zijn verwijderd.</string>
     <string name="setting_enable_map_title">Kaartkiezer inschakelen</string>
     <string name="setting_enable_map_sub">Sta de app toe verbinding te maken met internet om OpenStreetMap te tonen voor locatiekeuze</string>
+    <string name="setting_nearby_scramble_title">Gelokaliseerde vergiftiging gebruiken</string>
+    <string name="setting_nearby_scramble_sub">Bij het vergiftigen van metadata, randomiseer de coördinaten in de buurt van de oorspronkelijke locatie in plaats van een volledig willekeurig punt</string>
 
     <string name="setting_quick_scrub_title">Quick Scrub &amp; Delen</string>
     <string name="setting_quick_scrub_sub">Metadata automatisch strippen en Share Sheet opnieuw openen voor gedeelde bestanden</string>

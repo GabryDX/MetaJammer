@@ -162,7 +162,10 @@ object MetadataReplacementGenerator {
         return listOf("0", "1").random()
     }
 
-    fun generatePlan(): MetadataReplacementPlan {
+    fun generatePlan(
+        existingLat: Double? = null,
+        existingLon: Double? = null
+    ): MetadataReplacementPlan {
         val make = randomMake()
         val model = randomModel(make)
         val software = randomSoftware(make)
@@ -175,7 +178,17 @@ object MetadataReplacementGenerator {
         val focalLength = randomFocalLength()
         val whiteBalance = randomWhiteBalance()
         val flash = randomFlash()
-        val (latitude, longitude) = randomLatLong()
+        
+        val (latitude, longitude) = if (existingLat != null && existingLon != null) {
+            // Nearby scramble: shift by roughly 200m-1km
+            // 0.001 degree is roughly 111m
+            val latOffset = (Random.nextDouble(0.002, 0.01) * if (Random.nextBoolean()) 1 else -1)
+            val lonOffset = (Random.nextDouble(0.002, 0.01) * if (Random.nextBoolean()) 1 else -1)
+            (existingLat + latOffset) to (existingLon + lonOffset)
+        } else {
+            randomLatLong()
+        }
+
         val latitudeRef = if (latitude >= 0) "N" else "S"
         val longitudeRef = if (longitude >= 0) "E" else "W"
 

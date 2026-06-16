@@ -33,6 +33,7 @@ class SettingsRepository(private val context: Context) {
         private val SHARED_FILES_CUSTOM_PATH = stringPreferencesKey("shared_files_custom_path")
         private val THUMBNAIL_HANDLING = stringPreferencesKey("thumbnail_handling")
         private val ALLOW_INTERNET_FOR_MAP = booleanPreferencesKey("allow_internet_for_map")
+        private val USE_NEARBY_SCRAMBLE = booleanPreferencesKey("use_nearby_scramble")
         private val LANGUAGE = stringPreferencesKey("language")
     }
 
@@ -160,6 +161,13 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setAllowInternetForMap(allowed: Boolean) {
         context.dataStore.edit { it[ALLOW_INTERNET_FOR_MAP] = allowed }
+    }
+
+    val useNearbyScrambleFlow: Flow<Boolean> =
+        context.dataStore.data.map { it[USE_NEARBY_SCRAMBLE] ?: false }
+
+    suspend fun setUseNearbyScramble(enabled: Boolean) {
+        context.dataStore.edit { it[USE_NEARBY_SCRAMBLE] = enabled }
     }
 
     val languageFlow: Flow<AppLanguage> =

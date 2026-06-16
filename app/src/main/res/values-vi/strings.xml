@@ -111,6 +111,8 @@
     <string name="setting_thumbnails_warning">Cảnh báo: Giữ hình thu nhỏ gốc có thể làm rò rỉ siêu dữ liệu (vị trí, thông tin thiết bị) ngay cả khi các thẻ chính đã được xóa.</string>
     <string name="setting_enable_map_title">Bật chọn bản đồ</string>
     <string name="setting_enable_map_sub">Cho phép ứng dụng kết nối internet để hiển thị OpenStreetMap khi chọn vị trí</string>
+    <string name="setting_nearby_scramble_title">Sử dụng đầu độc cục bộ</string>
+    <string name="setting_nearby_scramble_sub">Khi đầu độc siêu dữ liệu, hãy ngẫu nhiên hóa các tọa độ gần vị trí ban đầu thay vì một điểm hoàn toàn ngẫu nhiên</string>
 
     <string name="setting_quick_scrub_title">Dọn dẹp nhanh &amp; Chia sẻ</string>
     <string name="setting_quick_scrub_sub">Tự động xóa siêu dữ liệu và mở lại trang Chia sẻ cho các tệp được chia sẻ</string>

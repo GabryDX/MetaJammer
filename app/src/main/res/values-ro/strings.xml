@@ -111,6 +111,8 @@
     <string name="setting_thumbnails_warning">Avertisment: Păstrarea miniaturilor originale poate duce la scurgerea de metadate (locație, informații despre dispozitiv) chiar dacă etichetele principale sunt eliminate.</string>
     <string name="setting_enable_map_title">Activează selectorul de hartă</string>
     <string name="setting_enable_map_sub">Permite aplicației să se conecteze la internet pentru a afișa OpenStreetMap pentru selectarea locației</string>
+    <string name="setting_nearby_scramble_title">Folosește otrăvirea localizată</string>
+    <string name="setting_nearby_scramble_sub">Când otrăvești metadatele, alege coordonate aleatorii lângă locația originală în loc de un punct complet aleatoriu</string>
 
     <string name="setting_quick_scrub_title">Curățare și partajare rapidă</string>
     <string name="setting_quick_scrub_sub">Elimină automat metadatele și redeschide meniul de partajare pentru fișierele partajate</string>

@@ -111,6 +111,8 @@
     <string name="setting_thumbnails_warning">คำเตือน: การคงรูปภาพตัวอย่างเดิมอาจทำให้ข้อมูลเมตาหลุดรอด (ตำแหน่ง, ข้อมูลอุปกรณ์) แม้ว่าจะลบแท็กหลักออกแล้วก็ตาม</string>
     <string name="setting_enable_map_title">เปิดใช้งานตัวเลือกแผนที่</string>
     <string name="setting_enable_map_sub">อนุญาตให้แอปเชื่อมต่ออินเทอร์เน็ตเพื่อแสดง OpenStreetMap สำหรับการเลือกตำแหน่ง</string>
+    <string name="setting_nearby_scramble_title">ใช้การวางยาพิษแบบระบุตำแหน่ง</string>
+    <string name="setting_nearby_scramble_sub">เมื่อวางยาพิษข้อมูลเมตา ให้สุ่มพิกัดใกล้กับตำแหน่งเดิมแทนที่จะเป็นจุดสุ่มโดยสิ้นเชิง</string>
 
     <string name="setting_quick_scrub_title">ล้างข้อมูลและแชร์อย่างรวดเร็ว</string>
     <string name="setting_quick_scrub_sub">ลบข้อมูลเมตาโดยอัตโนมัติและเปิดหน้าการแชร์อีกครั้งสำหรับไฟล์ที่แชร์</string>

@@ -3,6 +3,7 @@ package com.heronikostudios.metajammer.ui.screens
 import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -56,13 +57,32 @@ fun MetadataPreviewScreen(
                         val entries = metadataPreview[file.uri].orEmpty()
 
                         if (entries.isEmpty()) {
-                            Text(stringResource(R.string.no_metadata_found))
+                            Text(
+                                text = stringResource(R.string.no_metadata_found),
+                                style = MaterialTheme.typography.bodyMedium,
+                                modifier = Modifier.padding(vertical = 8.dp)
+                            )
                         } else {
-                            entries.forEach { entry ->
-                                Text(
-                                    text = "${entry.key}: ${entry.value}",
-                                    style = MaterialTheme.typography.bodySmall
-                                )
+                            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                                entries.forEach { entry ->
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.SpaceBetween
+                                    ) {
+                                        Text(
+                                            text = entry.key,
+                                            style = MaterialTheme.typography.labelMedium,
+                                            color = MaterialTheme.colorScheme.secondary,
+                                            modifier = Modifier.weight(1f)
+                                        )
+                                        Text(
+                                            text = entry.value,
+                                            style = MaterialTheme.typography.bodySmall,
+                                            modifier = Modifier.weight(2f),
+                                            textAlign = androidx.compose.ui.text.style.TextAlign.End
+                                        )
+                                    }
+                                }
                             }
                         }
                     }

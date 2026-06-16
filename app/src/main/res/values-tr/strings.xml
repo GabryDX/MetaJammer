@@ -111,6 +111,8 @@
     <string name="setting_thumbnails_warning">Uyarı: Orijinal küçük resimlerin korunması, ana etiketler kaldırılsa bile metadata (konum, cihaz bilgisi) sızdırabilir.</string>
     <string name="setting_enable_map_title">Harita seçiciyi etkinleştir</string>
     <string name="setting_enable_map_sub">Konum seçimi için OpenStreetMap\'i göstermek üzere uygulamanın internete bağlanmasına izin ver</string>
+    <string name="setting_nearby_scramble_title">Yerelleştirilmiş zehirleme kullan</string>
+    <string name="setting_nearby_scramble_sub">Meta verileri zehirlerken, koordinatları tamamen rastgele bir nokta yerine orijinal konumun yakınında rastgeleleştirin</string>
 
     <string name="setting_quick_scrub_title">Hızlı Temizle ve Paylaş</string>
     <string name="setting_quick_scrub_sub">Paylaşılan dosyalar için metadataları otomatik olarak temizle ve Paylaşım Sayfasını yeniden aç</string>

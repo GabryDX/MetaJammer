@@ -111,6 +111,8 @@
     <string name="setting_thumbnails_warning">Ostrzeżenie: Zachowanie oryginalnych miniatur może ujawnić metadane (lokalizacja, informacje o urządzeniu), nawet jeśli główne tagi zostaną usunięte.</string>
     <string name="setting_enable_map_title">Włącz wybór na mapie</string>
     <string name="setting_enable_map_sub">Pozwól aplikacji na połączenie z internetem w celu wyświetlenia OpenStreetMap do wyboru lokalizacji</string>
+    <string name="setting_nearby_scramble_title">Użyj lokalnego zatruwania</string>
+    <string name="setting_nearby_scramble_sub">Podczas zatruwania metadanych losuj współrzędne w pobliżu pierwotnej lokalizacji zamiast całkowicie losowego punktu</string>
 
     <string name="setting_quick_scrub_title">Szybkie czyszczenie i udostępnianie</string>
     <string name="setting_quick_scrub_sub">Automatycznie usuwaj metadane i ponownie otwieraj arkusz udostępniania dla udostępnionych plików</string>

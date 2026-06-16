@@ -15,5 +15,6 @@ data class AppSettings(
     val sharedFilesCustomPath: String? = null,
     val thumbnailHandling: ThumbnailHandling = ThumbnailHandling.REMOVE,
     val allowInternetForMap: Boolean = false,
+    val useNearbyScramble: Boolean = false,
     val language: AppLanguage = AppLanguage.SYSTEM
 )

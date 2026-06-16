@@ -111,6 +111,8 @@
     <string name="setting_thumbnails_warning">Aviso: Manter as miniaturas originais pode revelar metadados (localização, informações do dispositivo) mesmo que as etiquetas principais sejam removidas.</string>
     <string name="setting_enable_map_title">Ativar seletor de mapa</string>
     <string name="setting_enable_map_sub">Permitir que a aplicação se ligue à internet para mostrar o OpenStreetMap para a seleção da localização</string>
+    <string name="setting_nearby_scramble_title">Utilizar envenenamento localizado</string>
+    <string name="setting_nearby_scramble_sub">Ao envenenar metadados, randomize as coordenadas perto do local original em vez de um ponto totalmente aleatório</string>
 
     <string name="setting_quick_scrub_title">Quick Scrub e Partilha</string>
     <string name="setting_quick_scrub_sub">Remover metadados automaticamente e reabrir a folha de partilha para ficheiros partilhados</string>

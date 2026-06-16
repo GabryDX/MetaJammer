@@ -111,6 +111,8 @@
     <string name="setting_thumbnails_warning">Monitio: Imagines parvas servare metadata effundere potest.</string>
     <string name="setting_enable_map_title">Tabulam permittere</string>
     <string name="setting_enable_map_sub">App permittere ut cum interrete conectatur ad OpenStreetMap ostendendum</string>
+    <string name="setting_nearby_scramble_title">Venenum locale uti</string>
+    <string name="setting_nearby_scramble_sub">In venenatione metadatorum, coordinatas prope locum originalem temere facere pro puncto prorsus temere</string>
 
     <string name="setting_quick_scrub_title">Mundatio Celer &amp; Communicatio</string>
     <string name="setting_quick_scrub_sub">Metadata statim tollere et communicationem iterum aperire</string>
