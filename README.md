@@ -17,7 +17,7 @@
 - **📂 Flexible Output:** Save to custom folders via SAF, use standard MediaStore collections, or share directly to other apps.
 - **🖼️ Multi-Format Support:** Full compatibility with modern image formats (JPEG, WebP, HEIF/HEIC) and video containers (MP4, MOV). Support for both stripping and poisoning across all formats.
 - **🎨 Modern & Accessible UI:** Built with Jetpack Compose and Material 3, featuring Dynamic Color support, a dedicated OLED black mode, and battery-aware theme scheduling.
-- **🌍 Global Reach:** Fully localized in 20+ languages including English, Arabic, German, Greek, Spanish, Persian, French, Hindi, Indonesian, Italian, Japanese, Korean, Dutch, Polish, Portuguese, Russian, Thai, Turkish, Ukrainian, Vietnamese, and Chinese.
+- **🌍 Global Reach:** Fully localized in 24 languages including English, Arabic, German, Greek, Spanish, Persian, French, Hebrew, Hindi, Indonesian, Italian, Japanese, Korean, Latin, Dutch, Polish, Portuguese, Romanian, Russian, Thai, Turkish, Ukrainian, Vietnamese, and Chinese.
 
 ## Privacy & Security
 

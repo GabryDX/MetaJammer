@@ -1,9 +1,9 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MetaJammer</string>
     <string name="notification_channel_name">文件处理</string>
     <string name="notification_processing_title">正在处理文件</string>
-    <string name="notification_processing_message">正在从 %1$d 个文件中剥离元数据...</string>
+    <string name="notification_processing_message">正在从 %1$d 个文件中删除元数据...</string>
     <string name="notification_complete_title">处理完成</string>
     <string name="notification_complete_message">成功处理了 %1$d 个文件。</string>
 
@@ -18,19 +18,20 @@
     <string name="warning">警告</string>
     <string name="none">无</string>
     <string name="unknown">未知</string>
+    <string name="delete">删除</string>
 
     <!-- HomeScreen -->
     <string name="hero_title">保护您的隐私</string>
     <string name="hero_subtitle">在分享文件之前清理或替换敏感元数据。</string>
     <string name="feature_images_video_title">图像和视频</string>
-    <string name="feature_images_video_desc">完全支持从照片中剥离元数据，并对视频进行重新封装以移除追踪。</string>
-    <string name="feature_poisoning_title">元数据污染</string>
-    <string name="feature_poisoning_desc">不要仅仅移除数据——用逼真的伪造数据替换它，以保护隐私并迷惑追踪者。</string>
+    <string name="feature_images_video_desc">完全支持从照片中删除元数据以及对视频进行重混以删除追踪。</string>
+    <string name="feature_poisoning_title">元数据投毒</string>
+    <string name="feature_poisoning_desc">不仅是删除数据——更可以用逼真的虚假信息替换它，以保护您的隐私并迷惑追踪者。</string>
     <string name="feature_background_title">后台处理</string>
-    <string name="feature_background_desc">在您做其他事情时，高效地在后台处理数百个文件。</string>
+    <string name="feature_background_desc">在您做其他事情的同时，高效地在后台处理数百个文件。</string>
     <string name="feature_on_device_title">设备端隐私</string>
     <string name="feature_on_device_desc">所有处理都在您的设备本地进行。您的文件永远不会离开 MetaJammer。</string>
-    <string name="pro_tip_gallery">小贴士：您可以直接从相册应用分享文件到 MetaJammer。</string>
+    <string name="pro_tip_gallery">小提示：您可以直接从相册应用将文件分享到 MetaJammer。</string>
     <string name="select_files">选择文件</string>
     <string name="select_more_files">选择更多文件</string>
     <string name="clear_selection">清除选择</string>
@@ -43,22 +44,36 @@
     <!-- MetadataPreviewScreen -->
     <string name="metadata_preview">元数据预览</string>
     <string name="file_type">类型：%1$s</string>
-    <string name="no_metadata_found">未发现元数据</string>
+    <string name="no_metadata_found">未找到元数据</string>
 
     <!-- ProcessingScreen -->
     <string name="process_files_title">处理文件</string>
     <string name="pick_one_option">选择一个选项：</string>
-    <string name="poison_metadata">元数据污染</string>
-    <string name="remove_metadata">移除元数据</string>
-    <string name="selected_mode">已选：%1$s</string>
+    <string name="poison_metadata">元数据投毒</string>
+    <string name="remove_metadata">删除元数据</string>
+    <string name="selected_mode">已选择：%1$s</string>
     <string name="regenerate_plans">重新生成所有随机方案</string>
     <string name="preview_of_changes">更改预览</string>
-    <string name="no_preview_available">预览不可用</string>
+    <string name="no_preview_available">无预览可用</string>
     <string name="change_location_map">在地图上更改位置</string>
     <string name="process_files">处理文件</string>
     <string name="processing_foreground">正在前台处理...</string>
     <string name="background_progress">后台进度：%1$d%%</string>
     <string name="continue_to_output">继续到输出选项</string>
+
+    <!-- HelpScreen -->
+    <string name="help_title">帮助与教程</string>
+    <string name="help_item_video_title">视频处理</string>
+    <string name="help_item_video_body">支持的格式：MP4, MOV。\n\n这些格式支持完整的“重混”(Remuxing) 过程。该过程会删除 GPS、日期和设备信息，以保护您的隐私。</string>
+    <string name="help_item_image_title">图像处理</string>
+    <string name="help_item_image_body">支持的格式：JPG, PNG。\n\nMetaJammer 会从这些图像中删除 EXIF 元数据。在“投毒”模式下，它会将 GPS 坐标等敏感标签替换为现实的随机数据。</string>
+    <string name="help_item_other_title">其他文件</string>
+    <string name="help_item_other_body">支持的格式：目前没有。\n\nMetaJammer 目前专注于媒体文件。未来的更新将包括对 PDF 和文档的支持。敬请关注！</string>
+    <string name="help_report_issue_title">报告问题</string>
+    <string name="help_report_issue_body">发现了漏洞或有功能请求？请在我们的 GitHub 页面上报告。</string>
+    <string name="help_open_github">打开 GitHub 问题</string>
+    <string name="help_app_version">版本：%1$s</string>
+    <string name="help">帮助</string>
 
     <!-- LocationPickerScreen -->
     <string name="pick_location">选择位置</string>
@@ -67,7 +82,7 @@
     <!-- OutputOptionsScreen -->
     <string name="output_options">输出选项</string>
     <string name="saving_will_trigger_sharing">保存也将触发分享。</string>
-    <string name="choose_save_or_share">选择保存还是分享处理结果。</string>
+    <string name="choose_save_or_share">选择是保存还是分享处理结果。</string>
     <string name="save_to_default_folder">保存到默认文件夹</string>
     <string name="save_to_custom_folder">保存到自定义文件夹</string>
 
@@ -76,15 +91,15 @@
     <string name="category_file_management">文件管理</string>
     <string name="category_image_file">图像 / 文件</string>
     <string name="category_shared_files">共享文件行为</string>
-    <string name="category_ui">界面</string>
+    <string name="category_ui">用户界面</string>
 
     <string name="setting_random_names_title">使用随机文件名</string>
-    <string name="setting_random_names_sub">生成随机的输出名称，而不是使用原始文件名</string>
+    <string name="setting_random_names_sub">生成随机输出名称，而不是使用原始文件名</string>
     <string name="setting_default_path_title">默认保存路径</string>
     <string name="setting_reset_path">重置为 Pictures/MetaJammer</string>
     <string name="setting_select_folder">选择文件夹</string>
 
-    <string name="setting_keep_orientation_title">保持图像方向</string>
+    <string name="setting_keep_orientation_title">保留图像方向</string>
     <string name="setting_keep_orientation_sub">尽可能保留图像方向元数据</string>
     <string name="setting_share_default_title">默认分享结果</string>
     <string name="setting_share_default_sub">保存也将触发分享</string>
@@ -92,66 +107,69 @@
     <string name="setting_suffix_title">默认后缀</string>
     <string name="setting_not_set">未设置</string>
     <string name="setting_keep_thumbnails_title">保留原始缩略图</string>
-    <string name="setting_keep_thumbnails_sub">如果文件包含嵌入式缩略图，则按原样保留。如果禁用，任何现有的缩略图都将被移除，以实现最大的隐私。</string>
-    <string name="setting_thumbnails_warning">警告：保留原始缩略图可能会泄露元数据（位置、设备信息），即使主标签已被移除。</string>
+    <string name="setting_keep_thumbnails_sub">如果文件包含嵌入式缩略图，请将其按原样保留。如果禁用，任何现有的缩略图都将被删除以实现最大的隐私保护。</string>
+    <string name="setting_thumbnails_warning">警告：保留原始缩略图可能会泄露元数据（位置、设备信息），即使删除了主标签也是如此。</string>
     <string name="setting_enable_map_title">启用地图选择器</string>
-    <string name="setting_enable_map_sub">允许应用连接到互联网以显示 OpenStreetMap 进行位置选择</string>
+    <string name="setting_enable_map_sub">允许应用连接互联网以显示 OpenStreetMap 以进行位置选择</string>
 
     <string name="setting_quick_scrub_title">快速清理并分享</string>
-    <string name="setting_quick_scrub_sub">自动剥离分享文件的元数据并重新打开分享菜单</string>
+    <string name="setting_quick_scrub_sub">自动删除元数据并为分享的文件重新打开分享列表</string>
     <string name="setting_metadata_action_title">元数据操作</string>
     <string name="setting_output_action_title">输出操作</string>
-    <string name="setting_dedicated_folder_title">共享文件专用文件夹</string>
+    <string name="setting_dedicated_folder_title">专用共享文件文件夹</string>
     <string name="setting_no_folder_selected">未选择专用文件夹</string>
     <string name="setting_clear_folder">清除专用文件夹</string>
 
     <string name="setting_night_mode_title">夜间模式</string>
     <string name="setting_language_title">语言</string>
     <string name="setting_oled_mode_title">OLED 模式</string>
-    <string name="setting_oled_mode_sub">在支持的深色主题中使用更深的黑色调</string>
+    <string name="setting_oled_mode_sub">为支持的深色主题使用更深的黑色调</string>
 
     <!-- Enums -->
     <string name="night_mode_always">始终</string>
     <string name="night_mode_automatic">自动</string>
-    <string name="night_mode_low_battery">仅低电量</string>
+    <string name="night_mode_low_battery">仅限低电量</string>
     <string name="night_mode_never">从不</string>
 
     <string name="language_system">System Default (系统默认)</string>
     <string name="language_en">English (英语)</string>
+    <string name="language_zh">中文 (简体) (中文)</string>
     <string name="language_es">Español (西班牙语)</string>
-    <string name="language_it">Italiano (意大利语)</string>
-    <string name="language_fr">Français (法语)</string>
-    <string name="language_de">Deutsch (德语)</string>
-    <string name="language_zh">中文 (简体) (中文 (简体))</string>
     <string name="language_hi">हिन्दी (印地语)</string>
+    <string name="language_ar">العربية (阿拉伯语)</string>
+    <string name="language_fr">Français (法语)</string>
     <string name="language_pt">Português (葡萄牙语)</string>
     <string name="language_ru">Русский (俄语)</string>
-    <string name="language_el">Ελληνικά (希腊语)</string>
-    <string name="language_ar">العربية (阿拉伯语)</string>
     <string name="language_ja">日本語 (日语)</string>
-    <string name="language_in">Bahasa Indonesia (印度尼西亚语)</string>
-    <string name="language_tr">Türkçe (土耳其语)</string>
+    <string name="language_de">Deutsch (德语)</string>
     <string name="language_ko">한국어 (韩语)</string>
+    <string name="language_in">Bahasa Indonesia (印尼语)</string>
+    <string name="language_it">Italiano (意大利语)</string>
+    <string name="language_tr">Türkçe (土耳其语)</string>
     <string name="language_vi">Tiếng Việt (越南语)</string>
     <string name="language_th">ไทย (泰语)</string>
     <string name="language_pl">Polski (波兰语)</string>
-    <string name="language_nl">Nederlands (荷兰语)</string>
     <string name="language_uk">Українська (乌克兰语)</string>
+    <string name="language_nl">Nederlands (荷兰语)</string>
+    <string name="language_ro">Română (罗马尼亚语)</string>
     <string name="language_fa">فارسی (波斯语)</string>
+    <string name="language_el">Ελληνικά (希腊语)</string>
+    <string name="language_iw">עברית (希伯来语)</string>
+    <string name="language_la">Latina (拉丁语)</string>
 
-    <string name="processing_mode_poison">元数据污染 (虚假信息)</string>
-    <string name="processing_mode_remove">移除元数据 (完全清理)</string>
+    <string name="processing_mode_poison">元数据投毒（虚假信息）</string>
+    <string name="processing_mode_remove">删除元数据（完全清理）</string>
 
     <string name="output_action_default_folder">保存到默认文件夹</string>
     <string name="output_action_shared_folder">保存到专用文件夹</string>
-    <string name="output_action_reshare">重新分享清理后的文件</string>
+    <string name="output_action_reshare">重新分享已清理的文件</string>
 
     <!-- Dialogs/Permissions -->
-    <string name="map_permission_title">地图选择器与互联网访问</string>
-    <string name="map_permission_message">为了显示用于位置选择的地图，MetaJammer 需要连接到互联网以从 OpenStreetMap 加载地图瓦片。 \n\n如果您拒绝，应用将继续完美运行所有元数据剥离和污染功能，但您将无法在地图上直观地选择位置。</string>
+    <string name="map_permission_title">地图选择器和互联网访问</string>
+    <string name="map_permission_message">为了显示用于位置选择的地图，MetaJammer 需要连接到互联网以从 OpenStreetMap 加载地图图块。\n\n如果您拒绝，该应用仍能完美运行所有元数据删除和投毒功能，但您将无法在地图上直观地选择位置。</string>
     <string name="allow_open_map">允许并打开地图</string>
-    <string name="not_now">暂不</string>
+    <string name="not_now">现在不</string>
 
     <string name="notification_permission_title">保持知情</string>
-    <string name="notification_permission_message">MetaJammer 可以显示通知，让您在后台处理大量文件时了解进度。 \n\n如果您想在 MetaJammer 完成工作期间切换到另一个应用，这会非常有用。</string>
+    <string name="notification_permission_message">MetaJammer 可以显示通知，让您随时了解大批量文件在后台处理的进度。\n\n这在您希望在 MetaJammer 完成工作时切换到另一个应用时特别有用。</string>
 </resources>

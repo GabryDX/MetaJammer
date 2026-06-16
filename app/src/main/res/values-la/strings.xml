@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MetaJammer</string>
+    <string name="notification_channel_name">Fasciculi Processus</string>
+    <string name="notification_processing_title">Fasciculos Processus</string>
+    <string name="notification_processing_message">Metadata ex %1$d fasciculis tollens...</string>
+    <string name="notification_complete_title">Processus Completus</string>
+    <string name="notification_complete_message">Bene processit %1$d fasciculos.</string>
+
+    <!-- General -->
+    <string name="ok">Optime</string>
+    <string name="cancel">Abrogare</string>
+    <string name="back">Retro</string>
+    <string name="continue_label">Pergere</string>
+    <string name="save">Servare</string>
+    <string name="share">Communicare</string>
+    <string name="dismiss">Dimittere</string>
+    <string name="warning">Monitio</string>
+    <string name="none">Nihil</string>
+    <string name="unknown">ignotus</string>
+    <string name="delete">Delere</string>
+
+    <!-- HomeScreen -->
+    <string name="hero_title">Tuam Privatiam Protege</string>
+    <string name="hero_subtitle">Munda vel muta metadata sensitiva antequam fasciculos tuos communicas.</string>
+    <string name="feature_images_video_title">Imagines &amp; Videophonia</string>
+    <string name="feature_images_video_desc">Plena sustentatio ad metadata tollenda ex photographematis et videophoniis remuxandis.</string>
+    <string name="feature_poisoning_title">Metadata Venenum</string>
+    <string name="feature_poisoning_desc">Noli modo data tollere—ea cum falsis verisimilibus muta ut privatiam serves.</string>
+    <string name="feature_background_title">Processus in Occulto</string>
+    <string name="feature_background_desc">Centenos fasciculos efficienter in occulto processit dum alia agis.</string>
+    <string name="feature_on_device_title">Privatia in Instrumento</string>
+    <string name="feature_on_device_desc">Omnis processus localiter in instrumento tuo fit. Fasciculi tui MetaJammer numquam relinquunt.</string>
+    <string name="pro_tip_gallery">Consilium: Fasciculos directe ex Pinacotheca ad MetaJammer communicare potes.</string>
+    <string name="select_files">Fasciculos Seligere</string>
+    <string name="select_more_files">Plures Fasciculos Seligere</string>
+    <string name="clear_selection">Selectionem Delere</string>
+    <string name="files_selected">%1$d Fasciculi Selecti</string>
+    <string name="total_size">Magnitudo tota: %1$s</string>
+    <string name="size_mb">%.1f MB</string>
+    <string name="size_kb">%.1f KB</string>
+    <string name="size_bytes">%1$d Octeti</string>
+
+    <!-- MetadataPreviewScreen -->
+    <string name="metadata_preview">Metadata Praevisus</string>
+    <string name="file_type">Typus: %1$s</string>
+    <string name="no_metadata_found">Metadata non inventa</string>
+
+    <!-- ProcessingScreen -->
+    <string name="process_files_title">Fasciculos Processus</string>
+    <string name="pick_one_option">Unam optionem selige:</string>
+    <string name="poison_metadata">Metadata Venenare</string>
+    <string name="remove_metadata">Metadata Tollere</string>
+    <string name="selected_mode">Selectum: %1$s</string>
+    <string name="regenerate_plans">Omnia Consilia Temere Regenerare</string>
+    <string name="preview_of_changes">Praevisus Mutationum</string>
+    <string name="no_preview_available">Praevisus non adest</string>
+    <string name="change_location_map">Locum in Tabula Mutare</string>
+    <string name="process_files">Fasciculos Processus</string>
+    <string name="processing_foreground">In conspectu processus...</string>
+    <string name="background_progress">Progressus in Occulto: %1$d%%</string>
+    <string name="continue_to_output">Ad Optiones Exitus Pergere</string>
+
+    <!-- HelpScreen -->
+    <string name="help_title">Auxilium &amp; Institutiones</string>
+    <string name="help_item_video_title">Processus Videophoniae</string>
+    <string name="help_item_video_body">Formae sustentatae: MP4, MOV.\n\nHaec ratio GPS, dies, et instrumenti data tollit.</string>
+    <string name="help_item_image_title">Processus Imaginis</string>
+    <string name="help_item_image_body">Formae sustentatae: JPG, PNG.\n\nMetaJammer metadata EXIF ex his imaginibus tollit.</string>
+    <string name="help_item_other_title">Alii Fasciculi</string>
+    <string name="help_item_other_body">Formae sustentatae: Nullae in praesentia.\n\nMetaJammer nunc in fasciculis mediis intendit.</string>
+    <string name="help_report_issue_title">Rem Deferre</string>
+    <string name="help_report_issue_body">Si mendam invenisti, quaesumus in pagina GitHub deferre.</string>
+    <string name="help_open_github">GitHub Aperire</string>
+    <string name="help_app_version">Versio: %1$s</string>
+    <string name="help">Auxilium</string>
+
+    <!-- LocationPickerScreen -->
+    <string name="pick_location">Locum Seligere</string>
+    <string name="confirm_location">Locum Confirmare</string>
+
+    <!-- OutputOptionsScreen -->
+    <string name="output_options">Optiones Exitus</string>
+    <string name="saving_will_trigger_sharing">Servare etiam communicationem excitabit.</string>
+    <string name="choose_save_or_share">Elige utrum servare an communicare vis.</string>
+    <string name="save_to_default_folder">In Capsa Defalta Servare</string>
+    <string name="save_to_custom_folder">In Capsa Propria Servare</string>
+
+    <!-- SettingsScreen -->
+    <string name="settings">Optiones</string>
+    <string name="category_file_management">Fasciculorum Administratio</string>
+    <string name="category_image_file">Imago / Fasciculus</string>
+    <string name="category_shared_files">Fasciculorum Communicatorum Mores</string>
+    <string name="category_ui">UI</string>
+
+    <string name="setting_random_names_title">Nominibus temere uti</string>
+    <string name="setting_random_names_sub">Nomina exitus temere generare pro nominibus originalibus</string>
+    <string name="setting_default_path_title">Iter servandi defaltum</string>
+    <string name="setting_reset_path">Ad Pictures/MetaJammer restituere</string>
+    <string name="setting_select_folder">Capsam Seligere</string>
+
+    <string name="setting_keep_orientation_title">Imaginis situm servare</string>
+    <string name="setting_keep_orientation_sub">Metadata situs imaginis servare ubi fieri potest</string>
+    <string name="setting_share_default_title">Exitus defalte communicare</string>
+    <string name="setting_share_default_sub">Servare etiam communicationem excitabit</string>
+    <string name="setting_prefix_title">Praefixum Defaltum</string>
+    <string name="setting_suffix_title">Suffixum Defaltum</string>
+    <string name="setting_not_set">Non positum</string>
+    <string name="setting_keep_thumbnails_title">Imagines parvas originales servare</string>
+    <string name="setting_keep_thumbnails_sub">Si fasciculus imaginem parvam habet, eam servare.</string>
+    <string name="setting_thumbnails_warning">Monitio: Imagines parvas servare metadata effundere potest.</string>
+    <string name="setting_enable_map_title">Tabulam permittere</string>
+    <string name="setting_enable_map_sub">App permittere ut cum interrete conectatur ad OpenStreetMap ostendendum</string>
+
+    <string name="setting_quick_scrub_title">Mundatio Celer &amp; Communicatio</string>
+    <string name="setting_quick_scrub_sub">Metadata statim tollere et communicationem iterum aperire</string>
+    <string name="setting_metadata_action_title">Metadata actio</string>
+    <string name="setting_output_action_title">Exitus actio</string>
+    <string name="setting_dedicated_folder_title">Capsa propria pro communicatis</string>
+    <string name="setting_no_folder_selected">Nulla capsa selecta</string>
+    <string name="setting_clear_folder">Capsam Propriam Delere</string>
+
+    <string name="setting_night_mode_title">Modus nocturnus</string>
+    <string name="setting_language_title">Lingua</string>
+    <string name="setting_oled_mode_title">Modus OLED</string>
+    <string name="setting_oled_mode_sub">Coloribus nigrioribus uti pro dark themes</string>
+
+    <!-- Enums -->
+    <string name="night_mode_always">Semper</string>
+    <string name="night_mode_automatic">Automatice</string>
+    <string name="night_mode_low_battery">Tantum pugilla humili</string>
+    <string name="night_mode_never">Numquam</string>
+
+    <string name="language_system">Defaltum Systematis (System Default)</string>
+    <string name="language_en">English (Anglice)</string>
+    <string name="language_zh">中文 (简体) (Sinice)</string>
+    <string name="language_es">Español (Hispanice)</string>
+    <string name="language_hi">हिन्दी (Indice)</string>
+    <string name="language_ar">العربية (Arabice)</string>
+    <string name="language_fr">Français (Gallice)</string>
+    <string name="language_pt">Português (Lusitane)</string>
+    <string name="language_ru">Русский (Russice)</string>
+    <string name="language_ja">日本語 (Iaponice)</string>
+    <string name="language_de">Deutsch (Germanice)</string>
+    <string name="language_ko">한국어 (Coreane)</string>
+    <string name="language_in">Bahasa Indonesia (Indonesice)</string>
+    <string name="language_it">Italiano (Italice)</string>
+    <string name="language_tr">Türkçe (Turcice)</string>
+    <string name="language_vi">Tiếng Việt (Vietnamice)</string>
+    <string name="language_th">ไทย (Thailandice)</string>
+    <string name="language_pl">Polski (Polonice)</string>
+    <string name="language_uk">Українська (Ucrainice)</string>
+    <string name="language_nl">Nederlands (Batave)</string>
+    <string name="language_ro">Română (Dacoromanice)</string>
+    <string name="language_fa">فارسی (Persice)</string>
+    <string name="language_el">Ελληνικά (Graece)</string>
+    <string name="language_iw">עברית (Hebraice)</string>
+    <string name="language_la">Latina (Latine)</string>
+
+    <string name="processing_mode_poison">Metadata Venenare (Data falsa)</string>
+    <string name="processing_mode_remove">Metadata Tollere (Mundatio plena)</string>
+
+    <string name="output_action_default_folder">In capsa defalta servare</string>
+    <string name="output_action_shared_folder">In capsa propria servare</string>
+    <string name="output_action_reshare">Fasciculos mundatos iterum communicare</string>
+
+    <!-- Dialogs/Permissions -->
+    <string name="map_permission_title">Tabula &amp; Interrete</string>
+    <string name="map_permission_message">Ut tabulam videas, MetaJammer ad interrete conecti debet...</string>
+    <string name="allow_open_map">Permittere &amp; Aperire</string>
+    <string name="not_now">Nunc non</string>
+
+    <string name="notification_permission_title">Certior Fieri</string>
+    <string name="notification_permission_message">MetaJammer notificationes ostendere potest...</string>
+</resources>

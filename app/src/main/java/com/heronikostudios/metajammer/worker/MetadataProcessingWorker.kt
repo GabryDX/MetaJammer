@@ -52,7 +52,7 @@ class MetadataProcessingWorker(
         val plansFilePath = inputData.getString(KEY_PLANS_FILE_PATH)
         val savingPath = inputData.getString(KEY_SAVING_PATH)
         val defaultPrefix = inputData.getString(KEY_DEFAULT_PREFIX) ?: ""
-        val defaultSuffix = inputData.getString(KEY_DEFAULT_SUFFIX) ?: ""
+        val defaultSuffix = inputData.getString(KEY_DEFAULT_SUFFIX) ?: "_processed"
         val useRandomNames = inputData.getBoolean(KEY_USE_RANDOM_NAMES, false)
 
         val mode = ProcessingMode.valueOf(modeString)
@@ -88,7 +88,7 @@ class MetadataProcessingWorker(
                     replacementPlan = plan
                 )
 
-                val displayName = buildOutputName(
+                val displayName = SanitizationUtils.generateOutputName(
                     originalName = selectedFile.displayName,
                     useRandomFileNames = useRandomNames,
                     prefix = defaultPrefix,
@@ -164,28 +164,5 @@ class MetadataProcessingWorker(
         val channel = NotificationChannel(CHANNEL_ID, name, importance)
         val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
-    }
-
-    private fun buildOutputName(
-        originalName: String,
-        useRandomFileNames: Boolean,
-        prefix: String,
-        suffix: String
-    ): String {
-        val dotIndex = originalName.lastIndexOf('.')
-        val base = if (dotIndex > 0) originalName.substring(0, dotIndex) else originalName
-        val ext = if (dotIndex > 0) originalName.substring(dotIndex) else ""
-
-        val finalBase = if (useRandomFileNames) {
-            "mj_${System.currentTimeMillis()}"
-        } else {
-            val sPrefix = SanitizationUtils.sanitizeSimple(prefix)
-            val sSuffix = SanitizationUtils.sanitizeSimple(suffix)
-            val sanitizedBase = SanitizationUtils.sanitizeSimple(base)
-            "$sPrefix$sanitizedBase$sSuffix"
-        }
-
-        val extension = SanitizationUtils.sanitizeSimple(ext)
-        return "${finalBase}_processed$extension"
     }
 }

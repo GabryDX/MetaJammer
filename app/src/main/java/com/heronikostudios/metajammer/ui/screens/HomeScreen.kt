@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,32 +16,47 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
+import coil.compose.AsyncImage
+import coil.decode.VideoFrameDecoder
+import coil.request.ImageRequest
 import com.heronikostudios.metajammer.R
 import com.heronikostudios.metajammer.domain.model.SelectedFile
 import com.heronikostudios.metajammer.ui.theme.MetaJammerTheme
+import androidx.core.net.toUri
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     selectedFiles: List<SelectedFile>,
     onFilesPicked: (List<Uri>) -> Unit,
+    onFileRemoved: (SelectedFile) -> Unit,
     onContinue: () -> Unit,
     onClearSelection: () -> Unit,
     modifier: Modifier = Modifier,
@@ -79,8 +95,41 @@ fun HomeScreen(
                 )
             }
 
-            items(selectedFiles) { file ->
-                FileListItem(file = file)
+            items(
+                items = selectedFiles,
+                key = { it.uri.toString() }
+            ) { file ->
+                val dismissState = rememberSwipeToDismissBoxState()
+
+                LaunchedEffect(dismissState.currentValue) {
+                    if (dismissState.currentValue == SwipeToDismissBoxValue.EndToStart) {
+                        onFileRemoved(file)
+                    }
+                }
+
+                SwipeToDismissBox(
+                    state = dismissState,
+                    backgroundContent = {
+                        val alignment = Alignment.CenterEnd
+                        val icon = Icons.Default.Delete
+                        
+                        Box(
+                            Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 16.dp),
+                            contentAlignment = alignment
+                        ) {
+                            Icon(
+                                icon,
+                                contentDescription = stringResource(R.string.delete),
+                                tint = MaterialTheme.colorScheme.error
+                            )
+                        }
+                    },
+                    enableDismissFromStartToEnd = false
+                ) {
+                    FileListItem(file = file)
+                }
             }
         }
 
@@ -295,15 +344,19 @@ private fun FileListItem(file: SelectedFile) {
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                painter = if (file.mimeType?.startsWith("video") == true) {
-                    painterResource(R.drawable.ic_movie)
-                } else {
-                    painterResource(R.drawable.ic_photo_library)
-                },
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(file.uri)
+                    .decoderFactory(VideoFrameDecoder.Factory())
+                    .crossfade(true)
+                    .build(),
                 contentDescription = null,
-                modifier = Modifier.size(32.dp),
-                tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(MaterialTheme.shapes.small),
+                contentScale = ContentScale.Crop,
+                placeholder = painterResource(R.drawable.ic_photo_library),
+                error = painterResource(R.drawable.ic_photo_library)
             )
             Column(modifier = Modifier.weight(1f)) {
                 Text(
@@ -328,6 +381,7 @@ fun HomeScreenEmptyPreview() {
         HomeScreen(
             selectedFiles = emptyList(),
             onFilesPicked = {},
+            onFileRemoved = {},
             onContinue = {},
             onClearSelection = {}
         )
@@ -340,10 +394,11 @@ fun HomeScreenSelectedPreview() {
     MetaJammerTheme {
         HomeScreen(
             selectedFiles = listOf(
-                SelectedFile(Uri.EMPTY, "image.jpg", "image/jpeg", 1024 * 500),
-                SelectedFile(Uri.EMPTY, "video.mp4", "video/mp4", 1024 * 1024 * 10)
+                SelectedFile("content://media/external/images/media/1".toUri(), "image.jpg", "image/jpeg", 1024 * 500),
+                SelectedFile("content://media/external/video/media/2".toUri(), "video.mp4", "video/mp4", 1024 * 1024 * 10)
             ),
             onFilesPicked = {},
+            onFileRemoved = {},
             onContinue = {},
             onClearSelection = {}
         )

@@ -1,10 +1,11 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources><string name="app_name">MetaJammer</string>
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MetaJammer</string>
     <string name="notification_channel_name">Traitement des fichiers</string>
     <string name="notification_processing_title">Traitement des fichiers</string>
     <string name="notification_processing_message">Suppression des métadonnées de %1$d fichiers...</string>
     <string name="notification_complete_title">Traitement terminé</string>
-    <string name="notification_complete_message">%1$d fichiers traités avec succès.</string>
+    <string name="notification_complete_message">%1$d fichier(s) traité(s) avec succès.</string>
 
     <!-- General -->
     <string name="ok">OK</string>
@@ -17,6 +18,7 @@
     <string name="warning">Avertissement</string>
     <string name="none">Aucun</string>
     <string name="unknown">inconnu</string>
+    <string name="delete">Supprimer</string>
 
     <!-- HomeScreen -->
     <string name="hero_title">Protégez votre vie privée</string>
@@ -28,7 +30,7 @@
     <string name="feature_background_title">Traitement en arrière-plan</string>
     <string name="feature_background_desc">Traitez des centaines de fichiers efficacement en arrière-plan pendant que vous faites autre chose.</string>
     <string name="feature_on_device_title">Confidentialité sur l\'appareil</string>
-    <string name="feature_on_device_desc">Tout le traitement s\'effectue localement sur votre appareil. Vos fichiers ne quittent jamais MetaJammer.</string>
+    <string name="feature_on_device_desc">Tout le traitement se fait localement sur votre appareil. Vos fichiers ne quittent jamais MetaJammer.</string>
     <string name="pro_tip_gallery">Astuce : vous pouvez partager des fichiers directement depuis votre application Galerie vers MetaJammer.</string>
     <string name="select_files">Sélectionner des fichiers</string>
     <string name="select_more_files">Sélectionner plus de fichiers</string>
@@ -58,6 +60,20 @@
     <string name="processing_foreground">Traitement au premier plan...</string>
     <string name="background_progress">Progression en arrière-plan : %1$d%%</string>
     <string name="continue_to_output">Continuer vers les options de sortie</string>
+
+    <!-- HelpScreen -->
+    <string name="help_title">Aide et tutoriels</string>
+    <string name="help_item_video_title">Traitement vidéo</string>
+    <string name="help_item_video_body">Formats pris en charge : MP4, MOV.\n\nLe remuxage complet est pris en charge pour ces conteneurs. Ce processus supprime le GPS, les dates et les atomes de l\'appareil pour protéger votre vie privée.</string>
+    <string name="help_item_image_title">Traitement d\'image</string>
+    <string name="help_item_image_body">Formats pris en charge : JPG, PNG.\n\nMetaJammer supprime les métadonnées EXIF de ces images. En mode \"Poison\", il remplace les balises sensibles telles que les coordonnées GPS par des données aléatoires réalistes.</string>
+    <string name="help_item_other_title">Autres fichiers</string>
+    <string name="help_item_other_body">Formats pris en charge : Aucun pour le moment.\n\nMetaJammer se concentre actuellement sur les fichiers multimédias. Les prochaines mises à jour incluront la prise en charge des PDF et des documents. Restez à l\'écoute !</string>
+    <string name="help_report_issue_title">Signaler un problème</string>
+    <string name="help_report_issue_body">Vous avez trouvé un bug ou avez une demande de fonctionnalité ? Veuillez le signaler sur notre page GitHub.</string>
+    <string name="help_open_github">Ouvrir les problèmes GitHub</string>
+    <string name="help_app_version">Version : %1$s</string>
+    <string name="help">Aide</string>
 
     <!-- LocationPickerScreen -->
     <string name="pick_location">Choisir un emplacement</string>
@@ -117,26 +133,29 @@
 
     <string name="language_system">System Default (Par défaut du système)</string>
     <string name="language_en">English (Anglais)</string>
-    <string name="language_es">Español (Espagnol)</string>
-    <string name="language_it">Italiano (Italien)</string>
-    <string name="language_fr">Français (Français)</string>
-    <string name="language_de">Deutsch (Allemand)</string>
     <string name="language_zh">中文 (简体) (Chinois)</string>
+    <string name="language_es">Español (Espagnol)</string>
     <string name="language_hi">हिन्दी (Hindi)</string>
+    <string name="language_ar">العربية (Arabe)</string>
+    <string name="language_fr">Français (Français)</string>
     <string name="language_pt">Português (Portugais)</string>
     <string name="language_ru">Русский (Russe)</string>
-    <string name="language_el">Ελληνικά (Grec)</string>
-    <string name="language_ar">العربية (Arabe)</string>
     <string name="language_ja">日本語 (Japonais)</string>
-    <string name="language_in">Bahasa Indonesia (Indonésien)</string>
-    <string name="language_tr">Türkçe (Turc)</string>
+    <string name="language_de">Deutsch (Allemand)</string>
     <string name="language_ko">한국어 (Coréen)</string>
+    <string name="language_in">Bahasa Indonesia (Indonésien)</string>
+    <string name="language_it">Italiano (Italien)</string>
+    <string name="language_tr">Türkçe (Turc)</string>
     <string name="language_vi">Tiếng Việt (Vietnamien)</string>
     <string name="language_th">ไทย (Thaïlandais)</string>
     <string name="language_pl">Polski (Polonais)</string>
-    <string name="language_nl">Nederlands (Néerlandais)</string>
     <string name="language_uk">Українська (Ukrainien)</string>
+    <string name="language_nl">Nederlands (Néerlandais)</string>
+    <string name="language_ro">Română (Roumain)</string>
     <string name="language_fa">فارسی (Persan)</string>
+    <string name="language_el">Ελληνικά (Grec)</string>
+    <string name="language_iw">עברית (Hébreu)</string>
+    <string name="language_la">Latina (Latin)</string>
 
     <string name="processing_mode_poison">Empoisonner les métadonnées (Fausses infos)</string>
     <string name="processing_mode_remove">Supprimer les métadonnées (Nettoyage complet)</string>

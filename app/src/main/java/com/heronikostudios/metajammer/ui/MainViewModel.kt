@@ -208,6 +208,26 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         clearTempFiles()
     }
 
+    fun removeFileFromSelection(file: SelectedFile) {
+        val currentFiles = _selectedFiles.value.toMutableList()
+        if (currentFiles.remove(file)) {
+            _selectedFiles.value = currentFiles
+            
+            // Cleanup metadata and plans associated with this file
+            val currentMetadata = _metadataPreview.value.toMutableMap()
+            currentMetadata.remove(file.uri)
+            _metadataPreview.value = currentMetadata
+            
+            val currentPlans = _replacementPlans.value.toMutableMap()
+            currentPlans.remove(file.uri)
+            _replacementPlans.value = currentPlans
+            
+            val currentChangePreview = _changePreview.value.toMutableMap()
+            currentChangePreview.remove(file.uri)
+            _changePreview.value = currentChangePreview
+        }
+    }
+
     private fun loadMetadataPreview(files: List<SelectedFile>) {
         viewModelScope.launch {
             runCatching {
@@ -650,21 +670,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun buildOutputName(originalName: String): String {
         val settings = _appSettings.value
-
-        val dotIndex = originalName.lastIndexOf('.')
-        val base = if (dotIndex > 0) originalName.substring(0, dotIndex) else originalName
-        val ext = if (dotIndex > 0) originalName.substring(dotIndex) else ""
-
-        val finalBase = if (settings.useRandomFileNames) {
-            "mj_${System.currentTimeMillis()}"
-        } else {
-            val prefix = SanitizationUtils.sanitizeSimple(settings.defaultPrefix)
-            val suffix = SanitizationUtils.sanitizeSimple(settings.defaultSuffix)
-            val sanitizedBase = SanitizationUtils.sanitizeSimple(base)
-            "$prefix$sanitizedBase$suffix"
-        }
-
-        val extension = SanitizationUtils.sanitizeSimple(ext)
-        return "${finalBase}_processed$extension"
+        return SanitizationUtils.generateOutputName(
+            originalName = originalName,
+            useRandomFileNames = settings.useRandomFileNames,
+            prefix = settings.defaultPrefix,
+            suffix = settings.defaultSuffix
+        )
     }
 }

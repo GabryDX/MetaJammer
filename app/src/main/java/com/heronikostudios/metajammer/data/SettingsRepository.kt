@@ -78,7 +78,7 @@ class SettingsRepository(private val context: Context) {
     }
 
     val defaultSuffixFlow: Flow<String> =
-        context.dataStore.data.map { it[DEFAULT_SUFFIX] ?: "" }
+        context.dataStore.data.map { it[DEFAULT_SUFFIX] ?: "_processed" }
 
     suspend fun setDefaultSuffix(value: String) {
         context.dataStore.edit { it[DEFAULT_SUFFIX] = value }

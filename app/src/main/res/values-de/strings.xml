@@ -1,5 +1,6 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources><string name="app_name">MetaJammer</string>
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MetaJammer</string>
     <string name="notification_channel_name">Dateiverarbeitung</string>
     <string name="notification_processing_title">Dateien werden verarbeitet</string>
     <string name="notification_processing_message">Metadaten werden von %1$d Dateien entfernt...</string>
@@ -17,6 +18,7 @@
     <string name="warning">Warnung</string>
     <string name="none">Keine</string>
     <string name="unknown">unbekannt</string>
+    <string name="delete">Löschen</string>
 
     <!-- HomeScreen -->
     <string name="hero_title">Schütze deine Privatsphäre</string>
@@ -58,6 +60,20 @@
     <string name="processing_foreground">Verarbeitung im Vordergrund...</string>
     <string name="background_progress">Hintergrund-Fortschritt: %1$d%%</string>
     <string name="continue_to_output">Weiter zu den Ausgabeoptionen</string>
+
+    <!-- HelpScreen -->
+    <string name="help_title">Hilfe &amp; Tutorials</string>
+    <string name="help_item_video_title">Videoverarbeitung</string>
+    <string name="help_item_video_body">Unterstützte Formate: MP4, MOV.\n\nVollständiges Remuxing wird für diese Container unterstützt. Dieser Vorgang entfernt GPS, Daten und Geräteatome, um Ihre Privatsphäre zu schützen.</string>
+    <string name="help_item_image_title">Bildverarbeitung</string>
+    <string name="help_item_image_body">Unterstützte Formate: JPG, PNG.\n\nMetaJammer entfernt EXIF-Metadaten aus diesen Bildern. Im Modus „Vergiften“ werden sensible Tags wie GPS-Koordinaten durch realistische Zufallsdaten ersetzt.</string>
+    <string name="help_item_other_title">Andere Dateien</string>
+    <string name="help_item_other_body">Unterstützte Formate: Derzeit keine.\n\nMetaJammer konzentriert sich aktuell auf Mediendateien. Zukünftige Updates werden Unterstützung für PDFs und Dokumente enthalten. Bleiben Sie auf dem Laufenden!</string>
+    <string name="help_report_issue_title">Ein Problem melden</string>
+    <string name="help_report_issue_body">Haben Sie einen Fehler gefunden oder haben Sie einen Funktionswunsch? Bitte melden Sie dies auf einer GitHub-Seite.</string>
+    <string name="help_open_github">GitHub-Issues öffnen</string>
+    <string name="help_app_version">Version: %1$s</string>
+    <string name="help">Hilfe</string>
 
     <!-- LocationPickerScreen -->
     <string name="pick_location">Standort wählen</string>
@@ -117,26 +133,29 @@
 
     <string name="language_system">System Default (Systemstandard)</string>
     <string name="language_en">English (Englisch)</string>
-    <string name="language_es">Español (Spanisch)</string>
-    <string name="language_it">Italiano (Italienisch)</string>
-    <string name="language_fr">Français (Französisch)</string>
-    <string name="language_de">Deutsch (Deutsch)</string>
     <string name="language_zh">中文 (简体) (Chinesisch)</string>
+    <string name="language_es">Español (Spanisch)</string>
     <string name="language_hi">हिन्दी (Hindi)</string>
+    <string name="language_ar">العربية (Arabisch)</string>
+    <string name="language_fr">Français (Französisch)</string>
     <string name="language_pt">Português (Portugiesisch)</string>
     <string name="language_ru">Русский (Russisch)</string>
-    <string name="language_el">Ελληνικά (Griechisch)</string>
-    <string name="language_ar">العربية (Arabisch)</string>
     <string name="language_ja">日本語 (Japanisch)</string>
-    <string name="language_in">Bahasa Indonesia (Indonesisch)</string>
-    <string name="language_tr">Türkçe (Türkisch)</string>
+    <string name="language_de">Deutsch (Deutsch)</string>
     <string name="language_ko">한국어 (Koreanisch)</string>
+    <string name="language_in">Bahasa Indonesia (Indonesisch)</string>
+    <string name="language_it">Italiano (Italienisch)</string>
+    <string name="language_tr">Türkçe (Türkisch)</string>
     <string name="language_vi">Tiếng Việt (Vietnamesisch)</string>
     <string name="language_th">ไทย (Thailändisch)</string>
     <string name="language_pl">Polski (Polnisch)</string>
-    <string name="language_nl">Nederlands (Niederländisch)</string>
     <string name="language_uk">Українська (Ukrainisch)</string>
+    <string name="language_nl">Nederlands (Niederländisch)</string>
+    <string name="language_ro">Română (Rumänisch)</string>
     <string name="language_fa">فارسی (Persisch)</string>
+    <string name="language_el">Ελληνικά (Griechisch)</string>
+    <string name="language_iw">עברית (Hebräisch)</string>
+    <string name="language_la">Latina (Latein)</string>
 
     <string name="processing_mode_poison">Metadaten vergiften (Fake-Infos)</string>
     <string name="processing_mode_remove">Metadaten entfernen (Vollständige Bereinigung)</string>

@@ -1,11 +1,11 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MetaJammer</string>
     <string name="notification_channel_name">파일 처리</string>
     <string name="notification_processing_title">파일 처리 중</string>
-    <string name="notification_processing_message">%1$d개의 파일에서 메타데이터를 제거하는 중...</string>
+    <string name="notification_processing_message">%1$d개 파일에서 메타데이터 제거 중...</string>
     <string name="notification_complete_title">처리 완료</string>
-    <string name="notification_complete_message">%1$d개의 파일 처리가 성공적으로 완료되었습니다.</string>
+    <string name="notification_complete_message">%1$d개 파일이 성공적으로 처리되었습니다.</string>
 
     <!-- General -->
     <string name="ok">확인</string>
@@ -18,23 +18,24 @@
     <string name="warning">경고</string>
     <string name="none">없음</string>
     <string name="unknown">알 수 없음</string>
+    <string name="delete">삭제</string>
 
     <!-- HomeScreen -->
-    <string name="hero_title">당신의 개인정보를 보호하세요</string>
+    <string name="hero_title">프라이버시 보호</string>
     <string name="hero_subtitle">파일을 공유하기 전에 민감한 메타데이터를 정리하거나 교체하세요.</string>
-    <string name="feature_images_video_title">이미지 및 비디오</string>
-    <string name="feature_images_video_desc">사진의 메타데이터 제거 및 추적 방지를 위한 비디오 리맥싱(remuxing)을 완벽하게 지원합니다.</string>
+    <string name="feature_images_video_title">이미지 및 동영상</string>
+    <string name="feature_images_video_desc">사진에서 메타데이터를 제거하고 동영상을 리먹싱하여 추적을 방지하는 기능을 완벽하게 지원합니다.</string>
     <string name="feature_poisoning_title">메타데이터 포이즈닝</string>
-    <string name="feature_poisoning_desc">단순히 데이터를 제거하는 데 그치지 않고, 사실적인 가짜 데이터로 교체하여 프라이버시를 보호하고 추적자를 혼란스럽게 만듭니다.</string>
+    <string name="feature_poisoning_desc">단순히 데이터를 제거하는 데 그치지 않고 실제와 유사한 가짜 데이터로 교체하여 프라이버시를 보호하고 추적기를 혼란스럽게 만듭니다.</string>
     <string name="feature_background_title">백그라운드 처리</string>
     <string name="feature_background_desc">다른 작업을 하는 동안 백그라운드에서 수백 개의 파일을 효율적으로 처리합니다.</string>
     <string name="feature_on_device_title">온디바이스 프라이버시</string>
-    <string name="feature_on_device_desc">모든 처리는 기기 내에서 로컬로 이루어집니다. 당신의 파일은 절대 MetaJammer 밖으로 나가지 않습니다.</string>
-    <string name="pro_tip_gallery">팁: 갤러리 앱에서 MetaJammer로 직접 파일을 공유할 수 있습니다.</string>
+    <string name="feature_on_device_desc">모든 처리는 기기 내에서 로컬로 수행됩니다. 귀하의 파일은 절대 MetaJammer를 떠나지 않습니다.</string>
+    <string name="pro_tip_gallery">팁: 갤러리 앱에서 MetaJammer로 파일을 직접 공유할 수 있습니다.</string>
     <string name="select_files">파일 선택</string>
     <string name="select_more_files">파일 더 선택</string>
     <string name="clear_selection">선택 해제</string>
-    <string name="files_selected">%1$d개의 파일 선택됨</string>
+    <string name="files_selected">%1$d개 파일 선택됨</string>
     <string name="total_size">총 크기: %1$s</string>
     <string name="size_mb">%.1f MB</string>
     <string name="size_kb">%.1f KB</string>
@@ -47,26 +48,40 @@
 
     <!-- ProcessingScreen -->
     <string name="process_files_title">파일 처리</string>
-    <string name="pick_one_option">옵션 선택:</string>
-    <string name="poison_metadata">메타데이터 포이즈닝</string>
+    <string name="pick_one_option">옵션 하나를 선택하세요:</string>
+    <string name="poison_metadata">메타데이터 포이즌</string>
     <string name="remove_metadata">메타데이터 제거</string>
     <string name="selected_mode">선택됨: %1$s</string>
-    <string name="regenerate_plans">모든 랜덤 플랜 다시 생성</string>
+    <string name="regenerate_plans">모든 무작위 플랜 재생성</string>
     <string name="preview_of_changes">변경 사항 미리보기</string>
-    <string name="no_preview_available">미리보기를 사용할 수 없음</string>
+    <string name="no_preview_available">미리보기 불가</string>
     <string name="change_location_map">지도에서 위치 변경</string>
     <string name="process_files">파일 처리</string>
     <string name="processing_foreground">포그라운드에서 처리 중...</string>
     <string name="background_progress">백그라운드 진행률: %1$d%%</string>
-    <string name="continue_to_output">출력 옵션으로 계속</string>
+    <string name="continue_to_output">출력 옵션으로 이동</string>
+
+    <!-- HelpScreen -->
+    <string name="help_title">도움말 및 튜토리얼</string>
+    <string name="help_item_video_title">동영상 처리</string>
+    <string name="help_item_video_body">지원되는 형식: MP4, MOV.\n\n이러한 컨테이너에 대해 전체 리먹싱이 지원됩니다. 이 프로세스는 개인 정보를 보호하기 위해 GPS, 날짜 및 장치 원자를 제거합니다.</string>
+    <string name="help_item_image_title">이미지 처리</string>
+    <string name="help_item_image_body">지원되는 형식: JPG, PNG.\n\nMetaJammer는 이러한 이미지에서 EXIF 메타데이터를 제거합니다. \"포이즌\" 모드에서는 GPS 좌표와 같은 민감한 태그를 실제와 유사한 무작위 데이터로 대체합니다.</string>
+    <string name="help_item_other_title">기타 파일</string>
+    <string name="help_item_other_body">지원되는 형식: 현재 없음.\n\nMetaJammer는 현재 미디어 파일에 집중하고 있습니다. 향후 업데이트에는 PDF 및 문서에 대한 지원이 포함될 예정입니다. 기대해 주세요!</string>
+    <string name="help_report_issue_title">문제 보고</string>
+    <string name="help_report_issue_body">버그를 발견하셨나요? 아니면 기능 요청이 있으신가요? 저희 GitHub 페이지에 보고해 주세요.</string>
+    <string name="help_open_github">GitHub Issues 열기</string>
+    <string name="help_app_version">버전: %1$s</string>
+    <string name="help">도움말</string>
 
     <!-- LocationPickerScreen -->
     <string name="pick_location">위치 선택</string>
-    <string name="confirm_location">위치 확정</string>
+    <string name="confirm_location">위치 확인</string>
 
     <!-- OutputOptionsScreen -->
     <string name="output_options">출력 옵션</string>
-    <string name="saving_will_trigger_sharing">저장하면 공유도 트리거됩니다.</string>
+    <string name="saving_will_trigger_sharing">저장 시 공유도 함께 실행됩니다.</string>
     <string name="choose_save_or_share">처리된 결과를 저장할지 공유할지 선택하세요.</string>
     <string name="save_to_default_folder">기본 폴더에 저장</string>
     <string name="save_to_custom_folder">사용자 지정 폴더에 저장</string>
@@ -78,37 +93,37 @@
     <string name="category_shared_files">공유 파일 동작</string>
     <string name="category_ui">UI</string>
 
-    <string name="setting_random_names_title">무작위 파일 이름 사용</string>
-    <string name="setting_random_names_sub">원본 파일 이름 대신 무작위 출력 이름을 생성합니다</string>
+    <string name="setting_random_names_title">무작위 파일명 사용</string>
+    <string name="setting_random_names_sub">원본 파일명 대신 무작위로 생성된 출력 파일명을 사용합니다.</string>
     <string name="setting_default_path_title">기본 저장 경로</string>
     <string name="setting_reset_path">Pictures/MetaJammer로 재설정</string>
     <string name="setting_select_folder">폴더 선택</string>
 
     <string name="setting_keep_orientation_title">이미지 방향 유지</string>
-    <string name="setting_keep_orientation_sub">가능한 경우 이미지 방향 메타데이터를 보존합니다</string>
-    <string name="setting_share_default_title">기본적으로 결과 공유</string>
-    <string name="setting_share_default_sub">저장하면 공유도 트리거됩니다</string>
+    <string name="setting_keep_orientation_sub">가능한 경우 이미지 방향 메타데이터를 보존합니다.</string>
+    <string name="setting_share_default_title">결과를 기본으로 공유</string>
+    <string name="setting_share_default_sub">저장 시 공유도 함께 실행됩니다.</string>
     <string name="setting_prefix_title">기본 접두사</string>
     <string name="setting_suffix_title">기본 접미사</string>
     <string name="setting_not_set">설정되지 않음</string>
     <string name="setting_keep_thumbnails_title">원본 썸네일 유지</string>
-    <string name="setting_keep_thumbnails_sub">파일에 내장된 썸네일이 포함되어 있으면 그대로 보존합니다. 비활성화하면 최대 프라이버시를 위해 기존의 모든 썸네일이 제거됩니다.</string>
-    <string name="setting_thumbnails_warning">경고: 원본 썸네일을 유지하면 주요 태그를 제거하더라도 메타데이터(위치, 기기 정보)가 유출될 수 있습니다.</string>
-    <string name="setting_enable_map_title">지도 선택 도구 활성화</string>
-    <string name="setting_enable_map_sub">위치 선택을 위해 OpenStreetMap을 표시하도록 앱의 인터넷 연결을 허용합니다</string>
+    <string name="setting_keep_thumbnails_sub">파일에 포함된 썸네일이 있으면 그대로 보존합니다. 비활성화하면 프라이버시를 위해 기존 썸네일이 제거됩니다.</string>
+    <string name="setting_thumbnails_warning">경고: 원본 썸네일을 유지하면 주요 태그가 제거되더라도 메타데이터(위치, 기기 정보)가 유출될 수 있습니다.</string>
+    <string name="setting_enable_map_title">지도 선택기 활성화</string>
+    <string name="setting_enable_map_sub">위치 선택을 위해 OpenStreetMap을 표시할 수 있도록 앱의 인터넷 연결을 허용합니다.</string>
 
     <string name="setting_quick_scrub_title">빠른 정리 및 공유</string>
-    <string name="setting_quick_scrub_sub">공유된 파일의 메타데이터를 자동으로 정리하고 공유 시트를 다시 엽니다</string>
+    <string name="setting_quick_scrub_sub">공유된 파일에 대해 메타데이터를 자동으로 제거하고 공유 시트를 다시 엽니다.</string>
     <string name="setting_metadata_action_title">메타데이터 작업</string>
     <string name="setting_output_action_title">출력 작업</string>
-    <string name="setting_dedicated_folder_title">공유 파일 전용 폴더</string>
+    <string name="setting_dedicated_folder_title">전용 공유 파일 폴더</string>
     <string name="setting_no_folder_selected">전용 폴더가 선택되지 않음</string>
     <string name="setting_clear_folder">전용 폴더 비우기</string>
 
     <string name="setting_night_mode_title">야간 모드</string>
     <string name="setting_language_title">언어</string>
     <string name="setting_oled_mode_title">OLED 모드</string>
-    <string name="setting_oled_mode_sub">지원되는 다크 테마에서 더 깊은 검은색 톤을 사용합니다</string>
+    <string name="setting_oled_mode_sub">지원되는 다크 테마에서 더 어두운 검정색 톤을 사용합니다.</string>
 
     <!-- Enums -->
     <string name="night_mode_always">항상</string>
@@ -116,42 +131,45 @@
     <string name="night_mode_low_battery">배터리 부족 시에만</string>
     <string name="night_mode_never">안 함</string>
 
-    <string name="language_system">System Default (시스템 기본값)</string>
+    <string name="language_system">시스템 기본값</string>
     <string name="language_en">English (영어)</string>
+    <string name="language_zh">中文 (简体) (중국어)</string>
     <string name="language_es">Español (스페인어)</string>
-    <string name="language_it">Italiano (이탈리아어)</string>
-    <string name="language_fr">Français (프랑스어)</string>
-    <string name="language_de">Deutsch (독일어)</string>
-    <string name="language_zh">中文 (简体) (중국어 (간체))</string>
     <string name="language_hi">हिन्दी (힌디어)</string>
+    <string name="language_ar">العربية (아랍어)</string>
+    <string name="language_fr">Français (프랑스어)</string>
     <string name="language_pt">Português (포르투갈어)</string>
     <string name="language_ru">Русский (러시아어)</string>
-    <string name="language_el">Ελληνικά (그리스어)</string>
-    <string name="language_ar">العربية (아랍어)</string>
     <string name="language_ja">日本語 (일본어)</string>
-    <string name="language_in">Bahasa Indonesia (인도네시아어)</string>
-    <string name="language_tr">Türkçe (터키어)</string>
+    <string name="language_de">Deutsch (독일어)</string>
     <string name="language_ko">한국어 (한국어)</string>
+    <string name="language_in">Bahasa Indonesia (인도네시아어)</string>
+    <string name="language_it">Italiano (이탈리아어)</string>
+    <string name="language_tr">Türkçe (터키어)</string>
     <string name="language_vi">Tiếng Việt (베트남어)</string>
     <string name="language_th">ไทย (태국어)</string>
     <string name="language_pl">Polski (폴란드어)</string>
-    <string name="language_nl">Nederlands (네덜란드어)</string>
     <string name="language_uk">Українська (우크라이나어)</string>
-    <string name="language_fa">فارسی (페르시아어)</string>
+    <string name="language_nl">Nederlands (네덜란드어)</string>
+    <string name="language_ro">Română (루마니아어)</string>
+    <string name="language_fa">Persian (페르시아어)</string>
+    <string name="language_el">Ελληνικά (그리스어)</string>
+    <string name="language_iw">עברית (히브리어)</string>
+    <string name="language_la">Latina (라틴어)</string>
 
-    <string name="processing_mode_poison">메타데이터 포이즈닝 (가짜 정보)</string>
-    <string name="processing_mode_remove">메타데이터 제거 (전체 정리)</string>
+    <string name="processing_mode_poison">메타데이터 포이즌 (가짜 정보)</string>
+    <string name="processing_mode_remove">메타데이터 제거 (전체 삭제)</string>
 
     <string name="output_action_default_folder">기본 폴더에 저장</string>
     <string name="output_action_shared_folder">전용 폴더에 저장</string>
     <string name="output_action_reshare">정리된 파일 다시 공유</string>
 
     <!-- Dialogs/Permissions -->
-    <string name="map_permission_title">지도 선택 도구 및 인터넷 액세스</string>
-    <string name="map_permission_message">위치 선택을 위한 지도를 표시하기 위해, MetaJammer는 OpenStreetMap에서 지도 타일을 로드하기 위해 인터넷에 연결해야 합니다. \n\n거부하더라도 앱의 모든 메타데이터 제거 및 포이즈닝 기능은 완벽하게 작동하지만, 지도에서 시각적으로 위치를 선택할 수는 없습니다.</string>
+    <string name="map_permission_title">지도 선택기 및 인터넷 액세스</string>
+    <string name="map_permission_message">위치 선택을 위한 지도를 표시하려면 MetaJammer가 OpenStreetMap에서 지도 타일을 로드하기 위해 인터넷에 연결해야 합니다.\n\n거부하더라도 메타데이터 제거 및 포이즈닝 기능은 모두 완벽하게 작동하지만, 지도에서 시각적으로 위치를 선택할 수는 없게 됩니다.</string>
     <string name="allow_open_map">허용 및 지도 열기</string>
-    <string name="not_now">지금은 안 함</string>
+    <string name="not_now">나중에</string>
 
-    <string name="notification_permission_title">알림 받기</string>
-    <string name="notification_permission_message">MetaJammer는 백그라운드에서 대량의 파일이 처리되는 동안 진행 상황을 알림으로 표시할 수 있습니다. \n\n이는 MetaJammer가 작업을 마치는 동안 다른 앱으로 전환하고 싶을 때 특히 유용합니다.</string>
+    <string name="notification_permission_title">정보 유지</string>
+    <string name="notification_permission_message">MetaJammer는 대량의 파일이 백그라운드에서 처리되는 동안 진행 상황을 알려주는 알림을 표시할 수 있습니다.\n\n이는 MetaJammer가 작업을 마치는 동안 다른 앱으로 전환하고 싶을 때 특히 유용합니다.</string>
 </resources>

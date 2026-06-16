@@ -13,13 +13,13 @@ android {
         minSdk = 33
         targetSdk = 37
         versionCode = 1
-        versionName = "0.2.3"
+        versionName = "0.2.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     androidResources {
-        localeFilters += listOf("en", "es", "it", "fr", "de", "zh", "hi", "pt", "ru", "el", "ar", "ja", "in", "tr", "ko", "vi", "th", "pl", "nl", "uk", "fa")
+        localeFilters += listOf("en", "es", "it", "fr", "de", "zh", "hi", "pt", "ru", "el", "ar", "ja", "in", "tr", "ko", "vi", "th", "pl", "nl", "uk", "fa", "he", "iw", "la", "ro")
     }
 
     buildTypes {
@@ -74,6 +74,8 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.timber)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.video)
 
     testImplementation(libs.junit)
 

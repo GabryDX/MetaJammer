@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MetaJammer</string>
     <string name="notification_channel_name">Επεξεργασία αρχείων</string>
@@ -9,7 +9,7 @@
 
     <!-- General -->
     <string name="ok">OK</string>
-    <string name="cancel">Ακύρωση</string>
+    <string name="cancel">Άκυρο</string>
     <string name="back">Πίσω</string>
     <string name="continue_label">Συνέχεια</string>
     <string name="save">Αποθήκευση</string>
@@ -18,23 +18,24 @@
     <string name="warning">Προειδοποίηση</string>
     <string name="none">Κανένα</string>
     <string name="unknown">άγνωστο</string>
+    <string name="delete">Διαγραφή</string>
 
     <!-- HomeScreen -->
-    <string name="hero_title">Προστατέψτε την ιδιωτικότητά σας</string>
+    <string name="hero_title">Προστατέψτε το απόρρητό σας</string>
     <string name="hero_subtitle">Καθαρίστε ή αντικαταστήστε ευαίσθητα μεταδεδομένα πριν μοιραστείτε τα αρχεία σας.</string>
     <string name="feature_images_video_title">Εικόνες &amp; Βίντεο</string>
-    <string name="feature_images_video_desc">Πλήρης υποστήριξη για την αφαίρεση μεταδεδομένων από φωτογραφίες και την επανακωδικοποίηση βίντεο για την κατάργηση παρακολούθησης.</string>
-    <string name="feature_poisoning_title">Δηλητηρίαση Μεταδεδομένων</string>
-    <string name="feature_poisoning_desc">Μην αφαιρείτε απλώς δεδομένα—αντικαταστήστε τα με ρεαλιστικά ψεύτικα στοιχεία για να διατηρήσετε το απόρρητο και να μπερδέψετε τους ιχνηλάτες.</string>
+    <string name="feature_images_video_desc">Πλήρης υποστήριξη για την αφαίρεση μεταδεδομένων από φωτογραφίες και την επαναπολυπλεξία βίντεο για την κατάργηση της παρακολούθησης.</string>
+    <string name="feature_poisoning_title">Δηλητηρίαση μεταδεδομένων</string>
+    <string name="feature_poisoning_desc">Μην αφαιρείτε μόνο δεδομένα—αντικαταστήστε τα με ρεαλιστικά ψεύτικα για να διατηρήσετε το απόρρητο και να μπερδέψετε τους ιχνηλάτες.</string>
     <string name="feature_background_title">Επεξεργασία στο παρασκήνιο</string>
     <string name="feature_background_desc">Επεξεργαστείτε εκατοντάδες αρχεία αποτελεσματικά στο παρασκήνιο ενώ κάνετε άλλα πράγματα.</string>
     <string name="feature_on_device_title">Απόρρητο στη συσκευή</string>
     <string name="feature_on_device_desc">Όλη η επεξεργασία γίνεται τοπικά στη συσκευή σας. Τα αρχεία σας δεν φεύγουν ποτέ από το MetaJammer.</string>
-    <string name="pro_tip_gallery">Pro tip: Μπορείτε να μοιραστείτε αρχεία απευθείας από την εφαρμογή Συλλογή στο MetaJammer.</string>
+    <string name="pro_tip_gallery">Συμβουλή: Μπορείτε να μοιραστείτε αρχεία απευθείας από την εφαρμογή Συλλογή στο MetaJammer.</string>
     <string name="select_files">Επιλογή αρχείων</string>
     <string name="select_more_files">Επιλογή περισσότερων αρχείων</string>
     <string name="clear_selection">Εκκαθάριση επιλογής</string>
-    <string name="files_selected">%1$d Αρχεία επιλέχθηκαν</string>
+    <string name="files_selected">%1$d αρχεία επιλέχθηκαν</string>
     <string name="total_size">Συνολικό μέγεθος: %1$s</string>
     <string name="size_mb">%.1f MB</string>
     <string name="size_kb">%.1f KB</string>
@@ -53,12 +54,26 @@
     <string name="selected_mode">Επιλέχθηκε: %1$s</string>
     <string name="regenerate_plans">Αναγέννηση όλων των τυχαίων σχεδίων</string>
     <string name="preview_of_changes">Προεπισκόπηση αλλαγών</string>
-    <string name="no_preview_available">Δεν υπάρχει διαθέσιμη προεπισκόπηση</string>
+    <string name="no_preview_available">Μη διαθέσιμη προεπισκόπηση</string>
     <string name="change_location_map">Αλλαγή τοποθεσίας στον χάρτη</string>
     <string name="process_files">Επεξεργασία αρχείων</string>
     <string name="processing_foreground">Επεξεργασία στο προσκήνιο...</string>
-    <string name="background_progress">Πρόοδος παρασκηνίου: %1$d%%</string>
+    <string name="background_progress">Πρόοδος στο παρασκήνιο: %1$d%%</string>
     <string name="continue_to_output">Συνέχεια στις επιλογές εξόδου</string>
+
+    <!-- HelpScreen -->
+    <string name="help_title">Βοήθεια και οδηγοί</string>
+    <string name="help_item_video_title">Επεξεργασία βίντεο</string>
+    <string name="help_item_video_body">Υποστηριζόμενες μορφές: MP4, MOV.\n\nΥποστηρίζεται πλήρης επαναπολυπλεξία για αυτούς τους περιέκτες. Αυτή η διαδικασία αφαιρεί το GPS, τις ημερομηνίες και τα άτομα της συσκευής για την προστασία του απορρήτου σας.</string>
+    <string name="help_item_image_title">Επεξεργασία εικόνας</string>
+    <string name="help_item_image_body">Υποστηριζόμενες μορφές: JPG, PNG.\n\nΤο MetaJammer αφαιρεί τα μεταδεδομένα EXIF από αυτές τις εικόνες. Στη λειτουργία «Δηλητηρίαση», αντικαθιστά ευαίσθητες ετικέτες όπως οι συντεταγμένες GPS με ρεαλιστικά τυχαία δεδομένα.</string>
+    <string name="help_item_other_title">Άλλα αρχεία</string>
+    <string name="help_item_other_body">Υποστηριζόμενες μορφές: Καμία προς το παρόν.\n\nΤο MetaJammer επικεντρώνεται επί του παρόντος σε αρχεία πολυμέσων. Μελλοντικές ενημερώσεις θα περιλαμβάνουν υποστήριξη για PDF και έγγραφα. Μείνετε συντονισμένοι!</string>
+    <string name="help_report_issue_title">Αναφορά προβλήματος</string>
+    <string name="help_report_issue_body">Βρήκατε κάποιο σφάλμα ή έχετε ένα αίτημα για λειτουργία; Παρακαλούμε αναφέρετέ το στη σελίδα μας στο GitHub.</string>
+    <string name="help_open_github">Άνοιγμα προβλημάτων GitHub</string>
+    <string name="help_app_version">Έκδοση: %1$s</string>
+    <string name="help">Βοήθεια</string>
 
     <!-- LocationPickerScreen -->
     <string name="pick_location">Επιλογή τοποθεσίας</string>
@@ -67,7 +82,7 @@
     <!-- OutputOptionsScreen -->
     <string name="output_options">Επιλογές εξόδου</string>
     <string name="saving_will_trigger_sharing">Η αποθήκευση θα ενεργοποιήσει επίσης την κοινοποίηση.</string>
-    <string name="choose_save_or_share">Επιλέξτε αν θέλετε να αποθηκεύσετε ή να μοιραστείτε το επεξεργασμένο αποτέλεσμα.</string>
+    <string name="choose_save_or_share">Επιλέξτε εάν θέλετε να αποθηκεύσετε ή να μοιραστείτε το επεξεργασμένο αποτέλεσμα.</string>
     <string name="save_to_default_folder">Αποθήκευση στον προεπιλεγμένο φάκελο</string>
     <string name="save_to_custom_folder">Αποθήκευση σε προσαρμοσμένο φάκελο</string>
 
@@ -79,26 +94,26 @@
     <string name="category_ui">Διεπαφή χρήστη</string>
 
     <string name="setting_random_names_title">Χρήση τυχαίων ονομάτων αρχείων</string>
-    <string name="setting_random_names_sub">Δημιουργία τυχαίων ονομάτων εξόδου αντί για τη χρήση του αρχικού ονόματος αρχείου</string>
+    <string name="setting_random_names_sub">Δημιουργήστε τυχαία ονόματα εξόδου αντί να χρησιμοποιήσετε το αρχικό όνομα αρχείου</string>
     <string name="setting_default_path_title">Προεπιλεγμένη διαδρομή αποθήκευσης</string>
     <string name="setting_reset_path">Επαναφορά σε Pictures/MetaJammer</string>
     <string name="setting_select_folder">Επιλογή φακέλου</string>
 
     <string name="setting_keep_orientation_title">Διατήρηση προσανατολισμού εικόνας</string>
-    <string name="setting_keep_orientation_sub">Διατήρηση μεταδεδομένων προσανατολισμού εικόνας όταν είναι δυνατόν</string>
+    <string name="setting_keep_orientation_sub">Διατήρηση των μεταδεδομένων προσανατολισμού της εικόνας όταν είναι δυνατόν</string>
     <string name="setting_share_default_title">Κοινοποίηση αποτελέσματος ως προεπιλογή</string>
     <string name="setting_share_default_sub">Η αποθήκευση θα ενεργοποιήσει επίσης την κοινοποίηση</string>
     <string name="setting_prefix_title">Προεπιλεγμένο πρόθεμα</string>
     <string name="setting_suffix_title">Προεπιλεγμένο επίθεμα</string>
     <string name="setting_not_set">Δεν έχει οριστεί</string>
     <string name="setting_keep_thumbnails_title">Διατήρηση αρχικών μικρογραφιών</string>
-    <string name="setting_keep_thumbnails_sub">Εάν το αρχείο περιέχει ενσωματωμένη μικρογραφία, διατηρήστε την ως έχει. Εάν απενεργοποιηθεί, οποιαδήποτε υπάρχουσα μικρογραφία θα αφαιρεθεί για μέγιστο απόρρητο.</string>
-    <string name="setting_thumbnails_warning">Προειδοποίηση: Η διατήρηση των αρχικών μικρογραφιών ενδέχεται να διαρρεύσει μεταδεδομένα (τοποθεσία, πληροφορίες συσκευής) ακόμη και αν αφαιρεθούν οι κύριες ετικέτες.</string>
+    <string name="setting_keep_thumbnails_sub">Εάν το αρχείο περιέχει μια ενσωματωμένη μικρογραφία, διατηρήστε την ως έχει. Εάν απενεργοποιηθεί, οποιαδήποτε υπάρχουσα μικρογραφία θα αφαιρεθεί για μέγιστο απόρρητο.</string>
+    <string name="setting_thumbnails_warning">Προειδοποίηση: Η διατήρηση των αρχικών μικρογραφιών ενδέχεται να διαρρεύσει μεταδεδομένα (τοποθεσία, πληροφορίες συσκευής) ακόμα και αν αφαιρεθούν οι κύριες ετικέτες.</string>
     <string name="setting_enable_map_title">Ενεργοποίηση επιλογέα χάρτη</string>
     <string name="setting_enable_map_sub">Επιτρέψτε στην εφαρμογή να συνδεθεί στο διαδίκτυο για να εμφανίσει το OpenStreetMap για την επιλογή τοποθεσίας</string>
 
-    <string name="setting_quick_scrub_title">Γρήγορος καθαρισμός &amp; κοινοποίηση</string>
-    <string name="setting_quick_scrub_sub">Αυτόματη αφαίρεση μεταδεδομένων και επαναάνοιγμα του μενού κοινοποίησης για κοινόχρηστα αρχεία</string>
+    <string name="setting_quick_scrub_title">Γρήγορος καθαρισμός &amp; Κοινοποίηση</string>
+    <string name="setting_quick_scrub_sub">Αυτόματη αφαίρεση μεταδεδομένων και εκ νέου άνοιγμα του φύλλου κοινοποίησης για κοινόχρηστα αρχεία</string>
     <string name="setting_metadata_action_title">Ενέργεια μεταδεδομένων</string>
     <string name="setting_output_action_title">Ενέργεια εξόδου</string>
     <string name="setting_dedicated_folder_title">Αποκλειστικός φάκελος κοινόχρηστων αρχείων</string>
@@ -112,46 +127,49 @@
 
     <!-- Enums -->
     <string name="night_mode_always">Πάντα</string>
-    <string name="night_mode_automatic">Αυτόματα</string>
+    <string name="night_mode_automatic">Αυτόματο</string>
     <string name="night_mode_low_battery">Μόνο σε χαμηλή μπαταρία</string>
     <string name="night_mode_never">Ποτέ</string>
 
     <string name="language_system">System Default (Προεπιλογή συστήματος)</string>
     <string name="language_en">English (Αγγλικά)</string>
+    <string name="language_zh">中文 (简体) (Κινέζικα)</string>
     <string name="language_es">Español (Ισπανικά)</string>
-    <string name="language_it">Italiano (Ιταλικά)</string>
-    <string name="language_fr">Français (Γαλλικά)</string>
-    <string name="language_de">Deutsch (Γερμανικά)</string>
-    <string name="language_zh">中文 (简体) (Κινεζικά (Απλοποιημένα))</string>
     <string name="language_hi">हिन्दी (Χίντι)</string>
+    <string name="language_ar">العربية (Αραβικά)</string>
+    <string name="language_fr">Français (Γαλλικά)</string>
     <string name="language_pt">Português (Πορτογαλικά)</string>
     <string name="language_ru">Русский (Ρωσικά)</string>
-    <string name="language_el">Ελληνικά (Ελληνικά)</string>
-    <string name="language_ar">العربية (Αραβικά)</string>
     <string name="language_ja">日本語 (Ιαπωνικά)</string>
-    <string name="language_in">Bahasa Indonesia (Ινδονησιακά)</string>
-    <string name="language_tr">Türkçe (Τουρκικά)</string>
+    <string name="language_de">Deutsch (Γερμανικά)</string>
     <string name="language_ko">한국어 (Κορεατικά)</string>
+    <string name="language_in">Bahasa Indonesia (Ινδονησιακά)</string>
+    <string name="language_it">Italiano (Ιταλικά)</string>
+    <string name="language_tr">Türkçe (Τουρκικά)</string>
     <string name="language_vi">Tiếng Việt (Βιετναμέζικα)</string>
-    <string name="language_th">ไทย (Ταϊλανδέζικα)</string>
+    <string name="language_th">ไทย (Ταϊλανδικά)</string>
     <string name="language_pl">Polski (Πολωνικά)</string>
-    <string name="language_nl">Nederlands (Ολλανδικά)</string>
     <string name="language_uk">Українська (Ουκρανικά)</string>
+    <string name="language_nl">Nederlands (Ολλανδικά)</string>
+    <string name="language_ro">Română (Ρουμανικά)</string>
     <string name="language_fa">فارسی (Περσικά)</string>
+    <string name="language_el">Ελληνικά (Ελληνικά)</string>
+    <string name="language_iw">עברית (Εβραϊκά)</string>
+    <string name="language_la">Latina (Λατινικά)</string>
 
     <string name="processing_mode_poison">Δηλητηρίαση μεταδεδομένων (Ψεύτικες πληροφορίες)</string>
     <string name="processing_mode_remove">Αφαίρεση μεταδεδομένων (Πλήρης καθαρισμός)</string>
 
     <string name="output_action_default_folder">Αποθήκευση στον προεπιλεγμένο φάκελο</string>
     <string name="output_action_shared_folder">Αποθήκευση στον αποκλειστικό φάκελο</string>
-    <string name="output_action_reshare">Επανακοινοποίηση καθαρισμένων αρχείων</string>
+    <string name="output_action_reshare">Εκ νέου κοινοποίηση καθαρισμένων αρχείων</string>
 
     <!-- Dialogs/Permissions -->
-    <string name="map_permission_title">Επιλογέας Χάρτη &amp; Πρόσβαση στο Διαδίκτυο</string>
-    <string name="map_permission_message">Για να εμφανιστεί ένας χάρτης για την επιλογή τοποθεσίας, το MetaJammer πρέπει να συνδεθεί στο διαδίκτυο για να φορτώσει πλακίδια χάρτη από το OpenStreetMap. \n\nΕάν αρνηθείτε, η εφαρμογή θα συνεχίσει να λειτουργεί τέλεια για όλες τις λειτουργίες αφαίρεσης και δηλητηρίασης μεταδεδομένων, αλλά δεν θα μπορείτε να επιλέξετε τοποθεσίες οπτικά σε έναν χάρτη.</string>
+    <string name="map_permission_title">Επιλογέας χάρτη &amp; Πρόσβαση στο διαδίκτυο</string>
+    <string name="map_permission_message">Για να εμφανιστεί ένας χάρτης για την επιλογή τοποθεσίας, το MetaJammer πρέπει να συνδεθεί στο διαδίκτυο για να φορτώσει πλακίδια χάρτη από το OpenStreetMap. \n\nΕάν αρνηθείτε, η εφαρμογή θα συνεχίσει να λειτουργεί τέλεια για όλες τις δυνατότητες αφαίρεσης και δηλητηρίασης μεταδεδομένων, αλλά δεν θα μπορείτε να επιλέξετε τοποθεσίες οπτικά σε έναν χάρτη.</string>
     <string name="allow_open_map">Να επιτρέπεται &amp; Άνοιγμα χάρτη</string>
     <string name="not_now">Όχι τώρα</string>
 
     <string name="notification_permission_title">Μείνετε ενημερωμένοι</string>
-    <string name="notification_permission_message">Το MetaJammer μπορεί να εμφανίζει ειδοποιήσεις για να σας ενημερώνει για την πρόοδο μεγάλων παρτίδων αρχείων ενώ επεξεργάζονται στο παρασκήνιο. \n\nΑυτό είναι ιδιαίτερα χρήσιμο εάν θέλετε να μεταβείτε σε άλλη εφαρμογή ενώ το MetaJammer ολοκληρώνει την εργασία του.</string>
+    <string name="notification_permission_message">Το MetaJammer μπορεί να εμφανίζει ειδοποιήσεις για να σας κρατά ενήμερους για την πρόοδο μεγάλων παρτίδων αρχείων ενώ επεξεργάζονται στο παρασκήνιο. \n\nΑυτό είναι ιδιαίτερα χρήσιμο εάν θέλετε να μεταβείτε σε άλλη εφαρμογή ενώ το MetaJammer ολοκληρώνει την εργασία του.</string>
 </resources>

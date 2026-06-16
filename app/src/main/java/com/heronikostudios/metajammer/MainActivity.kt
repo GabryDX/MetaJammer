@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import androidx.core.net.toUri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.compose.BackHandler
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.ui.res.painterResource
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -42,6 +44,7 @@ import androidx.compose.ui.res.stringResource
 import com.heronikostudios.metajammer.domain.usecase.ShareFileUseCase
 import com.heronikostudios.metajammer.ui.MainViewModel
 import com.heronikostudios.metajammer.ui.components.MessageBanner
+import com.heronikostudios.metajammer.ui.screens.HelpScreen
 import com.heronikostudios.metajammer.ui.screens.HomeScreen
 import com.heronikostudios.metajammer.ui.screens.LocationPickerScreen
 import com.heronikostudios.metajammer.ui.screens.MetadataPreviewScreen
@@ -49,7 +52,6 @@ import com.heronikostudios.metajammer.ui.screens.OutputOptionsScreen
 import com.heronikostudios.metajammer.ui.screens.ProcessingScreen
 import com.heronikostudios.metajammer.ui.screens.SettingsScreen
 import com.heronikostudios.metajammer.ui.theme.MetaJammerTheme
-import com.heronikostudios.metajammer.R
 
 class MainActivity : AppCompatActivity() {
 
@@ -118,7 +120,8 @@ private enum class AppStep {
     PROCESS,
     LOCATION_PICKER,
     OUTPUT,
-    SETTINGS
+    SETTINGS,
+    HELP
 }
 
 private fun previousStep(step: AppStep): AppStep? = when (step) {
@@ -128,6 +131,7 @@ private fun previousStep(step: AppStep): AppStep? = when (step) {
     AppStep.LOCATION_PICKER -> AppStep.PROCESS
     AppStep.OUTPUT -> AppStep.PROCESS
     AppStep.SETTINGS -> null
+    AppStep.HELP -> AppStep.HOME
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -175,7 +179,7 @@ fun MetaJammerApp(
 
     fun navigateTo(step: AppStep) {
         viewModel.clearMessage()
-        if (step != AppStep.SETTINGS) {
+        if (step != AppStep.SETTINGS && step != AppStep.HELP) {
             previousNonSettingsStep = step
         }
         currentStep = step
@@ -240,6 +244,7 @@ fun MetaJammerApp(
                             AppStep.LOCATION_PICKER -> stringResource(R.string.pick_location)
                             AppStep.OUTPUT -> stringResource(R.string.output_options)
                             AppStep.SETTINGS -> stringResource(R.string.settings)
+                            AppStep.HELP -> stringResource(R.string.help_title)
                         },
                         style = when (currentStep) {
                             AppStep.HOME -> MaterialTheme.typography.headlineMedium
@@ -248,7 +253,14 @@ fun MetaJammerApp(
                     )
                 },
                 navigationIcon = {
-                    if (currentStep != AppStep.HOME) {
+                    if (currentStep == AppStep.HOME) {
+                        IconButton(onClick = { navigateTo(AppStep.HELP) }) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_help_outline),
+                                contentDescription = stringResource(R.string.help)
+                            )
+                        }
+                    } else if (currentStep != AppStep.HOME) {
                         IconButton(onClick = { navigateBack() }) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -289,11 +301,27 @@ fun MetaJammerApp(
                             viewModel.setIncomingUris(it)
                             navigateTo(AppStep.PREVIEW)
                         },
+                        onFileRemoved = {
+                            viewModel.removeFileFromSelection(it)
+                        },
                         onContinue = {
                             if (selectedFiles.isNotEmpty()) navigateTo(AppStep.PREVIEW)
                         },
                         onClearSelection = {
                             viewModel.clearSelection()
+                        },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+
+                AppStep.HELP -> {
+                    HelpScreen(
+                        onBack = { navigateBack() },
+                        onReportIssue = {
+                            runCatching {
+                                val intent = Intent(Intent.ACTION_VIEW, "https://github.com/GabryDX/MetaJammer/issues".toUri())
+                                context.startActivity(intent)
+                            }
                         },
                         modifier = Modifier.weight(1f)
                     )

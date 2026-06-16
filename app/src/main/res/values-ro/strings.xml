@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MetaJammer</string>
+    <string name="notification_channel_name">Procesare fișiere</string>
+    <string name="notification_processing_title">Se procesează fișierele</string>
+    <string name="notification_processing_message">Se elimină metadatele din %1$d fișiere...</string>
+    <string name="notification_complete_title">Procesare finalizată</string>
+    <string name="notification_complete_message">%1$d fișiere au fost procesate cu succes.</string>
+
+    <!-- General -->
+    <string name="ok">OK</string>
+    <string name="cancel">Anulare</string>
+    <string name="back">Înapoi</string>
+    <string name="continue_label">Continuare</string>
+    <string name="save">Salvare</string>
+    <string name="share">Partajare</string>
+    <string name="dismiss">Închidere</string>
+    <string name="warning">Avertisment</string>
+    <string name="none">Niciunul</string>
+    <string name="unknown">necunoscut</string>
+    <string name="delete">Ștergere</string>
+
+    <!-- HomeScreen -->
+    <string name="hero_title">Protejează-ți confidențialitatea</string>
+    <string name="hero_subtitle">Curăță sau înlocuiește metadatele sensibile înainte de a-ți partaja fișierele.</string>
+    <string name="feature_images_video_title">Imagini și video</string>
+    <string name="feature_images_video_desc">Suport complet pentru eliminarea metadatelor din fotografii și remuxarea videoclipurilor pentru a elimina urmărirea.</string>
+    <string name="feature_poisoning_title">Alterarea metadatelor</string>
+    <string name="feature_poisoning_desc">Nu doar șterge datele—înlocuiește-le cu unele false, dar realiste, pentru a-ți păstra confidențialitatea și a induce în eroare sistemele de urmărire.</string>
+    <string name="feature_background_title">Procesare pe fundal</string>
+    <string name="feature_background_desc">Procesează eficient sute de fișiere pe fundal în timp ce te ocupi de alte lucruri.</string>
+    <string name="feature_on_device_title">Confidențialitate pe dispozitiv</string>
+    <string name="feature_on_device_desc">Toată procesarea are loc local pe dispozitivul tău. Fișierele tale nu părăsesc niciodată MetaJammer.</string>
+    <string name="pro_tip_gallery">Sfat util: Poți partaja fișiere direct din aplicația Galerie în MetaJammer.</string>
+    <string name="select_files">Selectare fișiere</string>
+    <string name="select_more_files">Selectare mai multe fișiere</string>
+    <string name="clear_selection">Ștergere selecție</string>
+    <string name="files_selected">%1$d fișiere selectate</string>
+    <string name="total_size">Dimensiune totală: %1$s</string>
+    <string name="size_mb">%.1f MB</string>
+    <string name="size_kb">%.1f KB</string>
+    <string name="size_bytes">%1$d Octeți</string>
+
+    <!-- MetadataPreviewScreen -->
+    <string name="metadata_preview">Previzualizare metadate</string>
+    <string name="file_type">Tip: %1$s</string>
+    <string name="no_metadata_found">Nu s-au găsit metadate</string>
+
+    <!-- ProcessingScreen -->
+    <string name="process_files_title">Procesare fișiere</string>
+    <string name="pick_one_option">Alege o opțiune:</string>
+    <string name="poison_metadata">Alterare metadate (Date false)</string>
+    <string name="remove_metadata">Eliminare metadate</string>
+    <string name="selected_mode">Selectat: %1$s</string>
+    <string name="regenerate_plans">Regenerare planuri aleatorii</string>
+    <string name="preview_of_changes">Previzualizare modificări</string>
+    <string name="no_preview_available">Nicio previzualizare disponibilă</string>
+    <string name="change_location_map">Schimbă locația pe hartă</string>
+    <string name="process_files">Procesează fișierele</string>
+    <string name="processing_foreground">Se procesează în prim-plan...</string>
+    <string name="background_progress">Progres pe fundal: %1$d%%</string>
+    <string name="continue_to_output">Continuă la opțiunile de ieșire</string>
+
+    <!-- HelpScreen -->
+    <string name="help_title">Ajutor și tutoriale</string>
+    <string name="help_item_video_title">Procesare video</string>
+    <string name="help_item_video_body">Formate suportate: MP4, MOV.\n\nRemuxarea completă este suportată pentru aceste containere. Acest proces elimină datele GPS, datele calendaristice și atomii de dispozitiv pentru a-ți proteja confidențialitatea.</string>
+    <string name="help_item_image_title">Procesare imagini</string>
+    <string name="help_item_image_body">Formate suportate: JPG, PNG.\n\nMetaJammer elimină metadatele EXIF din aceste imagini. În modul \"Alterare\", acesta înlocuiește etichetele sensibile (cum ar fi coordonatele GPS) cu date aleatorii realiste.</string>
+    <string name="help_item_other_title">Alte fișiere</string>
+    <string name="help_item_other_body">Formate suportate: Momentan niciunul.\n\nMetaJammer se concentrează în prezent pe fișierele media. Actualizările viitoare vor include suport pentru PDF-uri și documente. Rămâi pe recepție!</string>
+    <string name="help_report_issue_title">Raportează o problemă</string>
+    <string name="help_report_issue_body">Ai găsit o eroare sau ai o sugestie de funcționalitate? Te rugăm să o raportezi pe pagina noastră de GitHub.</string>
+    <string name="help_open_github">Deschide probleme GitHub</string>
+    <string name="help_app_version">Versiune: %1$s</string>
+    <string name="help">Ajutor</string>
+
+    <!-- LocationPickerScreen -->
+    <string name="pick_location">Alege locația</string>
+    <string name="confirm_location">Confirmă locația</string>
+
+    <!-- OutputOptionsScreen -->
+    <string name="output_options">Opțiuni de ieșire</string>
+    <string name="saving_will_trigger_sharing">Salvarea va declanșa, de asemenea, partajarea.</string>
+    <string name="choose_save_or_share">Alege dacă dorești să salvezi sau să partajezi rezultatul procesat.</string>
+    <string name="save_to_default_folder">Salvare în dosarul implicit</string>
+    <string name="save_to_custom_folder">Salvare în dosar personalizat</string>
+
+    <!-- SettingsScreen -->
+    <string name="settings">Setări</string>
+    <string name="category_file_management">Gestionare fișiere</string>
+    <string name="category_image_file">Imagine / Fișier</string>
+    <string name="category_shared_files">Comportament fișiere partajate</string>
+    <string name="category_ui">Interfață utilizator</string>
+
+    <string name="setting_random_names_title">Folosește nume de fișiere aleatorii</string>
+    <string name="setting_random_names_sub">Generează nume de ieșire aleatorii în loc de a folosi numele original al fișierului</string>
+    <string name="setting_default_path_title">Cale de salvare implicită</string>
+    <string name="setting_reset_path">Resetare la Pictures/MetaJammer</string>
+    <string name="setting_select_folder">Selectare dosar</string>
+
+    <string name="setting_keep_orientation_title">Păstrează orientarea imaginii</string>
+    <string name="setting_keep_orientation_sub">Păstrează metadatele privind orientarea imaginii atunci când este posibil</string>
+    <string name="setting_share_default_title">Partajează rezultatul în mod implicit</string>
+    <string name="setting_share_default_sub">Salvarea va declanșa, de asemenea, partajarea</string>
+    <string name="setting_prefix_title">Prefix implicit</string>
+    <string name="setting_suffix_title">Sufix implicit</string>
+    <string name="setting_not_set">Nesetat</string>
+    <string name="setting_keep_thumbnails_title">Păstrează miniaturile originale</string>
+    <string name="setting_keep_thumbnails_sub">Dacă fișierul conține o miniatură încorporată, păstrează-o ca atare. Dacă opțiunea este dezactivată, orice miniatură existentă va fi eliminată pentru o confidențialitate maximă.</string>
+    <string name="setting_thumbnails_warning">Avertisment: Păstrarea miniaturilor originale poate duce la scurgerea de metadate (locație, informații despre dispozitiv) chiar dacă etichetele principale sunt eliminate.</string>
+    <string name="setting_enable_map_title">Activează selectorul de hartă</string>
+    <string name="setting_enable_map_sub">Permite aplicației să se conecteze la internet pentru a afișa OpenStreetMap pentru selectarea locației</string>
+
+    <string name="setting_quick_scrub_title">Curățare și partajare rapidă</string>
+    <string name="setting_quick_scrub_sub">Elimină automat metadatele și redeschide meniul de partajare pentru fișierele partajate</string>
+    <string name="setting_metadata_action_title">Acțiune metadate</string>
+    <string name="setting_output_action_title">Acțiune de ieșire</string>
+    <string name="setting_dedicated_folder_title">Dosar dedicat pentru fișiere partajate</string>
+    <string name="setting_no_folder_selected">Niciun dosar dedicat selectat</string>
+    <string name="setting_clear_folder">Șterge dosarul dedicat</string>
+
+    <string name="setting_night_mode_title">Mod noapte</string>
+    <string name="setting_language_title">Limbă</string>
+    <string name="setting_oled_mode_title">Mod OLED</string>
+    <string name="setting_oled_mode_sub">Folosește tonuri de negru mai închise pentru temele întunecate suportate</string>
+
+    <!-- Enums -->
+    <string name="night_mode_always">Întotdeauna</string>
+    <string name="night_mode_automatic">Automat</string>
+    <string name="night_mode_low_battery">Doar la baterie descărcată</string>
+    <string name="night_mode_never">Niciodată</string>
+
+    <string name="language_system">Limbă implicită sistem</string>
+    <string name="language_en">English (Engleză)</string>
+    <string name="language_zh">中文 (简体) (Chineză)</string>
+    <string name="language_es">Español (Spaniolă)</string>
+    <string name="language_hi">हिन्दी (Hindi)</string>
+    <string name="language_ar">العربية (Arabă)</string>
+    <string name="language_fr">Français (Franceză)</string>
+    <string name="language_pt">Português (Portugheză)</string>
+    <string name="language_ru">Русский (Rusă)</string>
+    <string name="language_ja">日本語 (Japoneză)</string>
+    <string name="language_de">Deutsch (Germană)</string>
+    <string name="language_ko">한국어 (Coreeană)</string>
+    <string name="language_in">Bahasa Indonesia (Indoneziană)</string>
+    <string name="language_it">Italiano (Italiană)</string>
+    <string name="language_tr">Türkçe (Turcă)</string>
+    <string name="language_vi">Tiếng Việt (Vietnameză)</string>
+    <string name="language_th">ไทย (Thailandeză)</string>
+    <string name="language_pl">Polski (Poloneză)</string>
+    <string name="language_uk">Українська (Ucraineană)</string>
+    <string name="language_nl">Nederlands (Olandeză)</string>
+    <string name="language_ro">Română (Română)</string>
+    <string name="language_fa">فارسی (Persană)</string>
+    <string name="language_el">Ελληνικά (Greacă)</string>
+    <string name="language_iw">עברית (Ebraică)</string>
+    <string name="language_la">Latina (Latină)</string>
+
+    <string name="processing_mode_poison">Alterare metadate (Informații false)</string>
+    <string name="processing_mode_remove">Eliminare metadate (Curățare completă)</string>
+
+    <string name="output_action_default_folder">Salvare în dosarul implicit</string>
+    <string name="output_action_shared_folder">Salvare în dosarul dedicat</string>
+    <string name="output_action_reshare">Repartajare fișiere igienizate</string>
+
+    <!-- Dialogs/Permissions -->
+    <string name="map_permission_title">Selector de hartă și acces la internet</string>
+    <string name="map_permission_message">Pentru a afișa o hartă pentru alegerea locației, MetaJammer trebuie să se conecteze la internet pentru a încărca secțiunile de hartă de la OpenStreetMap. \n\nDacă refuzi, aplicația va continua să funcționeze perfect pentru toate funcțiile de eliminare și alterare a metadatelor, dar nu vei putea alege locații vizual pe o hartă.</string>
+    <string name="allow_open_map">Permite și deschide harta</string>
+    <string name="not_now">Nu acum</string>
+
+    <string name="notification_permission_title">Rămâi informat</string>
+    <string name="notification_permission_message">MetaJammer poate afișa notificări pentru a te ține la curent cu progresul loturilor mari de fișiere în timp ce acestea sunt procesate pe fundal. \n\nAcest lucru este util mai ales dacă dorești să comuți la o altă aplicație în timp ce MetaJammer își termină treaba.</string>
+</resources>

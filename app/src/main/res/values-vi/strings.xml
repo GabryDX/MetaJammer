@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MetaJammer</string>
     <string name="notification_channel_name">Xử lý tệp</string>
@@ -18,24 +18,25 @@
     <string name="warning">Cảnh báo</string>
     <string name="none">Không có</string>
     <string name="unknown">không xác định</string>
+    <string name="delete">Xóa</string>
 
     <!-- HomeScreen -->
-    <string name="hero_title">Bảo vệ quyền riêng tư của bạn</string>
-    <string name="hero_subtitle">Xóa hoặc thay thế siêu dữ liệu nhạy cảm trước khi chia sẻ tệp của bạn.</string>
+    <string name="hero_title">Bảo vệ quyền riêng tư</string>
+    <string name="hero_subtitle">Dọn dẹp hoặc thay thế siêu dữ liệu nhạy cảm trước khi chia sẻ tệp của bạn.</string>
     <string name="feature_images_video_title">Hình ảnh &amp; Video</string>
-    <string name="feature_images_video_desc">Hỗ trợ đầy đủ việc xóa siêu dữ liệu khỏi ảnh và remux video để loại bỏ theo dõi.</string>
-    <string name="feature_poisoning_title">Gây nhiễu siêu dữ liệu</string>
-    <string name="feature_poisoning_desc">Đừng chỉ xóa dữ liệu—hãy thay thế nó bằng thông tin giả thực tế để bảo vệ quyền riêng tư và gây nhầm lẫn cho các trình theo dõi.</string>
-    <string name="feature_background_title">Xử lý dưới nền</string>
-    <string name="feature_background_desc">Xử lý hàng trăm tệp một cách hiệu quả dưới nền trong khi bạn làm việc khác.</string>
+    <string name="feature_images_video_desc">Hỗ trợ đầy đủ việc xóa siêu dữ liệu từ ảnh và remux video để loại bỏ theo dõi.</string>
+    <string name="feature_poisoning_title">Đầu độc siêu dữ liệu</string>
+    <string name="feature_poisoning_desc">Không chỉ xóa dữ liệu—hãy thay thế bằng dữ liệu giả thực tế để bảo vệ quyền riêng tư và gây nhiễu trình theo dõi.</string>
+    <string name="feature_background_title">Xử lý nền</string>
+    <string name="feature_background_desc">Xử lý hàng trăm tệp hiệu quả trong nền khi bạn làm việc khác.</string>
     <string name="feature_on_device_title">Quyền riêng tư trên thiết bị</string>
-    <string name="feature_on_device_desc">Tất cả quá trình xử lý diễn ra cục bộ trên thiết bị của bạn. Tệp của bạn không bao giờ rời khỏi MetaJammer.</string>
-    <string name="pro_tip_gallery">Mẹo: Bạn có thể chia sẻ tệp trực tiếp từ ứng dụng Thư viện vào MetaJammer.</string>
+    <string name="feature_on_device_desc">Mọi quá trình xử lý diễn ra cục bộ trên thiết bị của bạn. Tệp của bạn không bao giờ rời khỏi MetaJammer.</string>
+    <string name="pro_tip_gallery">Mẹo: Bạn có thể chia sẻ tệp trực tiếp từ ứng dụng Bộ sưu tập vào MetaJammer.</string>
     <string name="select_files">Chọn tệp</string>
     <string name="select_more_files">Chọn thêm tệp</string>
     <string name="clear_selection">Xóa lựa chọn</string>
     <string name="files_selected">Đã chọn %1$d tệp</string>
-    <string name="total_size">Tổng dung lượng: %1$s</string>
+    <string name="total_size">Tổng kích thước: %1$s</string>
     <string name="size_mb">%.1f MB</string>
     <string name="size_kb">%.1f KB</string>
     <string name="size_bytes">%1$d Byte</string>
@@ -48,17 +49,31 @@
     <!-- ProcessingScreen -->
     <string name="process_files_title">Xử lý tệp</string>
     <string name="pick_one_option">Chọn một tùy chọn:</string>
-    <string name="poison_metadata">Gây nhiễu siêu dữ liệu</string>
+    <string name="poison_metadata">Đầu độc siêu dữ liệu</string>
     <string name="remove_metadata">Xóa siêu dữ liệu</string>
     <string name="selected_mode">Đã chọn: %1$s</string>
     <string name="regenerate_plans">Tạo lại tất cả các kế hoạch ngẫu nhiên</string>
-    <string name="preview_of_changes">Xem trước các thay đổi</string>
+    <string name="preview_of_changes">Xem trước thay đổi</string>
     <string name="no_preview_available">Không có bản xem trước</string>
     <string name="change_location_map">Thay đổi vị trí trên bản đồ</string>
     <string name="process_files">Xử lý tệp</string>
-    <string name="processing_foreground">Đang xử lý ở chế độ ưu tiên...</string>
-    <string name="background_progress">Tiến độ dưới nền: %1$d%%</string>
-    <string name="continue_to_output">Tiếp tục đến các tùy chọn đầu ra</string>
+    <string name="processing_foreground">Đang xử lý ở chế độ hiện...</string>
+    <string name="background_progress">Tiến độ nền: %1$d%%</string>
+    <string name="continue_to_output">Tiếp tục đến tùy chọn đầu ra</string>
+
+    <!-- HelpScreen -->
+    <string name="help_title">Trợ giúp &amp; Hướng dẫn</string>
+    <string name="help_item_video_title">Xử lý Video</string>
+    <string name="help_item_video_body">Định dạng hỗ trợ: MP4, MOV.\n\nHỗ trợ remuxing hoàn toàn cho các định dạng này. Quá trình này sẽ loại bỏ GPS, ngày tháng và các thông tin thiết bị để bảo vệ quyền riêng tư của bạn.</string>
+    <string name="help_item_image_title">Xử lý Hình ảnh</string>
+    <string name="help_item_image_body">Định dạng hỗ trợ: JPG, PNG.\n\nMetaJammer loại bỏ siêu dữ liệu EXIF khỏi các hình ảnh này. Trong chế độ \"Đầu độc\", nó thay thế các thẻ nhạy cảm như tọa độ GPS bằng dữ liệu ngẫu nhiên thực tế.</string>
+    <string name="help_item_other_title">Các tệp khác</string>
+    <string name="help_item_other_body">Định dạng hỗ trợ: Hiện chưa có.\n\nMetaJammer hiện tập trung vào các tệp đa phương tiện. Các bản cập nhật trong tương lai sẽ bao gồm hỗ trợ cho PDF và tài liệu. Hãy chú ý đón xem!</string>
+    <string name="help_report_issue_title">Báo lỗi</string>
+    <string name="help_report_issue_body">Bạn tìm thấy lỗi hoặc có yêu cầu tính năng? Vui lòng báo cáo trên trang GitHub của chúng tôi.</string>
+    <string name="help_open_github">Mở GitHub Issues</string>
+    <string name="help_app_version">Phiên bản: %1$s</string>
+    <string name="help">Trợ giúp</string>
 
     <!-- LocationPickerScreen -->
     <string name="pick_location">Chọn vị trí</string>
@@ -85,30 +100,30 @@
     <string name="setting_select_folder">Chọn thư mục</string>
 
     <string name="setting_keep_orientation_title">Giữ hướng hình ảnh</string>
-    <string name="setting_keep_orientation_sub">Bảo toàn siêu dữ liệu hướng hình ảnh khi có thể</string>
+    <string name="setting_keep_orientation_sub">Bảo toàn siêu dữ liệu hướng hình ảnh nếu có thể</string>
     <string name="setting_share_default_title">Chia sẻ kết quả theo mặc định</string>
     <string name="setting_share_default_sub">Lưu cũng sẽ kích hoạt chia sẻ</string>
     <string name="setting_prefix_title">Tiền tố mặc định</string>
     <string name="setting_suffix_title">Hậu tố mặc định</string>
-    <string name="setting_not_set">Chưa thiết lập</string>
-    <string name="setting_keep_thumbnails_title">Giữ ảnh thu nhỏ gốc</string>
-    <string name="setting_keep_thumbnails_sub">Nếu tệp chứa ảnh thu nhỏ nhúng, hãy giữ nguyên nó. Nếu tắt, bất kỳ ảnh thu nhỏ nào hiện có sẽ bị xóa để bảo mật tối đa.</string>
-    <string name="setting_thumbnails_warning">Cảnh báo: Việc giữ ảnh thu nhỏ gốc có thể làm rò rỉ siêu dữ liệu (vị trí, thông tin thiết bị) ngay cả khi các thẻ chính đã được xóa.</string>
-    <string name="setting_enable_map_title">Bật trình chọn bản đồ</string>
-    <string name="setting_enable_map_sub">Cho phép ứng dụng kết nối Internet để hiển thị OpenStreetMap nhằm chọn vị trí</string>
+    <string name="setting_not_set">Chưa đặt</string>
+    <string name="setting_keep_thumbnails_title">Giữ hình thu nhỏ gốc</string>
+    <string name="setting_keep_thumbnails_sub">Nếu tệp chứa hình thu nhỏ được nhúng, hãy giữ nguyên. Nếu tắt, mọi hình thu nhỏ hiện có sẽ bị xóa để bảo mật tối đa.</string>
+    <string name="setting_thumbnails_warning">Cảnh báo: Giữ hình thu nhỏ gốc có thể làm rò rỉ siêu dữ liệu (vị trí, thông tin thiết bị) ngay cả khi các thẻ chính đã được xóa.</string>
+    <string name="setting_enable_map_title">Bật chọn bản đồ</string>
+    <string name="setting_enable_map_sub">Cho phép ứng dụng kết nối internet để hiển thị OpenStreetMap khi chọn vị trí</string>
 
-    <string name="setting_quick_scrub_title">Làm sạch nhanh &amp; Chia sẻ</string>
-    <string name="setting_quick_scrub_sub">Tự động xóa siêu dữ liệu và mở lại bảng chia sẻ cho các tệp được chia sẻ</string>
+    <string name="setting_quick_scrub_title">Dọn dẹp nhanh &amp; Chia sẻ</string>
+    <string name="setting_quick_scrub_sub">Tự động xóa siêu dữ liệu và mở lại trang Chia sẻ cho các tệp được chia sẻ</string>
     <string name="setting_metadata_action_title">Hành động siêu dữ liệu</string>
     <string name="setting_output_action_title">Hành động đầu ra</string>
-    <string name="setting_dedicated_folder_title">Thư mục dành riêng cho tệp chia sẻ</string>
+    <string name="setting_dedicated_folder_title">Thư mục dành riêng cho tệp được chia sẻ</string>
     <string name="setting_no_folder_selected">Chưa chọn thư mục dành riêng</string>
     <string name="setting_clear_folder">Xóa thư mục dành riêng</string>
 
-    <string name="setting_night_mode_title">Chế độ tối</string>
+    <string name="setting_night_mode_title">Chế độ ban đêm</string>
     <string name="setting_language_title">Ngôn ngữ</string>
     <string name="setting_oled_mode_title">Chế độ OLED</string>
-    <string name="setting_oled_mode_sub">Sử dụng tông màu đen sâu hơn cho các chủ đề tối được hỗ trợ</string>
+    <string name="setting_oled_mode_sub">Sử dụng tông màu đen đậm hơn cho các chủ đề tối được hỗ trợ</string>
 
     <!-- Enums -->
     <string name="night_mode_always">Luôn luôn</string>
@@ -118,40 +133,43 @@
 
     <string name="language_system">System Default (Mặc định hệ thống)</string>
     <string name="language_en">English (Tiếng Anh)</string>
+    <string name="language_zh">中文 (简体) (Tiếng Trung)</string>
     <string name="language_es">Español (Tiếng Tây Ban Nha)</string>
-    <string name="language_it">Italiano (Tiếng Ý)</string>
-    <string name="language_fr">Français (Tiếng Pháp)</string>
-    <string name="language_de">Deutsch (Tiếng Đức)</string>
-    <string name="language_zh">中文 (简体) (Tiếng Trung (Giản thể))</string>
     <string name="language_hi">हिन्दी (Tiếng Hindi)</string>
+    <string name="language_ar">العربية (Tiếng Ả Rập)</string>
+    <string name="language_fr">Français (Tiếng Pháp)</string>
     <string name="language_pt">Português (Tiếng Bồ Đào Nha)</string>
     <string name="language_ru">Русский (Tiếng Nga)</string>
-    <string name="language_el">Ελληνικά (Tiếng Hy Lạp)</string>
-    <string name="language_ar">العربية (Tiếng Ả Rập)</string>
     <string name="language_ja">日本語 (Tiếng Nhật)</string>
-    <string name="language_in">Bahasa Indonesia (Tiếng Indonesia)</string>
-    <string name="language_tr">Türkçe (Tiếng Thổ Nhĩ Kỳ)</string>
+    <string name="language_de">Deutsch (Tiếng Đức)</string>
     <string name="language_ko">한국어 (Tiếng Hàn)</string>
+    <string name="language_in">Bahasa Indonesia (Tiếng Indonesia)</string>
+    <string name="language_it">Italiano (Tiếng Ý)</string>
+    <string name="language_tr">Türkçe (Tiếng Thổ Nhĩ Kỳ)</string>
     <string name="language_vi">Tiếng Việt (Tiếng Việt)</string>
     <string name="language_th">ไทย (Tiếng Thái)</string>
     <string name="language_pl">Polski (Tiếng Ba Lan)</string>
-    <string name="language_nl">Nederlands (Tiếng Hà Lan)</string>
     <string name="language_uk">Українська (Tiếng Ukraina)</string>
+    <string name="language_nl">Nederlands (Tiếng Hà Lan)</string>
+    <string name="language_ro">Română (Tiếng Rumani)</string>
     <string name="language_fa">فارسی (Tiếng Ba Tư)</string>
+    <string name="language_el">Ελληνικά (Tiếng Hy Lạp)</string>
+    <string name="language_iw">עברית (Tiếng Do Thái)</string>
+    <string name="language_la">Latina (Tiếng La-tinh)</string>
 
-    <string name="processing_mode_poison">Gây nhiễu siêu dữ liệu (Thông tin giả)</string>
-    <string name="processing_mode_remove">Xóa siêu dữ liệu (Xóa hoàn toàn)</string>
+    <string name="processing_mode_poison">Đầu độc siêu dữ liệu (Thông tin giả)</string>
+    <string name="processing_mode_remove">Xóa siêu dữ liệu (Dọn sạch hoàn toàn)</string>
 
     <string name="output_action_default_folder">Lưu vào thư mục mặc định</string>
     <string name="output_action_shared_folder">Lưu vào thư mục dành riêng</string>
-    <string name="output_action_reshare">Chia sẻ lại các tệp đã được làm sạch</string>
+    <string name="output_action_reshare">Chia sẻ lại các tệp đã dọn dẹp</string>
 
     <!-- Dialogs/Permissions -->
-    <string name="map_permission_title">Trình chọn bản đồ &amp; Truy cập Internet</string>
-    <string name="map_permission_message">Để hiển thị bản đồ chọn vị trí, MetaJammer cần kết nối Internet để tải các ô bản đồ từ OpenStreetMap. \n\nNếu bạn từ chối, ứng dụng sẽ tiếp tục hoạt động hoàn hảo cho tất cả các tính năng xóa và gây nhiễu siêu dữ liệu, nhưng bạn sẽ không thể chọn vị trí một cách trực quan trên bản đồ.</string>
+    <string name="map_permission_title">Chọn bản đồ &amp; Truy cập Internet</string>
+    <string name="map_permission_message">Để hiển thị bản đồ chọn vị trí, MetaJammer cần kết nối internet để tải dữ liệu bản đồ từ OpenStreetMap.\n\nNếu bạn từ chối, ứng dụng vẫn hoạt động hoàn hảo cho mọi tính năng xóa và đầu độc siêu dữ liệu, nhưng bạn sẽ không thể chọn vị trí trực quan trên bản đồ.</string>
     <string name="allow_open_map">Cho phép &amp; Mở bản đồ</string>
     <string name="not_now">Để sau</string>
 
     <string name="notification_permission_title">Luôn cập nhật thông tin</string>
-    <string name="notification_permission_message">MetaJammer có thể hiển thị thông báo để cập nhật cho bạn về tiến trình xử lý các lô tệp lớn trong khi chúng được xử lý dưới nền. \n\nĐiều này đặc biệt hữu ích nếu bạn muốn chuyển sang ứng dụng khác trong khi MetaJammer hoàn tất công việc.</string>
+    <string name="notification_permission_message">MetaJammer có thể hiển thị thông báo để cập nhật cho bạn về tiến trình xử lý các lô tệp lớn khi chúng đang chạy nền.\n\nĐiều này đặc biệt hữu ích nếu bạn muốn chuyển sang ứng dụng khác trong khi MetaJammer hoàn tất công việc.</string>
 </resources>

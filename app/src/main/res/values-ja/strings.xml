@@ -1,64 +1,79 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MetaJammer</string>
     <string name="notification_channel_name">ファイル処理</string>
     <string name="notification_processing_title">ファイルを処理中</string>
-    <string name="notification_processing_message">%1$d 個のファイルからメタデータを削除しています...</string>
+    <string name="notification_processing_message">%1$d 個のファイルからメタデータを削除中...</string>
     <string name="notification_complete_title">処理完了</string>
-    <string name="notification_complete_message">%1$d 個のファイルの処理が正常に完了しました。</string>
+    <string name="notification_complete_message">%1$d 個のファイルの処理に成功しました。</string>
 
     <!-- General -->
     <string name="ok">OK</string>
     <string name="cancel">キャンセル</string>
     <string name="back">戻る</string>
-    <string name="continue_label">次へ</string>
+    <string name="continue_label">続行</string>
     <string name="save">保存</string>
     <string name="share">共有</string>
     <string name="dismiss">閉じる</string>
     <string name="warning">警告</string>
     <string name="none">なし</string>
     <string name="unknown">不明</string>
+    <string name="delete">削除</string>
 
     <!-- HomeScreen -->
     <string name="hero_title">プライバシーを守る</string>
-    <string name="hero_subtitle">ファイルを共有する前に、機密性の高いメタデータを削除または置換します。</string>
-    <string name="feature_images_video_title">画像と動画</string>
-    <string name="feature_images_video_desc">写真からのメタデータ削除と、トラッキングを排除するための動画の再多重化（remuxing）を完全にサポートしています。</string>
-    <string name="feature_poisoning_title">メタデータのポイズニング</string>
-    <string name="feature_poisoning_desc">データを単に削除するだけでなく、現実的な偽のデータに置き換えることで、プライバシーを保護し、トラッカーを混乱させます。</string>
+    <string name="hero_subtitle">ファイルを共有する前に、機密性の高いメタデータをクリーンアップまたは置換します。</string>
+    <string name="feature_images_video_title">画像とビデオ</string>
+    <string name="feature_images_video_desc">写真からのメタデータ削除と、トラッキングを排除するためのビデオのリマックを完全にサポートしています。</string>
+    <string name="feature_poisoning_title">メタデータポイズニング</string>
+    <string name="feature_poisoning_desc">単にデータを削除するだけでなく、現実的な偽のデータに置き換えることでプライバシーを保護し、トラッカーを混乱させます。</string>
     <string name="feature_background_title">バックグラウンド処理</string>
-    <string name="feature_background_desc">他の作業をしている間に、バックグラウンドで数百のファイルを効率的に処理できます。</string>
-    <string name="feature_on_device_title">デバイス上でのプライバシー</string>
-    <string name="feature_on_device_desc">すべての処理はデバイス上でローカルに行われます。ファイルがMetaJammerの外に出ることはありません。</string>
-    <string name="pro_tip_gallery">ヒント：ギャラリーアプリからMetaJammerに直接ファイルを共有できます。</string>
+    <string name="feature_background_desc">他の作業をしている間に、バックグラウンドで数百のファイルを効率的に処理します。</string>
+    <string name="feature_on_device_title">デバイス上のプライバシー</string>
+    <string name="feature_on_device_desc">すべての処理はデバイス上でローカルに行われます。ファイルが MetaJammer 外に出ることはありません。</string>
+    <string name="pro_tip_gallery">ヒント：ギャラリーアプリから MetaJammer にファイルを直接共有できます。</string>
     <string name="select_files">ファイルを選択</string>
     <string name="select_more_files">さらにファイルを選択</string>
     <string name="clear_selection">選択をクリア</string>
     <string name="files_selected">%1$d 個のファイルを選択中</string>
-    <string name="total_size">合計サイズ: %1$s</string>
+    <string name="total_size">合計サイズ：%1$s</string>
     <string name="size_mb">%.1f MB</string>
     <string name="size_kb">%.1f KB</string>
     <string name="size_bytes">%1$d バイト</string>
 
     <!-- MetadataPreviewScreen -->
-    <string name="metadata_preview">メタデータのプレビュー</string>
-    <string name="file_type">タイプ: %1$s</string>
+    <string name="metadata_preview">メタデータプレビュー</string>
+    <string name="file_type">タイプ：%1$s</string>
     <string name="no_metadata_found">メタデータが見つかりません</string>
 
     <!-- ProcessingScreen -->
     <string name="process_files_title">ファイルを処理</string>
-    <string name="pick_one_option">オプションを選択：</string>
-    <string name="poison_metadata">メタデータをポイズニング</string>
+    <string name="pick_one_option">オプションを選択してください：</string>
+    <string name="poison_metadata">メタデータをポイズン</string>
     <string name="remove_metadata">メタデータを削除</string>
-    <string name="selected_mode">選択済み: %1$s</string>
+    <string name="selected_mode">選択済み：%1$s</string>
     <string name="regenerate_plans">すべてのランダムプランを再生成</string>
     <string name="preview_of_changes">変更のプレビュー</string>
     <string name="no_preview_available">プレビューを利用できません</string>
-    <string name="change_location_map">マップで位置を変更</string>
+    <string name="change_location_map">地図上で位置を変更</string>
     <string name="process_files">ファイルを処理</string>
     <string name="processing_foreground">フォアグラウンドで処理中...</string>
-    <string name="background_progress">バックグラウンドの進捗: %1$d%%</string>
+    <string name="background_progress">バックグラウンド進行状況：%1$d%%</string>
     <string name="continue_to_output">出力オプションへ進む</string>
+
+    <!-- HelpScreen -->
+    <string name="help_title">ヘルプとチュートリアル</string>
+    <string name="help_item_video_title">ビデオ処理</string>
+    <string name="help_item_video_body">サポートされている形式：MP4、MOV。\n\nこれらのコンテナの完全なリマックがサポートされています。このプロセスにより、プライバシーを保護するためにGPS、日付、およびデバイスアトムが削除されます。</string>
+    <string name="help_item_image_title">画像処理</string>
+    <string name="help_item_image_body">サポートされている形式：JPG、PNG。\n\nMetaJammerはこれらの画像からEXIFメタデータを削除します。「ポイズン」モードでは、GPS座標などの機密タグを現実的なランダムデータに置き換えます。</string>
+    <string name="help_item_other_title">その他のファイル</string>
+    <string name="help_item_other_body">サポートされている形式：現在はなし。\n\nMetaJammerは現在、メディアファイルに焦点を当てています。将来のアップデートでは、PDFやドキュメントのサポートが含まれる予定です。ご期待ください！</string>
+    <string name="help_report_issue_title">問題を報告する</string>
+    <string name="help_report_issue_body">バグを見つけたか、機能のリクエストがありますか？GitHubページで報告してください。</string>
+    <string name="help_open_github">GitHub Issuesを開く</string>
+    <string name="help_app_version">バージョン：%1$s</string>
+    <string name="help">ヘルプ</string>
 
     <!-- LocationPickerScreen -->
     <string name="pick_location">位置を選択</string>
@@ -68,7 +83,7 @@
     <string name="output_options">出力オプション</string>
     <string name="saving_will_trigger_sharing">保存すると共有も実行されます。</string>
     <string name="choose_save_or_share">処理結果を保存するか共有するかを選択してください。</string>
-    <string name="save_to_default_folder">デフォルトのフォルダに保存</string>
+    <string name="save_to_default_folder">デフォルトフォルダに保存</string>
     <string name="save_to_custom_folder">カスタムフォルダに保存</string>
 
     <!-- SettingsScreen -->
@@ -79,79 +94,82 @@
     <string name="category_ui">UI</string>
 
     <string name="setting_random_names_title">ランダムなファイル名を使用</string>
-    <string name="setting_random_names_sub">元のファイル名を使用せず、ランダムな出力名を生成します</string>
+    <string name="setting_random_names_sub">元のファイル名を使用する代わりに、ランダムな出力名を生成します</string>
     <string name="setting_default_path_title">デフォルトの保存パス</string>
     <string name="setting_reset_path">Pictures/MetaJammer にリセット</string>
     <string name="setting_select_folder">フォルダを選択</string>
 
-    <string name="setting_keep_orientation_title">画像の向きを保持</string>
-    <string name="setting_keep_orientation_sub">可能な限り画像の向きのメタデータを保持します</string>
-    <string name="setting_share_default_title">デフォルトで結果を共有</string>
+    <string name="setting_keep_orientation_title">画像の向きを維持</string>
+    <string name="setting_keep_orientation_sub">可能な場合、画像の向きのメタデータを保持します</string>
+    <string name="setting_share_default_title">結果をデフォルトで共有</string>
     <string name="setting_share_default_sub">保存すると共有も実行されます</string>
-    <string name="setting_prefix_title">デフォルトの接頭辞</string>
-    <string name="setting_suffix_title">デフォルトの接尾辞</string>
+    <string name="setting_prefix_title">デフォルトのプレフィックス</string>
+    <string name="setting_suffix_title">デフォルトのサフィックス</string>
     <string name="setting_not_set">未設定</string>
-    <string name="setting_keep_thumbnails_title">元のサムネイルを保持</string>
-    <string name="setting_keep_thumbnails_sub">ファイルに埋め込みサムネイルが含まれている場合、そのまま保持します。無効にすると、プライバシーを最大限に保護するために既存のサムネイルが削除されます。</string>
+    <string name="setting_keep_thumbnails_title">元のサムネイルを維持</string>
+    <string name="setting_keep_thumbnails_sub">ファイルに埋め込みサムネイルが含まれている場合、そのまま保持します。無効にすると、プライバシーを最大化するために既存のサムネイルが削除されます。</string>
     <string name="setting_thumbnails_warning">警告：元のサムネイルを保持すると、メインのタグが削除されていてもメタデータ（位置、デバイス情報）が漏洩する可能性があります。</string>
-    <string name="setting_enable_map_title">マップピッカーを有効化</string>
+    <string name="setting_enable_map_title">マップピッカーを有効にする</string>
     <string name="setting_enable_map_sub">位置選択のためにOpenStreetMapを表示するため、アプリのインターネット接続を許可します</string>
 
-    <string name="setting_quick_scrub_title">クイックスクラブ＆共有</string>
-    <string name="setting_quick_scrub_sub">共有されたファイルのメタデータを自動的に削除し、共有シートを再度開きます</string>
-    <string name="setting_metadata_action_title">メタデータのアクション</string>
-    <string name="setting_output_action_title">出力のアクション</string>
+    <string name="setting_quick_scrub_title">クイッククリーンと共有</string>
+    <string name="setting_quick_scrub_sub">共有ファイルに対してメタデータを自動的に削除し、共有シートを再度開きます</string>
+    <string name="setting_metadata_action_title">メタデータアクション</string>
+    <string name="setting_output_action_title">出力アクション</string>
     <string name="setting_dedicated_folder_title">共有ファイル専用フォルダ</string>
     <string name="setting_no_folder_selected">専用フォルダが選択されていません</string>
     <string name="setting_clear_folder">専用フォルダをクリア</string>
 
-    <string name="setting_night_mode_title">ナイトモード</string>
+    <string name="setting_night_mode_title">夜間モード</string>
     <string name="setting_language_title">言語</string>
     <string name="setting_oled_mode_title">OLEDモード</string>
-    <string name="setting_oled_mode_sub">対応しているダークテーマで、より深い黒を使用します</string>
+    <string name="setting_oled_mode_sub">サポートされているダークテーマでより深い黒色を使用します</string>
 
     <!-- Enums -->
-    <string name="night_mode_always">常に有効</string>
+    <string name="night_mode_always">常に</string>
     <string name="night_mode_automatic">自動</string>
-    <string name="night_mode_low_battery">バッテリー残量低下時のみ</string>
-    <string name="night_mode_never">無効</string>
+    <string name="night_mode_low_battery">低バッテリー時のみ</string>
+    <string name="night_mode_never">しない</string>
 
     <string name="language_system">System Default (システムデフォルト)</string>
     <string name="language_en">English (英語)</string>
+    <string name="language_zh">中文 (简体) (中国語)</string>
     <string name="language_es">Español (スペイン語)</string>
-    <string name="language_it">Italiano (イタリア語)</string>
-    <string name="language_fr">Français (フランス語)</string>
-    <string name="language_de">Deutsch (ドイツ語)</string>
-    <string name="language_zh">中文 (简体) (中国語 (簡体字))</string>
     <string name="language_hi">हिन्दी (ヒンディー語)</string>
+    <string name="language_ar">العربية (アラビア語)</string>
+    <string name="language_fr">Français (フランス語)</string>
     <string name="language_pt">Português (ポルトガル語)</string>
     <string name="language_ru">Русский (ロシア語)</string>
-    <string name="language_el">Ελληνικά (ギリシャ語)</string>
-    <string name="language_ar">العربية (アラビア語)</string>
     <string name="language_ja">日本語 (日本語)</string>
-    <string name="language_in">Bahasa Indonesia (インドネシア語)</string>
-    <string name="language_tr">Türkçe (トルコ語)</string>
+    <string name="language_de">Deutsch (ドイツ語)</string>
     <string name="language_ko">한국어 (韓国語)</string>
+    <string name="language_in">Bahasa Indonesia (インドネシア語)</string>
+    <string name="language_it">Italiano (イタリア語)</string>
+    <string name="language_tr">Türkçe (トルコ語)</string>
     <string name="language_vi">Tiếng Việt (ベトナム語)</string>
     <string name="language_th">ไทย (タイ語)</string>
     <string name="language_pl">Polski (ポーランド語)</string>
-    <string name="language_nl">Nederlands (オランダ語)</string>
     <string name="language_uk">Українська (ウクライナ語)</string>
+    <string name="language_nl">Nederlands (オランダ語)</string>
+    <string name="language_ro">Română (ルーマニア語)</string>
     <string name="language_fa">فارسی (ペルシア語)</string>
+    <string name="language_el">Ελληνικά (ギリシャ語)</string>
+    <string name="language_iw">עברית (ヘブライ語)</string>
+    <string name="language_la">Latina (ラテン語)</string>
 
-    <string name="processing_mode_poison">メタデータをポイズニング（偽情報）</string>
-    <string name="processing_mode_remove">メタデータを削除（完全削除）</string>
+    <string name="processing_mode_poison">メタデータをポイズン（偽情報）</string>
+    <string name="processing_mode_remove">メタデータを削除（完全クリーン）</string>
 
-    <string name="output_action_default_folder">デフォルトのフォルダに保存</string>
+    <string name="output_action_default_folder">デフォルトフォルダに保存</string>
     <string name="output_action_shared_folder">専用フォルダに保存</string>
-    <string name="output_action_reshare">サニタイズされたファイルを再共有</string>
+    <string name="output_action_reshare">クリーンアップしたファイルを再共有</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">マップピッカーとインターネットアクセス</string>
-    <string name="map_permission_message">位置選択用のマップを表示するために、MetaJammerはOpenStreetMapからマップタイルを読み込むためにインターネットに接続する必要があります。\n\n拒否した場合でも、メタデータの削除やポイズニング機能は完全に動作しますが、マップ上で視覚的に位置を選択することはできなくなります。</string>
-    <string name="allow_open_map">許可してマップを開く</string>
+    <string name="map_permission_message">位置選択のための地図を表示するには、MetaJammerがOpenStreetMapから地図タイルを読み込むためにインターネットに接続する必要があります。\n\n拒否した場合でも、メタデータ削除やポイズニング機能はすべて正常に動作しますが、地図上で視覚的に位置を選択することはできなくなります。</string>
+    <string name="allow_open_map">許可して地図を開く</string>
     <string name="not_now">今はしない</string>
 
-    <string name="notification_permission_title">進捗状況の通知</string>
-    <string name="notification_permission_message">MetaJammerは、大量のファイルをバックグラウンドで処理している際に、その進捗状況を通知で知らせることができます。\n\nこれは、MetaJammerが処理を終えるまでの間に他のアプリに切り替えたい場合に特に便利です。</string>
+    <string name="notification_permission_title">最新情報をチェック</string>
+    <string name="notification_permission_message">MetaJammerは、大量のファイルがバックグラウンドで処理されている間、進行状況を通知で知らせることができます。\n\nこれは、MetaJammerが作業を終える間に別のアプリに切り替えたい場合に特に便利です。</string>
 </resources>

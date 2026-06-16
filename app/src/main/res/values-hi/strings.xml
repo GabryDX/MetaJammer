@@ -1,11 +1,11 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MetaJammer</string>
     <string name="notification_channel_name">फ़ाइल प्रोसेसिंग</string>
     <string name="notification_processing_title">फ़ाइलें प्रोसेस की जा रही हैं</string>
     <string name="notification_processing_message">%1$d फ़ाइलों से मेटाडेटा हटाया जा रहा है...</string>
-    <string name="notification_complete_title">प्रोसेसिंग पूर्ण</string>
-    <string name="notification_complete_message">%1$d फ़ाइलें सफलतापूर्वक प्रोसेस की गईं।</string>
+    <string name="notification_complete_title">प्रोसेसिंग पूरी हुई</string>
+    <string name="notification_complete_message">सफलतापूर्वक %1$d फ़ाइलें प्रोसेस की गईं।</string>
 
     <!-- General -->
     <string name="ok">ठीक है</string>
@@ -18,23 +18,24 @@
     <string name="warning">चेतावनी</string>
     <string name="none">कोई नहीं</string>
     <string name="unknown">अज्ञात</string>
+    <string name="delete">मिटाएं</string>
 
     <!-- HomeScreen -->
     <string name="hero_title">अपनी गोपनीयता की रक्षा करें</string>
-    <string name="hero_subtitle">अपनी फ़ाइलें साझा करने से पहले संवेदनशील मेटाडेटा साफ़ करें या बदलें।</string>
+    <string name="hero_subtitle">अपनी फ़ाइलें साझा करने से पहले संवेदनशील मेटाडेटा को साफ़ करें या बदलें।</string>
     <string name="feature_images_video_title">इमेज और वीडियो</string>
-    <string name="feature_images_video_desc">फ़ोटो से मेटाडेटा हटाने और ट्रैकिंग हटाने के लिए वीडियो को रीमक्स करने का पूर्ण समर्थन।</string>
+    <string name="feature_images_video_desc">फ़ोटो से मेटाडेटा हटाने और ट्रैकिंग हटाने के लिए वीडियो को रीमक्स करने का पूरा समर्थन।</string>
     <string name="feature_poisoning_title">मेटाडेटा पॉइज़निंग</string>
     <string name="feature_poisoning_desc">केवल डेटा न हटाएं—गोपनीयता बनाए रखने और ट्रैकर्स को भ्रमित करने के लिए इसे यथार्थवादी नकली डेटा से बदलें।</string>
     <string name="feature_background_title">बैकग्राउंड प्रोसेसिंग</string>
-    <string name="feature_background_desc">जब आप अन्य काम कर रहे हों तो बैकग्राउंड में सैकड़ों फ़ाइलों को कुशलतापूर्वक प्रोसेस करें।</string>
-    <string name="feature_on_device_title">डिवाइस पर गोपनीयता</string>
-    <string name="feature_on_device_desc">सभी प्रोसेसिंग आपके डिवाइस पर स्थानीय रूप से होती है। आपकी फ़ाइलें MetaJammer से बाहर कभी नहीं जाती हैं।</string>
+    <string name="feature_background_desc">जब आप अन्य काम करते हैं तो बैकग्राउंड में सैकड़ों फ़ाइलों को कुशलतापूर्वक प्रोसेस करें।</string>
+    <string name="feature_on_device_title">ऑन-डिवाइस गोपनीयता</string>
+    <string name="feature_on_device_desc">सभी प्रोसेसिंग आपके डिवाइस पर स्थानीय रूप से होती है। आपकी फ़ाइलें कभी भी MetaJammer से बाहर नहीं जातीं।</string>
     <string name="pro_tip_gallery">प्रो टिप: आप अपनी गैलरी ऐप से सीधे MetaJammer में फ़ाइलें साझा कर सकते हैं।</string>
     <string name="select_files">फ़ाइलें चुनें</string>
-    <string name="select_more_files">अधिक फ़ाइलें चुनें</string>
+    <string name="select_more_files">और फ़ाइलें चुनें</string>
     <string name="clear_selection">चयन साफ़ करें</string>
-    <string name="files_selected">%1$d फ़ाइलें चयनित</string>
+    <string name="files_selected">%1$d फ़ाइलें चुनी गईं</string>
     <string name="total_size">कुल आकार: %1$s</string>
     <string name="size_mb">%.1f MB</string>
     <string name="size_kb">%.1f KB</string>
@@ -51,14 +52,28 @@
     <string name="poison_metadata">मेटाडेटा पॉइज़न करें</string>
     <string name="remove_metadata">मेटाडेटा हटाएं</string>
     <string name="selected_mode">चयनित: %1$s</string>
-    <string name="regenerate_plans">सभी रैंडम प्लान फिर से जनरेट करें</string>
-    <string name="preview_of_changes">बदलावों का पूर्वावलोकन</string>
-    <string name="no_preview_available">कोई पूर्वावलोकन उपलब्ध नहीं है</string>
-    <string name="change_location_map">मैप पर स्थान बदलें</string>
+    <string name="regenerate_plans">सभी यादृच्छिक योजनाओं को पुनर्जीवित करें</string>
+    <string name="preview_of_changes">परिवर्तनों का पूर्वावलोकन</string>
+    <string name="no_preview_available">कोई पूर्वावलोकन उपलब्ध नहीं</string>
+    <string name="change_location_map">मानचित्र पर स्थान बदलें</string>
     <string name="process_files">फ़ाइलें प्रोसेस करें</string>
-    <string name="processing_foreground">फ़ोरग्राउंड में प्रोसेसिंग हो रही है...</string>
+    <string name="processing_foreground">फोरग्राउंड में प्रोसेसिंग...</string>
     <string name="background_progress">बैकग्राउंड प्रगति: %1$d%%</string>
     <string name="continue_to_output">आउटपुट विकल्पों पर जारी रखें</string>
+
+    <!-- HelpScreen -->
+    <string name="help_title">Help &amp; Tutorials</string>
+    <string name="help_item_video_title">Video Processing</string>
+    <string name="help_item_video_body">Supported formats: MP4, MOV.\n\nFull re-muxing is supported for these containers. This process strips GPS, dates, and device atoms to protect your privacy.</string>
+    <string name="help_item_image_title">Image Processing</string>
+    <string name="help_item_image_body">Supported formats: JPG, PNG.\n\nMetaJammer strips EXIF metadata from these images. In \"Poison\" mode, it replaces sensitive tags like GPS coordinates with realistic random data.</string>
+    <string name="help_item_other_title">Other Files</string>
+    <string name="help_item_other_body">Supported formats: None currently.\n\nMetaJammer currently focuses on media files. Future updates will include support for PDFs and documents. Stay tuned!</string>
+    <string name="help_report_issue_title">Report an Issue</string>
+    <string name="help_report_issue_body">Found a bug or have a feature request? Please report it on our GitHub page.</string>
+    <string name="help_open_github">Open GitHub Issues</string>
+    <string name="help_app_version">Version: %1$s</string>
+    <string name="help">Help</string>
 
     <!-- LocationPickerScreen -->
     <string name="pick_location">स्थान चुनें</string>
@@ -66,7 +81,7 @@
 
     <!-- OutputOptionsScreen -->
     <string name="output_options">आउटपुट विकल्प</string>
-    <string name="saving_will_trigger_sharing">सहेजना शेयरिंग को भी ट्रिगर करेगा।</string>
+    <string name="saving_will_trigger_sharing">सहेजने से साझाकरण भी शुरू हो जाएगा।</string>
     <string name="choose_save_or_share">चुनें कि प्रोसेस किए गए परिणाम को सहेजना है या साझा करना है।</string>
     <string name="save_to_default_folder">डिफ़ॉल्ट फ़ोल्डर में सहेजें</string>
     <string name="save_to_custom_folder">कस्टम फ़ोल्डर में सहेजें</string>
@@ -118,40 +133,43 @@
 
     <string name="language_system">System Default (सिस्टम डिफ़ॉल्ट)</string>
     <string name="language_en">English (अंग्रेज़ी)</string>
-    <string name="language_es">Español (स्पेनिश)</string>
-    <string name="language_it">Italiano (इतालवी)</string>
-    <string name="language_fr">Français (फ्रेंच)</string>
-    <string name="language_de">Deutsch (जर्मन)</string>
     <string name="language_zh">中文 (简体) (चीनी (सरलीकृत))</string>
+    <string name="language_es">Español (स्पेनिश)</string>
     <string name="language_hi">हिन्दी (हिन्दी)</string>
+    <string name="language_ar">العربية (अरबी)</string>
+    <string name="language_fr">Français (फ्रेंच)</string>
     <string name="language_pt">Português (पुर्तगाली)</string>
     <string name="language_ru">Русский (रूसी)</string>
-    <string name="language_el">Ελληνικά (यूनानी)</string>
-    <string name="language_ar">العربية (अरबी)</string>
     <string name="language_ja">日本語 (जापानी)</string>
-    <string name="language_in">Bahasa Indonesia (इंडोनेशियाई)</string>
-    <string name="language_tr">Türkçe (तुर्की)</string>
+    <string name="language_de">Deutsch (जर्मन)</string>
     <string name="language_ko">한국어 (कोरियाई)</string>
+    <string name="language_in">Bahasa Indonesia (इंडोनेशियाई)</string>
+    <string name="language_it">Italiano (इतालवी)</string>
+    <string name="language_tr">Türkçe (तुर्की)</string>
     <string name="language_vi">Tiếng Việt (वियतनामी)</string>
     <string name="language_th">ไทย (थाई)</string>
     <string name="language_pl">Polski (पोलिश)</string>
-    <string name="language_nl">Nederlands (डच)</string>
     <string name="language_uk">Українська (यूक्रेनी)</string>
+    <string name="language_nl">Nederlands (डच)</string>
+    <string name="language_ro">Română (रोमानियाई)</string>
     <string name="language_fa">فارسی (फारसी)</string>
+    <string name="language_el">Ελληνικά (यूनानी)</string>
+    <string name="language_iw">עברית (हिब्रू)</string>
+    <string name="language_la">Latina (लैटिन)</string>
 
-    <string name="processing_mode_poison">मेटाडेटा पॉइज़न करें (नकली जानकारी)</string>
-    <string name="processing_mode_remove">मेटाडेटा हटाएं (पूर्ण सफाई)</string>
+    <string name="processing_mode_poison">मेटाडेटा पॉइज़न (नकली जानकारी)</string>
+    <string name="processing_mode_remove">मेटाडेटा हटाएं (पूरी तरह साफ़)</string>
 
     <string name="output_action_default_folder">डिफ़ॉल्ट फ़ोल्डर में सहेजें</string>
     <string name="output_action_shared_folder">समर्पित फ़ोल्डर में सहेजें</string>
-    <string name="output_action_reshare">स्वच्छ फ़ाइलों को फिर से साझा करें</string>
+    <string name="output_action_reshare">साफ़ की गई फ़ाइलों को फिर से साझा करें</string>
 
     <!-- Dialogs/Permissions -->
-    <string name="map_permission_title">मैप पिकर और इंटरनेट एक्सेस</string>
-    <string name="map_permission_message">स्थान चुनने के लिए मैप दिखाने हेतु, MetaJammer को OpenStreetMap से मैप टाइल्स लोड करने के लिए इंटरनेट से जुड़ना होगा। \n\nयदि आप मना करते हैं, तो ऐप सभी मेटाडेटा हटाने और पॉइज़निंग सुविधाओं के लिए पूरी तरह से काम करना जारी रखेगा, लेकिन आप मैप पर विजुअल रूप से स्थान नहीं चुन पाएंगे।</string>
-    <string name="allow_open_map">अनुमति दें और मैप खोलें</string>
+    <string name="map_permission_title">मानचित्र चयनकर्ता और इंटरनेट एक्सेस</string>
+    <string name="map_permission_message">स्थान चुनने के लिए मानचित्र दिखाने के लिए, MetaJammer को OpenStreetMap से मानचित्र टाइल लोड करने के लिए इंटरनेट से कनेक्ट करने की आवश्यकता है। \n\nयदि आप अस्वीकार करते हैं, तो ऐप सभी मेटाडेटा हटाने और पॉइज़निंग सुविधाओं के लिए पूरी तरह से काम करना जारी रखेगा, लेकिन आप मानचित्र पर दृश्य रूप से स्थान नहीं चुन पाएंगे।</string>
+    <string name="allow_open_map">अनुमति दें और मानचित्र खोलें</string>
     <string name="not_now">अभी नहीं</string>
 
     <string name="notification_permission_title">सूचित रहें</string>
-    <string name="notification_permission_message">बैकग्राउंड में बड़ी फ़ाइलों के प्रोसेस होने के दौरान MetaJammer आपको प्रगति के बारे में अपडेट रखने के लिए सूचनाएं दिखा सकता है। \n\nयह विशेष रूप से तब उपयोगी होता है जब आप MetaJammer के अपना काम पूरा करने के दौरान किसी अन्य ऐप पर जाना चाहते हैं।</string>
+    <string name="notification_permission_message">MetaJammer बैकग्राउंड में प्रोसेस होने के दौरान बड़े फ़ाइल बैचों की प्रगति के बारे में आपको अपडेट रखने के लिए सूचनाएं दिखा सकता है। \n\nयह विशेष रूप से तब उपयोगी होता है जब आप MetaJammer के अपना काम पूरा करने के दौरान किसी अन्य ऐप पर स्विच करना चाहते हैं।</string>
 </resources>
