@@ -20,6 +20,7 @@ This document summarizes the audit performed to ensure that MetaJammer only uses
 | **Coil** | `io.coil-kt:coil-*` | Apache 2.0 | FOSS |
 | **Kotlinx Serialization** | `org.jetbrains.kotlinx:kotlinx-serialization-json` | Apache 2.0 | FOSS |
 | **Timber** | `com.jakewharton.timber:timber` | Apache 2.0 | FOSS |
+| **PDFBox-Android** | `com.tom-roush:pdfbox-android` | Apache 2.0 | FOSS |
 | **JUnit** | `junit:junit` | EPL 2.0 | FOSS |
 | **Espresso** | `androidx.test.espresso:espresso-core` | Apache 2.0 | FOSS |
 
