@@ -111,59 +111,6 @@ class MetadataRepository(
         }
     }
 
-    /**
-     * Reads metadata changes that would happen in poison mode.
-     */
-    fun getPoisonPreview(selectedFile: SelectedFile, plan: MetadataReplacementPlan): List<MetadataEntry> {
-        val mime = selectedFile.mimeType ?: ""
-        return when {
-            mime.startsWith("image/") -> {
-                listOf(
-                    MetadataEntry(ExifInterface.TAG_DATETIME, plan.dateTime),
-                    MetadataEntry(ExifInterface.TAG_MAKE, plan.make),
-                    MetadataEntry(ExifInterface.TAG_MODEL, plan.model),
-                    MetadataEntry(ExifInterface.TAG_SOFTWARE, plan.software),
-                    MetadataEntry(ExifInterface.TAG_IMAGE_DESCRIPTION, plan.imageDescription),
-                    MetadataEntry(ExifInterface.TAG_USER_COMMENT, plan.userComment),
-                    MetadataEntry(ExifInterface.TAG_GPS_LATITUDE, plan.latitude.toString()),
-                    MetadataEntry(ExifInterface.TAG_GPS_LONGITUDE, plan.longitude.toString())
-                )
-            }
-            mime.startsWith("video/") -> {
-                val entries = mutableListOf(
-                    MetadataEntry("Location", "${plan.latitude}, ${plan.longitude}")
-                )
-                plan.title?.let { entries.add(MetadataEntry("Title", it)) }
-                plan.artist?.let { entries.add(MetadataEntry("Director", it)) }
-                plan.year?.let { entries.add(MetadataEntry("Year", it)) }
-                plan.genre?.let { entries.add(MetadataEntry("Genre", it)) }
-                plan.mediaDate?.let { entries.add(MetadataEntry("Date", it)) }
-                entries
-            }
-            mime.startsWith("audio/") -> {
-                val entries = mutableListOf(
-                    MetadataEntry("Location", "${plan.latitude}, ${plan.longitude}")
-                )
-                plan.title?.let { entries.add(MetadataEntry("Title", it)) }
-                plan.artist?.let { entries.add(MetadataEntry("Artist", it)) }
-                plan.album?.let { entries.add(MetadataEntry("Album", it)) }
-                plan.year?.let { entries.add(MetadataEntry("Year", it)) }
-                plan.genre?.let { entries.add(MetadataEntry("Genre", it)) }
-                plan.mediaDate?.let { entries.add(MetadataEntry("Date", it)) }
-                entries
-            }
-            mime == "application/pdf" -> {
-                val entries = mutableListOf<MetadataEntry>()
-                plan.pdfTitle?.let { entries.add(MetadataEntry("Title", it)) }
-                plan.author?.let { entries.add(MetadataEntry("Author", it)) }
-                plan.creator?.let { entries.add(MetadataEntry("Creator", it)) }
-                plan.producer?.let { entries.add(MetadataEntry("Producer", it)) }
-                entries
-            }
-            else -> emptyList()
-        }
-    }
-
     private fun readMediaMetadata(selectedFile: SelectedFile): List<MetadataEntry> {
         val resolver = fileRepository.getContext().contentResolver
         val entries = mutableListOf<MetadataEntry>()

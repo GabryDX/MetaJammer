@@ -88,15 +88,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">Setări</string>
-    <string name="category_file_management">Gestionare fișiere</string>
+    <string name="category_folder_management">Gestionare foldere</string>
+    <string name="category_file_management">Metadate și nume de fișiere</string>
     <string name="category_image_file">Imagine / Fișier</string>
     <string name="category_shared_files">Comportament fișiere partajate</string>
     <string name="category_ui">Interfață utilizator</string>
 
+    <string name="setting_folder_structure_title">Structură foldere</string>
+    <string name="setting_folder_structure_unified">Unificată (Un seul folder pentru toate)</string>
+    <string name="setting_folder_structure_split">Separată (Foldere separate după tip)</string>
+    <string name="setting_use_subfolders_title">Utilizați subfoldere în modul unificat</string>
+    <string name="setting_use_subfolders_sub">Organizați după tip (Imagini, Filme etc.) în folderul unificat</string>
+
+    <string name="setting_unified_path_title">Folder de salvare unificat</string>
+    <string name="setting_pictures_path_title">Folder de salvare Imagini</string>
+    <string name="setting_music_path_title">Folder de salvare Muzică</string>
+    <string name="setting_movies_path_title">Folder de salvare Filme</string>
+    <string name="setting_documents_path_title">Folder de salvare Documente</string>
+
+    <string name="setting_configure_split_folders">Configurare foldere separate</string>
+    <string name="setting_split_folders_desc">Gestionați foldere individuale pentru fiecare categorie</string>
+
     <string name="setting_random_names_title">Folosește nume de fișiere aleatorii</string>
     <string name="setting_random_names_sub">Generează nume de ieșire aleatorii în loc de a folosi numele original al fișierului</string>
     <string name="setting_default_path_title">Cale de salvare implicită</string>
-    <string name="setting_reset_path">Resetare la Pictures/MetaJammer</string>
+    <string name="setting_reset_path_pictures">Resetare la Pictures/MetaJammer</string>
+    <string name="setting_reset_path_download">Resetare la Download/MetaJammer</string>
+    <string name="setting_reset_path_music">Resetare la Music/MetaJammer</string>
+    <string name="setting_reset_path_movies">Resetare la Movies/MetaJammer</string>
+    <string name="setting_reset_path_documents">Resetare la Documents/MetaJammer</string>
     <string name="setting_select_folder">Selectare dosar</string>
 
     <string name="setting_keep_orientation_title">Păstrează orientarea imaginii</string>

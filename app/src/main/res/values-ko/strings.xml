@@ -88,15 +88,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">설정</string>
-    <string name="category_file_management">파일 관리</string>
+    <string name="category_folder_management">폴더 관리</string>
+    <string name="category_file_management">메타데이터 및 파일 이름</string>
     <string name="category_image_file">이미지 / 파일</string>
     <string name="category_shared_files">공유 파일 동작</string>
     <string name="category_ui">UI</string>
 
+    <string name="setting_folder_structure_title">폴더 구조</string>
+    <string name="setting_folder_structure_unified">통합 (모든 파일을 하나의 폴더로)</string>
+    <string name="setting_folder_structure_split">분할 (유형별로 별도의 폴더)</string>
+    <string name="setting_use_subfolders_title">통합 폴더 내 하위 폴더 사용</string>
+    <string name="setting_use_subfolders_sub">통합 폴더 내에서 유형별(사진, 영화 등)로 정리</string>
+
+    <string name="setting_unified_path_title">통합 저장 폴더</string>
+    <string name="setting_pictures_path_title">사진 저장 폴더</string>
+    <string name="setting_music_path_title">음악 저장 폴더</string>
+    <string name="setting_movies_path_title">영화 저장 폴더</string>
+    <string name="setting_documents_path_title">문서 저장 폴더</string>
+
+    <string name="setting_configure_split_folders">분할 폴더 구성</string>
+    <string name="setting_split_folders_desc">각 파일 카테고리별로 개별 폴더 관리</string>
+
     <string name="setting_random_names_title">무작위 파일명 사용</string>
     <string name="setting_random_names_sub">원본 파일명 대신 무작위로 생성된 출력 파일명을 사용합니다.</string>
     <string name="setting_default_path_title">기본 저장 경로</string>
-    <string name="setting_reset_path">Pictures/MetaJammer로 재설정</string>
+    <string name="setting_reset_path_pictures">Pictures/MetaJammer로 초기화</string>
+    <string name="setting_reset_path_download">Download/MetaJammer로 초기화</string>
+    <string name="setting_reset_path_music">Music/MetaJammer로 초기화</string>
+    <string name="setting_reset_path_movies">Movies/MetaJammer로 초기화</string>
+    <string name="setting_reset_path_documents">Documents/MetaJammer로 초기화</string>
     <string name="setting_select_folder">폴더 선택</string>
 
     <string name="setting_keep_orientation_title">이미지 방향 유지</string>

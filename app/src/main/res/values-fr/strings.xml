@@ -88,15 +88,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">Paramètres</string>
-    <string name="category_file_management">Gestion des fichiers</string>
+    <string name="category_folder_management">Gestion des dossiers</string>
+    <string name="category_file_management">Métadonnées et noms de fichiers</string>
     <string name="category_image_file">Image / Fichier</string>
     <string name="category_shared_files">Comportement des fichiers partagés</string>
     <string name="category_ui">Interface utilisateur</string>
 
+    <string name="setting_folder_structure_title">Structure des dossiers</string>
+    <string name="setting_folder_structure_unified">Unifiée (Un seul dossier pour tout)</string>
+    <string name="setting_folder_structure_split">Séparée (Dossiers distincts par type)</string>
+    <string name="setting_use_subfolders_title">Utiliser des sous-dossiers en mode unifié</string>
+    <string name="setting_use_subfolders_sub">Organiser par type (Images, Films, etc.) dans le dossier unifié</string>
+
+    <string name="setting_unified_path_title">Dossier d\'enregistrement unifié</string>
+    <string name="setting_pictures_path_title">Dossier d\'enregistrement des images</string>
+    <string name="setting_music_path_title">Dossier d\'enregistrement de la musique</string>
+    <string name="setting_movies_path_title">Dossier d\'enregistrement des films</string>
+    <string name="setting_documents_path_title">Dossier d\'enregistrement des documents</string>
+
+    <string name="setting_configure_split_folders">Configurer les dossiers séparés</string>
+    <string name="setting_split_folders_desc">Gérer les dossiers individuels pour chaque catégorie</string>
+
     <string name="setting_random_names_title">Utiliser des noms de fichiers aléatoires</string>
     <string name="setting_random_names_sub">Générer des noms de sortie aléatoires au lieu d\'utiliser le nom de fichier original</string>
     <string name="setting_default_path_title">Chemin d\'enregistrement par défaut</string>
-    <string name="setting_reset_path">Réinitialiser à Pictures/MetaJammer</string>
+    <string name="setting_reset_path_pictures">Réinitialiser vers Pictures/MetaJammer</string>
+    <string name="setting_reset_path_download">Réinitialiser vers Download/MetaJammer</string>
+    <string name="setting_reset_path_music">Réinitialiser vers Music/MetaJammer</string>
+    <string name="setting_reset_path_movies">Réinitialiser vers Movies/MetaJammer</string>
+    <string name="setting_reset_path_documents">Réinitialiser vers Documents/MetaJammer</string>
     <string name="setting_select_folder">Sélectionner un dossier</string>
 
     <string name="setting_keep_orientation_title">Conserver l\'orientation de l\'image</string>

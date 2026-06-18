@@ -88,15 +88,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">Ayarlar</string>
-    <string name="category_file_management">Dosya Yönetimi</string>
+    <string name="category_folder_management">Klasör Yönetimi</string>
+    <string name="category_file_management">Meta Veriler ve Dosya Adları</string>
     <string name="category_image_file">Resim / Dosya</string>
     <string name="category_shared_files">Paylaşılan Dosya Davranışı</string>
     <string name="category_ui">Kullanıcı Arayüzü</string>
 
+    <string name="setting_folder_structure_title">Klasör Yapısı</string>
+    <string name="setting_folder_structure_unified">Birleşik (Herkes için tek klasör)</string>
+    <string name="setting_folder_structure_split">Ayrı (Türe göre ayrı klasörler)</string>
+    <string name="setting_use_subfolders_title">Birleşik yapıda alt klasör kullan</string>
+    <string name="setting_use_subfolders_sub">Birleşik klasör içinde türe göre (Resimler, Filmler vb.) düzenle</string>
+
+    <string name="setting_unified_path_title">Birleşik kayıt klasörü</string>
+    <string name="setting_pictures_path_title">Resim kayıt klasörü</string>
+    <string name="setting_music_path_title">Müzik kayıt klasörü</string>
+    <string name="setting_movies_path_title">Film kayıt klasörü</string>
+    <string name="setting_documents_path_title">Belge kayıt klasörü</string>
+
+    <string name="setting_configure_split_folders">Ayrı Klasörleri Yapılandır</string>
+    <string name="setting_split_folders_desc">Her dosya kategorisi için ayrı klasörleri yönet</string>
+
     <string name="setting_random_names_title">Rastgele dosya adları kullan</string>
     <string name="setting_random_names_sub">Orijinal dosya adını kullanmak yerine rastgele çıktı adları oluşturun</string>
     <string name="setting_default_path_title">Varsayılan kaydetme yolu</string>
-    <string name="setting_reset_path">Resimler/MetaJammer klasörüne sıfırla</string>
+    <string name="setting_reset_path_pictures">Pictures/MetaJammer olarak sıfırla</string>
+    <string name="setting_reset_path_download">Download/MetaJammer olarak sıfırla</string>
+    <string name="setting_reset_path_music">Music/MetaJammer olarak sıfırla</string>
+    <string name="setting_reset_path_movies">Movies/MetaJammer olarak sıfırla</string>
+    <string name="setting_reset_path_documents">Documents/MetaJammer olarak sıfırla</string>
     <string name="setting_select_folder">Klasör Seç</string>
 
     <string name="setting_keep_orientation_title">Resim yönünü koru</string>

@@ -88,15 +88,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">Optiones</string>
-    <string name="category_file_management">Fasciculorum Administratio</string>
+    <string name="category_folder_management">Administratio scriniorum</string>
+    <string name="category_file_management">Metadatorum et nominum administrator</string>
     <string name="category_image_file">Imago / Fasciculus</string>
     <string name="category_shared_files">Fasciculorum Communicatorum Mores</string>
     <string name="category_ui">UI</string>
 
+    <string name="setting_folder_structure_title">Scriniorum structura</string>
+    <string name="setting_folder_structure_unified">Unitum (Unum scrinium pro omnibus)</string>
+    <string name="setting_folder_structure_split">Divisum (Scrinia separata pro typo)</string>
+    <string name="setting_use_subfolders_title">Subscrinia in unito uti</string>
+    <string name="setting_use_subfolders_sub">Secundum typon (Imagines, Cinematographa, etc.) in unitum disponere</string>
+
+    <string name="setting_unified_path_title">Unitum servandi scrinium</string>
+    <string name="setting_pictures_path_title">Imaginum servandi scrinium</string>
+    <string name="setting_music_path_title">Musicae servandi scrinium</string>
+    <string name="setting_movies_path_title">Cinematographorum servandi scrinium</string>
+    <string name="setting_documents_path_title">Documentorum servandi scrinium</string>
+
+    <string name="setting_configure_split_folders">Scrinia divisa disponere</string>
+    <string name="setting_split_folders_desc">Singula scrinia pro unaquaque categoria regere</string>
+
     <string name="setting_random_names_title">Nominibus temere uti</string>
     <string name="setting_random_names_sub">Nomina exitus temere generare pro nominibus originalibus</string>
     <string name="setting_default_path_title">Iter servandi defaltum</string>
-    <string name="setting_reset_path">Ad Pictures/MetaJammer restituere</string>
+    <string name="setting_reset_path_pictures">Ad Pictures/MetaJammer restituere</string>
+    <string name="setting_reset_path_download">Ad Download/MetaJammer restituere</string>
+    <string name="setting_reset_path_music">Ad Music/MetaJammer restituere</string>
+    <string name="setting_reset_path_movies">Ad Movies/MetaJammer restituere</string>
+    <string name="setting_reset_path_documents">Ad Documents/MetaJammer restituere</string>
     <string name="setting_select_folder">Capsam Seligere</string>
 
     <string name="setting_keep_orientation_title">Imaginis situm servare</string>

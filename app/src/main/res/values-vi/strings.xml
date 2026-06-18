@@ -88,15 +88,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">Cài đặt</string>
-    <string name="category_file_management">Quản lý tệp</string>
+    <string name="category_folder_management">Quản lý thư mục</string>
+    <string name="category_file_management">Metadata &amp; Tên tệp</string>
     <string name="category_image_file">Hình ảnh / Tệp</string>
     <string name="category_shared_files">Hành vi tệp được chia sẻ</string>
     <string name="category_ui">Giao diện</string>
 
+    <string name="setting_folder_structure_title">Cấu trúc thư mục</string>
+    <string name="setting_folder_structure_unified">Hợp nhất (Một thư mục cho tất cả)</string>
+    <string name="setting_folder_structure_split">Phân chia (Thư mục riêng theo loại)</string>
+    <string name="setting_use_subfolders_title">Sử dụng thư mục con trong chế độ hợp nhất</string>
+    <string name="setting_use_subfolders_sub">Sắp xếp theo loại (Ảnh, Phim, v.v.) bên trong thư mục hợp nhất</string>
+
+    <string name="setting_unified_path_title">Thư mục lưu trữ hợp nhất</string>
+    <string name="setting_pictures_path_title">Thư mục lưu trữ Ảnh</string>
+    <string name="setting_music_path_title">Thư mục lưu trữ Nhạc</string>
+    <string name="setting_movies_path_title">Thư mục lưu trữ Phim</string>
+    <string name="setting_documents_path_title">Thư mục lưu trữ Tài liệu</string>
+
+    <string name="setting_configure_split_folders">Cấu hình thư mục phân chia</string>
+    <string name="setting_split_folders_desc">Quản lý các thư mục riêng lẻ cho từng loại tệp</string>
+
     <string name="setting_random_names_title">Sử dụng tên tệp ngẫu nhiên</string>
     <string name="setting_random_names_sub">Tạo tên đầu ra ngẫu nhiên thay vì sử dụng tên tệp gốc</string>
     <string name="setting_default_path_title">Đường dẫn lưu mặc định</string>
-    <string name="setting_reset_path">Đặt lại về Pictures/MetaJammer</string>
+    <string name="setting_reset_path_pictures">Đặt lại về Pictures/MetaJammer</string>
+    <string name="setting_reset_path_download">Đặt lại về Download/MetaJammer</string>
+    <string name="setting_reset_path_music">Đặt lại về Music/MetaJammer</string>
+    <string name="setting_reset_path_movies">Đặt lại về Movies/MetaJammer</string>
+    <string name="setting_reset_path_documents">Đặt lại về Documents/MetaJammer</string>
     <string name="setting_select_folder">Chọn thư mục</string>
 
     <string name="setting_keep_orientation_title">Giữ hướng hình ảnh</string>

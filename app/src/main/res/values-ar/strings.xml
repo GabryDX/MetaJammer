@@ -88,15 +88,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">الإعدادات</string>
-    <string name="category_file_management">إدارة الملفات</string>
+    <string name="category_folder_management">إدارة المجلدات</string>
+    <string name="category_file_management">البيانات الوصفية وأسماء الملفات</string>
     <string name="category_image_file">الصورة / الملف</string>
     <string name="category_shared_files">سلوك الملفات المشتركة</string>
     <string name="category_ui">واجهة المستخدم</string>
 
+    <string name="setting_folder_structure_title">هيكل المجلد</string>
+    <string name="setting_folder_structure_unified">موحد (مجلد واحد للكل)</string>
+    <string name="setting_folder_structure_split">مقسم (مجلدات منفصلة حسب النوع)</string>
+    <string name="setting_use_subfolders_title">استخدام المجلدات الفرعية في المجلد الموحد</string>
+    <string name="setting_use_subfolders_sub">التنظيم حسب النوع (صور، أفلام، إلخ) داخل المجلد الموحد</string>
+
+    <string name="setting_unified_path_title">مجلد حفظ موحد</string>
+    <string name="setting_pictures_path_title">مجلد حفظ الصور</string>
+    <string name="setting_music_path_title">مجلد حفظ الموسيقى</string>
+    <string name="setting_movies_path_title">مجلد حفظ الأفلام</string>
+    <string name="setting_documents_path_title">مجلد حفظ المستندات</string>
+
+    <string name="setting_configure_split_folders">تكوين المجلدات المقسمة</string>
+    <string name="setting_split_folders_desc">إدارة المجلدات الفردية لكل فئة ملفات</string>
+
     <string name="setting_random_names_title">استخدام أسماء ملفات عشوائية</string>
     <string name="setting_random_names_sub">توليد أسماء إخراج عشوائية بدلاً من استخدام اسم الملف الأصلي</string>
     <string name="setting_default_path_title">مسار الحفظ الافتراضي</string>
-    <string name="setting_reset_path">إعادة الضبط إلى Pictures/MetaJammer</string>
+    <string name="setting_reset_path_pictures">إعادة الضبط إلى Pictures/MetaJammer</string>
+    <string name="setting_reset_path_download">إعادة الضبط إلى Download/MetaJammer</string>
+    <string name="setting_reset_path_music">إعادة الضبط إلى Music/MetaJammer</string>
+    <string name="setting_reset_path_movies">إعادة الضبط إلى Movies/MetaJammer</string>
+    <string name="setting_reset_path_documents">إعادة الضبط إلى Documents/MetaJammer</string>
     <string name="setting_select_folder">اختيار مجلد</string>
 
     <string name="setting_keep_orientation_title">الحفاظ على اتجاه الصورة</string>

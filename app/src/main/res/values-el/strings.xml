@@ -88,15 +88,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">Ρυθμίσεις</string>
-    <string name="category_file_management">Διαχείριση αρχείων</string>
+    <string name="category_folder_management">Διαχείριση φακέλων</string>
+    <string name="category_file_management">Μεταδεδομένα &amp; Ονόματα αρχείων</string>
     <string name="category_image_file">Εικόνα / Αρχείο</string>
     <string name="category_shared_files">Συμπεριφορά κοινόχρηστων αρχείων</string>
     <string name="category_ui">Διεπαφή χρήστη</string>
 
+    <string name="setting_folder_structure_title">Δομή φακέλων</string>
+    <string name="setting_folder_structure_unified">Ενοποιημένη (Ένας φάκελος για όλα)</string>
+    <string name="setting_folder_structure_split">Διαχωρισμένη (Ξεχωριστοί φάκελοι ανά τύπο)</string>
+    <string name="setting_use_subfolders_title">Χρήση υποφακέλων στην ενοποιημένη δομή</string>
+    <string name="setting_use_subfolders_sub">Οργάνωση ανά τύπο (Εικόνες, Ταινίες κ.λπ.) μέσα στον ενοποιημένο φάκελο</string>
+
+    <string name="setting_unified_path_title">Ενοποιημένος φάκελος αποθήκευσης</string>
+    <string name="setting_pictures_path_title">Φάκελος αποθήκευσης εικόνων</string>
+    <string name="setting_music_path_title">Φάκελος αποθήκευσης μουσικής</string>
+    <string name="setting_movies_path_title">Φάκελος αποθήκευσης ταινιών</string>
+    <string name="setting_documents_path_title">Φάκελος αποθήκευσης εγγράφων</string>
+
+    <string name="setting_configure_split_folders">Διαμόρφωση διαχωρισμένων φακέλων</string>
+    <string name="setting_split_folders_desc">Διαχείριση μεμονωμένων φακέλων για κάθε κατηγορία αρχείων</string>
+
     <string name="setting_random_names_title">Χρήση τυχαίων ονομάτων αρχείων</string>
     <string name="setting_random_names_sub">Δημιουργήστε τυχαία ονόματα εξόδου αντί να χρησιμοποιήσετε το αρχικό όνομα αρχείου</string>
     <string name="setting_default_path_title">Προεπιλεγμένη διαδρομή αποθήκευσης</string>
-    <string name="setting_reset_path">Επαναφορά σε Pictures/MetaJammer</string>
+    <string name="setting_reset_path_pictures">Επαναφορά σε Pictures/MetaJammer</string>
+    <string name="setting_reset_path_download">Επαναφορά σε Download/MetaJammer</string>
+    <string name="setting_reset_path_music">Επαναφορά σε Music/MetaJammer</string>
+    <string name="setting_reset_path_movies">Επαναφορά σε Movies/MetaJammer</string>
+    <string name="setting_reset_path_documents">Επαναφορά σε Documents/MetaJammer</string>
     <string name="setting_select_folder">Επιλογή φακέλου</string>
 
     <string name="setting_keep_orientation_title">Διατήρηση προσανατολισμού εικόνας</string>

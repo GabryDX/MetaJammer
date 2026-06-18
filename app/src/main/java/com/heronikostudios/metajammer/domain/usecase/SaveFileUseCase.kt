@@ -11,13 +11,15 @@ class SaveFileUseCase(
         sourceFile: File,
         displayName: String,
         mimeType: String?,
-        configuredPath: String?
+        configuredPath: String?,
+        subPath: String? = null
     ): Uri? {
         return fileRepository.saveToDefaultFolder(
             sourceFile = sourceFile,
             displayName = displayName,
             mimeType = mimeType,
-            configuredPath = configuredPath
+            configuredPath = configuredPath,
+            subPath = subPath
         )
     }
 
@@ -25,8 +27,9 @@ class SaveFileUseCase(
         treeUri: Uri,
         sourceFile: File,
         displayName: String,
-        mimeType: String?
+        mimeType: String?,
+        subPath: String? = null
     ): Uri? {
-        return fileRepository.saveToCustomFolder(treeUri, sourceFile, displayName, mimeType)
+        return fileRepository.saveToCustomFolder(treeUri, sourceFile, displayName, mimeType, subPath)
     }
 }

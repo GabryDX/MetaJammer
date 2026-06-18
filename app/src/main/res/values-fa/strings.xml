@@ -88,15 +88,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">تنظیمات</string>
-    <string name="category_file_management">مدیریت فایل</string>
+    <string name="category_folder_management">مدیریت پوشه</string>
+    <string name="category_file_management">متادیتا و نام فایل‌ها</string>
     <string name="category_image_file">تصویر / فایل</string>
     <string name="category_shared_files">رفتار فایل‌های به اشتراک گذاشته شده</string>
     <string name="category_ui">رابط کاربری</string>
 
+    <string name="setting_folder_structure_title">ساختار پوشه</string>
+    <string name="setting_folder_structure_unified">یکپارچه (یک پوشه برای همه)</string>
+    <string name="setting_folder_structure_split">مجزا (پوشه‌های جداگانه بر اساس نوع)</string>
+    <string name="setting_use_subfolders_title">استفاده از زیرپوشه در حالت یکپارچه</string>
+    <string name="setting_use_subfolders_sub">سازماندهی بر اساس نوع (تصاویر، فیلم‌ها و غیره) در پوشه یکپارچه</string>
+
+    <string name="setting_unified_path_title">پوشه ذخیره‌سازی یکپارچه</string>
+    <string name="setting_pictures_path_title">پوشه ذخیره‌سازی تصاویر</string>
+    <string name="setting_music_path_title">پوشه ذخیره‌سازی موسیقی</string>
+    <string name="setting_movies_path_title">پوشه ذخیره‌سازی فیلم‌ها</string>
+    <string name="setting_documents_path_title">پوشه ذخیره‌سازی اسناد</string>
+
+    <string name="setting_configure_split_folders">پیکربندی پوشه‌های مجزا</string>
+    <string name="setting_split_folders_desc">مدیریت پوشه‌های جداگانه برای هر دسته از فایل‌ها</string>
+
     <string name="setting_random_names_title">استفاده از نام‌های فایل تصادفی</string>
     <string name="setting_random_names_sub">به‌جای استفاده از نام اصلی فایل، نام‌های خروجی تصادفی تولید کنید</string>
     <string name="setting_default_path_title">مسیر ذخیره‌سازی پیش‌فرض</string>
-    <string name="setting_reset_path">بازنشانی به Pictures/MetaJammer</string>
+    <string name="setting_reset_path_pictures">بازنشانی به Pictures/MetaJammer</string>
+    <string name="setting_reset_path_download">بازنشانی به Download/MetaJammer</string>
+    <string name="setting_reset_path_music">بازنشانی به Music/MetaJammer</string>
+    <string name="setting_reset_path_movies">بازنشانی به Movies/MetaJammer</string>
+    <string name="setting_reset_path_documents">بازنشانی به Documents/MetaJammer</string>
     <string name="setting_select_folder">انتخاب پوشه</string>
 
     <string name="setting_keep_orientation_title">حفظ جهت تصویر</string>

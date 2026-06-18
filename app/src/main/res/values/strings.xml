@@ -88,15 +88,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">Settings</string>
-    <string name="category_file_management">File Management</string>
+    <string name="category_folder_management">Folder Management</string>
+    <string name="category_file_management">Metadata &amp; Filenames</string>
     <string name="category_image_file">Image / File</string>
     <string name="category_shared_files">Shared Files Behavior</string>
     <string name="category_ui">UI</string>
 
+    <string name="setting_folder_structure_title">Folder Structure</string>
+    <string name="setting_folder_structure_unified">Unified (Single folder for all)</string>
+    <string name="setting_folder_structure_split">Split (Separate folders by type)</string>
+    <string name="setting_use_subfolders_title">Use subfolders in unified</string>
+    <string name="setting_use_subfolders_sub">Organize by type (Pictures, Movies, etc.) inside the unified folder</string>
+
+    <string name="setting_unified_path_title">Unified saving folder</string>
+    <string name="setting_pictures_path_title">Pictures saving folder</string>
+    <string name="setting_music_path_title">Music saving folder</string>
+    <string name="setting_movies_path_title">Movies saving folder</string>
+    <string name="setting_documents_path_title">Documents saving folder</string>
+
+    <string name="setting_configure_split_folders">Configure Split Folders</string>
+    <string name="setting_split_folders_desc">Manage individual folders for each file category</string>
+
     <string name="setting_random_names_title">Use random file names</string>
     <string name="setting_random_names_sub">Generate randomized output names instead of using the original file name</string>
     <string name="setting_default_path_title">Default saving path</string>
-    <string name="setting_reset_path">Reset to Pictures/MetaJammer</string>
+    <string name="setting_reset_path_pictures">Reset to Pictures/MetaJammer</string>
+    <string name="setting_reset_path_download">Reset to Download/MetaJammer</string>
+    <string name="setting_reset_path_music">Reset to Music/MetaJammer</string>
+    <string name="setting_reset_path_movies">Reset to Movies/MetaJammer</string>
+    <string name="setting_reset_path_documents">Reset to Documents/MetaJammer</string>
     <string name="setting_select_folder">Select Folder</string>
 
     <string name="setting_keep_orientation_title">Keep image orientation</string>

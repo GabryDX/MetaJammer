@@ -88,15 +88,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">הגדרות</string>
-    <string name="category_file_management">ניהול קבצים</string>
+    <string name="category_folder_management">ניהול תיקיות</string>
+    <string name="category_file_management">מטא-דאטה ושמות קבצים</string>
     <string name="category_image_file">תמונה / קובץ</string>
     <string name="category_shared_files">התנהגות קבצים משותפים</string>
     <string name="category_ui">ממשק משתמש</string>
 
+    <string name="setting_folder_structure_title">מבנה תיקיות</string>
+    <string name="setting_folder_structure_unified">מאוחד (תיקייה אחת לכולם)</string>
+    <string name="setting_folder_structure_split">מפוצל (תיקיות נפרדות לפי סוג)</string>
+    <string name="setting_use_subfolders_title">שימוש בתתי-תיקיות במבנה מאוחד</string>
+    <string name="setting_use_subfolders_sub">ארגון לפי סוג (תמונות, סרטים וכו\') בתוך התיקייה המאוחדת</string>
+
+    <string name="setting_unified_path_title">תיקיית שמירה מאוחדת</string>
+    <string name="setting_pictures_path_title">תיקיית שמירת תמונות</string>
+    <string name="setting_music_path_title">תיקיית שמירת מוזיקה</string>
+    <string name="setting_movies_path_title">תיקיית שמירת סרטים</string>
+    <string name="setting_documents_path_title">תיקיית שמירת מסמכים</string>
+
+    <string name="setting_configure_split_folders">הגדרת תיקיות מפוצלות</string>
+    <string name="setting_split_folders_desc">ניהול תיקיות אישיות לכל קטגוריית קבצים</string>
+
     <string name="setting_random_names_title">השתמש בשמות קבצים אקראיים</string>
     <string name="setting_random_names_sub">צור שמות פלט אקראיים במקום להשתמש בשם הקובץ המקורי</string>
     <string name="setting_default_path_title">נתיב שמירה כברירת מחדל</string>
-    <string name="setting_reset_path">אפס ל-Pictures/MetaJammer</string>
+    <string name="setting_reset_path_pictures">איפוס ל-Pictures/MetaJammer</string>
+    <string name="setting_reset_path_download">איפוס ל-Download/MetaJammer</string>
+    <string name="setting_reset_path_music">איפוס ל-Music/MetaJammer</string>
+    <string name="setting_reset_path_movies">איפוס ל-Movies/MetaJammer</string>
+    <string name="setting_reset_path_documents">איפוס ל-Documents/MetaJammer</string>
     <string name="setting_select_folder">בחר תיקייה</string>
 
     <string name="setting_keep_orientation_title">שמור על כיוון התמונה</string>

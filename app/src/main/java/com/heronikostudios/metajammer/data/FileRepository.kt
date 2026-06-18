@@ -91,23 +91,30 @@ class FileRepository(private val context: Context) {
         sourceFile: File,
         displayName: String,
         mimeType: String?,
-        configuredPath: String?
+        configuredPath: String?,
+        subPath: String? = null
     ): Uri? {
-        val path = configuredPath ?: "Pictures/MetaJammer"
+        val path = configuredPath ?: "Download/MetaJammer"
+        val finalRelativePath = if (subPath != null) {
+            if (path.endsWith("/")) "$path$subPath" else "$path/$subPath"
+        } else {
+            path
+        }
 
         return if (path.startsWith("content://")) {
             saveToCustomFolder(
                 treeUri = path.toUri(),
                 sourceFile = sourceFile,
                 displayName = displayName,
-                mimeType = mimeType
+                mimeType = mimeType,
+                subPath = subPath
             )
         } else {
             saveToMediaStorePath(
                 sourceFile = sourceFile,
                 displayName = displayName,
                 mimeType = mimeType,
-                relativePath = path
+                relativePath = finalRelativePath
             )
         }
     }
@@ -159,13 +166,29 @@ class FileRepository(private val context: Context) {
         treeUri: Uri,
         sourceFile: File,
         displayName: String,
-        mimeType: String?
+        mimeType: String?,
+        subPath: String? = null
     ): Uri? {
-        val folder = DocumentFile.fromTreeUri(context, treeUri) ?: run {
+        val rootFolder = DocumentFile.fromTreeUri(context, treeUri) ?: run {
             Timber.e("Failed to get DocumentFile from tree URI: %s", treeUri)
             return null
         }
-        val outFile = folder.createFile(mimeType ?: "application/octet-stream", displayName) ?: run {
+
+        val targetFolder = if (subPath != null) {
+            val parts = subPath.split("/").filter { it.isNotEmpty() }
+            var currentFolder = rootFolder
+            parts.forEach { part ->
+                currentFolder = currentFolder.findFile(part) ?: currentFolder.createDirectory(part) ?: run {
+                    Timber.e("Failed to find or create subdirectory: %s", part)
+                    return null
+                }
+            }
+            currentFolder
+        } else {
+            rootFolder
+        }
+
+        val outFile = targetFolder.createFile(mimeType ?: "application/octet-stream", displayName) ?: run {
             Timber.e("Failed to create file in custom folder")
             return null
         }
@@ -210,11 +233,4 @@ class FileRepository(private val context: Context) {
         }
     }
 
-    /**
-     * Sanitizes a filename to prevent path traversal and remove illegal characters.
-     */
-    @Deprecated("Use SanitizationUtils.sanitizeFileName", replaceWith = ReplaceWith("SanitizationUtils.sanitizeFileName(fileName)"))
-    private fun sanitizeFileName(fileName: String?): String {
-        return SanitizationUtils.sanitizeFileName(fileName)
-    }
 }

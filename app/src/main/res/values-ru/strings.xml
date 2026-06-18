@@ -88,15 +88,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">Настройки</string>
-    <string name="category_file_management">Управление файлами</string>
+    <string name="category_folder_management">Управление папками</string>
+    <string name="category_file_management">Метаданные и имена файлов</string>
     <string name="category_image_file">Изображение / Файл</string>
     <string name="category_shared_files">Поведение общих файлов</string>
     <string name="category_ui">Интерфейс</string>
 
+    <string name="setting_folder_structure_title">Структура папок</string>
+    <string name="setting_folder_structure_unified">Единая (Одна папка для всех)</string>
+    <string name="setting_folder_structure_split">Раздельная (Разные папки по типам)</string>
+    <string name="setting_use_subfolders_title">Использовать подпапки в едином режиме</string>
+    <string name="setting_use_subfolders_sub">Организовать по типам (Изображения, Видео и т.д.) внутри единой папки</string>
+
+    <string name="setting_unified_path_title">Единая папка для сохранения</string>
+    <string name="setting_pictures_path_title">Папка для сохранения изображений</string>
+    <string name="setting_music_path_title">Папка для сохранения музыки</string>
+    <string name="setting_movies_path_title">Папка для сохранения видео</string>
+    <string name="setting_documents_path_title">Папка для сохранения документов</string>
+
+    <string name="setting_configure_split_folders">Настроить раздельные папки</string>
+    <string name="setting_split_folders_desc">Управление отдельными папками для каждой категории файлов</string>
+
     <string name="setting_random_names_title">Использовать случайные имена файлов</string>
     <string name="setting_random_names_sub">Генерировать случайные имена вывода вместо использования исходного имени файла</string>
     <string name="setting_default_path_title">Путь сохранения по умолчанию</string>
-    <string name="setting_reset_path">Сбросить до Pictures/MetaJammer</string>
+    <string name="setting_reset_path_pictures">Сбросить на Pictures/MetaJammer</string>
+    <string name="setting_reset_path_download">Сбросить на Download/MetaJammer</string>
+    <string name="setting_reset_path_music">Сбросить на Music/MetaJammer</string>
+    <string name="setting_reset_path_movies">Сбросить на Movies/MetaJammer</string>
+    <string name="setting_reset_path_documents">Сбросить на Documents/MetaJammer</string>
     <string name="setting_select_folder">Выбрать папку</string>
 
     <string name="setting_keep_orientation_title">Сохранять ориентацию изображения</string>

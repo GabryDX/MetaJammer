@@ -88,15 +88,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">Pengaturan</string>
-    <string name="category_file_management">Manajemen File</string>
+    <string name="category_folder_management">Manajemen Folder</string>
+    <string name="category_file_management">Metadata &amp; Nama File</string>
     <string name="category_image_file">Gambar / File</string>
     <string name="category_shared_files">Perilaku File Bersama</string>
     <string name="category_ui">UI</string>
 
+    <string name="setting_folder_structure_title">Struktur Folder</string>
+    <string name="setting_folder_structure_unified">Terpadu (Satu folder untuk semua)</string>
+    <string name="setting_folder_structure_split">Terpisah (Folder terpisah berdasarkan tipe)</string>
+    <string name="setting_use_subfolders_title">Gunakan subfolder dalam mode terpadu</string>
+    <string name="setting_use_subfolders_sub">Atur berdasarkan tipe (Gambar, Film, dll.) di dalam folder terpadu</string>
+
+    <string name="setting_unified_path_title">Folder penyimpanan terpadu</string>
+    <string name="setting_pictures_path_title">Folder penyimpanan Gambar</string>
+    <string name="setting_music_path_title">Folder penyimpanan Musik</string>
+    <string name="setting_movies_path_title">Folder penyimpanan Film</string>
+    <string name="setting_documents_path_title">Folder penyimpanan Dokumen</string>
+
+    <string name="setting_configure_split_folders">Konfigurasi Folder Terpisah</string>
+    <string name="setting_split_folders_desc">Kelola folder individual untuk setiap kategori file</string>
+
     <string name="setting_random_names_title">Gunakan nama file acak</string>
     <string name="setting_random_names_sub">Hasilkan nama output acak alih-alih menggunakan nama file asli</string>
     <string name="setting_default_path_title">Jalur penyimpanan default</string>
-    <string name="setting_reset_path">Atur ulang ke Pictures/MetaJammer</string>
+    <string name="setting_reset_path_pictures">Setel ulang ke Pictures/MetaJammer</string>
+    <string name="setting_reset_path_download">Setel ulang ke Download/MetaJammer</string>
+    <string name="setting_reset_path_music">Setel ulang ke Music/MetaJammer</string>
+    <string name="setting_reset_path_movies">Setel ulang ke Movies/MetaJammer</string>
+    <string name="setting_reset_path_documents">Setel ulang ke Documents/MetaJammer</string>
     <string name="setting_select_folder">Pilih Folder</string>
 
     <string name="setting_keep_orientation_title">Pertahankan orientasi gambar</string>

@@ -17,7 +17,7 @@
     <string name="dismiss">Dispensar</string>
     <string name="warning">Aviso</string>
     <string name="none">Nenhum</string>
-    <string name="unknown">desconhecido</string>
+    <string name="unknown">desconocido</string>
     <string name="delete">Eliminar</string>
 
     <!-- HomeScreen -->
@@ -88,15 +88,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">Definições</string>
-    <string name="category_file_management">Gestão de ficheiros</string>
+    <string name="category_folder_management">Gestão de pastas</string>
+    <string name="category_file_management">Metadados e nomes de ficheiros</string>
     <string name="category_image_file">Imagem / Ficheiro</string>
     <string name="category_shared_files">Comportamento de ficheiros partilhados</string>
     <string name="category_ui">Interface do utilizador</string>
 
+    <string name="setting_folder_structure_title">Estrutura de pastas</string>
+    <string name="setting_folder_structure_unified">Unificada (Uma pasta para todos)</string>
+    <string name="setting_folder_structure_split">Dividida (Pastas separadas por tipo)</string>
+    <string name="setting_use_subfolders_title">Usar subpastas no modo unificado</string>
+    <string name="setting_use_subfolders_sub">Organizar por tipo (Imagens, Filmes, etc.) dentro da pasta unificada</string>
+
+    <string name="setting_unified_path_title">Pasta de gravação unificada</string>
+    <string name="setting_pictures_path_title">Pasta de gravação de Imagens</string>
+    <string name="setting_music_path_title">Pasta de gravação de Música</string>
+    <string name="setting_movies_path_title">Pasta de gravação de Filmes</string>
+    <string name="setting_documents_path_title">Pasta de gravação de Documentos</string>
+
+    <string name="setting_configure_split_folders">Configurar pastas divididas</string>
+    <string name="setting_split_folders_desc">Gerir pastas individuais para cada categoria de ficheiro</string>
+
     <string name="setting_random_names_title">Utilizar nomes de ficheiros aleatórios</string>
-    <string name="setting_random_names_sub">Gerar nomes de saída aleatórios em vez de utilizar o nome original do ficheiro</string>
+    <string name="setting_random_names_sub">Gerar nomes de saída aleatórios envez de utilizar o nome original do ficheiro</string>
     <string name="setting_default_path_title">Caminho de gravação predefinido</string>
-    <string name="setting_reset_path">Repor para Pictures/MetaJammer</string>
+    <string name="setting_reset_path_pictures">Repor para Pictures/MetaJammer</string>
+    <string name="setting_reset_path_download">Repor para Download/MetaJammer</string>
+    <string name="setting_reset_path_music">Repor para Music/MetaJammer</string>
+    <string name="setting_reset_path_movies">Repor para Movies/MetaJammer</string>
+    <string name="setting_reset_path_documents">Repor para Documents/MetaJammer</string>
     <string name="setting_select_folder">Selecionar pasta</string>
 
     <string name="setting_keep_orientation_title">Manter orientação da imagem</string>

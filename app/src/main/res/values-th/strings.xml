@@ -88,15 +88,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">การตั้งค่า</string>
-    <string name="category_file_management">การจัดการไฟล์</string>
+    <string name="category_folder_management">การจัดการโฟลเดอร์</string>
+    <string name="category_file_management">ข้อมูลเมตาและชื่อไฟล์</string>
     <string name="category_image_file">รูปภาพ / ไฟล์</string>
     <string name="category_shared_files">พฤติกรรมไฟล์ที่แชร์</string>
     <string name="category_ui">UI</string>
 
+    <string name="setting_folder_structure_title">โครงสร้างโฟลเดอร์</string>
+    <string name="setting_folder_structure_unified">แบบรวม (โฟลเดอร์เดียวสำหรับทั้งหมด)</string>
+    <string name="setting_folder_structure_split">แบบแยก (แยกโฟลเดอร์ตามประเภท)</string>
+    <string name="setting_use_subfolders_title">ใช้โฟลเดอร์ย่อยในการรวมโฟลเดอร์</string>
+    <string name="setting_use_subfolders_sub">จัดระเบียบตามประเภท (รูปภาพ, ภาพยนตร์ ฯลฯ) ภายในโฟลเดอร์ที่รวมไว้</string>
+
+    <string name="setting_unified_path_title">โฟลเดอร์บันทึกแบบรวม</string>
+    <string name="setting_pictures_path_title">โฟลเดอร์บันทึกรูปภาพ</string>
+    <string name="setting_music_path_title">โฟลเดอร์บันทึกเพลง</string>
+    <string name="setting_movies_path_title">โฟลเดอร์บันทึกภาพยนตร์</string>
+    <string name="setting_documents_path_title">โฟลเดอร์บันทึกเอกสาร</string>
+
+    <string name="setting_configure_split_folders">กำหนดค่าโฟลเดอร์แยก</string>
+    <string name="setting_split_folders_desc">จัดการโฟลเดอร์แยกสำหรับแต่ละหมวดหมู่ไฟล์</string>
+
     <string name="setting_random_names_title">ใช้ชื่อไฟล์แบบสุ่ม</string>
     <string name="setting_random_names_sub">สร้างชื่อไฟล์ส่งออกแบบสุ่มแทนการใช้ชื่อไฟล์เดิม</string>
     <string name="setting_default_path_title">เส้นทางการบันทึกเริ่มต้น</string>
-    <string name="setting_reset_path">รีเซ็ตเป็น Pictures/MetaJammer</string>
+    <string name="setting_reset_path_pictures">รีเซ็ตเป็น Pictures/MetaJammer</string>
+    <string name="setting_reset_path_download">รีเซ็ตเป็น Download/MetaJammer</string>
+    <string name="setting_reset_path_music">รีเซ็ตเป็น Music/MetaJammer</string>
+    <string name="setting_reset_path_movies">รีเซ็ตเป็น Movies/MetaJammer</string>
+    <string name="setting_reset_path_documents">รีเซ็ตเป็น Documents/MetaJammer</string>
     <string name="setting_select_folder">เลือกโฟลเดอร์</string>
 
     <string name="setting_keep_orientation_title">คงทิศทางของภาพ</string>

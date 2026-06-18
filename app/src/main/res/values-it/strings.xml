@@ -88,15 +88,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">Impostazioni</string>
-    <string name="category_file_management">Gestione file</string>
+    <string name="category_folder_management">Gestione cartelle</string>
+    <string name="category_file_management">Metadati e nomi file</string>
     <string name="category_image_file">Immagine / File</string>
     <string name="category_shared_files">Comportamento file condivisi</string>
     <string name="category_ui">Interfaccia utente</string>
 
+    <string name="setting_folder_structure_title">Struttura cartelle</string>
+    <string name="setting_folder_structure_unified">Unificata (Singola cartella per tutto)</string>
+    <string name="setting_folder_structure_split">Separata (Cartelle diverse per tipo)</string>
+    <string name="setting_use_subfolders_title">Usa sottocartelle in unificata</string>
+    <string name="setting_use_subfolders_sub">Organizza per tipo (Immagini, Film, ecc.) all\'interno della cartella unificata</string>
+
+    <string name="setting_unified_path_title">Cartella di salvataggio unificata</string>
+    <string name="setting_pictures_path_title">Cartella di salvataggio Immagini</string>
+    <string name="setting_music_path_title">Cartella di salvataggio Musica</string>
+    <string name="setting_movies_path_title">Cartella di salvataggio Film</string>
+    <string name="setting_documents_path_title">Cartella di salvataggio Documenti</string>
+
+    <string name="setting_configure_split_folders">Configura cartelle separate</string>
+    <string name="setting_split_folders_desc">Gestisci le singole cartelle per ogni categoria di file</string>
+
     <string name="setting_random_names_title">Usa nomi di file casuali</string>
     <string name="setting_random_names_sub">Genera nomi di output casuali invece di usare il nome del file originale</string>
     <string name="setting_default_path_title">Percorso di salvataggio predefinito</string>
-    <string name="setting_reset_path">Ripristina a Pictures/MetaJammer</string>
+    <string name="setting_reset_path_pictures">Ripristina a Pictures/MetaJammer</string>
+    <string name="setting_reset_path_download">Ripristina a Download/MetaJammer</string>
+    <string name="setting_reset_path_music">Ripristina a Music/MetaJammer</string>
+    <string name="setting_reset_path_movies">Ripristina a Movies/MetaJammer</string>
+    <string name="setting_reset_path_documents">Ripristina a Documents/MetaJammer</string>
     <string name="setting_select_folder">Seleziona cartella</string>
 
     <string name="setting_keep_orientation_title">Mantieni orientamento immagine</string>

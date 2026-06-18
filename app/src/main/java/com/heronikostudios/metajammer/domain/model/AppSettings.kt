@@ -2,7 +2,13 @@ package com.heronikostudios.metajammer.domain.model
 
 data class AppSettings(
     val useRandomFileNames: Boolean = false,
-    val defaultSavingPath: String? = "Pictures/MetaJammer",
+    val folderStructure: FolderStructure = FolderStructure.SPLIT,
+    val useSubfoldersInUnified: Boolean = true,
+    val unifiedSavingPath: String? = "Download/MetaJammer",
+    val picturesSavingPath: String? = "Pictures/MetaJammer",
+    val musicSavingPath: String? = "Music/MetaJammer",
+    val moviesSavingPath: String? = "Movies/MetaJammer",
+    val documentsSavingPath: String? = "Documents/MetaJammer",
     val keepImageOrientation: Boolean = true,
     val shareResultAsDefault: Boolean = false,
     val defaultPrefix: String = "",

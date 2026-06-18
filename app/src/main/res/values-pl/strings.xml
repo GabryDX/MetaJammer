@@ -88,15 +88,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">Ustawienia</string>
-    <string name="category_file_management">Zarządzanie plikami</string>
+    <string name="category_folder_management">Zarządzanie folderami</string>
+    <string name="category_file_management">Metadane i nazwy plików</string>
     <string name="category_image_file">Obraz / Plik</string>
     <string name="category_shared_files">Zachowanie udostępnionych plików</string>
     <string name="category_ui">Interfejs użytkownika</string>
 
+    <string name="setting_folder_structure_title">Struktura folderów</string>
+    <string name="setting_folder_structure_unified">Jednolita (Jeden folder dla wszystkich)</string>
+    <string name="setting_folder_structure_split">Podzielona (Oddzielne foldery według typu)</string>
+    <string name="setting_use_subfolders_title">Używaj podfolderów w trybie jednolitym</string>
+    <string name="setting_use_subfolders_sub">Organizuj według typu (Obrazy, Filmy itp.) w folderze jednolitym</string>
+
+    <string name="setting_unified_path_title">Jednolity folder zapisu</string>
+    <string name="setting_pictures_path_title">Folder zapisu Obrazów</string>
+    <string name="setting_music_path_title">Folder zapisu Muzyki</string>
+    <string name="setting_movies_path_title">Folder zapisu Filmów</string>
+    <string name="setting_documents_path_title">Folder zapisu Dokumentów</string>
+
+    <string name="setting_configure_split_folders">Konfiguruj oddzielne foldery</string>
+    <string name="setting_split_folders_desc">Zarządzaj poszczególnymi folderami dla każdej kategorii plików</string>
+
     <string name="setting_random_names_title">Używaj losowych nazw plików</string>
     <string name="setting_random_names_sub">Generuj losowe nazwy wyjściowe zamiast używać oryginalnej nazwy pliku</string>
     <string name="setting_default_path_title">Domyślna ścieżka zapisu</string>
-    <string name="setting_reset_path">Resetuj do Pictures/MetaJammer</string>
+    <string name="setting_reset_path_pictures">Przywróć Pictures/MetaJammer</string>
+    <string name="setting_reset_path_download">Przywróć Download/MetaJammer</string>
+    <string name="setting_reset_path_music">Przywróć Music/MetaJammer</string>
+    <string name="setting_reset_path_movies">Przywróć Movies/MetaJammer</string>
+    <string name="setting_reset_path_documents">Przywróć Documents/MetaJammer</string>
     <string name="setting_select_folder">Wybierz folder</string>
 
     <string name="setting_keep_orientation_title">Zachowaj orientację obrazu</string>

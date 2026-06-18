@@ -87,8 +87,38 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
         viewModelScope.launch {
-            settingsRepository.defaultSavingPathFlow.collect { value ->
-                _appSettings.update { it.copy(defaultSavingPath = value) }
+            settingsRepository.folderStructureFlow.collect { value ->
+                _appSettings.update { it.copy(folderStructure = value) }
+            }
+        }
+        viewModelScope.launch {
+            settingsRepository.useSubfoldersInUnifiedFlow.collect { value ->
+                _appSettings.update { it.copy(useSubfoldersInUnified = value) }
+            }
+        }
+        viewModelScope.launch {
+            settingsRepository.unifiedSavingPathFlow.collect { value ->
+                _appSettings.update { it.copy(unifiedSavingPath = value) }
+            }
+        }
+        viewModelScope.launch {
+            settingsRepository.picturesSavingPathFlow.collect { value ->
+                _appSettings.update { it.copy(picturesSavingPath = value) }
+            }
+        }
+        viewModelScope.launch {
+            settingsRepository.musicSavingPathFlow.collect { value ->
+                _appSettings.update { it.copy(musicSavingPath = value) }
+            }
+        }
+        viewModelScope.launch {
+            settingsRepository.moviesSavingPathFlow.collect { value ->
+                _appSettings.update { it.copy(moviesSavingPath = value) }
+            }
+        }
+        viewModelScope.launch {
+            settingsRepository.documentsSavingPathFlow.collect { value ->
+                _appSettings.update { it.copy(documentsSavingPath = value) }
             }
         }
         viewModelScope.launch {
@@ -454,19 +484,26 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun enqueueBackgroundProcessing(files: List<SelectedFile>, mode: ProcessingMode) {
         val plans = _replacementPlans.value.mapKeys { it.key.toString() }
-        val plansFile = File(appContext.cacheDir, "processing_plans_${System.currentTimeMillis()}.json")
+        val plansFile = File(appContext?.cacheDir, "processing_plans_${System.currentTimeMillis()}.json")
         plansFile.writeText(Json.encodeToString(plans))
 
+        val settings = _appSettings.value
         val inputData = Data.Builder()
             .putStringArray(MetadataProcessingWorker.KEY_INPUT_URIS, files.map { it.uri.toString() }.toTypedArray())
             .putString(MetadataProcessingWorker.KEY_MODE, mode.name)
-            .putBoolean(MetadataProcessingWorker.KEY_KEEP_ORIENTATION, _appSettings.value.keepImageOrientation)
-            .putString(MetadataProcessingWorker.KEY_THUMBNAIL_HANDLING, _appSettings.value.thumbnailHandling.name)
+            .putBoolean(MetadataProcessingWorker.KEY_KEEP_ORIENTATION, settings.keepImageOrientation)
+            .putString(MetadataProcessingWorker.KEY_THUMBNAIL_HANDLING, settings.thumbnailHandling.name)
             .putString(MetadataProcessingWorker.KEY_PLANS_FILE_PATH, plansFile.absolutePath)
-            .putString(MetadataProcessingWorker.KEY_SAVING_PATH, _appSettings.value.defaultSavingPath)
-            .putString(MetadataProcessingWorker.KEY_DEFAULT_PREFIX, _appSettings.value.defaultPrefix)
-            .putString(MetadataProcessingWorker.KEY_DEFAULT_SUFFIX, _appSettings.value.defaultSuffix)
-            .putBoolean(MetadataProcessingWorker.KEY_USE_RANDOM_NAMES, _appSettings.value.useRandomFileNames)
+            .putString(MetadataProcessingWorker.KEY_FOLDER_STRUCTURE, settings.folderStructure.name)
+            .putBoolean(MetadataProcessingWorker.KEY_USE_SUBFOLDERS_IN_UNIFIED, settings.useSubfoldersInUnified)
+            .putString(MetadataProcessingWorker.KEY_UNIFIED_SAVING_PATH, settings.unifiedSavingPath)
+            .putString(MetadataProcessingWorker.KEY_PICTURES_SAVING_PATH, settings.picturesSavingPath)
+            .putString(MetadataProcessingWorker.KEY_MUSIC_SAVING_PATH, settings.musicSavingPath)
+            .putString(MetadataProcessingWorker.KEY_MOVIES_SAVING_PATH, settings.moviesSavingPath)
+            .putString(MetadataProcessingWorker.KEY_DOCUMENTS_SAVING_PATH, settings.documentsSavingPath)
+            .putString(MetadataProcessingWorker.KEY_DEFAULT_PREFIX, settings.defaultPrefix)
+            .putString(MetadataProcessingWorker.KEY_DEFAULT_SUFFIX, settings.defaultSuffix)
+            .putBoolean(MetadataProcessingWorker.KEY_USE_RANDOM_NAMES, settings.useRandomFileNames)
             .build()
 
         val workRequest = OneTimeWorkRequestBuilder<MetadataProcessingWorker>()
@@ -583,24 +620,45 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun saveProcessedFilesToDefault(): List<Uri> {
-        // Since this involves I/O, it's safer on Dispatchers.IO, but currently 
-        // it's called from Main and returns a value. 
-        // We'll leave the call as is for now as it's relatively light MediaStore I/O, 
-        // but ideally use a Flow or deferred result.
         val results = _processedFiles.value.mapNotNull { (selectedFile, processedFile) ->
+            val (configuredPath, subPath) = resolveSavingPath(selectedFile.mimeType)
             saveFileUseCase.saveToDefaultFolder(
                 sourceFile = processedFile,
                 displayName = buildOutputName(selectedFile.displayName),
                 mimeType = selectedFile.mimeType,
-                configuredPath = _appSettings.value.defaultSavingPath
+                configuredPath = configuredPath,
+                subPath = subPath
             )
         }
         if (results.isNotEmpty()) {
-            _message.value = "Saved ${results.size} file(s) to default folder"
+            _message.value = "Saved ${results.size} file(s)"
         } else if (_processedFiles.value.isNotEmpty()) {
             _message.value = "Failed to save files"
         }
         return results
+    }
+
+    private fun resolveSavingPath(mimeType: String?): Pair<String?, String?> {
+        val settings = _appSettings.value
+        return if (settings.folderStructure == FolderStructure.UNIFIED) {
+            val subPath = if (settings.useSubfoldersInUnified) {
+                when {
+                    mimeType?.startsWith("image/") == true -> "Pictures"
+                    mimeType?.startsWith("video/") == true -> "Movies"
+                    mimeType?.startsWith("audio/") == true -> "Music"
+                    else -> "Documents"
+                }
+            } else null
+            settings.unifiedSavingPath to subPath
+        } else {
+            val path = when {
+                mimeType?.startsWith("image/") == true -> settings.picturesSavingPath
+                mimeType?.startsWith("video/") == true -> settings.moviesSavingPath
+                mimeType?.startsWith("audio/") == true -> settings.musicSavingPath
+                else -> settings.documentsSavingPath
+            }
+            path to null
+        }
     }
 
     fun saveProcessedFilesToCustom(treeUri: Uri): List<Uri> {
@@ -651,27 +709,89 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun persistAndSetDefaultSavingPath(uri: Uri?) {
+    fun persistAndSetUnifiedSavingPath(uri: Uri?) {
         if (uri == null) {
             viewModelScope.launch {
-                settingsRepository.setDefaultSavingPathString("Pictures/MetaJammer")
-                _message.value = "Default saving path reset to Pictures/MetaJammer"
+                settingsRepository.setUnifiedSavingPath(null)
+                _message.value = "Unified saving path reset to Download/MetaJammer"
             }
             return
         }
+        takePersistablePermission(uri)
+        viewModelScope.launch {
+            settingsRepository.setUnifiedSavingPath(uri)
+            _message.value = "Unified saving path updated"
+        }
+    }
 
+    fun persistAndSetPicturesSavingPath(uri: Uri?) {
+        if (uri == null) {
+            viewModelScope.launch {
+                settingsRepository.setPicturesSavingPath(null)
+                _message.value = "Pictures saving path reset to Pictures/MetaJammer"
+            }
+            return
+        }
+        takePersistablePermission(uri)
+        viewModelScope.launch {
+            settingsRepository.setPicturesSavingPath(uri)
+            _message.value = "Pictures saving path updated"
+        }
+    }
+
+    fun persistAndSetMusicSavingPath(uri: Uri?) {
+        if (uri == null) {
+            viewModelScope.launch {
+                settingsRepository.setMusicSavingPath(null)
+                _message.value = "Music saving path reset to Music/MetaJammer"
+            }
+            return
+        }
+        takePersistablePermission(uri)
+        viewModelScope.launch {
+            settingsRepository.setMusicSavingPath(uri)
+            _message.value = "Music saving path updated"
+        }
+    }
+
+    fun persistAndSetMoviesSavingPath(uri: Uri?) {
+        if (uri == null) {
+            viewModelScope.launch {
+                settingsRepository.setMoviesSavingPath(null)
+                _message.value = "Movies saving path reset to Movies/MetaJammer"
+            }
+            return
+        }
+        takePersistablePermission(uri)
+        viewModelScope.launch {
+            settingsRepository.setMoviesSavingPath(uri)
+            _message.value = "Movies saving path updated"
+        }
+    }
+
+    fun persistAndSetDocumentsSavingPath(uri: Uri?) {
+        if (uri == null) {
+            viewModelScope.launch {
+                settingsRepository.setDocumentsSavingPath(null)
+                _message.value = "Documents saving path reset to Documents/MetaJammer"
+            }
+            return
+        }
+        takePersistablePermission(uri)
+        viewModelScope.launch {
+            settingsRepository.setDocumentsSavingPath(uri)
+            _message.value = "Documents saving path updated"
+        }
+    }
+
+    private fun takePersistablePermission(uri: Uri) {
         if (uri.toString().startsWith("content://")) {
             runCatching {
-                appContext.contentResolver.takePersistableUriPermission(
+                appContext?.contentResolver?.takePersistableUriPermission(
                     uri,
                     Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                 )
             }
-        }
-
-        viewModelScope.launch {
-            settingsRepository.setDefaultSavingPath(uri)
-            _message.value = "Default saving path updated"
         }
     }
 
@@ -701,6 +821,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setUseRandomFileNames(enabled: Boolean) = launchSettingUpdate {
         settingsRepository.setUseRandomFileNames(enabled)
+    }
+
+    fun setFolderStructure(structure: FolderStructure) = launchSettingUpdate {
+        settingsRepository.setFolderStructure(structure)
+    }
+
+    fun setUseSubfoldersInUnified(enabled: Boolean) = launchSettingUpdate {
+        settingsRepository.setUseSubfoldersInUnified(enabled)
     }
 
     fun setKeepImageOrientation(enabled: Boolean) = launchSettingUpdate {

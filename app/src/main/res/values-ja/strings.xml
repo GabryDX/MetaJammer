@@ -88,15 +88,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">設定</string>
-    <string name="category_file_management">ファイル管理</string>
+    <string name="category_folder_management">フォルダ管理</string>
+    <string name="category_file_management">メタデータとファイル名</string>
     <string name="category_image_file">画像 / ファイル</string>
     <string name="category_shared_files">共有ファイルの動作</string>
     <string name="category_ui">UI</string>
 
+    <string name="setting_folder_structure_title">フォルダ構造</string>
+    <string name="setting_folder_structure_unified">統合（すべてを1つのフォルダに）</string>
+    <string name="setting_folder_structure_split">分割（タイプ別に個別のフォルダ）</string>
+    <string name="setting_use_subfolders_title">統合フォルダ内でサブフォルダを使用する</string>
+    <string name="setting_use_subfolders_sub">統合フォルダ内でタイプ別（画像、動画など）に整理する</string>
+
+    <string name="setting_unified_path_title">統合保存フォルダ</string>
+    <string name="setting_pictures_path_title">画像保存フォルダ</string>
+    <string name="setting_music_path_title">音楽保存フォルダ</string>
+    <string name="setting_movies_path_title">動画保存フォルダ</string>
+    <string name="setting_documents_path_title">ドキュメント保存フォルダ</string>
+
+    <string name="setting_configure_split_folders">分割フォルダの設定</string>
+    <string name="setting_split_folders_desc">ファイルカテゴリごとに個別のフォルダを管理する</string>
+
     <string name="setting_random_names_title">ランダムなファイル名を使用</string>
     <string name="setting_random_names_sub">元のファイル名を使用する代わりに、ランダムな出力名を生成します</string>
     <string name="setting_default_path_title">デフォルトの保存パス</string>
-    <string name="setting_reset_path">Pictures/MetaJammer にリセット</string>
+    <string name="setting_reset_path_pictures">Pictures/MetaJammer にリセット</string>
+    <string name="setting_reset_path_download">Download/MetaJammer にリセット</string>
+    <string name="setting_reset_path_music">Music/MetaJammer にリセット</string>
+    <string name="setting_reset_path_movies">Movies/MetaJammer にリセット</string>
+    <string name="setting_reset_path_documents">Documents/MetaJammer にリセット</string>
     <string name="setting_select_folder">フォルダを選択</string>
 
     <string name="setting_keep_orientation_title">画像の向きを維持</string>
