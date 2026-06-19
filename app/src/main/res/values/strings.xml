@@ -56,6 +56,8 @@
     <string name="preview_of_changes">Preview of Changes</string>
     <string name="no_preview_available">No preview available</string>
     <string name="change_location_map">Change Location on Map</string>
+    <string name="process_and_continue">Process and Continue</string>
+    <string name="processing_complete">Processing Complete</string>
     <string name="process_files">Process Files</string>
     <string name="processing_foreground">Processing in foreground...</string>
     <string name="background_progress">Background Progress: %1$d%%</string>

@@ -56,6 +56,8 @@
     <string name="preview_of_changes">תצוגה מקדימה של שינויים</string>
     <string name="no_preview_available">אין תצוגה מקדימה זמינה</string>
     <string name="change_location_map">שנה מיקום במפה</string>
+    <string name="process_and_continue">עיבוד והמשך</string>
+    <string name="processing_complete">העיבוד הושלם</string>
     <string name="process_files">עבד קבצים</string>
     <string name="processing_foreground">מעבד בקדמה...</string>
     <string name="background_progress">התקדמות ברקע: %1$d%%</string>

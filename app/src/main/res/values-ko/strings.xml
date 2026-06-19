@@ -56,6 +56,8 @@
     <string name="preview_of_changes">변경 사항 미리보기</string>
     <string name="no_preview_available">미리보기 불가</string>
     <string name="change_location_map">지도에서 위치 변경</string>
+    <string name="process_and_continue">처리 및 계속</string>
+    <string name="processing_complete">처리 완료</string>
     <string name="process_files">파일 처리</string>
     <string name="processing_foreground">포그라운드에서 처리 중...</string>
     <string name="background_progress">백그라운드 진행률: %1$d%%</string>

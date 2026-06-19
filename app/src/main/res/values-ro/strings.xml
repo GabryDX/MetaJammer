@@ -56,6 +56,8 @@
     <string name="preview_of_changes">Previzualizare modificări</string>
     <string name="no_preview_available">Nicio previzualizare disponibilă</string>
     <string name="change_location_map">Schimbă locația pe hartă</string>
+    <string name="process_and_continue">Procesează și continuă</string>
+    <string name="processing_complete">Procesare finalizată</string>
     <string name="process_files">Procesează fișierele</string>
     <string name="processing_foreground">Se procesează în prim-plan...</string>
     <string name="background_progress">Progres pe fundal: %1$d%%</string>

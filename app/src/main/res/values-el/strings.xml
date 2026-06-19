@@ -56,6 +56,8 @@
     <string name="preview_of_changes">Προεπισκόπηση αλλαγών</string>
     <string name="no_preview_available">Μη διαθέσιμη προεπισκόπηση</string>
     <string name="change_location_map">Αλλαγή τοποθεσίας στον χάρτη</string>
+    <string name="process_and_continue">Επεξεργασία και συνέχεια</string>
+    <string name="processing_complete">Η επεξεργασία ολοκληρώθηκε</string>
     <string name="process_files">Επεξεργασία αρχείων</string>
     <string name="processing_foreground">Επεξεργασία στο προσκήνιο...</string>
     <string name="background_progress">Πρόοδος στο παρασκήνιο: %1$d%%</string>

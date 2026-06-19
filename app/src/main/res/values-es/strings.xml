@@ -56,6 +56,8 @@
     <string name="preview_of_changes">Vista previa de cambios</string>
     <string name="no_preview_available">Vista previa no disponible</string>
     <string name="change_location_map">Cambiar ubicación en el mapa</string>
+    <string name="process_and_continue">Procesar y continuar</string>
+    <string name="processing_complete">Procesamiento completado</string>
     <string name="process_files">Procesar archivos</string>
     <string name="processing_foreground">Procesando en primer plano...</string>
     <string name="background_progress">Progreso en segundo plano: %1$d%%</string>

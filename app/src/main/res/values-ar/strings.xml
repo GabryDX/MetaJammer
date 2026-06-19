@@ -56,6 +56,8 @@
     <string name="preview_of_changes">معاينة التغييرات</string>
     <string name="no_preview_available">لا توجد معاينة متاحة</string>
     <string name="change_location_map">تغيير الموقع على الخريطة</string>
+    <string name="process_and_continue">معالجة ومتابعة</string>
+    <string name="processing_complete">اكتملت المعالجة</string>
     <string name="process_files">معالجة الملفات</string>
     <string name="processing_foreground">جاري المعالجة في الواجهة...</string>
     <string name="background_progress">تقدم الخلفية: %1$d%%</string>

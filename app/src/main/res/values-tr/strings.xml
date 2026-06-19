@@ -56,6 +56,8 @@
     <string name="preview_of_changes">Değişikliklerin Önizlemesi</string>
     <string name="no_preview_available">Önizleme mevcut değil</string>
     <string name="change_location_map">Haritada Konumu Değiştir</string>
+    <string name="process_and_continue">İşle ve devam et</string>
+    <string name="processing_complete">İşlem tamamlandı</string>
     <string name="process_files">Dosyaları İşle</string>
     <string name="processing_foreground">Ön planda işleniyor...</string>
     <string name="background_progress">Arka Plan İlerlemesi: %1$d%%</string>

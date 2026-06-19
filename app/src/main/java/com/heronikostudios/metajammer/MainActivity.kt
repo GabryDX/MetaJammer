@@ -238,6 +238,13 @@ fun MetaJammerApp(
         }
     }
 
+    val workInfo by viewModel.workInfo.collectAsStateWithLifecycle()
+    LaunchedEffect(workInfo) {
+        if (currentStep == AppStep.PROCESS && workInfo?.state == WorkInfo.State.SUCCEEDED) {
+            navigateTo(AppStep.OUTPUT)
+        }
+    }
+
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
@@ -345,6 +352,8 @@ fun MetaJammerApp(
                 }
 
                 AppStep.PROCESS -> {
+                    val hasProcessedFiles = processedFiles.isNotEmpty() || viewModel.workInfo.collectAsStateWithLifecycle().value?.state == WorkInfo.State.SUCCEEDED
+
                     ProcessingScreen(
                         selectedFiles = selectedFiles,
                         selectedMode = selectedMode,
@@ -353,9 +362,14 @@ fun MetaJammerApp(
                         workInfo = viewModel.workInfo.collectAsStateWithLifecycle().value,
                         onModeSelected = viewModel::setProcessingMode,
                         onRegeneratePlans = viewModel::regeneratePoisonPlans,
-                        onProcess = viewModel::processFiles,
-                        onNext = {
-                            if (processedFiles.isNotEmpty()) navigateTo(AppStep.OUTPUT)
+                        onProcess = {
+                            if (hasProcessedFiles) {
+                                navigateTo(AppStep.OUTPUT)
+                            } else {
+                                viewModel.processFiles(onSuccess = {
+                                    navigateTo(AppStep.OUTPUT)
+                                })
+                            }
                         },
                         onEditLocation = { uri ->
                             uriToEditLocation = uri
@@ -365,7 +379,7 @@ fun MetaJammerApp(
                                 showInternetPermissionExplanation = true
                             }
                         },
-                        hasProcessedFiles = processedFiles.isNotEmpty() || viewModel.workInfo.collectAsStateWithLifecycle().value?.state == WorkInfo.State.SUCCEEDED,
+                        hasProcessedFiles = hasProcessedFiles,
                         modifier = Modifier.weight(1f)
                     )
                 }

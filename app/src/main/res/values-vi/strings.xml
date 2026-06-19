@@ -56,6 +56,8 @@
     <string name="preview_of_changes">Xem trước thay đổi</string>
     <string name="no_preview_available">Không có bản xem trước</string>
     <string name="change_location_map">Thay đổi vị trí trên bản đồ</string>
+    <string name="process_and_continue">Xử lý và tiếp tục</string>
+    <string name="processing_complete">Xử lý hoàn tất</string>
     <string name="process_files">Xử lý tệp</string>
     <string name="processing_foreground">Đang xử lý ở chế độ hiện...</string>
     <string name="background_progress">Tiến độ nền: %1$d%%</string>

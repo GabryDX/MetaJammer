@@ -35,7 +35,6 @@ fun ProcessingScreen(
     onModeSelected: (ProcessingMode) -> Unit,
     onRegeneratePlans: () -> Unit,
     onProcess: () -> Unit,
-    onNext: () -> Unit,
     onEditLocation: (Uri) -> Unit,
     hasProcessedFiles: Boolean,
     modifier: Modifier = Modifier
@@ -149,7 +148,7 @@ fun ProcessingScreen(
             enabled = !processing && selectedMode != null,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(stringResource(R.string.process_files))
+            Text(if (hasProcessedFiles) stringResource(R.string.continue_label) else stringResource(R.string.process_and_continue))
         }
 
         if (processing) {
@@ -176,15 +175,6 @@ fun ProcessingScreen(
                     )
                     Text(stringResource(R.string.background_progress, progress), style = MaterialTheme.typography.bodySmall)
                 }
-            }
-        }
-
-        if (hasProcessedFiles) {
-            Button(
-                onClick = onNext,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(stringResource(R.string.continue_to_output))
             }
         }
     }

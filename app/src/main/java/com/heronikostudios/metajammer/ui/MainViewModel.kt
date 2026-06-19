@@ -286,6 +286,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun setProcessingMode(mode: ProcessingMode) {
+        if (_selectedMode.value != mode) {
+            clearProcessedFiles()
+        }
         _selectedMode.value = mode
         if (mode == ProcessingMode.POISON_METADATA && _replacementPlans.value.isEmpty()) {
             _replacementPlans.value = _selectedFiles.value.associate { selectedFile ->
@@ -321,6 +324,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             longitudeRef = longitudeRef
         )
         _replacementPlans.value = currentPlans
+        clearProcessedFiles()
         generateChangePreview()
     }
 
@@ -338,6 +342,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 MetadataReplacementGenerator.generatePlan(selectedFile.mimeType)
             }
         }
+        clearProcessedFiles()
         generateChangePreview()
     }
 
@@ -442,7 +447,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun processFiles() {
+    fun processFiles(onSuccess: (() -> Unit)? = null) {
         val files = _selectedFiles.value
         val mode = _selectedMode.value
 
@@ -478,6 +483,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }.onSuccess {
                 _processedFiles.value = it
                 _message.value = "Processing complete"
+                onSuccess?.invoke()
             }.onFailure {
                 Timber.e(it, "Manual processing failed")
                 _message.value = "Processing failed: ${it.message}"
@@ -837,6 +843,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setKeepImageOrientation(enabled: Boolean) = launchSettingUpdate {
         settingsRepository.setKeepImageOrientation(enabled)
+        clearProcessedFiles()
         if (_selectedMode.value != null) generateChangePreview()
     }
 
@@ -874,6 +881,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setThumbnailHandling(handling: ThumbnailHandling) = launchSettingUpdate {
         settingsRepository.setThumbnailHandling(handling)
+        clearProcessedFiles()
     }
 
     fun setAllowInternetForMap(allowed: Boolean) = launchSettingUpdate {
@@ -882,6 +890,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setUseNearbyScramble(enabled: Boolean) = launchSettingUpdate {
         settingsRepository.setUseNearbyScramble(enabled)
+        clearProcessedFiles()
     }
 
     fun setLanguage(language: AppLanguage) = launchSettingUpdate {
@@ -896,9 +905,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _message.value = null
     }
 
-    fun clearTempFiles() {
+    private fun clearProcessedFiles() {
         _processedFiles.value.forEach { (_, file) -> runCatching { file.delete() } }
         _processedFiles.value = emptyList()
+        _workInfo.value = null
+    }
+
+    fun clearTempFiles() {
+        clearProcessedFiles()
         fileRepository.clearCache()
     }
 

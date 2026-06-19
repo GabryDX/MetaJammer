@@ -56,6 +56,8 @@
     <string name="preview_of_changes">Aperçu des modifications</string>
     <string name="no_preview_available">Aucun aperçu disponible</string>
     <string name="change_location_map">Modifier l\'emplacement sur la carte</string>
+    <string name="process_and_continue">Traiter et continuer</string>
+    <string name="processing_complete">Traitement terminé</string>
     <string name="process_files">Traiter les fichiers</string>
     <string name="processing_foreground">Traitement au premier plan...</string>
     <string name="background_progress">Progression en arrière-plan : %1$d%%</string>

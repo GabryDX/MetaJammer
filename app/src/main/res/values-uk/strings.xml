@@ -56,6 +56,8 @@
     <string name="preview_of_changes">Попередній перегляд змін</string>
     <string name="no_preview_available">Попередній перегляд недоступний</string>
     <string name="change_location_map">Змінити місцезнаходження на карті</string>
+    <string name="process_and_continue">Обробити та продовжити</string>
+    <string name="processing_complete">Обробка завершена</string>
     <string name="process_files">Обробити файли</string>
     <string name="processing_foreground">Обробка на передньому плані...</string>
     <string name="background_progress">Прогрес у фоновому режимі: %1$d%%</string>

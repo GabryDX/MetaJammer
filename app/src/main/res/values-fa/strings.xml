@@ -56,6 +56,8 @@
     <string name="preview_of_changes">پیش‌نمایش تغییرات</string>
     <string name="no_preview_available">پیش‌نمایشی در دسترس نیست</string>
     <string name="change_location_map">تغییر مکان روی نقشه</string>
+    <string name="process_and_continue">پردازش و ادامه</string>
+    <string name="processing_complete">پردازش تکمیل شد</string>
     <string name="process_files">پردازش فایل‌ها</string>
     <string name="processing_foreground">در حال پردازش در پیش‌زمینه...</string>
     <string name="background_progress">پیشرفت در پس‌زمینه: %1$d%%</string>

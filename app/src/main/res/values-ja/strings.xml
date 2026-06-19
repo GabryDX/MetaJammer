@@ -56,6 +56,8 @@
     <string name="preview_of_changes">変更のプレビュー</string>
     <string name="no_preview_available">プレビューを利用できません</string>
     <string name="change_location_map">地図上で位置を変更</string>
+    <string name="process_and_continue">処理して続行</string>
+    <string name="processing_complete">処理完了</string>
     <string name="process_files">ファイルを処理</string>
     <string name="processing_foreground">フォアグラウンドで処理中...</string>
     <string name="background_progress">バックグラウンド進行状況：%1$d%%</string>

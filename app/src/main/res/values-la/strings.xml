@@ -56,6 +56,8 @@
     <string name="preview_of_changes">Praevisus Mutationum</string>
     <string name="no_preview_available">Praevisus non adest</string>
     <string name="change_location_map">Locum in Tabula Mutare</string>
+    <string name="process_and_continue">Elabora et perge</string>
+    <string name="processing_complete">Elaboratio confecta</string>
     <string name="process_files">Fasciculos Processus</string>
     <string name="processing_foreground">In conspectu processus...</string>
     <string name="background_progress">Progressus in Occulto: %1$d%%</string>

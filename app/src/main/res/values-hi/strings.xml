@@ -56,6 +56,8 @@
     <string name="preview_of_changes">परिवर्तनों का पूर्वावलोकन</string>
     <string name="no_preview_available">कोई पूर्वावलोकन उपलब्ध नहीं</string>
     <string name="change_location_map">मानचित्र पर स्थान बदलें</string>
+    <string name="process_and_continue">संसाधित करें और जारी रखें</string>
+    <string name="processing_complete">प्रसंस्करण पूर्ण</string>
     <string name="process_files">फ़ाइलें प्रोसेस करें</string>
     <string name="processing_foreground">फोरग्राउंड में प्रोसेसिंग...</string>
     <string name="background_progress">बैकग्राउंड प्रगति: %1$d%%</string>
