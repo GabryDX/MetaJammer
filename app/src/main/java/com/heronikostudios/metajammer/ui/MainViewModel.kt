@@ -20,6 +20,8 @@ import com.heronikostudios.metajammer.domain.usecase.SaveFileUseCase
 import com.heronikostudios.metajammer.metadata.MetadataReplacementGenerator
 import com.heronikostudios.metajammer.util.SanitizationUtils
 import com.heronikostudios.metajammer.worker.MetadataProcessingWorker
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -268,9 +270,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             runCatching {
                 withContext(Dispatchers.IO) {
-                    files.associate { file ->
-                        file.uri to metadataRepository.readMetadata(file)
-                    }
+                    files.map { file ->
+                        async {
+                            file.uri to metadataRepository.readMetadata(file)
+                        }
+                    }.awaitAll().toMap()
                 }
             }.onSuccess {
                 _metadataPreview.value = it

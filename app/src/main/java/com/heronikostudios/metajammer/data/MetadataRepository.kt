@@ -117,43 +117,44 @@ class MetadataRepository(
         
         runCatching {
             val retriever = android.media.MediaMetadataRetriever()
-            resolver.openFileDescriptor(selectedFile.uri, "r")?.use { fd ->
-                retriever.setDataSource(fd.fileDescriptor)
-                
-                // General metadata
-                retriever.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_TITLE)?.let {
-                    entries.add(MetadataEntry("Title", it))
-                }
-                retriever.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_ARTIST)?.let {
-                    entries.add(MetadataEntry("Artist", it))
-                }
-                retriever.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_ALBUM)?.let {
-                    entries.add(MetadataEntry("Album", it))
-                }
-                retriever.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_DATE)?.let {
-                    entries.add(MetadataEntry("Date", it))
-                }
-                retriever.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_LOCATION)?.let {
-                    entries.add(MetadataEntry("Location (Raw)", it))
-                }
-                
-                // Video specific
-                retriever.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_HAS_VIDEO)?.let {
-                    if (it == "yes") {
-                        retriever.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)?.let { w ->
-                            retriever.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)?.let { h ->
-                                entries.add(MetadataEntry("Resolution", "${w}x${h}"))
+            retriever.use { r ->
+                resolver.openFileDescriptor(selectedFile.uri, "r")?.use { fd ->
+                    r.setDataSource(fd.fileDescriptor)
+                    
+                    // General metadata
+                    r.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_TITLE)?.let {
+                        entries.add(MetadataEntry("Title", it))
+                    }
+                    r.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_ARTIST)?.let {
+                        entries.add(MetadataEntry("Artist", it))
+                    }
+                    r.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_ALBUM)?.let {
+                        entries.add(MetadataEntry("Album", it))
+                    }
+                    r.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_DATE)?.let {
+                        entries.add(MetadataEntry("Date", it))
+                    }
+                    r.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_LOCATION)?.let {
+                        entries.add(MetadataEntry("Location (Raw)", it))
+                    }
+                    
+                    // Video specific
+                    r.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_HAS_VIDEO)?.let {
+                        if (it == "yes") {
+                            r.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)?.let { w ->
+                                r.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)?.let { h ->
+                                    entries.add(MetadataEntry("Resolution", "${w}x${h}"))
+                                }
                             }
                         }
                     }
-                }
 
-                retriever.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_DURATION)?.let {
-                    val durationMs = it.toLongOrNull() ?: 0L
-                    entries.add(MetadataEntry("Duration", "${durationMs / 1000}s"))
+                    r.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_DURATION)?.let {
+                        val durationMs = it.toLongOrNull() ?: 0L
+                        entries.add(MetadataEntry("Duration", "${durationMs / 1000}s"))
+                    }
                 }
             }
-            retriever.release()
         }.onFailure {
             Timber.e(it, "Failed to read media metadata for %s", selectedFile.uri)
         }

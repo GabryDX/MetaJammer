@@ -57,11 +57,11 @@ class FileRepository(private val context: Context) {
         val tempFile = createSharedTempFile(prefix, resolvedSuffix)
         context.contentResolver.openInputStream(uri)?.use { input ->
             tempFile.outputStream().use { output ->
-                input.copyTo(output)
+                input.copyTo(output, bufferSize = 64 * 1024)
             }
         } ?: run {
             Timber.e("Unable to open input stream for %s", uri)
-            error("Unable to open input stream for $uri")
+            throw java.io.IOException("Unable to open input stream for $uri")
         }
         return tempFile
     }
@@ -147,7 +147,7 @@ class FileRepository(private val context: Context) {
 
         resolver.openOutputStream(uri)?.use { output ->
             sourceFile.inputStream().use { input ->
-                input.copyTo(output)
+                input.copyTo(output, bufferSize = 64 * 1024)
             }
         } ?: run {
             Timber.e("Failed to open output stream for MediaStore URI: %s", uri)
@@ -195,7 +195,7 @@ class FileRepository(private val context: Context) {
 
         context.contentResolver.openOutputStream(outFile.uri)?.use { output ->
             sourceFile.inputStream().use { input ->
-                input.copyTo(output)
+                input.copyTo(output, bufferSize = 64 * 1024)
             }
         } ?: run {
             Timber.e("Failed to open output stream for custom folder file: %s", outFile.uri)
