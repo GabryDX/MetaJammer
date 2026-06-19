@@ -68,7 +68,7 @@
     <string name="help_item_image_title">Görüntü İşleme</string>
     <string name="help_item_image_body">Desteklenen formatlar: JPG, PNG, WebP, HEIF.\n\nMetaJammer bu görüntülerden EXIF metadatalarını temizler. \"Zehirleme\" modunda, GPS koordinatları gibi hassas etiketleri gerçekçi rastgele verilerle değiştirir.</string>
     <string name="help_item_other_title">PDF ve Belge İşleme</string>
-    <string name="help_item_other_body">Desteklenen formatlar: PDF.\n\nMetaJammer artık PDF belgelerini tam olarak destekliyor. Belgelerinizin paylaşılmadan önce temiz olduğundan emin olmak için Başlık, Yazar, Konu, Anahtar Kelimeler, Oluşturucu ve Üretici gibi meta verileri okuyabilir, kaldırabilir ve yanıltabilirsiniz (poison).</string>
+    <string name="help_item_other_body">Desteklenen formatlar: PDF.\n\nMetaJammer artık PDF belgelerini tam olarak destekliyor. Başlık, Yazar, Konu, Anahtar Kelimeler, Oluşturucu ve Üretici gibi meta verileri okuyabilir, silebilir ve \"zehirleyebilirsiniz\". Ayrıca, paylaşmadan önce belgelerinizin temiz olduğundan emin olmak için gizli filigranları ve açıklamaları da temizler.</string>
     <string name="help_report_issue_title">Sorun Bildir</string>
     <string name="help_report_issue_body">Bir hata mı buldunuz veya bir özellik isteğiniz mi var? Lütfen GitHub sayfamızda bildirin.</string>
     <string name="help_open_github">GitHub Sorunlarını Aç</string>

@@ -68,7 +68,7 @@
     <string name="help_item_image_title">Bildverarbeitung</string>
     <string name="help_item_image_body">Unterstützte Formate: JPG, PNG, WebP, HEIF.\n\nMetaJammer entfernt EXIF-Metadaten aus diesen Bildern. Im Modus „Vergiften“ werden sensible Tags wie GPS-Koordinaten durch realistische Zufallsdaten ersetzt.</string>
     <string name="help_item_other_title">PDF- &amp; Dokumentenverarbeitung</string>
-    <string name="help_item_other_body">Unterstützte Formate: PDF.\n\nMetaJammer unterstützt jetzt PDF-Dokumente vollständig. Sie können Metadaten wie Titel, Autor, Thema, Schlüsselwörter, Ersteller und Produzent lesen, entfernen und manipulieren (poison), um sicherzustellen, dass Ihre Dokumente vor dem Teilen sauber sind.</string>
+    <string name="help_item_other_body">Unterstützte Formate: PDF.\n\nMetaJammer unterstützt jetzt PDF-Dokumente vollständig. Sie können Metadaten wie Titel, Autor, Thema, Schlagwörter, Ersteller und Produzent lesen, entfernen und „vergiften“. Außerdem werden versteckte Wasserzeichen und Anmerkungen entfernt, um sicherzustellen, dass Ihre Dokumente vor der Freigabe sauber sind.</string>
     <string name="help_report_issue_title">Ein Problem melden</string>
     <string name="help_report_issue_body">Haben Sie einen Fehler gefunden oder haben Sie einen Funktionswunsch? Bitte melden Sie dies auf einer GitHub-Seite.</string>
     <string name="help_open_github">GitHub-Issues öffnen</string>

@@ -68,7 +68,7 @@
     <string name="help_item_image_title">Xử lý Hình ảnh</string>
     <string name="help_item_image_body">Định dạng hỗ trợ: JPG, PNG, WebP, HEIF.\n\nMetaJammer loại bỏ siêu dữ liệu EXIF khỏi các hình ảnh này. Trong chế độ \"Đầu độc\", nó thay thế các thẻ nhạy cảm như tọa độ GPS bằng dữ liệu ngẫu nhiên thực tế.</string>
     <string name="help_item_other_title">Xử lý PDF &amp; Tài liệu</string>
-    <string name="help_item_other_body">Định dạng được hỗ trợ: PDF.\n\nMetaJammer hiện đã hỗ trợ đầy đủ các tài liệu PDF. Bạn có thể đọc, xóa và \"làm giả\" (poison) siêu dữ liệu như Tiêu đề, Tác giả, Chủ đề, Từ khóa, Người tạo và Nhà sản xuất để đảm bảo tài liệu của bạn sạch sẽ trước khi chia sẻ.</string>
+    <string name="help_item_other_body">Định dạng được hỗ trợ: PDF.\n\nMetaJammer hiện đã hỗ trợ đầy đủ các tài liệu PDF. Bạn có thể đọc, xóa và \"đầu độc\" siêu dữ liệu như Tiêu đề, Tác giả, Chủ đề, Từ khóa, Người tạo và Nhà sản xuất. Nó cũng loại bỏ các hình mờ và chú thích ẩn để đảm bảo tài liệu của bạn sạch sẽ trước khi chia sẻ.</string>
     <string name="help_report_issue_title">Báo lỗi</string>
     <string name="help_report_issue_body">Bạn tìm thấy lỗi hoặc có yêu cầu tính năng? Vui lòng báo cáo trên trang GitHub của chúng tôi.</string>
     <string name="help_open_github">Mở GitHub Issues</string>

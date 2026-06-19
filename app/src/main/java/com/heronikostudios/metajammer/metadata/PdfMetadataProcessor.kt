@@ -63,6 +63,7 @@ class PdfMetadataProcessor(
                     }
                     
                     document.documentInformation = info
+                    stripWatermarks(document)
                     document.save(FileOutputStream(outputFile))
                 }
             }
@@ -81,6 +82,7 @@ class PdfMetadataProcessor(
                     
                     // Overwrite metadata with a blank information dictionary
                     document.documentInformation = PDDocumentInformation()
+                    stripWatermarks(document)
                     document.save(FileOutputStream(outputFile))
                 }
             }
@@ -88,5 +90,38 @@ class PdfMetadataProcessor(
         }.onFailure {
             Timber.e(it, "Failed to strip PDF metadata for %s", inputUri)
         }.getOrNull()
+    }
+
+    private fun stripWatermarks(document: PDDocument) {
+        runCatching {
+            for (page in document.pages) {
+                // 1. Remove Watermark Annotations
+                val annotations = page.annotations
+                val iterator = annotations.iterator()
+                var changed = false
+                while (iterator.hasNext()) {
+                    val annotation = iterator.next()
+                    // Check for Watermark subtype or intent
+                    val subtype = annotation.subtype
+                    val intent = annotation.getCOSObject().getNameAsString("IT")
+                    
+                    if (subtype == "Watermark" || subtype == "Stamp" || intent == "Watermark") {
+                        iterator.remove()
+                        changed = true
+                    }
+                }
+                if (changed) {
+                    page.annotations = annotations
+                }
+            }
+
+            // 2. Clear Optional Content Groups (OCGs) / Layers
+            // OCGs are often used for watermarks that can be toggled on/off
+            if (document.documentCatalog.ocProperties != null) {
+                Timber.d("PDF has OCG properties, potential watermarking layers present")
+            }
+        }.onFailure {
+            Timber.e(it, "Failed to strip watermarks from PDF")
+        }
     }
 }

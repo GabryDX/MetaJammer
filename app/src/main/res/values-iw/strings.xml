@@ -68,7 +68,7 @@
     <string name="help_item_image_title">עיבוד תמונה</string>
     <string name="help_item_image_body">פורמטים נתמכים: JPG, PNG, WebP, HEIF.\n\nMetaJammer מסיר מטא-דאטה EXIF מתמונות אלו. במצב \"הרעלה\", הוא מחליף תגיות רגישות בנתונים אקראיים מציאותיים.</string>
     <string name="help_item_other_title">עיבוד PDF ומסמכים</string>
-    <string name="help_item_other_body">פורמטים נתמכים: PDF.\n\nMetaJammer תומך כעת באופן מלא במסמכי PDF. ניתן לקרוא, להסיר, ולשבש (poison) מטא-נתונים כמו כותרת, מחבר, נושא, מילות מפתח, יוצר ויצרן כדי להבטיח שהמסמכים שלכם נקיים לפני השיתוף.</string>
+    <string name="help_item_other_body">פורמטים נתמכים: PDF.\n\n‏MetaJammer תומך כעת באופן מלא במסמכי PDF. ניתן לקרוא, להסיר ו\"להרעיל\" מטא-דאטה כמו כותרת, מחבר, נושא, מילות מפתח, יוצר ויצרן. הכלי גם מסיר סימני מים נסתרים והערות כדי להבטיח שהמסמכים שלכם נקיים לפני השיתוף.</string>
     <string name="help_report_issue_title">דווח על בעיה</string>
     <string name="help_report_issue_body">מצאת באג או יש לך בקשה לתכונה חדשה? אנא דווח עליה בדף ה-GitHub שלנו.</string>
     <string name="help_open_github">פתח בעיות ב-GitHub</string>

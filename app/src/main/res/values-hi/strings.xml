@@ -68,7 +68,7 @@
     <string name="help_item_image_title">Image Processing</string>
     <string name="help_item_image_body">Supported formats: JPG, PNG, WebP, HEIF.\n\nMetaJammer strips EXIF metadata from these images. In \"Poison\" mode, it replaces sensitive tags like GPS coordinates with realistic random data.</string>
     <string name="help_item_other_title">PDF और दस्तावेज़ प्रसंस्करण</string>
-    <string name="help_item_other_body">समर्थित प्रारूप: PDF।\n\nMetaJammer अब पूरी तरह से PDF दस्तावेजों का समर्थन करता है। साझा करने से पहले आपके दस्तावेज़ साफ़ हैं, यह सुनिश्चित करने के लिए आप शीर्षक, लेखक, विषय, कीवर्ड, निर्माता और उत्पादक जैसे मेटाडेटा को पढ़ सकते हैं, हटा सकते हैं और दूषित (poison) कर सकते हैं।</string>
+    <string name="help_item_other_body">समर्थित प्रारूप: PDF।\n\nMetaJammer अब पूरी तरह से PDF दस्तावेजों का समर्थन करता है। आप शीर्षक, लेखक, विषय, कीवर्ड, निर्माता और उत्पादक जैसे मेटाडेटा को पढ़ सकते हैं, हटा सकते हैं और \"पॉइजन\" कर सकते हैं। यह साझा करने से पहले आपके दस्तावेज़ों को साफ सुनिश्चित करने के लिए छिपे हुए वॉटरमार्क और एनोटेशन को भी हटा देता है।</string>
     <string name="help_report_issue_title">Report an Issue</string>
     <string name="help_report_issue_body">Found a bug or have a feature request? Please report it on our GitHub page.</string>
     <string name="help_open_github">Open GitHub Issues</string>

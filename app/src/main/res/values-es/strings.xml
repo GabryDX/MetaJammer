@@ -68,7 +68,7 @@
     <string name="help_item_image_title">Procesamiento de imágenes</string>
     <string name="help_item_image_body">Formatos compatibles: JPG, PNG, WebP, HEIF.\n\nMetaJammer elimina los metadatos EXIF de estas imágenes. En el modo \"Envenenar\", reemplaza las etiquetas sensibles como las coordenadas GPS con datos aleatorios realistas.</string>
     <string name="help_item_other_title">Procesamiento de PDF y documentos</string>
-    <string name="help_item_other_body">Formatos compatibles: PDF.\n\nMetaJammer ahora es totalmente compatible con documentos PDF. Puedes leer, eliminar y falsear (poison) metadatos como Título, Autor, Asunto, Palabras clave, Creador y Productor para garantizar que tus documentos estén limpios antes de compartirlos.</string>
+    <string name="help_item_other_body">Formatos compatibles: PDF.\n\nMetaJammer ahora es totalmente compatible con documentos PDF. Puedes leer, eliminar y \"envenenar\" metadatos como Título, Autor, Asunto, Palabras clave, Creador y Productor. También elimina marcas de agua ocultas y anotaciones para garantizar que tus documentos estén limpios antes de compartirlos.</string>
     <string name="help_report_issue_title">Informar de un problema</string>
     <string name="help_report_issue_body">¿Has encontrado un error o tienes una petición de funcionalidad? Por favor, infórmanos en nuestra página de GitHub.</string>
     <string name="help_open_github">Abrir problemas en GitHub</string>

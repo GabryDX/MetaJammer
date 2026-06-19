@@ -68,7 +68,7 @@
     <string name="help_item_image_title">معالجة الصور</string>
     <string name="help_item_image_body">التنسيقات المدعومة: JPG, PNG, WebP, HEIF.\n\nيقوم MetaJammer بإزالة بيانات EXIF من هذه الصور. في وضع \"التسميم\" (Poison)، يستبدل العلامات الحساسة مثل إحداثيات GPS ببيانات عشوائية واقعية.</string>
     <string name="help_item_other_title">ملفات أخرى</string>
-    <string name="help_item_other_body">التنسيقات المدعومة: لا يوجد حالياً.\n\nيركز MetaJammer حالياً على ملفات الوسائط. ستشمل التحديثات المستقبلية دعم ملفات PDF والمستندات. ابقوا على اطلاع!</string>
+    <string name="help_item_other_body">الصيغ المدعومة: PDF.\n\nيدعم MetaJammer الآن ملفات PDF بشكل كامل. يمكنك قراءة وإزالة وتسميم البيانات الوصفية مثل العنوان، والمؤلف، والموضوع، والكلمات المفتاحية، والمنشئ، والمنتج. كما يقوم بتجريد العلامات المائية المخفية والتعليقات التوضيحية لضمان نظافة مستنداتك قبل مشاركتها.</string>
     <string name="help_report_issue_title">الإبلاغ عن مشكلة</string>
     <string name="help_report_issue_body">هل وجدت خللاً أو لديك طلب ميزة؟ يرجى الإبلاغ عنها على صفحتنا في GitHub.</string>
     <string name="help_open_github">فتح مشاكل GitHub</string>

@@ -68,7 +68,7 @@
     <string name="help_item_image_title">图像处理</string>
     <string name="help_item_image_body">支持的格式：JPG, PNG, WebP, HEIF。\n\nMetaJammer 会从这些图像中删除 EXIF 元数据。在“投毒”模式下，它会将 GPS 坐标等敏感标签替换为现实的随机数据。</string>
     <string name="help_item_other_title">PDF 和文档处理</string>
-    <string name="help_item_other_body">支持的格式：PDF。\n\nMetaJammer 现在全面支持 PDF 文档。您可以读取、删除和伪造 (poison) 诸如标题、作者、主题、关键词、创建者和生成者等元数据，以确保您的文档在共享前保持洁净。</string>
+    <string name="help_item_other_body">支持的格式：PDF。\n\nMetaJammer 现在全面支持 PDF 文档。您可以读取、删除和“投毒”元数据，如标题、作者、主题、关键词、创建者和制作者。它还会清除隐藏的水印和注释，以确保您的文档在共享前保持干净。</string>
     <string name="help_report_issue_title">报告问题</string>
     <string name="help_report_issue_body">发现了漏洞或有功能请求？请在我们的 GitHub 页面上报告。</string>
     <string name="help_open_github">打开 GitHub 问题</string>

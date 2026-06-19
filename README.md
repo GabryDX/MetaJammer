@@ -15,7 +15,7 @@
 - **⚡ Quick Scrub & Share:** A "truly invisible" workflow. Share a file to MetaJammer, let it auto-process, and immediately re-open the share sheet with the clean version.
 - **📦 Background Batch Processing:** Reliable processing for 50+ high-resolution files at once using Android WorkManager, complete with system notifications.
 - **📂 Flexible Output:** Save to custom folders via SAF, use standard MediaStore collections, or share directly to other apps.
-- **🖼️ Multi-Format Support:** Full compatibility with modern image formats (JPEG, WebP, HEIF/HEIC), video containers (MP4, MOV), and PDF documents. Support for both stripping and poisoning across all formats, including PDF-specific fields like Title, Author, and Producer.
+- **🖼️ Multi-Format Support:** Full compatibility with modern image formats (JPEG, WebP, HEIF/HEIC), video containers (MP4, MOV), and PDF documents. Support for both stripping and poisoning across all formats, including PDF-specific fields like Title, Author, and Producer. Now includes advanced removal of hidden watermarks and annotations from PDF files.
 - **🎨 Modern & Accessible UI:** Built with Jetpack Compose and Material 3, featuring Dynamic Color support, a dedicated OLED black mode, and battery-aware theme scheduling.
 - **🌍 Global Reach:** Fully localized in 24 languages including English, Arabic, German, Greek, Spanish, Persian, French, Hebrew, Hindi, Indonesian, Italian, Japanese, Korean, Latin, Dutch, Polish, Portuguese, Romanian, Russian, Thai, Turkish, Ukrainian, Vietnamese, and Chinese.
 

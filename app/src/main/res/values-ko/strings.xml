@@ -68,7 +68,7 @@
     <string name="help_item_image_title">이미지 처리</string>
     <string name="help_item_image_body">지원되는 형식: JPG, PNG, WebP, HEIF.\n\nMetaJammer는 이러한 이미지에서 EXIF 메타데이터를 제거합니다. \"포이즌\" 모드에서는 GPS 좌표와 같은 민감한 태그를 실제와 유사한 무작위 데이터로 대체합니다.</string>
     <string name="help_item_other_title">PDF 및 문서 처리</string>
-    <string name="help_item_other_body">지원 형식: PDF.\n\nMetaJammer는 이제 PDF 문서를 완벽하게 지원합니다. 공유하기 전에 문서를 깨끗하게 유지하기 위해 제목, 작성자, 주제, 키워드, 만든 이, 제작자와 같은 메타데이터를 읽고, 제거하고, 변조(poison)할 수 있습니다.</string>
+    <string name="help_item_other_body">지원 형식: PDF.\n\nMetaJammer가 이제 PDF 문서를 완벽하게 지원합니다. 제목, 작성자, 주제, 키워드, 생성자 및 제작자와 같은 메타데이터를 읽고, 삭제하고, \"포이즈닝(변조)\"할 수 있습니다. 또한, 숨겨진 워터마크와 주석을 제거하여 공유하기 전에 문서가 깨끗한지 확인합니다.</string>
     <string name="help_report_issue_title">문제 보고</string>
     <string name="help_report_issue_body">버그를 발견하셨나요? 아니면 기능 요청이 있으신가요? 저희 GitHub 페이지에 보고해 주세요.</string>
     <string name="help_open_github">GitHub Issues 열기</string>

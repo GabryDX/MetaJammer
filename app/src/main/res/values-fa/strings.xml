@@ -68,7 +68,7 @@
     <string name="help_item_image_title">Image Processing</string>
     <string name="help_item_image_body">Supported formats: JPG, PNG, WebP, HEIF.\n\nMetaJammer strips EXIF metadata from these images. In \"Poison\" mode, it replaces sensitive tags like GPS coordinates with realistic random data.</string>
     <string name="help_item_other_title">پردازش PDF و اسناد</string>
-    <string name="help_item_other_body">فرمت‌های پشتیبانی شده: PDF.\n\nاکنون MetaJammer به طور کامل از اسناد PDF پشتیبانی می‌کند. شما می‌توانید متادیتاهایی مانند عنوان، نویسنده، موضوع، کلمات کلیدی، سازنده و تولیدکننده را بخوانید، حذف کنید و مسموم (poison) کنید تا از پاک بودن اسناد خود قبل از اشتراک‌گذاری اطمینان حاصل کنید.</string>
+    <string name="help_item_other_body">فرمت‌های پشتیبانی شده: PDF.\n\nنرم‌افزار MetaJammer اکنون به‌طور کامل از اسناد PDF پشتیبانی می‌کند. شما می‌توانید متادیتاهایی مانند عنوان، نویسنده، موضوع، کلمات کلیدی، سازنده و تولیدکننده را بخوانید، حذف کنید و مسموم کنید. همچنین واترمارک‌های پنهان و یادداشت‌ها را پاک می‌کند تا از تمیز بودن اسناد شما قبل از اشتراک‌گذاری اطمینان حاصل شود.</string>
     <string name="help_report_issue_title">Report an Issue</string>
     <string name="help_report_issue_body">Found a bug or have a feature request? Please report it on our GitHub page.</string>
     <string name="help_open_github">Open GitHub Issues</string>

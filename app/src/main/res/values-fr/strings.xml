@@ -68,7 +68,7 @@
     <string name="help_item_image_title">Traitement d\'image</string>
     <string name="help_item_image_body">Formats pris en charge : JPG, PNG, WebP, HEIF.\n\nMetaJammer supprime les métadonnées EXIF de ces images. En mode \"Poison\", il remplace les balises sensibles telles que les coordonnées GPS par des données aléatoires réalistes.</string>
     <string name="help_item_other_title">Traitement de PDF et de documents</string>
-    <string name="help_item_other_body">Formats pris en charge : PDF.\n\nMetaJammer prend désormais entièrement en charge les documents PDF. Vous pouvez lire, supprimer et falsifier (poison) les métadonnées telles que le titre, l\'auteur, le sujet, les mots-clés, le créateur et le producteur pour garantir que vos documents sont propres avant de les partager.</string>
+    <string name="help_item_other_body">Formats pris en charge : PDF.\n\nMetaJammer prend désormais entièrement en charge les documents PDF. Vous pouvez lire, supprimer et « empoisonner » les métadonnées telles que le titre, l\'auteur, le sujet, les mots-clés, le créateur et le producteur. Il supprime également les filigranes et les annotations invisibles pour garantir que vos documents sont propres avant de les partager.</string>
     <string name="help_report_issue_title">Signaler un problème</string>
     <string name="help_report_issue_body">Vous avez trouvé un bug ou avez une demande de fonctionnalité ? Veuillez le signaler sur notre page GitHub.</string>
     <string name="help_open_github">Ouvrir les problèmes GitHub</string>

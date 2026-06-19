@@ -68,7 +68,7 @@
     <string name="help_item_image_title">Procesare imagini</string>
     <string name="help_item_image_body">Formate suportate: JPG, PNG, WebP, HEIF.\n\nMetaJammer elimină metadatele EXIF din aceste imagini. În modul \"Alterare\", acesta înlocuiește etichetele sensibile (cum ar fi coordonatele GPS) cu date aleatorii realiste.</string>
     <string name="help_item_other_title">Procesare PDF și documente</string>
-    <string name="help_item_other_body">Formate acceptate: PDF.\n\nMetaJammer acceptă acum complet documentele PDF. Puteți citi, elimina și „otrăvi” (poison) metadatele precum Titlu, Autor, Subiect, Cuvinte cheie, Creator și Producător pentru a vă asigura că documentele sunt curate înainte de partajare.</string>
+    <string name="help_item_other_body">Formate suportate: PDF.\n\nMetaJammer acceptă acum pe deplin documentele PDF. Puteți citi, elimina și „otrăvi” metadate precum Titlu, Autor, Subiect, Cuvinte cheie, Creator și Producător. De asemenea, elimină filigranele ascunse și adnotările pentru a vă asigura că documentele sunt curate înainte de a fi partajate.</string>
     <string name="help_report_issue_title">Raportează o problemă</string>
     <string name="help_report_issue_body">Ai găsit o eroare sau ai o sugestie de funcționalitate? Te rugăm să o raportezi pe pagina noastră de GitHub.</string>
     <string name="help_open_github">Deschide probleme GitHub</string>

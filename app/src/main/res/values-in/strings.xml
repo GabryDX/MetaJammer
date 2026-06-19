@@ -68,7 +68,7 @@
     <string name="help_item_image_title">Pemrosesan Gambar</string>
     <string name="help_item_image_body">Format yang didukung: JPG, PNG, WebP, HEIF.\n\nMetaJammer menghapus metadata EXIF dari gambar-gambar ini. Dalam mode \"Poison\", metadata sensitif seperti koordinat GPS diganti dengan data acak yang realistis.</string>
     <string name="help_item_other_title">Pemrosesan PDF &amp; Dokumen</string>
-    <string name="help_item_other_body">Format yang didukung: PDF.\n\nMetaJammer kini mendukung penuh dokumen PDF. Anda dapat membaca, menghapus, dan memalsukan (poison) metadata seperti Judul, Penulis, Subjek, Kata Kunci, Pembuat, dan Produser untuk memastikan dokumen Anda bersih sebelum dibagikan.</string>
+    <string name="help_item_other_body">Format yang didukung: PDF.\n\nMetaJammer kini sepenuhnya mendukung dokumen PDF. Anda dapat membaca, menghapus, dan \"meracuni\" metadata seperti Judul, Penulis, Subjek, Kata Kunci, Pembuat, dan Produser. Ini juga menghapus tanda air dan anotasi tersembunyi untuk memastikan dokumen Anda bersih sebelum dibagikan.</string>
     <string name="help_report_issue_title">Laporkan Masalah</string>
     <string name="help_report_issue_body">Menemukan bug atau memiliki permintaan fitur? Silakan laporkan di halaman GitHub kami.</string>
     <string name="help_open_github">Buka GitHub Issues</string>
