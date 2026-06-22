@@ -1,5 +1,6 @@
 package com.heronikostudios.metajammer.domain.usecase
 
+import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -16,10 +17,14 @@ class ShareFileUseCase {
         val intent = Intent(Intent.ACTION_SEND).apply {
             type = mimeType ?: "*/*"
             putExtra(Intent.EXTRA_STREAM, uri)
+            clipData = ClipData.newRawUri(null, uri)
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
 
-        context.startActivity(Intent.createChooser(intent, "Share processed file"))
+        val chooser = Intent.createChooser(intent, "Share processed file").apply {
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+        context.startActivity(chooser)
     }
 
     fun shareFile(
@@ -59,9 +64,22 @@ class ShareFileUseCase {
         val intent = Intent(Intent.ACTION_SEND_MULTIPLE).apply {
             type = mimeType ?: "*/*"
             putParcelableArrayListExtra(Intent.EXTRA_STREAM, ArrayList(uris))
+            
+            // Add ClipData for permission delegation on modern Android/GrapheneOS
+            if (uris.isNotEmpty()) {
+                val clipData = ClipData.newRawUri(null, uris.first())
+                for (i in 1 until uris.size) {
+                    clipData.addItem(ClipData.Item(uris[i]))
+                }
+                this.clipData = clipData
+            }
+            
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
 
-        context.startActivity(Intent.createChooser(intent, "Share ${files.size} processed files"))
+        val chooser = Intent.createChooser(intent, "Share ${files.size} processed files").apply {
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+        context.startActivity(chooser)
     }
 }

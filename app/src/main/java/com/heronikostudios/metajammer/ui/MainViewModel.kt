@@ -9,6 +9,8 @@ import androidx.work.Data
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
+import com.heronikostudios.metajammer.worker.CleanupWorker
+import java.util.concurrent.TimeUnit
 import com.heronikostudios.metajammer.data.FileRepository
 import com.heronikostudios.metajammer.data.MetadataRepository
 import com.heronikostudios.metajammer.data.SettingsRepository
@@ -43,6 +45,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val workManager = WorkManager.getInstance(appContext)
     private val processFileUseCase = ProcessFileUseCase(metadataRepository)
     private val saveFileUseCase = SaveFileUseCase(fileRepository)
+
+    private var isQuickScrubActive = false
 
     private val _selectedFiles = MutableStateFlow<List<SelectedFile>>(emptyList())
     val selectedFiles: StateFlow<List<SelectedFile>> = _selectedFiles.asStateFlow()
@@ -538,6 +542,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     suspend fun autoHandleSharedInput(
         onShareFilesReady: (List<File>, String?) -> Unit
     ) {
+        isQuickScrubActive = true
         val files = _selectedFiles.value
         if (files.isEmpty()) {
             _message.value = "No shared files received"
@@ -918,7 +923,18 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     override fun onCleared() {
         super.onCleared()
-        clearTempFiles()
+        if (isQuickScrubActive) {
+            // Schedule background cleanup after 5 minutes to give receiving apps time to read files
+            val cleanupRequest = OneTimeWorkRequestBuilder<CleanupWorker>()
+                .setInitialDelay(5, TimeUnit.MINUTES)
+                .build()
+            workManager.enqueue(cleanupRequest)
+            
+            // Still clear in-memory state
+            clearProcessedFiles()
+        } else {
+            clearTempFiles()
+        }
     }
 
     private fun buildOutputName(originalName: String): String {
