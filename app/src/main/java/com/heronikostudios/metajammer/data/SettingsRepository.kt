@@ -182,7 +182,7 @@ class SettingsRepository(private val context: Context) {
         context.dataStore.data.map { preferences ->
             preferences[SHARED_FILES_OUTPUT_ACTION]
                 ?.let { runCatching { SharedInputOutputAction.valueOf(it) }.getOrNull() }
-                ?: SharedInputOutputAction.SAVE_TO_DEFAULT_FOLDER
+                ?: SharedInputOutputAction.SHARE_TO_ANOTHER_APP
         }
 
     suspend fun setSharedFilesOutputAction(action: SharedInputOutputAction) {

@@ -17,7 +17,7 @@ data class AppSettings(
     val oledMode: Boolean = false,
     val autoHandleSharedFiles: Boolean = false,
     val sharedFilesProcessingMode: ProcessingMode = ProcessingMode.REMOVE_METADATA,
-    val sharedFilesOutputAction: SharedInputOutputAction = SharedInputOutputAction.SAVE_TO_DEFAULT_FOLDER,
+    val sharedFilesOutputAction: SharedInputOutputAction = SharedInputOutputAction.SHARE_TO_ANOTHER_APP,
     val sharedFilesCustomPath: String? = null,
     val thumbnailHandling: ThumbnailHandling = ThumbnailHandling.REMOVE,
     val allowInternetForMap: Boolean = false,
