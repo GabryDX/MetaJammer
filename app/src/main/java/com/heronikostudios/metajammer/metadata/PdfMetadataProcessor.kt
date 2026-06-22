@@ -118,7 +118,8 @@ class PdfMetadataProcessor(
             // 2. Clear Optional Content Groups (OCGs) / Layers
             // OCGs are often used for watermarks that can be toggled on/off
             if (document.documentCatalog.ocProperties != null) {
-                Timber.d("PDF has OCG properties, potential watermarking layers present")
+                document.documentCatalog.ocProperties = null
+                Timber.d("Cleared PDF OCG properties (layers)")
             }
         }.onFailure {
             Timber.e(it, "Failed to strip watermarks from PDF")

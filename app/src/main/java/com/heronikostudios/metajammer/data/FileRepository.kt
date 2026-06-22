@@ -225,11 +225,17 @@ class FileRepository(private val context: Context) {
     fun clearCache() {
         val sharedDir = File(context.cacheDir, "shared")
         if (sharedDir.exists()) {
-            sharedDir.listFiles()?.forEach { it.delete() }
+            sharedDir.listFiles()?.forEach { 
+                runCatching { it.deleteRecursively() }
+                    .onFailure { e -> Timber.w(e, "Failed to delete file from shared cache: %s", it.name) }
+            }
         }
         // Also clear root cache directory for any stray files like processing_plans
         context.cacheDir.listFiles()?.forEach { 
-            if (it.isFile) it.delete()
+            if (it.isFile) {
+                runCatching { it.delete() }
+                    .onFailure { e -> Timber.w(e, "Failed to delete file from root cache: %s", it.name) }
+            }
         }
     }
 

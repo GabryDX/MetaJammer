@@ -62,7 +62,11 @@ class ImageMetadataProcessor(
             ExifInterface.TAG_LENS_MAKE,
             ExifInterface.TAG_LENS_MODEL,
             ExifInterface.TAG_LENS_SERIAL_NUMBER,
-            ExifInterface.TAG_XMP
+            ExifInterface.TAG_XMP,
+            ExifInterface.TAG_CAMERA_OWNER_NAME,
+            "OwnerName",
+            "ImageResources",
+            "PrintIM"
         )
 
         private val POISON_LEAK_PROTECTION_TAGS = listOf(
