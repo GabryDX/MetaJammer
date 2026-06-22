@@ -7,15 +7,18 @@ import com.heronikostudios.metajammer.domain.model.ProcessingMode
 import com.heronikostudios.metajammer.domain.model.SelectedFile
 import com.heronikostudios.metajammer.domain.model.ThumbnailHandling
 import com.heronikostudios.metajammer.metadata.ImageMetadataProcessor
-import com.heronikostudios.metajammer.metadata.VideoMetadataProcessor
+import com.heronikostudios.metajammer.metadata.MediaMetadataProcessor
+import com.heronikostudios.metajammer.metadata.PdfMetadataProcessor
 import timber.log.Timber
 import java.io.File
 
 class MetadataRepository(
     private val fileRepository: FileRepository
 ) {
+    private val context = fileRepository.getContext()
     private val imageProcessor = ImageMetadataProcessor(fileRepository)
-    private val videoProcessor = VideoMetadataProcessor(fileRepository)
+    private val mediaProcessor = MediaMetadataProcessor(fileRepository)
+    private val pdfProcessor = PdfMetadataProcessor(context, fileRepository)
 
     companion object {
         private val PREVIEW_TAGS = listOf(
@@ -52,7 +55,7 @@ class MetadataRepository(
         )
     }
 
-    fun processFile(
+    suspend fun processFile(
         selectedFile: SelectedFile,
         mode: ProcessingMode,
         keepOrientation: Boolean,
@@ -73,53 +76,87 @@ class MetadataRepository(
                 }
             }
 
-            mime.startsWith("video/") -> {
+            mime.startsWith("video/") || mime.startsWith("audio/") -> {
                 when (mode) {
                     ProcessingMode.POISON_METADATA -> {
                         val plan = requireNotNull(replacementPlan) { "Plan required for poison mode" }
-                        videoProcessor.poisonMetadata(selectedFile.uri, plan.latitude, plan.longitude)
+                        mediaProcessor.poisonMetadata(selectedFile.uri, plan)
                     }
-                    ProcessingMode.REMOVE_METADATA -> videoProcessor.removeMetadata(selectedFile.uri)
+                    ProcessingMode.REMOVE_METADATA -> mediaProcessor.removeMetadata(selectedFile.uri)
                 }
+            }
+
+            mime == "application/pdf" -> {
+                val result = when (mode) {
+                    ProcessingMode.POISON_METADATA -> {
+                        val plan = requireNotNull(replacementPlan) { "Plan required for poison mode" }
+                        pdfProcessor.poisonMetadata(selectedFile.uri, plan)
+                    }
+                    ProcessingMode.REMOVE_METADATA -> pdfProcessor.removeMetadata(selectedFile.uri)
+                }
+                result ?: fileRepository.copyUriToCache(selectedFile.uri, prefix = "pdf_failed_", suffix = ".pdf")
             }
 
             else -> fileRepository.copyUriToCache(selectedFile.uri, prefix = "generic_", suffix = null)
         }
     }
 
-    fun readMetadata(selectedFile: SelectedFile): List<MetadataEntry> {
+    suspend fun readMetadata(selectedFile: SelectedFile): List<MetadataEntry> {
         val mime = selectedFile.mimeType ?: ""
         return when {
             mime.startsWith("image/") -> readImageMetadata(selectedFile)
-            mime.startsWith("video/") -> readVideoMetadata(selectedFile)
+            mime.startsWith("video/") || mime.startsWith("audio/") -> readMediaMetadata(selectedFile)
+            mime == "application/pdf" -> pdfProcessor.readMetadata(selectedFile.uri)
             else -> listOf(MetadataEntry("Info", "Metadata preview not yet supported for $mime"))
         }
     }
 
-    private fun readVideoMetadata(selectedFile: SelectedFile): List<MetadataEntry> {
+    private fun readMediaMetadata(selectedFile: SelectedFile): List<MetadataEntry> {
         val resolver = fileRepository.getContext().contentResolver
         val entries = mutableListOf<MetadataEntry>()
         
         runCatching {
             val retriever = android.media.MediaMetadataRetriever()
-            resolver.openFileDescriptor(selectedFile.uri, "r")?.use { fd ->
-                retriever.setDataSource(fd.fileDescriptor)
-                
-                // Add some useful metadata fields
-                retriever.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_DATE)?.let {
-                    entries.add(MetadataEntry("Creation Date", it))
-                }
-                retriever.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_LOCATION)?.let {
-                    entries.add(MetadataEntry("Location (Raw)", it))
-                }
-                retriever.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_DURATION)?.let {
-                    val durationMs = it.toLongOrNull() ?: 0L
-                    entries.add(MetadataEntry("Duration", "${durationMs / 1000}s"))
+            retriever.use { r ->
+                resolver.openFileDescriptor(selectedFile.uri, "r")?.use { fd ->
+                    r.setDataSource(fd.fileDescriptor)
+                    
+                    // General metadata
+                    r.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_TITLE)?.let {
+                        entries.add(MetadataEntry("Title", it))
+                    }
+                    r.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_ARTIST)?.let {
+                        entries.add(MetadataEntry("Artist", it))
+                    }
+                    r.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_ALBUM)?.let {
+                        entries.add(MetadataEntry("Album", it))
+                    }
+                    r.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_DATE)?.let {
+                        entries.add(MetadataEntry("Date", it))
+                    }
+                    r.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_LOCATION)?.let {
+                        entries.add(MetadataEntry("Location (Raw)", it))
+                    }
+                    
+                    // Video specific
+                    r.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_HAS_VIDEO)?.let {
+                        if (it == "yes") {
+                            r.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)?.let { w ->
+                                r.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)?.let { h ->
+                                    entries.add(MetadataEntry("Resolution", "${w}x${h}"))
+                                }
+                            }
+                        }
+                    }
+
+                    r.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_DURATION)?.let {
+                        val durationMs = it.toLongOrNull() ?: 0L
+                        entries.add(MetadataEntry("Duration", "${durationMs / 1000}s"))
+                    }
                 }
             }
-            retriever.release()
         }.onFailure {
-            Timber.e(it, "Failed to read video metadata for %s", selectedFile.uri)
+            Timber.e(it, "Failed to read media metadata for %s", selectedFile.uri)
         }
 
         return entries

@@ -23,8 +23,8 @@
     <!-- HomeScreen -->
     <string name="hero_title">ปกป้องความเป็นส่วนตัวของคุณ</string>
     <string name="hero_subtitle">ล้างหรือเปลี่ยนข้อมูลเมตาที่ละเอียดอ่อนก่อนแชร์ไฟล์ของคุณ</string>
-    <string name="feature_images_video_title">รูปภาพและวิดีโอ</string>
-    <string name="feature_images_video_desc">รองรับการลบข้อมูลเมตาจากภาพถ่ายและรีมิกซ์วิดีโอเพื่อลบการติดตามอย่างสมบูรณ์</string>
+    <string name="feature_images_video_title">รูปภาพ, วิดีโอ, เสียง และ PDF</string>
+    <string name="feature_images_video_desc">รองรับการลบข้อมูลเมทาดาตาจากรูปภาพอย่างเต็มรูปแบบ รวมถึงการ remux วิดีโอ, เสียง และเอกสาร PDF เพื่อลบการติดตาม</string>
     <string name="feature_poisoning_title">การวางยาข้อมูลเมตา</string>
     <string name="feature_poisoning_desc">อย่าแค่ลบข้อมูล แต่ให้แทนที่ด้วยข้อมูลปลอมที่สมจริงเพื่อรักษาความเป็นส่วนตัวและทำให้ผู้ติดตามสับสน</string>
     <string name="feature_background_title">การประมวลผลเบื้องหลัง</string>
@@ -56,6 +56,8 @@
     <string name="preview_of_changes">ตัวอย่างการเปลี่ยนแปลง</string>
     <string name="no_preview_available">ไม่มีตัวอย่าง</string>
     <string name="change_location_map">เปลี่ยนตำแหน่งบนแผนที่</string>
+    <string name="process_and_continue">ประมวลผลและดำเนินการต่อ</string>
+    <string name="processing_complete">การประมวลผลเสร็จสิ้น</string>
     <string name="process_files">ประมวลผลไฟล์</string>
     <string name="processing_foreground">กำลังประมวลผลในเบื้องหน้า...</string>
     <string name="background_progress">ความคืบหน้าเบื้องหลัง: %1$d%%</string>
@@ -66,9 +68,9 @@
     <string name="help_item_video_title">Video Processing</string>
     <string name="help_item_video_body">Supported formats: MP4, MOV.\n\nFull re-muxing is supported for these containers. This process strips GPS, dates, and device atoms to protect your privacy.</string>
     <string name="help_item_image_title">Image Processing</string>
-    <string name="help_item_image_body">Supported formats: JPG, PNG.\n\nMetaJammer strips EXIF metadata from these images. In \"Poison\" mode, it replaces sensitive tags like GPS coordinates with realistic random data.</string>
-    <string name="help_item_other_title">Other Files</string>
-    <string name="help_item_other_body">Supported formats: None currently.\n\nMetaJammer currently focuses on media files. Future updates will include support for PDFs and documents. Stay tuned!</string>
+    <string name="help_item_image_body">Supported formats: JPG, PNG, WebP, HEIF.\n\nMetaJammer strips EXIF metadata from these images. In \"Poison\" mode, it replaces sensitive tags like GPS coordinates with realistic random data.</string>
+    <string name="help_item_other_title">การประมวลผล PDF และเอกสาร</string>
+    <string name="help_item_other_body">รูปแบบที่รองรับ: PDF\n\nขณะนี้ MetaJammer รองรับเอกสาร PDF อย่างเต็มรูปแบบแล้ว คุณสามารถอ่าน ลบ และ \"วางยา\" ข้อมูลเมตา เช่น ชื่อเรื่อง ผู้เขียน หัวข้อ คำสำคัญ ผู้สร้าง และผู้ผลิต นอกจากนี้ยังลบลายน้ำและคำอธิบายประกอบที่ซ่อนอยู่ เพื่อให้แน่ใจว่าเอกสารของคุณสะอาดก่อนที่จะแชร์</string>
     <string name="help_report_issue_title">Report an Issue</string>
     <string name="help_report_issue_body">Found a bug or have a feature request? Please report it on our GitHub page.</string>
     <string name="help_open_github">Open GitHub Issues</string>
@@ -88,15 +90,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">การตั้งค่า</string>
-    <string name="category_file_management">การจัดการไฟล์</string>
+    <string name="category_folder_management">การจัดการโฟลเดอร์</string>
+    <string name="category_file_management">ข้อมูลเมตาและชื่อไฟล์</string>
     <string name="category_image_file">รูปภาพ / ไฟล์</string>
     <string name="category_shared_files">พฤติกรรมไฟล์ที่แชร์</string>
     <string name="category_ui">UI</string>
 
+    <string name="setting_folder_structure_title">โครงสร้างโฟลเดอร์</string>
+    <string name="setting_folder_structure_unified">แบบรวม (โฟลเดอร์เดียวสำหรับทั้งหมด)</string>
+    <string name="setting_folder_structure_split">แบบแยก (แยกโฟลเดอร์ตามประเภท)</string>
+    <string name="setting_use_subfolders_title">ใช้โฟลเดอร์ย่อยในการรวมโฟลเดอร์</string>
+    <string name="setting_use_subfolders_sub">จัดระเบียบตามประเภท (รูปภาพ, ภาพยนตร์ ฯลฯ) ภายในโฟลเดอร์ที่รวมไว้</string>
+
+    <string name="setting_unified_path_title">โฟลเดอร์บันทึกแบบรวม</string>
+    <string name="setting_pictures_path_title">โฟลเดอร์บันทึกรูปภาพ</string>
+    <string name="setting_music_path_title">โฟลเดอร์บันทึกเพลง</string>
+    <string name="setting_movies_path_title">โฟลเดอร์บันทึกภาพยนตร์</string>
+    <string name="setting_documents_path_title">โฟลเดอร์บันทึกเอกสาร</string>
+
+    <string name="setting_configure_split_folders">กำหนดค่าโฟลเดอร์แยก</string>
+    <string name="setting_split_folders_desc">จัดการโฟลเดอร์แยกสำหรับแต่ละหมวดหมู่ไฟล์</string>
+
     <string name="setting_random_names_title">ใช้ชื่อไฟล์แบบสุ่ม</string>
     <string name="setting_random_names_sub">สร้างชื่อไฟล์ส่งออกแบบสุ่มแทนการใช้ชื่อไฟล์เดิม</string>
     <string name="setting_default_path_title">เส้นทางการบันทึกเริ่มต้น</string>
-    <string name="setting_reset_path">รีเซ็ตเป็น Pictures/MetaJammer</string>
+    <string name="setting_reset_path_pictures">รีเซ็ตเป็น Pictures/MetaJammer</string>
+    <string name="setting_reset_path_download">รีเซ็ตเป็น Download/MetaJammer</string>
+    <string name="setting_reset_path_music">รีเซ็ตเป็น Music/MetaJammer</string>
+    <string name="setting_reset_path_movies">รีเซ็ตเป็น Movies/MetaJammer</string>
+    <string name="setting_reset_path_documents">รีเซ็ตเป็น Documents/MetaJammer</string>
     <string name="setting_select_folder">เลือกโฟลเดอร์</string>
 
     <string name="setting_keep_orientation_title">คงทิศทางของภาพ</string>
@@ -111,6 +133,8 @@
     <string name="setting_thumbnails_warning">คำเตือน: การคงรูปภาพตัวอย่างเดิมอาจทำให้ข้อมูลเมตาหลุดรอด (ตำแหน่ง, ข้อมูลอุปกรณ์) แม้ว่าจะลบแท็กหลักออกแล้วก็ตาม</string>
     <string name="setting_enable_map_title">เปิดใช้งานตัวเลือกแผนที่</string>
     <string name="setting_enable_map_sub">อนุญาตให้แอปเชื่อมต่ออินเทอร์เน็ตเพื่อแสดง OpenStreetMap สำหรับการเลือกตำแหน่ง</string>
+    <string name="setting_nearby_scramble_title">ใช้การวางยาพิษแบบระบุตำแหน่ง</string>
+    <string name="setting_nearby_scramble_sub">เมื่อวางยาพิษข้อมูลเมตา ให้สุ่มพิกัดใกล้กับตำแหน่งเดิมแทนที่จะเป็นจุดสุ่มโดยสิ้นเชิง</string>
 
     <string name="setting_quick_scrub_title">ล้างข้อมูลและแชร์อย่างรวดเร็ว</string>
     <string name="setting_quick_scrub_sub">ลบข้อมูลเมตาโดยอัตโนมัติและเปิดหน้าการแชร์อีกครั้งสำหรับไฟล์ที่แชร์</string>

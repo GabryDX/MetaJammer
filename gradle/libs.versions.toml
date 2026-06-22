@@ -16,6 +16,7 @@ workRuntimeKtx = "2.11.2"
 kotlinxSerializationJson = "1.11.0"
 timber = "5.0.1"
 coil = "2.7.0"
+pdfbox-android = "2.0.27.0"
 
 [libraries]
 androidx-compose-material-icons-core = { module = "androidx.compose.material:material-icons-core" }
@@ -44,6 +45,7 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 coil-video = { module = "io.coil-kt:coil-video", version.ref = "coil" }
+pdfbox-android = { module = "com.tom-roush:pdfbox-android", version.ref = "pdfbox-android" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

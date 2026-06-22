@@ -20,10 +20,13 @@ import com.heronikostudios.metajammer.domain.usecase.SaveFileUseCase
 import com.heronikostudios.metajammer.metadata.MetadataReplacementGenerator
 import com.heronikostudios.metajammer.util.SanitizationUtils
 import com.heronikostudios.metajammer.worker.MetadataProcessingWorker
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
@@ -81,49 +84,79 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun observeSettings() {
         viewModelScope.launch {
-            settingsRepository.useRandomFileNamesFlow.collect {
-                _appSettings.value = _appSettings.value.copy(useRandomFileNames = it)
+            settingsRepository.useRandomFileNamesFlow.collect { value ->
+                _appSettings.update { it.copy(useRandomFileNames = value) }
             }
         }
         viewModelScope.launch {
-            settingsRepository.defaultSavingPathFlow.collect {
-                _appSettings.value = _appSettings.value.copy(defaultSavingPath = it)
+            settingsRepository.folderStructureFlow.collect { value ->
+                _appSettings.update { it.copy(folderStructure = value) }
             }
         }
         viewModelScope.launch {
-            settingsRepository.keepImageOrientationFlow.collect {
-                _appSettings.value = _appSettings.value.copy(keepImageOrientation = it)
+            settingsRepository.useSubfoldersInUnifiedFlow.collect { value ->
+                _appSettings.update { it.copy(useSubfoldersInUnified = value) }
             }
         }
         viewModelScope.launch {
-            settingsRepository.shareResultAsDefaultFlow.collect {
-                _appSettings.value = _appSettings.value.copy(shareResultAsDefault = it)
+            settingsRepository.unifiedSavingPathFlow.collect { value ->
+                _appSettings.update { it.copy(unifiedSavingPath = value) }
             }
         }
         viewModelScope.launch {
-            settingsRepository.defaultPrefixFlow.collect {
-                _appSettings.value = _appSettings.value.copy(defaultPrefix = it)
+            settingsRepository.picturesSavingPathFlow.collect { value ->
+                _appSettings.update { it.copy(picturesSavingPath = value) }
             }
         }
         viewModelScope.launch {
-            settingsRepository.defaultSuffixFlow.collect {
-                _appSettings.value = _appSettings.value.copy(defaultSuffix = it)
+            settingsRepository.musicSavingPathFlow.collect { value ->
+                _appSettings.update { it.copy(musicSavingPath = value) }
             }
         }
         viewModelScope.launch {
-            settingsRepository.nightModeFlow.collect {
-                _appSettings.value = _appSettings.value.copy(nightMode = it)
+            settingsRepository.moviesSavingPathFlow.collect { value ->
+                _appSettings.update { it.copy(moviesSavingPath = value) }
             }
         }
         viewModelScope.launch {
-            settingsRepository.oledModeFlow.collect {
-                _appSettings.value = _appSettings.value.copy(oledMode = it)
+            settingsRepository.documentsSavingPathFlow.collect { value ->
+                _appSettings.update { it.copy(documentsSavingPath = value) }
+            }
+        }
+        viewModelScope.launch {
+            settingsRepository.keepImageOrientationFlow.collect { value ->
+                _appSettings.update { it.copy(keepImageOrientation = value) }
+            }
+        }
+        viewModelScope.launch {
+            settingsRepository.shareResultAsDefaultFlow.collect { value ->
+                _appSettings.update { it.copy(shareResultAsDefault = value) }
+            }
+        }
+        viewModelScope.launch {
+            settingsRepository.defaultPrefixFlow.collect { value ->
+                _appSettings.update { it.copy(defaultPrefix = value) }
+            }
+        }
+        viewModelScope.launch {
+            settingsRepository.defaultSuffixFlow.collect { value ->
+                _appSettings.update { it.copy(defaultSuffix = value) }
+            }
+        }
+        viewModelScope.launch {
+            settingsRepository.nightModeFlow.collect { value ->
+                _appSettings.update { it.copy(nightMode = value) }
+            }
+        }
+        viewModelScope.launch {
+            settingsRepository.oledModeFlow.collect { value ->
+                _appSettings.update { it.copy(oledMode = value) }
             }
         }
         viewModelScope.launch {
             var firstEmission = true
-            settingsRepository.autoHandleSharedFilesFlow.collect {
-                _appSettings.value = _appSettings.value.copy(autoHandleSharedFiles = it)
+            settingsRepository.autoHandleSharedFilesFlow.collect { value ->
+                _appSettings.update { it.copy(autoHandleSharedFiles = value) }
                 if (firstEmission) {
                     _settingsInitialized.value = true
                     firstEmission = false
@@ -131,33 +164,38 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
         viewModelScope.launch {
-            settingsRepository.sharedFilesProcessingModeFlow.collect {
-                _appSettings.value = _appSettings.value.copy(sharedFilesProcessingMode = it)
+            settingsRepository.sharedFilesProcessingModeFlow.collect { value ->
+                _appSettings.update { it.copy(sharedFilesProcessingMode = value) }
             }
         }
         viewModelScope.launch {
-            settingsRepository.sharedFilesOutputActionFlow.collect {
-                _appSettings.value = _appSettings.value.copy(sharedFilesOutputAction = it)
+            settingsRepository.sharedFilesOutputActionFlow.collect { value ->
+                _appSettings.update { it.copy(sharedFilesOutputAction = value) }
             }
         }
         viewModelScope.launch {
-            settingsRepository.sharedFilesCustomPathFlow.collect {
-                _appSettings.value = _appSettings.value.copy(sharedFilesCustomPath = it)
+            settingsRepository.sharedFilesCustomPathFlow.collect { value ->
+                _appSettings.update { it.copy(sharedFilesCustomPath = value) }
             }
         }
         viewModelScope.launch {
-            settingsRepository.thumbnailHandlingFlow.collect {
-                _appSettings.value = _appSettings.value.copy(thumbnailHandling = it)
+            settingsRepository.thumbnailHandlingFlow.collect { value ->
+                _appSettings.update { it.copy(thumbnailHandling = value) }
             }
         }
         viewModelScope.launch {
-            settingsRepository.allowInternetForMapFlow.collect {
-                _appSettings.value = _appSettings.value.copy(allowInternetForMap = it)
+            settingsRepository.allowInternetForMapFlow.collect { value ->
+                _appSettings.update { it.copy(allowInternetForMap = value) }
+            }
+        }
+        viewModelScope.launch {
+            settingsRepository.useNearbyScrambleFlow.collect { value ->
+                _appSettings.update { it.copy(useNearbyScramble = value) }
             }
         }
         viewModelScope.launch {
             settingsRepository.languageFlow.collect { language ->
-                _appSettings.value = _appSettings.value.copy(language = language)
+                _appSettings.update { it.copy(language = language) }
                 applyLanguage(language)
             }
         }
@@ -232,9 +270,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             runCatching {
                 withContext(Dispatchers.IO) {
-                    files.associate { file ->
-                        file.uri to metadataRepository.readMetadata(file)
-                    }
+                    files.map { file ->
+                        async {
+                            file.uri to metadataRepository.readMetadata(file)
+                        }
+                    }.awaitAll().toMap()
                 }
             }.onSuccess {
                 _metadataPreview.value = it
@@ -246,9 +286,23 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun setProcessingMode(mode: ProcessingMode) {
+        if (_selectedMode.value != mode) {
+            clearProcessedFiles()
+        }
         _selectedMode.value = mode
         if (mode == ProcessingMode.POISON_METADATA && _replacementPlans.value.isEmpty()) {
-            _replacementPlans.value = _selectedFiles.value.associate { it.uri to MetadataReplacementGenerator.generatePlan() }
+            _replacementPlans.value = _selectedFiles.value.associate { selectedFile ->
+                val metadata = _metadataPreview.value[selectedFile.uri].orEmpty()
+                val lat = metadata.find { it.key == "GPSLatitude" }?.value?.toDoubleOrNull()
+                val lon = metadata.find { it.key == "GPSLongitude" }?.value?.toDoubleOrNull()
+                
+                val useScramble = _appSettings.value.useNearbyScramble
+                selectedFile.uri to if (useScramble && lat != null && lon != null) {
+                    MetadataReplacementGenerator.generatePlan(selectedFile.mimeType, lat, lon)
+                } else {
+                    MetadataReplacementGenerator.generatePlan(selectedFile.mimeType)
+                }
+            }
         } else if (mode != ProcessingMode.POISON_METADATA) {
             _replacementPlans.value = emptyMap()
         }
@@ -257,7 +311,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun updatePlanLocation(uri: Uri, latitude: Double, longitude: Double) {
         val currentPlans = _replacementPlans.value.toMutableMap()
-        val plan = currentPlans[uri] ?: MetadataReplacementGenerator.generatePlan()
+        val file = _selectedFiles.value.find { it.uri == uri }
+        val plan = currentPlans[uri] ?: MetadataReplacementGenerator.generatePlan(file?.mimeType)
 
         val latitudeRef = if (latitude >= 0) "N" else "S"
         val longitudeRef = if (longitude >= 0) "E" else "W"
@@ -269,14 +324,25 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             longitudeRef = longitudeRef
         )
         _replacementPlans.value = currentPlans
+        clearProcessedFiles()
         generateChangePreview()
     }
 
     fun regeneratePoisonPlans() {
         if (_selectedMode.value != ProcessingMode.POISON_METADATA) return
-        _replacementPlans.value = _selectedFiles.value.associate {
-            it.uri to MetadataReplacementGenerator.generatePlan()
+        _replacementPlans.value = _selectedFiles.value.associate { selectedFile ->
+            val metadata = _metadataPreview.value[selectedFile.uri].orEmpty()
+            val lat = metadata.find { it.key == "GPSLatitude" }?.value?.toDoubleOrNull()
+            val lon = metadata.find { it.key == "GPSLongitude" }?.value?.toDoubleOrNull()
+            
+            val useScramble = _appSettings.value.useNearbyScramble
+            selectedFile.uri to if (useScramble && lat != null && lon != null) {
+                MetadataReplacementGenerator.generatePlan(selectedFile.mimeType, lat, lon)
+            } else {
+                MetadataReplacementGenerator.generatePlan(selectedFile.mimeType)
+            }
         }
+        clearProcessedFiles()
         generateChangePreview()
     }
 
@@ -306,28 +372,56 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     if (plan == null) {
                         listOf(MetadataEntry("Info", "No replacement plan available"))
                     } else {
-                        val targetMap = linkedMapOf(
-                            "DateTime" to plan.dateTime,
-                            "DateTimeOriginal" to plan.dateTime,
-                            "DateTimeDigitized" to plan.dateTime,
-                            "Make" to plan.make,
-                            "Model" to plan.model,
-                            "Software" to plan.software,
-                            "ImageDescription" to plan.imageDescription,
-                            "UserComment" to plan.userComment,
-                            "PhotographicSensitivity" to plan.photographicSensitivity,
-                            "ExposureTime" to plan.exposureTime,
-                            "FNumber" to plan.fNumber,
-                            "FocalLength" to plan.focalLength,
-                            "WhiteBalance" to plan.whiteBalance,
-                            "Flash" to plan.flash,
-                            "GPSLatitude" to plan.latitude.toString(),
-                            "GPSLatitudeRef" to plan.latitudeRef,
-                            "GPSLongitude" to plan.longitude.toString(),
-                            "GPSLongitudeRef" to plan.longitudeRef
-                        )
+                        val targetMap = linkedMapOf<String, String>()
+                        val mime = file.mimeType ?: ""
 
-                        if (keepOrientation) {
+                        when {
+                            mime.startsWith("image/") -> {
+                                targetMap["DateTime"] = plan.dateTime
+                                targetMap["DateTimeOriginal"] = plan.dateTime
+                                targetMap["DateTimeDigitized"] = plan.dateTime
+                                targetMap["Make"] = plan.make
+                                targetMap["Model"] = plan.model
+                                targetMap["Software"] = plan.software
+                                targetMap["ImageDescription"] = plan.imageDescription
+                                targetMap["UserComment"] = plan.userComment
+                                targetMap["PhotographicSensitivity"] = plan.photographicSensitivity
+                                targetMap["ExposureTime"] = plan.exposureTime
+                                targetMap["FNumber"] = plan.fNumber
+                                targetMap["FocalLength"] = plan.focalLength
+                                targetMap["WhiteBalance"] = plan.whiteBalance
+                                targetMap["Flash"] = plan.flash
+                                targetMap["GPSLatitude"] = plan.latitude.toString()
+                                targetMap["GPSLatitudeRef"] = plan.latitudeRef
+                                targetMap["GPSLongitude"] = plan.longitude.toString()
+                                targetMap["GPSLongitudeRef"] = plan.longitudeRef
+                            }
+                            mime.startsWith("video/") -> {
+                                targetMap["Location"] = "${plan.latitude}, ${plan.longitude}"
+                                plan.title?.let { targetMap["Title"] = it }
+                                plan.artist?.let { targetMap["Director"] = it }
+                                plan.year?.let { targetMap["Year"] = it }
+                                plan.genre?.let { targetMap["Genre"] = it }
+                                plan.mediaDate?.let { targetMap["Date"] = it }
+                            }
+                            mime.startsWith("audio/") -> {
+                                targetMap["Location"] = "${plan.latitude}, ${plan.longitude}"
+                                plan.title?.let { targetMap["Title"] = it }
+                                plan.artist?.let { targetMap["Artist"] = it }
+                                plan.album?.let { targetMap["Album"] = it }
+                                plan.year?.let { targetMap["Year"] = it }
+                                plan.genre?.let { targetMap["Genre"] = it }
+                                plan.mediaDate?.let { targetMap["Date"] = it }
+                            }
+                            mime == "application/pdf" -> {
+                                plan.pdfTitle?.let { targetMap["Title"] = it }
+                                plan.author?.let { targetMap["Author"] = it }
+                                plan.creator?.let { targetMap["Creator"] = it }
+                                plan.producer?.let { targetMap["Producer"] = it }
+                            }
+                        }
+
+                        if (keepOrientation && mime.startsWith("image/")) {
                             currentMap["Orientation"]?.let { targetMap["Orientation"] = it }
                         }
 
@@ -353,7 +447,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun processFiles() {
+    fun processFiles(onSuccess: (() -> Unit)? = null) {
         val files = _selectedFiles.value
         val mode = _selectedMode.value
 
@@ -389,6 +483,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }.onSuccess {
                 _processedFiles.value = it
                 _message.value = "Processing complete"
+                onSuccess?.invoke()
             }.onFailure {
                 Timber.e(it, "Manual processing failed")
                 _message.value = "Processing failed: ${it.message}"
@@ -399,19 +494,26 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun enqueueBackgroundProcessing(files: List<SelectedFile>, mode: ProcessingMode) {
         val plans = _replacementPlans.value.mapKeys { it.key.toString() }
-        val plansFile = File(appContext.cacheDir, "processing_plans_${System.currentTimeMillis()}.json")
+        val plansFile = File(appContext?.cacheDir, "processing_plans_${System.currentTimeMillis()}.json")
         plansFile.writeText(Json.encodeToString(plans))
 
+        val settings = _appSettings.value
         val inputData = Data.Builder()
             .putStringArray(MetadataProcessingWorker.KEY_INPUT_URIS, files.map { it.uri.toString() }.toTypedArray())
             .putString(MetadataProcessingWorker.KEY_MODE, mode.name)
-            .putBoolean(MetadataProcessingWorker.KEY_KEEP_ORIENTATION, _appSettings.value.keepImageOrientation)
-            .putString(MetadataProcessingWorker.KEY_THUMBNAIL_HANDLING, _appSettings.value.thumbnailHandling.name)
+            .putBoolean(MetadataProcessingWorker.KEY_KEEP_ORIENTATION, settings.keepImageOrientation)
+            .putString(MetadataProcessingWorker.KEY_THUMBNAIL_HANDLING, settings.thumbnailHandling.name)
             .putString(MetadataProcessingWorker.KEY_PLANS_FILE_PATH, plansFile.absolutePath)
-            .putString(MetadataProcessingWorker.KEY_SAVING_PATH, _appSettings.value.defaultSavingPath)
-            .putString(MetadataProcessingWorker.KEY_DEFAULT_PREFIX, _appSettings.value.defaultPrefix)
-            .putString(MetadataProcessingWorker.KEY_DEFAULT_SUFFIX, _appSettings.value.defaultSuffix)
-            .putBoolean(MetadataProcessingWorker.KEY_USE_RANDOM_NAMES, _appSettings.value.useRandomFileNames)
+            .putString(MetadataProcessingWorker.KEY_FOLDER_STRUCTURE, settings.folderStructure.name)
+            .putBoolean(MetadataProcessingWorker.KEY_USE_SUBFOLDERS_IN_UNIFIED, settings.useSubfoldersInUnified)
+            .putString(MetadataProcessingWorker.KEY_UNIFIED_SAVING_PATH, settings.unifiedSavingPath)
+            .putString(MetadataProcessingWorker.KEY_PICTURES_SAVING_PATH, settings.picturesSavingPath)
+            .putString(MetadataProcessingWorker.KEY_MUSIC_SAVING_PATH, settings.musicSavingPath)
+            .putString(MetadataProcessingWorker.KEY_MOVIES_SAVING_PATH, settings.moviesSavingPath)
+            .putString(MetadataProcessingWorker.KEY_DOCUMENTS_SAVING_PATH, settings.documentsSavingPath)
+            .putString(MetadataProcessingWorker.KEY_DEFAULT_PREFIX, settings.defaultPrefix)
+            .putString(MetadataProcessingWorker.KEY_DEFAULT_SUFFIX, settings.defaultSuffix)
+            .putBoolean(MetadataProcessingWorker.KEY_USE_RANDOM_NAMES, settings.useRandomFileNames)
             .build()
 
         val workRequest = OneTimeWorkRequestBuilder<MetadataProcessingWorker>()
@@ -446,9 +548,23 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         val keepOrientation = _appSettings.value.keepImageOrientation
 
         if (mode == ProcessingMode.POISON_METADATA) {
-            _replacementPlans.value = files.associate {
-                it.uri to MetadataReplacementGenerator.generatePlan()
+            val newPlans = mutableMapOf<Uri, MetadataReplacementPlan>()
+            withContext(Dispatchers.IO) {
+                for (selectedFile in files) {
+                    val metadata = metadataRepository.readMetadata(selectedFile)
+                    val lat = metadata.find { it.key == "GPSLatitude" }?.value?.toDoubleOrNull()
+                    val lon = metadata.find { it.key == "GPSLongitude" }?.value?.toDoubleOrNull()
+
+                    val useScramble = _appSettings.value.useNearbyScramble
+                    val plan = if (useScramble && lat != null && lon != null) {
+                        MetadataReplacementGenerator.generatePlan(selectedFile.mimeType, lat, lon)
+                    } else {
+                        MetadataReplacementGenerator.generatePlan(selectedFile.mimeType)
+                    }
+                    newPlans[selectedFile.uri] = plan
+                }
             }
+            _replacementPlans.value = newPlans
         } else {
             _replacementPlans.value = emptyMap()
         }
@@ -492,9 +608,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         throw IllegalStateException("No processed files available for sharing")
                     }
                     val processedFilesList = _processedFiles.value.map { it.second }
-                    val firstMime = _processedFiles.value.first().first.mimeType
-                    val allSameMime = _processedFiles.value.all { it.first.mimeType == firstMime }
-                    onShareFilesReady(processedFilesList, if (allSameMime) firstMime else "*/*")
+                    val selectedFilesList = _processedFiles.value.map { it.first }
+                    
+                    val nicelyNamedFiles = withContext(Dispatchers.IO) {
+                        prepareFilesForSharing(processedFilesList, selectedFilesList)
+                    }
+
+                    val firstMime = selectedFilesList.first().mimeType
+                    val allSameMime = selectedFilesList.all { it.mimeType == firstMime }
+                    onShareFilesReady(nicelyNamedFiles, if (allSameMime) firstMime else "*/*")
                 }
             }
         }.onSuccess {
@@ -508,24 +630,45 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun saveProcessedFilesToDefault(): List<Uri> {
-        // Since this involves I/O, it's safer on Dispatchers.IO, but currently 
-        // it's called from Main and returns a value. 
-        // We'll leave the call as is for now as it's relatively light MediaStore I/O, 
-        // but ideally use a Flow or deferred result.
         val results = _processedFiles.value.mapNotNull { (selectedFile, processedFile) ->
+            val (configuredPath, subPath) = resolveSavingPath(selectedFile.mimeType)
             saveFileUseCase.saveToDefaultFolder(
                 sourceFile = processedFile,
                 displayName = buildOutputName(selectedFile.displayName),
                 mimeType = selectedFile.mimeType,
-                configuredPath = _appSettings.value.defaultSavingPath
+                configuredPath = configuredPath,
+                subPath = subPath
             )
         }
         if (results.isNotEmpty()) {
-            _message.value = "Saved ${results.size} file(s) to default folder"
+            _message.value = "Saved ${results.size} file(s)"
         } else if (_processedFiles.value.isNotEmpty()) {
             _message.value = "Failed to save files"
         }
         return results
+    }
+
+    private fun resolveSavingPath(mimeType: String?): Pair<String?, String?> {
+        val settings = _appSettings.value
+        return if (settings.folderStructure == FolderStructure.UNIFIED) {
+            val subPath = if (settings.useSubfoldersInUnified) {
+                when {
+                    mimeType?.startsWith("image/") == true -> "Pictures"
+                    mimeType?.startsWith("video/") == true -> "Movies"
+                    mimeType?.startsWith("audio/") == true -> "Music"
+                    else -> "Documents"
+                }
+            } else null
+            settings.unifiedSavingPath to subPath
+        } else {
+            val path = when {
+                mimeType?.startsWith("image/") == true -> settings.picturesSavingPath
+                mimeType?.startsWith("video/") == true -> settings.moviesSavingPath
+                mimeType?.startsWith("audio/") == true -> settings.musicSavingPath
+                else -> settings.documentsSavingPath
+            }
+            path to null
+        }
     }
 
     fun saveProcessedFilesToCustom(treeUri: Uri): List<Uri> {
@@ -545,30 +688,120 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         return results
     }
 
-    fun getFirstProcessedFileForSharing(): Pair<SelectedFile, File>? =
-        _processedFiles.value.firstOrNull()
+    suspend fun getProcessedFilesForSharing(): List<File> = withContext(Dispatchers.IO) {
+        val pairs = _processedFiles.value
+        if (pairs.isEmpty()) return@withContext emptyList()
+        
+        val processedFilesList = pairs.map { it.second }
+        val selectedFilesList = pairs.map { it.first }
+        
+        prepareFilesForSharing(processedFilesList, selectedFilesList)
+    }
 
-    fun persistAndSetDefaultSavingPath(uri: Uri?) {
+    private fun prepareFilesForSharing(processedFiles: List<File>, selectedFiles: List<SelectedFile>): List<File> {
+        val sharedDir = File(appContext?.cacheDir, "shared/outgoing_${System.currentTimeMillis()}")
+        if (!sharedDir.exists()) {
+            sharedDir.mkdirs()
+        }
+
+        return processedFiles.mapIndexed { index, file ->
+            val selectedFile = selectedFiles[index]
+            val niceName = buildOutputName(selectedFile.displayName)
+            val sharedFile = File(sharedDir, niceName)
+            
+            runCatching {
+                file.copyTo(sharedFile, overwrite = true)
+            }.onFailure {
+                Timber.e(it, "Failed to copy file for sharing: %s", niceName)
+            }
+            
+            sharedFile
+        }
+    }
+
+    fun persistAndSetUnifiedSavingPath(uri: Uri?) {
         if (uri == null) {
             viewModelScope.launch {
-                settingsRepository.setDefaultSavingPathString("Pictures/MetaJammer")
-                _message.value = "Default saving path reset to Pictures/MetaJammer"
+                settingsRepository.setUnifiedSavingPath(null)
+                _message.value = "Unified saving path reset to Download/MetaJammer"
             }
             return
         }
+        takePersistablePermission(uri)
+        viewModelScope.launch {
+            settingsRepository.setUnifiedSavingPath(uri)
+            _message.value = "Unified saving path updated"
+        }
+    }
 
+    fun persistAndSetPicturesSavingPath(uri: Uri?) {
+        if (uri == null) {
+            viewModelScope.launch {
+                settingsRepository.setPicturesSavingPath(null)
+                _message.value = "Pictures saving path reset to Pictures/MetaJammer"
+            }
+            return
+        }
+        takePersistablePermission(uri)
+        viewModelScope.launch {
+            settingsRepository.setPicturesSavingPath(uri)
+            _message.value = "Pictures saving path updated"
+        }
+    }
+
+    fun persistAndSetMusicSavingPath(uri: Uri?) {
+        if (uri == null) {
+            viewModelScope.launch {
+                settingsRepository.setMusicSavingPath(null)
+                _message.value = "Music saving path reset to Music/MetaJammer"
+            }
+            return
+        }
+        takePersistablePermission(uri)
+        viewModelScope.launch {
+            settingsRepository.setMusicSavingPath(uri)
+            _message.value = "Music saving path updated"
+        }
+    }
+
+    fun persistAndSetMoviesSavingPath(uri: Uri?) {
+        if (uri == null) {
+            viewModelScope.launch {
+                settingsRepository.setMoviesSavingPath(null)
+                _message.value = "Movies saving path reset to Movies/MetaJammer"
+            }
+            return
+        }
+        takePersistablePermission(uri)
+        viewModelScope.launch {
+            settingsRepository.setMoviesSavingPath(uri)
+            _message.value = "Movies saving path updated"
+        }
+    }
+
+    fun persistAndSetDocumentsSavingPath(uri: Uri?) {
+        if (uri == null) {
+            viewModelScope.launch {
+                settingsRepository.setDocumentsSavingPath(null)
+                _message.value = "Documents saving path reset to Documents/MetaJammer"
+            }
+            return
+        }
+        takePersistablePermission(uri)
+        viewModelScope.launch {
+            settingsRepository.setDocumentsSavingPath(uri)
+            _message.value = "Documents saving path updated"
+        }
+    }
+
+    private fun takePersistablePermission(uri: Uri) {
         if (uri.toString().startsWith("content://")) {
             runCatching {
-                appContext.contentResolver.takePersistableUriPermission(
+                appContext?.contentResolver?.takePersistableUriPermission(
                     uri,
                     Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                 )
             }
-        }
-
-        viewModelScope.launch {
-            settingsRepository.setDefaultSavingPath(uri)
-            _message.value = "Default saving path updated"
         }
     }
 
@@ -600,8 +833,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         settingsRepository.setUseRandomFileNames(enabled)
     }
 
+    fun setFolderStructure(structure: FolderStructure) = launchSettingUpdate {
+        settingsRepository.setFolderStructure(structure)
+    }
+
+    fun setUseSubfoldersInUnified(enabled: Boolean) = launchSettingUpdate {
+        settingsRepository.setUseSubfoldersInUnified(enabled)
+    }
+
     fun setKeepImageOrientation(enabled: Boolean) = launchSettingUpdate {
         settingsRepository.setKeepImageOrientation(enabled)
+        clearProcessedFiles()
         if (_selectedMode.value != null) generateChangePreview()
     }
 
@@ -639,10 +881,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setThumbnailHandling(handling: ThumbnailHandling) = launchSettingUpdate {
         settingsRepository.setThumbnailHandling(handling)
+        clearProcessedFiles()
     }
 
     fun setAllowInternetForMap(allowed: Boolean) = launchSettingUpdate {
         settingsRepository.setAllowInternetForMap(allowed)
+    }
+
+    fun setUseNearbyScramble(enabled: Boolean) = launchSettingUpdate {
+        settingsRepository.setUseNearbyScramble(enabled)
+        clearProcessedFiles()
     }
 
     fun setLanguage(language: AppLanguage) = launchSettingUpdate {
@@ -657,9 +905,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _message.value = null
     }
 
-    fun clearTempFiles() {
+    private fun clearProcessedFiles() {
         _processedFiles.value.forEach { (_, file) -> runCatching { file.delete() } }
         _processedFiles.value = emptyList()
+        _workInfo.value = null
+    }
+
+    fun clearTempFiles() {
+        clearProcessedFiles()
         fileRepository.clearCache()
     }
 

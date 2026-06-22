@@ -23,8 +23,8 @@
     <!-- HomeScreen -->
     <string name="hero_title">הגן על הפרטיות שלך</string>
     <string name="hero_subtitle">נקה או החלף מטא-דאטה רגיש לפני שיתוף הקבצים שלך.</string>
-    <string name="feature_images_video_title">תמונות ווידאו</string>
-    <string name="feature_images_video_desc">תמיכה מלאה בניקוי מטא-דאטה מתמונות ועיבוד מחדש של סרטונים להסרת מעקב.</string>
+    <string name="feature_images_video_title">תמונות, וידאו, אודיו ו-PDF</string>
+    <string name="feature_images_video_desc">תמיכה מלאה בהסרת מטא-נתונים מתמונות, וביצוע remuxing לסרטוני וידאו, אודיו ומסמכי PDF כדי להסיר מעקב.</string>
     <string name="feature_poisoning_title">הרעלת מטא-דאטה</string>
     <string name="feature_poisoning_desc">אל תסתפק בהסרת נתונים - החלף אותם בנתונים מזויפים מציאותיים כדי לשמור על פרטיות ולבלבל עוקבים.</string>
     <string name="feature_background_title">עיבוד ברקע</string>
@@ -56,6 +56,8 @@
     <string name="preview_of_changes">תצוגה מקדימה של שינויים</string>
     <string name="no_preview_available">אין תצוגה מקדימה זמינה</string>
     <string name="change_location_map">שנה מיקום במפה</string>
+    <string name="process_and_continue">עיבוד והמשך</string>
+    <string name="processing_complete">העיבוד הושלם</string>
     <string name="process_files">עבד קבצים</string>
     <string name="processing_foreground">מעבד בקדמה...</string>
     <string name="background_progress">התקדמות ברקע: %1$d%%</string>
@@ -66,9 +68,9 @@
     <string name="help_item_video_title">עיבוד וידאו</string>
     <string name="help_item_video_body">פורמטים נתמכים: MP4, MOV.\n\nתהליך זה מסיר GPS, תאריכים ונתוני מכשיר כדי להגן על פרטיותך.</string>
     <string name="help_item_image_title">עיבוד תמונה</string>
-    <string name="help_item_image_body">פורמטים נתמכים: JPG, PNG.\n\nMetaJammer מסיר מטא-דאטה EXIF מתמונות אלו. במצב \"הרעלה\", הוא מחליף תגיות רגישות בנתונים אקראיים מציאותיים.</string>
-    <string name="help_item_other_title">קבצים אחרים</string>
-    <string name="help_item_other_body">פורמטים נתמכים: אין כרגע.\n\nMetaJammer מתמקד כרגע בקבצי מדיה. עדכונים עתידיים יכללו תמיכה ב-PDF ומסמכים.</string>
+    <string name="help_item_image_body">פורמטים נתמכים: JPG, PNG, WebP, HEIF.\n\nMetaJammer מסיר מטא-דאטה EXIF מתמונות אלו. במצב \"הרעלה\", הוא מחליף תגיות רגישות בנתונים אקראיים מציאותיים.</string>
+    <string name="help_item_other_title">עיבוד PDF ומסמכים</string>
+    <string name="help_item_other_body">פורמטים נתמכים: PDF.\n\n‏MetaJammer תומך כעת באופן מלא במסמכי PDF. ניתן לקרוא, להסיר ו\"להרעיל\" מטא-דאטה כמו כותרת, מחבר, נושא, מילות מפתח, יוצר ויצרן. הכלי גם מסיר סימני מים נסתרים והערות כדי להבטיח שהמסמכים שלכם נקיים לפני השיתוף.</string>
     <string name="help_report_issue_title">דווח על בעיה</string>
     <string name="help_report_issue_body">מצאת באג או יש לך בקשה לתכונה חדשה? אנא דווח עליה בדף ה-GitHub שלנו.</string>
     <string name="help_open_github">פתח בעיות ב-GitHub</string>
@@ -88,15 +90,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">הגדרות</string>
-    <string name="category_file_management">ניהול קבצים</string>
+    <string name="category_folder_management">ניהול תיקיות</string>
+    <string name="category_file_management">מטא-דאטה ושמות קבצים</string>
     <string name="category_image_file">תמונה / קובץ</string>
     <string name="category_shared_files">התנהגות קבצים משותפים</string>
     <string name="category_ui">ממשק משתמש</string>
 
+    <string name="setting_folder_structure_title">מבנה תיקיות</string>
+    <string name="setting_folder_structure_unified">מאוחד (תיקייה אחת לכולם)</string>
+    <string name="setting_folder_structure_split">מפוצל (תיקיות נפרדות לפי סוג)</string>
+    <string name="setting_use_subfolders_title">שימוש בתתי-תיקיות במבנה מאוחד</string>
+    <string name="setting_use_subfolders_sub">ארגון לפי סוג (תמונות, סרטים וכו\') בתוך התיקייה המאוחדת</string>
+
+    <string name="setting_unified_path_title">תיקיית שמירה מאוחדת</string>
+    <string name="setting_pictures_path_title">תיקיית שמירת תמונות</string>
+    <string name="setting_music_path_title">תיקיית שמירת מוזיקה</string>
+    <string name="setting_movies_path_title">תיקיית שמירת סרטים</string>
+    <string name="setting_documents_path_title">תיקיית שמירת מסמכים</string>
+
+    <string name="setting_configure_split_folders">הגדרת תיקיות מפוצלות</string>
+    <string name="setting_split_folders_desc">ניהול תיקיות אישיות לכל קטגוריית קבצים</string>
+
     <string name="setting_random_names_title">השתמש בשמות קבצים אקראיים</string>
     <string name="setting_random_names_sub">צור שמות פלט אקראיים במקום להשתמש בשם הקובץ המקורי</string>
     <string name="setting_default_path_title">נתיב שמירה כברירת מחדל</string>
-    <string name="setting_reset_path">אפס ל-Pictures/MetaJammer</string>
+    <string name="setting_reset_path_pictures">איפוס ל-Pictures/MetaJammer</string>
+    <string name="setting_reset_path_download">איפוס ל-Download/MetaJammer</string>
+    <string name="setting_reset_path_music">איפוס ל-Music/MetaJammer</string>
+    <string name="setting_reset_path_movies">איפוס ל-Movies/MetaJammer</string>
+    <string name="setting_reset_path_documents">איפוס ל-Documents/MetaJammer</string>
     <string name="setting_select_folder">בחר תיקייה</string>
 
     <string name="setting_keep_orientation_title">שמור על כיוון התמונה</string>
@@ -111,6 +133,8 @@
     <string name="setting_thumbnails_warning">אזהרה: שמירה על תמונות ממוזערות מקוריות עלולה להדליף מטא-דאטה.</string>
     <string name="setting_enable_map_title">אפשר בחירת מפה</string>
     <string name="setting_enable_map_sub">אפשר לאפליקציה להתחבר לאינטרנט כדי להציג את OpenStreetMap</string>
+    <string name="setting_nearby_scramble_title">השתמש בהרעלת נתונים מקומית</string>
+    <string name="setting_nearby_scramble_sub">בעת הרעלת מטא-נתונים, בצע רנדומיזציה של קואורדינטות בקרבת המיקום המקורי במקום נקודה אקראית לחלוטין</string>
 
     <string name="setting_quick_scrub_title">ניקוי מהיר ושיתוף</string>
     <string name="setting_quick_scrub_sub">נקה מטא-דאטה באופן אוטומטי ופתח מחדש את תפריט השיתוף</string>

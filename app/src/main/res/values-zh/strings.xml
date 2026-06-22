@@ -23,8 +23,8 @@
     <!-- HomeScreen -->
     <string name="hero_title">保护您的隐私</string>
     <string name="hero_subtitle">在分享文件之前清理或替换敏感元数据。</string>
-    <string name="feature_images_video_title">图像和视频</string>
-    <string name="feature_images_video_desc">完全支持从照片中删除元数据以及对视频进行重混以删除追踪。</string>
+    <string name="feature_images_video_title">图像、视频、音频和 PDF</string>
+    <string name="feature_images_video_desc">全面支持清除照片中的元数据，并对视频、音频和 PDF 文档进行重新封装 (remuxing) 以消除追踪。</string>
     <string name="feature_poisoning_title">元数据投毒</string>
     <string name="feature_poisoning_desc">不仅是删除数据——更可以用逼真的虚假信息替换它，以保护您的隐私并迷惑追踪者。</string>
     <string name="feature_background_title">后台处理</string>
@@ -56,6 +56,8 @@
     <string name="preview_of_changes">更改预览</string>
     <string name="no_preview_available">无预览可用</string>
     <string name="change_location_map">在地图上更改位置</string>
+    <string name="process_and_continue">处理并继续</string>
+    <string name="processing_complete">处理完成</string>
     <string name="process_files">处理文件</string>
     <string name="processing_foreground">正在前台处理...</string>
     <string name="background_progress">后台进度：%1$d%%</string>
@@ -66,9 +68,9 @@
     <string name="help_item_video_title">视频处理</string>
     <string name="help_item_video_body">支持的格式：MP4, MOV。\n\n这些格式支持完整的“重混”(Remuxing) 过程。该过程会删除 GPS、日期和设备信息，以保护您的隐私。</string>
     <string name="help_item_image_title">图像处理</string>
-    <string name="help_item_image_body">支持的格式：JPG, PNG。\n\nMetaJammer 会从这些图像中删除 EXIF 元数据。在“投毒”模式下，它会将 GPS 坐标等敏感标签替换为现实的随机数据。</string>
-    <string name="help_item_other_title">其他文件</string>
-    <string name="help_item_other_body">支持的格式：目前没有。\n\nMetaJammer 目前专注于媒体文件。未来的更新将包括对 PDF 和文档的支持。敬请关注！</string>
+    <string name="help_item_image_body">支持的格式：JPG, PNG, WebP, HEIF。\n\nMetaJammer 会从这些图像中删除 EXIF 元数据。在“投毒”模式下，它会将 GPS 坐标等敏感标签替换为现实的随机数据。</string>
+    <string name="help_item_other_title">PDF 和文档处理</string>
+    <string name="help_item_other_body">支持的格式：PDF。\n\nMetaJammer 现在全面支持 PDF 文档。您可以读取、删除和“投毒”元数据，如标题、作者、主题、关键词、创建者和制作者。它还会清除隐藏的水印和注释，以确保您的文档在共享前保持干净。</string>
     <string name="help_report_issue_title">报告问题</string>
     <string name="help_report_issue_body">发现了漏洞或有功能请求？请在我们的 GitHub 页面上报告。</string>
     <string name="help_open_github">打开 GitHub 问题</string>
@@ -88,15 +90,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">设置</string>
-    <string name="category_file_management">文件管理</string>
+    <string name="category_folder_management">文件夹管理</string>
+    <string name="category_file_management">元数据与文件名</string>
     <string name="category_image_file">图像 / 文件</string>
     <string name="category_shared_files">共享文件行为</string>
     <string name="category_ui">用户界面</string>
 
+    <string name="setting_folder_structure_title">文件夹结构</string>
+    <string name="setting_folder_structure_unified">统一（所有文件共用一个文件夹）</string>
+    <string name="setting_folder_structure_split">拆分（按类型存放至不同文件夹）</string>
+    <string name="setting_use_subfolders_title">在统一结构中使用子文件夹</string>
+    <string name="setting_use_subfolders_sub">在统一文件夹内按类型（图片、视频等）分类</string>
+
+    <string name="setting_unified_path_title">统一保存文件夹</string>
+    <string name="setting_pictures_path_title">图片保存文件夹</string>
+    <string name="setting_music_path_title">音乐保存文件夹</string>
+    <string name="setting_movies_path_title">视频保存文件夹</string>
+    <string name="setting_documents_path_title">文档保存文件夹</string>
+
+    <string name="setting_configure_split_folders">配置拆分文件夹</string>
+    <string name="setting_split_folders_desc">为每个文件类别管理独立文件夹</string>
+
     <string name="setting_random_names_title">使用随机文件名</string>
     <string name="setting_random_names_sub">生成随机输出名称，而不是使用原始文件名</string>
     <string name="setting_default_path_title">默认保存路径</string>
-    <string name="setting_reset_path">重置为 Pictures/MetaJammer</string>
+    <string name="setting_reset_path_pictures">重置为 Pictures/MetaJammer</string>
+    <string name="setting_reset_path_download">重置为 Download/MetaJammer</string>
+    <string name="setting_reset_path_music">重置为 Music/MetaJammer</string>
+    <string name="setting_reset_path_movies">重置为 Movies/MetaJammer</string>
+    <string name="setting_reset_path_documents">重置为 Documents/MetaJammer</string>
     <string name="setting_select_folder">选择文件夹</string>
 
     <string name="setting_keep_orientation_title">保留图像方向</string>
@@ -111,6 +133,8 @@
     <string name="setting_thumbnails_warning">警告：保留原始缩略图可能会泄露元数据（位置、设备信息），即使删除了主标签也是如此。</string>
     <string name="setting_enable_map_title">启用地图选择器</string>
     <string name="setting_enable_map_sub">允许应用连接互联网以显示 OpenStreetMap 以进行位置选择</string>
+    <string name="setting_nearby_scramble_title">使用本地化中毒</string>
+    <string name="setting_nearby_scramble_sub">中毒元数据时，随机化原始位置附近的坐标，而不是完全随机的点</string>
 
     <string name="setting_quick_scrub_title">快速清理并分享</string>
     <string name="setting_quick_scrub_sub">自动删除元数据并为分享的文件重新打开分享列表</string>

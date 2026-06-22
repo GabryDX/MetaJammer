@@ -23,8 +23,8 @@
     <!-- HomeScreen -->
     <string name="hero_title">از حریم خصوصی خود محافظت کنید</string>
     <string name="hero_subtitle">قبل از اشتراک‌گذاری فایل‌ها، متاداده‌های حساس را پاک یا جایگزین کنید.</string>
-    <string name="feature_images_video_title">تصاویر و ویدیو</string>
-    <string name="feature_images_video_desc">پشتیبانی کامل از پاکسازی متاداده از عکس‌ها و ریمیکس کردن ویدیوها برای حذف ردیابی.</string>
+    <string name="feature_images_video_title">تصاویر، ویدیو، صدا و PDF</string>
+    <string name="feature_images_video_desc">پشتیبانی کامل از حذف متادیتا از عکس‌ها و ریمکس کردن ویدیوها، صداها و اسناد PDF برای حذف ردیابی.</string>
     <string name="feature_poisoning_title">مسموم‌سازی متاداده</string>
     <string name="feature_poisoning_desc">فقط داده‌ها را حذف نکنید—آن‌ها را با داده‌های جعلی واقع‌گرایانه جایگزین کنید تا حریم خصوصی حفظ شود و ردیاب‌ها گمراه شوند.</string>
     <string name="feature_background_title">پردازش در پس‌زمینه</string>
@@ -56,6 +56,8 @@
     <string name="preview_of_changes">پیش‌نمایش تغییرات</string>
     <string name="no_preview_available">پیش‌نمایشی در دسترس نیست</string>
     <string name="change_location_map">تغییر مکان روی نقشه</string>
+    <string name="process_and_continue">پردازش و ادامه</string>
+    <string name="processing_complete">پردازش تکمیل شد</string>
     <string name="process_files">پردازش فایل‌ها</string>
     <string name="processing_foreground">در حال پردازش در پیش‌زمینه...</string>
     <string name="background_progress">پیشرفت در پس‌زمینه: %1$d%%</string>
@@ -66,9 +68,9 @@
     <string name="help_item_video_title">Video Processing</string>
     <string name="help_item_video_body">Supported formats: MP4, MOV.\n\nFull re-muxing is supported for these containers. This process strips GPS, dates, and device atoms to protect your privacy.</string>
     <string name="help_item_image_title">Image Processing</string>
-    <string name="help_item_image_body">Supported formats: JPG, PNG.\n\nMetaJammer strips EXIF metadata from these images. In \"Poison\" mode, it replaces sensitive tags like GPS coordinates with realistic random data.</string>
-    <string name="help_item_other_title">Other Files</string>
-    <string name="help_item_other_body">Supported formats: None currently.\n\nMetaJammer currently focuses on media files. Future updates will include support for PDFs and documents. Stay tuned!</string>
+    <string name="help_item_image_body">Supported formats: JPG, PNG, WebP, HEIF.\n\nMetaJammer strips EXIF metadata from these images. In \"Poison\" mode, it replaces sensitive tags like GPS coordinates with realistic random data.</string>
+    <string name="help_item_other_title">پردازش PDF و اسناد</string>
+    <string name="help_item_other_body">فرمت‌های پشتیبانی شده: PDF.\n\nنرم‌افزار MetaJammer اکنون به‌طور کامل از اسناد PDF پشتیبانی می‌کند. شما می‌توانید متادیتاهایی مانند عنوان، نویسنده، موضوع، کلمات کلیدی، سازنده و تولیدکننده را بخوانید، حذف کنید و مسموم کنید. همچنین واترمارک‌های پنهان و یادداشت‌ها را پاک می‌کند تا از تمیز بودن اسناد شما قبل از اشتراک‌گذاری اطمینان حاصل شود.</string>
     <string name="help_report_issue_title">Report an Issue</string>
     <string name="help_report_issue_body">Found a bug or have a feature request? Please report it on our GitHub page.</string>
     <string name="help_open_github">Open GitHub Issues</string>
@@ -88,15 +90,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">تنظیمات</string>
-    <string name="category_file_management">مدیریت فایل</string>
+    <string name="category_folder_management">مدیریت پوشه</string>
+    <string name="category_file_management">متادیتا و نام فایل‌ها</string>
     <string name="category_image_file">تصویر / فایل</string>
     <string name="category_shared_files">رفتار فایل‌های به اشتراک گذاشته شده</string>
     <string name="category_ui">رابط کاربری</string>
 
+    <string name="setting_folder_structure_title">ساختار پوشه</string>
+    <string name="setting_folder_structure_unified">یکپارچه (یک پوشه برای همه)</string>
+    <string name="setting_folder_structure_split">مجزا (پوشه‌های جداگانه بر اساس نوع)</string>
+    <string name="setting_use_subfolders_title">استفاده از زیرپوشه در حالت یکپارچه</string>
+    <string name="setting_use_subfolders_sub">سازماندهی بر اساس نوع (تصاویر، فیلم‌ها و غیره) در پوشه یکپارچه</string>
+
+    <string name="setting_unified_path_title">پوشه ذخیره‌سازی یکپارچه</string>
+    <string name="setting_pictures_path_title">پوشه ذخیره‌سازی تصاویر</string>
+    <string name="setting_music_path_title">پوشه ذخیره‌سازی موسیقی</string>
+    <string name="setting_movies_path_title">پوشه ذخیره‌سازی فیلم‌ها</string>
+    <string name="setting_documents_path_title">پوشه ذخیره‌سازی اسناد</string>
+
+    <string name="setting_configure_split_folders">پیکربندی پوشه‌های مجزا</string>
+    <string name="setting_split_folders_desc">مدیریت پوشه‌های جداگانه برای هر دسته از فایل‌ها</string>
+
     <string name="setting_random_names_title">استفاده از نام‌های فایل تصادفی</string>
     <string name="setting_random_names_sub">به‌جای استفاده از نام اصلی فایل، نام‌های خروجی تصادفی تولید کنید</string>
     <string name="setting_default_path_title">مسیر ذخیره‌سازی پیش‌فرض</string>
-    <string name="setting_reset_path">بازنشانی به Pictures/MetaJammer</string>
+    <string name="setting_reset_path_pictures">بازنشانی به Pictures/MetaJammer</string>
+    <string name="setting_reset_path_download">بازنشانی به Download/MetaJammer</string>
+    <string name="setting_reset_path_music">بازنشانی به Music/MetaJammer</string>
+    <string name="setting_reset_path_movies">بازنشانی به Movies/MetaJammer</string>
+    <string name="setting_reset_path_documents">بازنشانی به Documents/MetaJammer</string>
     <string name="setting_select_folder">انتخاب پوشه</string>
 
     <string name="setting_keep_orientation_title">حفظ جهت تصویر</string>
@@ -111,6 +133,8 @@
     <string name="setting_thumbnails_warning">هشدار: حفظ تصاویر بندانگشتی اصلی ممکن است متاداده‌ها (مکان، اطلاعات دستگاه) را فاش کند، حتی اگر تگ‌های اصلی حذف شده باشند.</string>
     <string name="setting_enable_map_title">فعال کردن انتخابگر نقشه</string>
     <string name="setting_enable_map_sub">اجازه دادن به برنامه برای اتصال به اینترنت جهت نمایش OpenStreetMap برای انتخاب مکان</string>
+    <string name="setting_nearby_scramble_title">استفاده از مسموم‌سازی موضعی</string>
+    <string name="setting_nearby_scramble_sub">هنگام مسموم‌سازی متاداده، مختصات را به جای یک نقطه کاملاً تصادفی، در نزدیکی مکان اصلی تصادفی کنید</string>
 
     <string name="setting_quick_scrub_title">پاکسازی سریع و اشتراک‌گذاری</string>
     <string name="setting_quick_scrub_sub">حذف خودکار متاداده و باز کردن مجدد برگه اشتراک‌گذاری برای فایل‌های به اشتراک گذاشته شده</string>

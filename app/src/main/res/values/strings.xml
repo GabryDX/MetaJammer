@@ -23,8 +23,8 @@
     <!-- HomeScreen -->
     <string name="hero_title">Protect Your Privacy</string>
     <string name="hero_subtitle">Clean or replace sensitive metadata before sharing your files.</string>
-    <string name="feature_images_video_title">Images &amp; Video</string>
-    <string name="feature_images_video_desc">Full support for stripping metadata from photos and remuxing videos to remove tracking.</string>
+    <string name="feature_images_video_title">Images, Video, Audio &amp; PDF</string>
+    <string name="feature_images_video_desc">Full support for stripping metadata from photos, and remuxing videos, audio, and PDF documents to remove tracking.</string>
     <string name="feature_poisoning_title">Metadata Poisoning</string>
     <string name="feature_poisoning_desc">Don’t just remove data—replace it with realistic fakes to preserve privacy and confuse trackers.</string>
     <string name="feature_background_title">Background Processing</string>
@@ -56,6 +56,8 @@
     <string name="preview_of_changes">Preview of Changes</string>
     <string name="no_preview_available">No preview available</string>
     <string name="change_location_map">Change Location on Map</string>
+    <string name="process_and_continue">Process and Continue</string>
+    <string name="processing_complete">Processing Complete</string>
     <string name="process_files">Process Files</string>
     <string name="processing_foreground">Processing in foreground...</string>
     <string name="background_progress">Background Progress: %1$d%%</string>
@@ -63,12 +65,12 @@
 
     <!-- HelpScreen -->
     <string name="help_title">Help &amp; Tutorials</string>
-    <string name="help_item_video_title">Video Processing</string>
-    <string name="help_item_video_body">Supported formats: MP4, MOV.\n\nFull re-muxing is supported for these containers. This process strips GPS, dates, and device atoms to protect your privacy.</string>
+    <string name="help_item_video_title">Video &amp; Audio Processing</string>
+    <string name="help_item_video_body">Supported formats: MP4, MOV, M4A, OGG.\n\nFull re-muxing is supported for these containers. This process strips GPS, dates, and device atoms to protect your privacy.</string>
     <string name="help_item_image_title">Image Processing</string>
-    <string name="help_item_image_body">Supported formats: JPG, PNG.\n\nMetaJammer strips EXIF metadata from these images. In \"Poison\" mode, it replaces sensitive tags like GPS coordinates with realistic random data.</string>
-    <string name="help_item_other_title">Other Files</string>
-    <string name="help_item_other_body">Supported formats: None currently.\n\nMetaJammer currently focuses on media files. Future updates will include support for PDFs and documents. Stay tuned!</string>
+    <string name="help_item_image_body">Supported formats: JPG, PNG, WebP, HEIF.\n\nMetaJammer strips EXIF metadata from these images. In \"Poison\" mode, it replaces sensitive tags like GPS coordinates with realistic random data.</string>
+    <string name="help_item_other_title">PDF &amp; Document Processing</string>
+    <string name="help_item_other_body">Supported formats: PDF.\n\nMetaJammer now fully supports PDF documents. You can read, remove, and poison metadata like Title, Author, Subject, Keywords, Creator, and Producer. It also strips hidden watermarks and annotations to ensure your documents are clean before sharing.</string>
     <string name="help_report_issue_title">Report an Issue</string>
     <string name="help_report_issue_body">Found a bug or have a feature request? Please report it on our GitHub page.</string>
     <string name="help_open_github">Open GitHub Issues</string>
@@ -88,15 +90,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">Settings</string>
-    <string name="category_file_management">File Management</string>
+    <string name="category_folder_management">Folder Management</string>
+    <string name="category_file_management">Metadata &amp; Filenames</string>
     <string name="category_image_file">Image / File</string>
     <string name="category_shared_files">Shared Files Behavior</string>
     <string name="category_ui">UI</string>
 
+    <string name="setting_folder_structure_title">Folder Structure</string>
+    <string name="setting_folder_structure_unified">Unified (Single folder for all)</string>
+    <string name="setting_folder_structure_split">Split (Separate folders by type)</string>
+    <string name="setting_use_subfolders_title">Use subfolders in unified</string>
+    <string name="setting_use_subfolders_sub">Organize by type (Pictures, Movies, etc.) inside the unified folder</string>
+
+    <string name="setting_unified_path_title">Unified saving folder</string>
+    <string name="setting_pictures_path_title">Pictures saving folder</string>
+    <string name="setting_music_path_title">Music saving folder</string>
+    <string name="setting_movies_path_title">Movies saving folder</string>
+    <string name="setting_documents_path_title">Documents saving folder</string>
+
+    <string name="setting_configure_split_folders">Configure Split Folders</string>
+    <string name="setting_split_folders_desc">Manage individual folders for each file category</string>
+
     <string name="setting_random_names_title">Use random file names</string>
     <string name="setting_random_names_sub">Generate randomized output names instead of using the original file name</string>
     <string name="setting_default_path_title">Default saving path</string>
-    <string name="setting_reset_path">Reset to Pictures/MetaJammer</string>
+    <string name="setting_reset_path_pictures">Reset to Pictures/MetaJammer</string>
+    <string name="setting_reset_path_download">Reset to Download/MetaJammer</string>
+    <string name="setting_reset_path_music">Reset to Music/MetaJammer</string>
+    <string name="setting_reset_path_movies">Reset to Movies/MetaJammer</string>
+    <string name="setting_reset_path_documents">Reset to Documents/MetaJammer</string>
     <string name="setting_select_folder">Select Folder</string>
 
     <string name="setting_keep_orientation_title">Keep image orientation</string>
@@ -111,6 +133,8 @@
     <string name="setting_thumbnails_warning">Warning: Keeping original thumbnails may leak metadata (location, device info) even if main tags are removed.</string>
     <string name="setting_enable_map_title">Enable map picker</string>
     <string name="setting_enable_map_sub">Allow the app to connect to the internet to show OpenStreetMap for location selection</string>
+    <string name="setting_nearby_scramble_title">Use localized poisoning</string>
+    <string name="setting_nearby_scramble_sub">When poisoning metadata, randomize coordinates near the original location instead of a totally random spot</string>
 
     <string name="setting_quick_scrub_title">Quick Scrub &amp; Share</string>
     <string name="setting_quick_scrub_sub">Automatically strip metadata and re-open Share Sheet for shared files</string>

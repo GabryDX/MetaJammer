@@ -23,8 +23,8 @@
     <!-- HomeScreen -->
     <string name="hero_title">Chroń swoją prywatność</string>
     <string name="hero_subtitle">Wyczyść lub zastąp wrażliwe metadane przed udostępnieniem plików.</string>
-    <string name="feature_images_video_title">Obrazy i wideo</string>
-    <string name="feature_images_video_desc">Pełne wsparcie dla usuwania metadanych ze zdjęć i remuxingu wideo w celu usunięcia śledzenia.</string>
+    <string name="feature_images_video_title">Obrazy, wideo, audio i PDF</string>
+    <string name="feature_images_video_desc">Pełne wsparcie dla usuwania metadanych ze zdjęć oraz remuksowania plików wideo, audio i dokumentów PDF w celu usunięcia śledzenia.</string>
     <string name="feature_poisoning_title">Zatruwanie metadanych</string>
     <string name="feature_poisoning_desc">Nie tylko usuwaj dane — zastępuj je realistycznymi fałszywkami, aby zachować prywatność i zmylić trackery.</string>
     <string name="feature_background_title">Przetwarzanie w tle</string>
@@ -56,6 +56,8 @@
     <string name="preview_of_changes">Podgląd zmian</string>
     <string name="no_preview_available">Podgląd niedostępny</string>
     <string name="change_location_map">Zmień lokalizację na mapie</string>
+    <string name="process_and_continue">Przetwórz i kontynuuj</string>
+    <string name="processing_complete">Przetwarzanie zakończone</string>
     <string name="process_files">Przetwarzaj pliki</string>
     <string name="processing_foreground">Przetwarzanie na pierwszym planie...</string>
     <string name="background_progress">Postęp w tle: %1$d%%</string>
@@ -66,9 +68,9 @@
     <string name="help_item_video_title">Przetwarzanie wideo</string>
     <string name="help_item_video_body">Obsługiwane formaty: MP4, MOV.\n\nPełny remuxing jest obsługiwany dla tych kontenerów. Proces ten usuwa dane GPS, daty i atomy urządzenia, aby chronić Twoją prywatność.</string>
     <string name="help_item_image_title">Przetwarzanie obrazów</string>
-    <string name="help_item_image_body">Obsługiwane formaty: JPG, PNG.\n\nMetaJammer usuwa metadane EXIF z tych obrazów. W trybie „Zatruwanie” zastępuje wrażliwe tagi, takie jak współrzędne GPS, realistycznymi losowymi danymi.</string>
-    <string name="help_item_other_title">Inne pliki</string>
-    <string name="help_item_other_body">Obsługiwane formaty: Obecnie brak.\n\nMetaJammer koncentruje się obecnie na plikach multimedialnych. Przyszłe aktualizacje obejmą obsługę plików PDF i dokumentów. Bądź na bieżąco!</string>
+    <string name="help_item_image_body">Obsługiwane formaty: JPG, PNG, WebP, HEIF.\n\nMetaJammer usuwa metadane EXIF z tych obrazów. W trybie „Zatruwanie” zastępuje wrażliwe tagi, takie jak współrzędne GPS, realistycznymi losowymi danymi.</string>
+    <string name="help_item_other_title">Przetwarzanie dokumentów i plików PDF</string>
+    <string name="help_item_other_body">Obsługiwane formaty: PDF.\n\nMetaJammer w pełni obsługuje teraz dokumenty PDF. Możesz czytać, usuwać i „zatruwać” metadane, takie jak tytuł, autor, temat, słowa kluczowe, twórca i producent. Usuwa również ukryte znaki wodne i adnotacje, aby zapewnić, że dokumenty są czyste przed udostępnieniem.</string>
     <string name="help_report_issue_title">Zgłoś problem</string>
     <string name="help_report_issue_body">Znalazłeś błąd lub masz propozycję nowej funkcji? Zgłoś to na naszej stronie GitHub.</string>
     <string name="help_open_github">Otwórz zgłoszenia na GitHub</string>
@@ -88,15 +90,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">Ustawienia</string>
-    <string name="category_file_management">Zarządzanie plikami</string>
+    <string name="category_folder_management">Zarządzanie folderami</string>
+    <string name="category_file_management">Metadane i nazwy plików</string>
     <string name="category_image_file">Obraz / Plik</string>
     <string name="category_shared_files">Zachowanie udostępnionych plików</string>
     <string name="category_ui">Interfejs użytkownika</string>
 
+    <string name="setting_folder_structure_title">Struktura folderów</string>
+    <string name="setting_folder_structure_unified">Jednolita (Jeden folder dla wszystkich)</string>
+    <string name="setting_folder_structure_split">Podzielona (Oddzielne foldery według typu)</string>
+    <string name="setting_use_subfolders_title">Używaj podfolderów w trybie jednolitym</string>
+    <string name="setting_use_subfolders_sub">Organizuj według typu (Obrazy, Filmy itp.) w folderze jednolitym</string>
+
+    <string name="setting_unified_path_title">Jednolity folder zapisu</string>
+    <string name="setting_pictures_path_title">Folder zapisu Obrazów</string>
+    <string name="setting_music_path_title">Folder zapisu Muzyki</string>
+    <string name="setting_movies_path_title">Folder zapisu Filmów</string>
+    <string name="setting_documents_path_title">Folder zapisu Dokumentów</string>
+
+    <string name="setting_configure_split_folders">Konfiguruj oddzielne foldery</string>
+    <string name="setting_split_folders_desc">Zarządzaj poszczególnymi folderami dla każdej kategorii plików</string>
+
     <string name="setting_random_names_title">Używaj losowych nazw plików</string>
     <string name="setting_random_names_sub">Generuj losowe nazwy wyjściowe zamiast używać oryginalnej nazwy pliku</string>
     <string name="setting_default_path_title">Domyślna ścieżka zapisu</string>
-    <string name="setting_reset_path">Resetuj do Pictures/MetaJammer</string>
+    <string name="setting_reset_path_pictures">Przywróć Pictures/MetaJammer</string>
+    <string name="setting_reset_path_download">Przywróć Download/MetaJammer</string>
+    <string name="setting_reset_path_music">Przywróć Music/MetaJammer</string>
+    <string name="setting_reset_path_movies">Przywróć Movies/MetaJammer</string>
+    <string name="setting_reset_path_documents">Przywróć Documents/MetaJammer</string>
     <string name="setting_select_folder">Wybierz folder</string>
 
     <string name="setting_keep_orientation_title">Zachowaj orientację obrazu</string>
@@ -111,6 +133,8 @@
     <string name="setting_thumbnails_warning">Ostrzeżenie: Zachowanie oryginalnych miniatur może ujawnić metadane (lokalizacja, informacje o urządzeniu), nawet jeśli główne tagi zostaną usunięte.</string>
     <string name="setting_enable_map_title">Włącz wybór na mapie</string>
     <string name="setting_enable_map_sub">Pozwól aplikacji na połączenie z internetem w celu wyświetlenia OpenStreetMap do wyboru lokalizacji</string>
+    <string name="setting_nearby_scramble_title">Użyj lokalnego zatruwania</string>
+    <string name="setting_nearby_scramble_sub">Podczas zatruwania metadanych losuj współrzędne w pobliżu pierwotnej lokalizacji zamiast całkowicie losowego punktu</string>
 
     <string name="setting_quick_scrub_title">Szybkie czyszczenie i udostępnianie</string>
     <string name="setting_quick_scrub_sub">Automatycznie usuwaj metadane i ponownie otwieraj arkusz udostępniania dla udostępnionych plików</string>

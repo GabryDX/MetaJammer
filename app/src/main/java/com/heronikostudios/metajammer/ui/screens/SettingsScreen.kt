@@ -22,7 +22,13 @@ import com.heronikostudios.metajammer.domain.model.*
 fun SettingsScreen(
     settings: AppSettings,
     onUseRandomFileNamesChanged: (Boolean) -> Unit,
-    onDefaultSavingPathSelected: (Uri?) -> Unit,
+    onFolderStructureChanged: (FolderStructure) -> Unit,
+    onUseSubfoldersInUnifiedChanged: (Boolean) -> Unit,
+    onUnifiedSavingPathSelected: (Uri?) -> Unit,
+    onPicturesSavingPathSelected: (Uri?) -> Unit,
+    onMusicSavingPathSelected: (Uri?) -> Unit,
+    onMoviesSavingPathSelected: (Uri?) -> Unit,
+    onDocumentsSavingPathSelected: (Uri?) -> Unit,
     onKeepImageOrientationChanged: (Boolean) -> Unit,
     onShareResultAsDefaultChanged: (Boolean) -> Unit,
     onDefaultPrefixChanged: (String) -> Unit,
@@ -35,11 +41,24 @@ fun SettingsScreen(
     onSharedFilesCustomPathSelected: (Uri?) -> Unit,
     onThumbnailHandlingChanged: (ThumbnailHandling) -> Unit,
     onAllowInternetForMapChanged: (Boolean) -> Unit,
+    onUseNearbyScrambleChanged: (Boolean) -> Unit,
     onLanguageChanged: (AppLanguage) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val folderPicker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { 
-        onDefaultSavingPathSelected(it) 
+    val unifiedFolderPicker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { 
+        onUnifiedSavingPathSelected(it) 
+    }
+    val picturesFolderPicker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { 
+        onPicturesSavingPathSelected(it) 
+    }
+    val musicFolderPicker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { 
+        onMusicSavingPathSelected(it) 
+    }
+    val moviesFolderPicker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { 
+        onMoviesSavingPathSelected(it) 
+    }
+    val documentsFolderPicker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { 
+        onDocumentsSavingPathSelected(it) 
     }
     val sharedFolderPicker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { 
         onSharedFilesCustomPathSelected(it) 
@@ -55,22 +74,43 @@ fun SettingsScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        SettingsCategory(title = stringResource(R.string.category_folder_management)) {
+            DialogSettingRow(
+                title = stringResource(R.string.setting_folder_structure_title),
+                value = settings.folderStructure.toReadableLabel(),
+                onClick = { activeDialog = SettingsDialog.FolderStructureDialog(settings.folderStructure) }
+            )
+
+            if (settings.folderStructure == FolderStructure.UNIFIED) {
+                SettingSwitchRow(
+                    title = stringResource(R.string.setting_use_subfolders_title),
+                    subtitle = stringResource(R.string.setting_use_subfolders_sub),
+                    checked = settings.useSubfoldersInUnified,
+                    onCheckedChange = onUseSubfoldersInUnifiedChanged
+                )
+
+                SettingFolderRow(
+                    title = stringResource(R.string.setting_unified_path_title),
+                    currentPath = settings.unifiedSavingPath ?: "Download/MetaJammer",
+                    onSelect = { unifiedFolderPicker.launch(null) },
+                    onReset = { onUnifiedSavingPathSelected(null) },
+                    resetLabel = stringResource(R.string.setting_reset_path_download)
+                )
+            } else {
+                DialogSettingRow(
+                    title = stringResource(R.string.setting_configure_split_folders),
+                    value = stringResource(R.string.setting_split_folders_desc),
+                    onClick = { activeDialog = SettingsDialog.SplitFoldersConfig }
+                )
+            }
+        }
+
         SettingsCategory(title = stringResource(R.string.category_file_management)) {
             SettingSwitchRow(
                 title = stringResource(R.string.setting_random_names_title),
                 subtitle = stringResource(R.string.setting_random_names_sub),
                 checked = settings.useRandomFileNames,
                 onCheckedChange = onUseRandomFileNamesChanged
-            )
-
-            HorizontalDivider()
-
-            SettingFolderRow(
-                title = stringResource(R.string.setting_default_path_title),
-                currentPath = settings.defaultSavingPath ?: "Pictures/MetaJammer",
-                onSelect = { folderPicker.launch(null) },
-                onReset = { onDefaultSavingPathSelected(null) },
-                resetLabel = stringResource(R.string.setting_reset_path)
             )
         }
 
@@ -123,6 +163,13 @@ fun SettingsScreen(
                 subtitle = stringResource(R.string.setting_enable_map_sub),
                 checked = settings.allowInternetForMap,
                 onCheckedChange = onAllowInternetForMapChanged
+            )
+
+            SettingSwitchRow(
+                title = stringResource(R.string.setting_nearby_scramble_title),
+                subtitle = stringResource(R.string.setting_nearby_scramble_sub),
+                checked = settings.useNearbyScramble,
+                onCheckedChange = onUseNearbyScrambleChanged
             )
         }
 
@@ -184,7 +231,17 @@ fun SettingsScreen(
     if (currentDialog != null) {
         HandleSettingsDialog(
             dialog = currentDialog,
+            settings = settings,
             onDismiss = { if (activeDialog != null) activeDialog = null },
+            onFolderStructureChanged = onFolderStructureChanged,
+            onPicturesSavingPathSelected = { picturesFolderPicker.launch(null) },
+            onMusicSavingPathSelected = { musicFolderPicker.launch(null) },
+            onMoviesSavingPathSelected = { moviesFolderPicker.launch(null) },
+            onDocumentsSavingPathSelected = { documentsFolderPicker.launch(null) },
+            onPicturesReset = { onPicturesSavingPathSelected(null) },
+            onMusicReset = { onMusicSavingPathSelected(null) },
+            onMoviesReset = { onMoviesSavingPathSelected(null) },
+            onDocumentsReset = { onDocumentsSavingPathSelected(null) },
             onNightModeChanged = onNightModeChanged,
             onPrefixChanged = onDefaultPrefixChanged,
             onSuffixChanged = onDefaultSuffixChanged,
@@ -303,6 +360,8 @@ private fun DialogSettingRow(
 }
 
 private sealed class SettingsDialog {
+    data class FolderStructureDialog(val current: FolderStructure) : SettingsDialog()
+    object SplitFoldersConfig : SettingsDialog()
     data class NightMode(val current: NightModeSetting) : SettingsDialog()
     data class Prefix(val current: String) : SettingsDialog()
     data class Suffix(val current: String) : SettingsDialog()
@@ -314,7 +373,17 @@ private sealed class SettingsDialog {
 @Composable
 private fun HandleSettingsDialog(
     dialog: SettingsDialog,
+    settings: AppSettings, // Pass settings for SplitFoldersConfig
     onDismiss: () -> Unit,
+    onFolderStructureChanged: (FolderStructure) -> Unit,
+    onPicturesSavingPathSelected: () -> Unit,
+    onMusicSavingPathSelected: () -> Unit,
+    onMoviesSavingPathSelected: () -> Unit,
+    onDocumentsSavingPathSelected: () -> Unit,
+    onPicturesReset: () -> Unit,
+    onMusicReset: () -> Unit,
+    onMoviesReset: () -> Unit,
+    onDocumentsReset: () -> Unit,
     onNightModeChanged: (NightModeSetting) -> Unit,
     onPrefixChanged: (String) -> Unit,
     onSuffixChanged: (String) -> Unit,
@@ -323,6 +392,54 @@ private fun HandleSettingsDialog(
     onLanguageChanged: (AppLanguage) -> Unit
 ) {
     when (dialog) {
+        is SettingsDialog.FolderStructureDialog -> SingleSelectDialog(
+            title = stringResource(R.string.setting_folder_structure_title),
+            options = FolderStructure.entries,
+            selected = dialog.current,
+            labelProvider = { it.toReadableLabel() },
+            onConfirm = onFolderStructureChanged,
+            onDismiss = onDismiss
+        )
+        SettingsDialog.SplitFoldersConfig -> AlertDialog(
+            onDismissRequest = onDismiss,
+            title = { Text(stringResource(R.string.setting_configure_split_folders)) },
+            text = {
+                Column(
+                    modifier = Modifier.verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    SettingFolderRow(
+                        title = stringResource(R.string.setting_pictures_path_title),
+                        currentPath = settings.picturesSavingPath ?: "Pictures/MetaJammer",
+                        onSelect = onPicturesSavingPathSelected,
+                        onReset = onPicturesReset,
+                        resetLabel = stringResource(R.string.setting_reset_path_pictures)
+                    )
+                    SettingFolderRow(
+                        title = stringResource(R.string.setting_music_path_title),
+                        currentPath = settings.musicSavingPath ?: "Music/MetaJammer",
+                        onSelect = onMusicSavingPathSelected,
+                        onReset = onMusicReset,
+                        resetLabel = stringResource(R.string.setting_reset_path_music)
+                    )
+                    SettingFolderRow(
+                        title = stringResource(R.string.setting_movies_path_title),
+                        currentPath = settings.moviesSavingPath ?: "Movies/MetaJammer",
+                        onSelect = onMoviesSavingPathSelected,
+                        onReset = onMoviesReset,
+                        resetLabel = stringResource(R.string.setting_reset_path_movies)
+                    )
+                    SettingFolderRow(
+                        title = stringResource(R.string.setting_documents_path_title),
+                        currentPath = settings.documentsSavingPath ?: "Documents/MetaJammer",
+                        onSelect = onDocumentsSavingPathSelected,
+                        onReset = onDocumentsReset,
+                        resetLabel = stringResource(R.string.setting_reset_path_documents)
+                    )
+                }
+            },
+            confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.ok)) } }
+        )
         is SettingsDialog.Prefix -> TextFieldDialog(
             title = stringResource(R.string.setting_prefix_title),
             initialValue = dialog.current,
@@ -435,6 +552,12 @@ private fun <T> SingleSelectDialog(
 }
 
 // Labels
+@Composable
+private fun FolderStructure.toReadableLabel() = when (this) {
+    FolderStructure.UNIFIED -> stringResource(R.string.setting_folder_structure_unified)
+    FolderStructure.SPLIT -> stringResource(R.string.setting_folder_structure_split)
+}
+
 @Composable
 private fun NightModeSetting.toReadableLabel() = when (this) {
     NightModeSetting.ALWAYS -> stringResource(R.string.night_mode_always)

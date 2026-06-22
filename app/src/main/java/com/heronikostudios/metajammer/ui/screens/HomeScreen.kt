@@ -75,12 +75,11 @@ fun HomeScreen(
             .padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        item {
-            Spacer(modifier = Modifier.height(8.dp))
-            HeroSection()
-        }
-
         if (selectedFiles.isEmpty()) {
+            item {
+                Spacer(modifier = Modifier.height(8.dp))
+                HeroSection()
+            }
             item {
                 FeatureHighlights()
             }

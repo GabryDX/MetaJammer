@@ -23,8 +23,8 @@
     <!-- HomeScreen -->
     <string name="hero_title">Bescherm je privacy</string>
     <string name="hero_subtitle">Wis of vervang gevoelige metadata voordat je bestanden deelt.</string>
-    <string name="feature_images_video_title">Afbeeldingen &amp; Video</string>
-    <string name="feature_images_video_desc">Volledige ondersteuning voor het strippen van metadata uit foto\'s en het remuxen van video\'s om tracking te verwijderen.</string>
+    <string name="feature_images_video_title">Afbeeldingen, Video, Audio &amp; PDF</string>
+    <string name="feature_images_video_desc">Volledige ondersteuning voor het verwijderen van metadata uit foto\'s, en het remuxen van video\'s, audio en PDF-documenten om tracking te verwijderen.</string>
     <string name="feature_poisoning_title">Metadata Vergiftiging</string>
     <string name="feature_poisoning_desc">Verwijder niet alleen gegevens—vervang ze door realistische vervalsingen om de privacy te waarborgen en trackers te misleiden.</string>
     <string name="feature_background_title">Achtergrondverwerking</string>
@@ -56,6 +56,8 @@
     <string name="preview_of_changes">Voorbeeld van wijzigingen</string>
     <string name="no_preview_available">Geen voorbeeld beschikbaar</string>
     <string name="change_location_map">Locatie wijzigen op kaart</string>
+    <string name="process_and_continue">Verwerken en doorgaan</string>
+    <string name="processing_complete">Verwerking voltooid</string>
     <string name="process_files">Bestanden verwerken</string>
     <string name="processing_foreground">Verwerking op voorgrond...</string>
     <string name="background_progress">Voortgang achtergrond: %1$d%%</string>
@@ -66,9 +68,9 @@
     <string name="help_item_video_title">Videoverwerking</string>
     <string name="help_item_video_body">Ondersteunde formaten: MP4, MOV.\n\nVolledige remuxing wordt ondersteund voor deze containers. Dit proces verwijdert GPS, datums en apparaat-atomen om uw privacy te beschermen.</string>
     <string name="help_item_image_title">Beeldverwerking</string>
-    <string name="help_item_image_body">Ondersteunde formaten: JPG, PNG.\n\nMetaJammer verwijdert EXIF-metadata van deze afbeeldingen. In de modus \"Poison\" worden gevoelige tags zoals GPS-coördinaten vervangen door realistische willekeurige gegevens.</string>
-    <string name="help_item_other_title">Andere bestanden</string>
-    <string name="help_item_other_body">Ondersteunde formaten: Momenteel geen.\n\nMetaJammer richt zich momenteel op mediabestanden. Toekomstige updates zullen ondersteuning voor PDF\'s en documenten bevatten. Blijf op de hoogte!</string>
+    <string name="help_item_image_body">Ondersteunde formaten: JPG, PNG, WebP, HEIF.\n\nMetaJammer verwijdert EXIF-metadata van deze afbeeldingen. In de modus \"Poison\" worden gevoelige tags zoals GPS-coördinaten vervangen door realistische willekeurige gegevens.</string>
+    <string name="help_item_other_title">PDF- &amp; documentverwerking</string>
+    <string name="help_item_other_body">Ondersteunde formaten: PDF.\n\nMetaJammer ondersteunt nu volledig PDF-documenten. U kunt metadata zoals Titel, Auteur, Onderwerp, Trefwoorden, Maker en Producent lezen, verwijderen en \"vergiftigen\". Het verwijdert ook verborgen watermerken en annotaties om ervoor te zorgen dat uw documenten schoon zijn voordat u ze deelt.</string>
     <string name="help_report_issue_title">Meld een probleem</string>
     <string name="help_report_issue_body">Een bug gevonden of een verzoek voor een nieuwe functie? Meld het op onze GitHub-pagina.</string>
     <string name="help_open_github">GitHub Issues openen</string>
@@ -88,15 +90,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">Instellingen</string>
-    <string name="category_file_management">Bestandsbeheer</string>
+    <string name="category_folder_management">Mapbeheer</string>
+    <string name="category_file_management">Metadata &amp; bestandsnamen</string>
     <string name="category_image_file">Afbeelding / Bestand</string>
     <string name="category_shared_files">Gedrag gedeelde bestanden</string>
     <string name="category_ui">Gebruikersinterface</string>
 
+    <string name="setting_folder_structure_title">Mapstructuur</string>
+    <string name="setting_folder_structure_unified">Eenduidig (Eén map voor alles)</string>
+    <string name="setting_folder_structure_split">Gesplitst (Afzonderlijke mappen per type)</string>
+    <string name="setting_use_subfolders_title">Submappen gebruiken in eenduidige modus</string>
+    <string name="setting_use_subfolders_sub">Organiseren op type (Afbeeldingen, Films, etc.) binnen de eenduidige map</string>
+
+    <string name="setting_unified_path_title">Eenduidige opslagmap</string>
+    <string name="setting_pictures_path_title">Opslagmap voor Afbeeldingen</string>
+    <string name="setting_music_path_title">Opslagmap voor Muziek</string>
+    <string name="setting_movies_path_title">Opslagmap voor Films</string>
+    <string name="setting_documents_path_title">Opslagmap voor Documenten</string>
+
+    <string name="setting_configure_split_folders">Gesplitste mappen configureren</string>
+    <string name="setting_split_folders_desc">Individuele mappen beheren voor elke bestandscategorie</string>
+
     <string name="setting_random_names_title">Gebruik willekeurige bestandsnamen</string>
     <string name="setting_random_names_sub">Genereer willekeurige uitvoernamen in plaats van de oorspronkelijke bestandsnaam te gebruiken</string>
     <string name="setting_default_path_title">Standaard opslagpad</string>
-    <string name="setting_reset_path">Herstellen naar Pictures/MetaJammer</string>
+    <string name="setting_reset_path_pictures">Herstellen naar Pictures/MetaJammer</string>
+    <string name="setting_reset_path_download">Herstellen naar Download/MetaJammer</string>
+    <string name="setting_reset_path_music">Herstellen naar Music/MetaJammer</string>
+    <string name="setting_reset_path_movies">Herstellen naar Movies/MetaJammer</string>
+    <string name="setting_reset_path_documents">Herstellen naar Documents/MetaJammer</string>
     <string name="setting_select_folder">Map selecteren</string>
 
     <string name="setting_keep_orientation_title">Behoud beeldoriëntatie</string>
@@ -111,6 +133,8 @@
     <string name="setting_thumbnails_warning">Waarschuwing: Het behouden van originele miniaturen kan metadata lekken (locatie, apparaatinfo), zelfs als de belangrijkste tags zijn verwijderd.</string>
     <string name="setting_enable_map_title">Kaartkiezer inschakelen</string>
     <string name="setting_enable_map_sub">Sta de app toe verbinding te maken met internet om OpenStreetMap te tonen voor locatiekeuze</string>
+    <string name="setting_nearby_scramble_title">Gelokaliseerde vergiftiging gebruiken</string>
+    <string name="setting_nearby_scramble_sub">Bij het vergiftigen van metadata, randomiseer de coördinaten in de buurt van de oorspronkelijke locatie in plaats van een volledig willekeurig punt</string>
 
     <string name="setting_quick_scrub_title">Quick Scrub &amp; Delen</string>
     <string name="setting_quick_scrub_sub">Metadata automatisch strippen en Share Sheet opnieuw openen voor gedeelde bestanden</string>
@@ -152,7 +176,7 @@
     <string name="language_uk">Українська (Oekraïens)</string>
     <string name="language_nl">Nederlands (Nederlands)</string>
     <string name="language_ro">Română (Roemeens)</string>
-    <string name="language_fa">Persian (Perzisch)</string>
+    <string name="language_fa">فارسی (Perzisch)</string>
     <string name="language_el">Ελληνικά (Grieks)</string>
     <string name="language_iw">עברית (Hebreeuws)</string>
     <string name="language_la">Latina (Latijn)</string>

@@ -57,11 +57,11 @@ class FileRepository(private val context: Context) {
         val tempFile = createSharedTempFile(prefix, resolvedSuffix)
         context.contentResolver.openInputStream(uri)?.use { input ->
             tempFile.outputStream().use { output ->
-                input.copyTo(output)
+                input.copyTo(output, bufferSize = 64 * 1024)
             }
         } ?: run {
             Timber.e("Unable to open input stream for %s", uri)
-            error("Unable to open input stream for $uri")
+            throw java.io.IOException("Unable to open input stream for $uri")
         }
         return tempFile
     }
@@ -91,23 +91,30 @@ class FileRepository(private val context: Context) {
         sourceFile: File,
         displayName: String,
         mimeType: String?,
-        configuredPath: String?
+        configuredPath: String?,
+        subPath: String? = null
     ): Uri? {
-        val path = configuredPath ?: "Pictures/MetaJammer"
+        val path = configuredPath ?: "Download/MetaJammer"
+        val finalRelativePath = if (subPath != null) {
+            if (path.endsWith("/")) "$path$subPath" else "$path/$subPath"
+        } else {
+            path
+        }
 
         return if (path.startsWith("content://")) {
             saveToCustomFolder(
                 treeUri = path.toUri(),
                 sourceFile = sourceFile,
                 displayName = displayName,
-                mimeType = mimeType
+                mimeType = mimeType,
+                subPath = subPath
             )
         } else {
             saveToMediaStorePath(
                 sourceFile = sourceFile,
                 displayName = displayName,
                 mimeType = mimeType,
-                relativePath = path
+                relativePath = finalRelativePath
             )
         }
     }
@@ -140,7 +147,7 @@ class FileRepository(private val context: Context) {
 
         resolver.openOutputStream(uri)?.use { output ->
             sourceFile.inputStream().use { input ->
-                input.copyTo(output)
+                input.copyTo(output, bufferSize = 64 * 1024)
             }
         } ?: run {
             Timber.e("Failed to open output stream for MediaStore URI: %s", uri)
@@ -159,20 +166,36 @@ class FileRepository(private val context: Context) {
         treeUri: Uri,
         sourceFile: File,
         displayName: String,
-        mimeType: String?
+        mimeType: String?,
+        subPath: String? = null
     ): Uri? {
-        val folder = DocumentFile.fromTreeUri(context, treeUri) ?: run {
+        val rootFolder = DocumentFile.fromTreeUri(context, treeUri) ?: run {
             Timber.e("Failed to get DocumentFile from tree URI: %s", treeUri)
             return null
         }
-        val outFile = folder.createFile(mimeType ?: "application/octet-stream", displayName) ?: run {
+
+        val targetFolder = if (subPath != null) {
+            val parts = subPath.split("/").filter { it.isNotEmpty() }
+            var currentFolder = rootFolder
+            parts.forEach { part ->
+                currentFolder = currentFolder.findFile(part) ?: currentFolder.createDirectory(part) ?: run {
+                    Timber.e("Failed to find or create subdirectory: %s", part)
+                    return null
+                }
+            }
+            currentFolder
+        } else {
+            rootFolder
+        }
+
+        val outFile = targetFolder.createFile(mimeType ?: "application/octet-stream", displayName) ?: run {
             Timber.e("Failed to create file in custom folder")
             return null
         }
 
         context.contentResolver.openOutputStream(outFile.uri)?.use { output ->
             sourceFile.inputStream().use { input ->
-                input.copyTo(output)
+                input.copyTo(output, bufferSize = 64 * 1024)
             }
         } ?: run {
             Timber.e("Failed to open output stream for custom folder file: %s", outFile.uri)
@@ -194,25 +217,26 @@ class FileRepository(private val context: Context) {
         return File.createTempFile(prefix, suffix, sharedDir)
     }
 
+    fun createCacheFile(prefix: String, suffix: String?): File = createSharedTempFile(prefix, suffix)
+
     /**
      * Clears all temporary files in the 'shared' cache directory.
      */
     fun clearCache() {
         val sharedDir = File(context.cacheDir, "shared")
         if (sharedDir.exists()) {
-            sharedDir.listFiles()?.forEach { it.delete() }
+            sharedDir.listFiles()?.forEach { 
+                runCatching { it.deleteRecursively() }
+                    .onFailure { e -> Timber.w(e, "Failed to delete file from shared cache: %s", it.name) }
+            }
         }
         // Also clear root cache directory for any stray files like processing_plans
         context.cacheDir.listFiles()?.forEach { 
-            if (it.isFile) it.delete()
+            if (it.isFile) {
+                runCatching { it.delete() }
+                    .onFailure { e -> Timber.w(e, "Failed to delete file from root cache: %s", it.name) }
+            }
         }
     }
 
-    /**
-     * Sanitizes a filename to prevent path traversal and remove illegal characters.
-     */
-    @Deprecated("Use SanitizationUtils.sanitizeFileName", replaceWith = ReplaceWith("SanitizationUtils.sanitizeFileName(fileName)"))
-    private fun sanitizeFileName(fileName: String?): String {
-        return SanitizationUtils.sanitizeFileName(fileName)
-    }
 }

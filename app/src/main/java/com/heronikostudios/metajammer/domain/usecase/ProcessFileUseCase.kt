@@ -9,7 +9,7 @@ import java.io.File
 class ProcessFileUseCase(
     private val metadataRepository: MetadataRepository
 ) {
-    operator fun invoke(
+    suspend operator fun invoke(
         selectedFile: SelectedFile,
         processingMode: ProcessingMode,
         keepOrientation: Boolean,

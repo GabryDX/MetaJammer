@@ -23,8 +23,8 @@
     <!-- HomeScreen -->
     <string name="hero_title">Tuam Privatiam Protege</string>
     <string name="hero_subtitle">Munda vel muta metadata sensitiva antequam fasciculos tuos communicas.</string>
-    <string name="feature_images_video_title">Imagines &amp; Videophonia</string>
-    <string name="feature_images_video_desc">Plena sustentatio ad metadata tollenda ex photographematis et videophoniis remuxandis.</string>
+    <string name="feature_images_video_title">Imagines, Videogrammata, Auditus et PDF</string>
+    <string name="feature_images_video_desc">Plena subsidia ad metadatorum ex photographematis detrahendum, et ad videogrammata, auditus, et documenta PDF remuscendum ad vestigia tollenda.</string>
     <string name="feature_poisoning_title">Metadata Venenum</string>
     <string name="feature_poisoning_desc">Noli modo data tollere—ea cum falsis verisimilibus muta ut privatiam serves.</string>
     <string name="feature_background_title">Processus in Occulto</string>
@@ -56,6 +56,8 @@
     <string name="preview_of_changes">Praevisus Mutationum</string>
     <string name="no_preview_available">Praevisus non adest</string>
     <string name="change_location_map">Locum in Tabula Mutare</string>
+    <string name="process_and_continue">Elabora et perge</string>
+    <string name="processing_complete">Elaboratio confecta</string>
     <string name="process_files">Fasciculos Processus</string>
     <string name="processing_foreground">In conspectu processus...</string>
     <string name="background_progress">Progressus in Occulto: %1$d%%</string>
@@ -66,9 +68,9 @@
     <string name="help_item_video_title">Processus Videophoniae</string>
     <string name="help_item_video_body">Formae sustentatae: MP4, MOV.\n\nHaec ratio GPS, dies, et instrumenti data tollit.</string>
     <string name="help_item_image_title">Processus Imaginis</string>
-    <string name="help_item_image_body">Formae sustentatae: JPG, PNG.\n\nMetaJammer metadata EXIF ex his imaginibus tollit.</string>
-    <string name="help_item_other_title">Alii Fasciculi</string>
-    <string name="help_item_other_body">Formae sustentatae: Nullae in praesentia.\n\nMetaJammer nunc in fasciculis mediis intendit.</string>
+    <string name="help_item_image_body">Formae sustentatae: JPG, PNG, WebP, HEIF.\n\nMetaJammer metadata EXIF ex his imaginibus tollit.</string>
+    <string name="help_item_other_title">PDF et Documentorum Processio</string>
+    <string name="help_item_other_body">Formata fulta: PDF.\n\nMetaJammer nunc documenta PDF plene sustinet. Legere, delere, et metadata \"venenare\" potes, sicut Titulum, Auctorem, Argumentum, Verba Clavem, Creatorem, et Produtorem. Etiam notae aquatiles occultas et annotationes delet ut documenta tua munda sint antequam communicentur.</string>
     <string name="help_report_issue_title">Rem Deferre</string>
     <string name="help_report_issue_body">Si mendam invenisti, quaesumus in pagina GitHub deferre.</string>
     <string name="help_open_github">GitHub Aperire</string>
@@ -88,15 +90,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">Optiones</string>
-    <string name="category_file_management">Fasciculorum Administratio</string>
+    <string name="category_folder_management">Administratio scriniorum</string>
+    <string name="category_file_management">Metadatorum et nominum administrator</string>
     <string name="category_image_file">Imago / Fasciculus</string>
     <string name="category_shared_files">Fasciculorum Communicatorum Mores</string>
     <string name="category_ui">UI</string>
 
+    <string name="setting_folder_structure_title">Scriniorum structura</string>
+    <string name="setting_folder_structure_unified">Unitum (Unum scrinium pro omnibus)</string>
+    <string name="setting_folder_structure_split">Divisum (Scrinia separata pro typo)</string>
+    <string name="setting_use_subfolders_title">Subscrinia in unito uti</string>
+    <string name="setting_use_subfolders_sub">Secundum typon (Imagines, Cinematographa, etc.) in unitum disponere</string>
+
+    <string name="setting_unified_path_title">Unitum servandi scrinium</string>
+    <string name="setting_pictures_path_title">Imaginum servandi scrinium</string>
+    <string name="setting_music_path_title">Musicae servandi scrinium</string>
+    <string name="setting_movies_path_title">Cinematographorum servandi scrinium</string>
+    <string name="setting_documents_path_title">Documentorum servandi scrinium</string>
+
+    <string name="setting_configure_split_folders">Scrinia divisa disponere</string>
+    <string name="setting_split_folders_desc">Singula scrinia pro unaquaque categoria regere</string>
+
     <string name="setting_random_names_title">Nominibus temere uti</string>
     <string name="setting_random_names_sub">Nomina exitus temere generare pro nominibus originalibus</string>
     <string name="setting_default_path_title">Iter servandi defaltum</string>
-    <string name="setting_reset_path">Ad Pictures/MetaJammer restituere</string>
+    <string name="setting_reset_path_pictures">Ad Pictures/MetaJammer restituere</string>
+    <string name="setting_reset_path_download">Ad Download/MetaJammer restituere</string>
+    <string name="setting_reset_path_music">Ad Music/MetaJammer restituere</string>
+    <string name="setting_reset_path_movies">Ad Movies/MetaJammer restituere</string>
+    <string name="setting_reset_path_documents">Ad Documents/MetaJammer restituere</string>
     <string name="setting_select_folder">Capsam Seligere</string>
 
     <string name="setting_keep_orientation_title">Imaginis situm servare</string>
@@ -111,6 +133,8 @@
     <string name="setting_thumbnails_warning">Monitio: Imagines parvas servare metadata effundere potest.</string>
     <string name="setting_enable_map_title">Tabulam permittere</string>
     <string name="setting_enable_map_sub">App permittere ut cum interrete conectatur ad OpenStreetMap ostendendum</string>
+    <string name="setting_nearby_scramble_title">Venenum locale uti</string>
+    <string name="setting_nearby_scramble_sub">In venenatione metadatorum, coordinatas prope locum originalem temere facere pro puncto prorsus temere</string>
 
     <string name="setting_quick_scrub_title">Mundatio Celer &amp; Communicatio</string>
     <string name="setting_quick_scrub_sub">Metadata statim tollere et communicationem iterum aperire</string>

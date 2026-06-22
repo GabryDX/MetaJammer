@@ -23,8 +23,8 @@
     <!-- HomeScreen -->
     <string name="hero_title">Захистіть свою приватність</string>
     <string name="hero_subtitle">Очистіть або замініть конфіденційні метадані перед надсиланням файлів.</string>
-    <string name="feature_images_video_title">Зображення та відео</string>
-    <string name="feature_images_video_desc">Повна підтримка видалення метаданих із фотографій та ремуксингу відео для видалення відстеження.</string>
+    <string name="feature_images_video_title">Зображення, відео, аудіо та PDF</string>
+    <string name="feature_images_video_desc">Повна підтримка видалення метаданих із фотографій, а також ремуксингу відео, аудіо та документів PDF для усунення відстеження.</string>
     <string name="feature_poisoning_title">Отруєння метаданих</string>
     <string name="feature_poisoning_desc">Не просто видаляйте дані — замінюйте їх реалістичними підробками, щоб зберегти приватність і заплутати трекери.</string>
     <string name="feature_background_title">Фонова обробка</string>
@@ -56,6 +56,8 @@
     <string name="preview_of_changes">Попередній перегляд змін</string>
     <string name="no_preview_available">Попередній перегляд недоступний</string>
     <string name="change_location_map">Змінити місцезнаходження на карті</string>
+    <string name="process_and_continue">Обробити та продовжити</string>
+    <string name="processing_complete">Обробка завершена</string>
     <string name="process_files">Обробити файли</string>
     <string name="processing_foreground">Обробка на передньому плані...</string>
     <string name="background_progress">Прогрес у фоновому режимі: %1$d%%</string>
@@ -66,9 +68,9 @@
     <string name="help_item_video_title">Обробка відео</string>
     <string name="help_item_video_body">Підтримувані формати: MP4, MOV.\n\nПовний ремуксинг підтримується для цих контейнерів. Цей процес видаляє GPS, дати та атоми пристрою, щоб захистити вашу конфіденційність.</string>
     <string name="help_item_image_title">Обробка зображень</string>
-    <string name="help_item_image_body">Підтримувані формати: JPG, PNG.\n\nMetaJammer видаляє метадані EXIF з цих зображень. У режимі «Отруєння» він замінює конфіденційні теги, такі як координати GPS, реалістичними випадковими даними.</string>
-    <string name="help_item_other_title">Інші файли</string>
-    <string name="help_item_other_body">Підтримувані формати: Наразі немає.\n\nMetaJammer зараз зосереджений на медіафайлах. Майбутні оновлення включатимуть підтримку PDF та документів. Слідкуйте за оновленнями!</string>
+    <string name="help_item_image_body">Підтримувані формати: JPG, PNG, WebP, HEIF.\n\nMetaJammer видаляє метадані EXIF з цих зображень. У режимі «Отруєння» він замінює конфіденційні теги, такі як координати GPS, реалістичними випадковими даними.</string>
+    <string name="help_item_other_title">Обробка PDF та документів</string>
+    <string name="help_item_other_body">Підтримувані формати: PDF.\n\nMetaJammer тепер повністю підтримує PDF-документи. Ви можете читати, видаляти та «отруювати» метадані, такі як заголовок, автор, тема, ключові слова, розробник і виробник. Програма також видаляє приховані водяні знаки та анотації, щоб ваші документи були чистими перед поширенням.</string>
     <string name="help_report_issue_title">Повідомити про проблему</string>
     <string name="help_report_issue_body">Знайшли помилку або маєте пропозицію щодо функції? Будь ласка, повідомте про це на нашій сторінці GitHub.</string>
     <string name="help_open_github">Відкрити GitHub Issues</string>
@@ -88,15 +90,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">Налаштування</string>
-    <string name="category_file_management">Керування файлами</string>
+    <string name="category_folder_management">Керування папками</string>
+    <string name="category_file_management">Метадані та імена файлів</string>
     <string name="category_image_file">Зображення / Файл</string>
     <string name="category_shared_files">Поведінка спільних файлів</string>
     <string name="category_ui">Інтерфейс</string>
 
+    <string name="setting_folder_structure_title">Структура папок</string>
+    <string name="setting_folder_structure_unified">Єдина (Одна папка для всіх)</string>
+    <string name="setting_folder_structure_split">Роздільна (Окремі папки за типом)</string>
+    <string name="setting_use_subfolders_title">Використовувати підпапки в єдиному режимі</string>
+    <string name="setting_use_subfolders_sub">Організувати за типом (Зображення, Відео тощо) всередині єдиної папки</string>
+
+    <string name="setting_unified_path_title">Єдина папка для збереження</string>
+    <string name="setting_pictures_path_title">Папка для збереження зображень</string>
+    <string name="setting_music_path_title">Папка для збереження музики</string>
+    <string name="setting_movies_path_title">Папка для збереження відео</string>
+    <string name="setting_documents_path_title">Папка для збереження документів</string>
+
+    <string name="setting_configure_split_folders">Налаштувати роздільні папки</string>
+    <string name="setting_split_folders_desc">Керування окремими папками для кожної категорії файлів</string>
+
     <string name="setting_random_names_title">Використовувати випадкові імена файлів</string>
     <string name="setting_random_names_sub">Генерувати випадкові імена виводу замість використання вихідного імені файлу</string>
     <string name="setting_default_path_title">Шлях збереження за замовчуванням</string>
-    <string name="setting_reset_path">Скинути до Pictures/MetaJammer</string>
+    <string name="setting_reset_path_pictures">Скинути до Pictures/MetaJammer</string>
+    <string name="setting_reset_path_download">Скинути до Download/MetaJammer</string>
+    <string name="setting_reset_path_music">Скинути до Music/MetaJammer</string>
+    <string name="setting_reset_path_movies">Скинути до Movies/MetaJammer</string>
+    <string name="setting_reset_path_documents">Скинути до Documents/MetaJammer</string>
     <string name="setting_select_folder">Вибрати папку</string>
 
     <string name="setting_keep_orientation_title">Зберігати орієнтацію зображення</string>
@@ -111,6 +133,8 @@
     <string name="setting_thumbnails_warning">Попередження: збереження оригінальних мініатюр може призвести до витоку метаданих (місцезнаходження, інформація про пристрій), навіть якщо основні теги видалено.</string>
     <string name="setting_enable_map_title">Увімкнути вибір карти</string>
     <string name="setting_enable_map_sub">Дозволити додатку підключатися до Інтернету для відображення OpenStreetMap при виборі місцезнаходження</string>
+    <string name="setting_nearby_scramble_title">Використовувати локалізоване отруєння</string>
+    <string name="setting_nearby_scramble_sub">При отруєнні метаданих координати вибираються випадковим чином поруч із вихідним місцем розташування, а не в повністю випадковій точці</string>
 
     <string name="setting_quick_scrub_title">Швидке очищення та надсилання</string>
     <string name="setting_quick_scrub_sub">Автоматично видаляти метадані та повторно відкривати панель надсилання для спільних файлів</string>

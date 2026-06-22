@@ -23,8 +23,8 @@
     <!-- HomeScreen -->
     <string name="hero_title">Lindungi Privasi Anda</string>
     <string name="hero_subtitle">Bersihkan atau ganti metadata sensitif sebelum membagikan file Anda.</string>
-    <string name="feature_images_video_title">Gambar &amp; Video</string>
-    <string name="feature_images_video_desc">Dukungan penuh untuk menghapus metadata dari foto dan melakukan remuxing pada video untuk menghapus pelacakan.</string>
+    <string name="feature_images_video_title">Gambar, Video, Audio &amp; PDF</string>
+    <string name="feature_images_video_desc">Dukungan penuh untuk menghapus metadata dari foto, dan melakukan remuxing video, audio, serta dokumen PDF untuk menghapus pelacakan.</string>
     <string name="feature_poisoning_title">Metadata Poisoning</string>
     <string name="feature_poisoning_desc">Jangan hanya menghapus data—ganti dengan data palsu yang realistis untuk menjaga privasi dan membingungkan pelacak.</string>
     <string name="feature_background_title">Pemrosesan Latar Belakang</string>
@@ -56,6 +56,8 @@
     <string name="preview_of_changes">Pratinjau Perubahan</string>
     <string name="no_preview_available">Pratinjau tidak tersedia</string>
     <string name="change_location_map">Ubah Lokasi di Peta</string>
+    <string name="process_and_continue">Proses dan lanjutkan</string>
+    <string name="processing_complete">Pemrosesan selesai</string>
     <string name="process_files">Proses File</string>
     <string name="processing_foreground">Memproses di latar depan...</string>
     <string name="background_progress">Progres Latar Belakang: %1$d%%</string>
@@ -66,9 +68,9 @@
     <string name="help_item_video_title">Pemrosesan Video</string>
     <string name="help_item_video_body">Format yang didukung: MP4, MOV.\n\nRemuxing penuh didukung untuk kontainer ini. Proses ini menghapus GPS, tanggal, dan atom perangkat untuk melindungi privasi Anda.</string>
     <string name="help_item_image_title">Pemrosesan Gambar</string>
-    <string name="help_item_image_body">Format yang didukung: JPG, PNG.\n\nMetaJammer menghapus metadata EXIF dari gambar-gambar ini. Dalam mode \"Poison\", metadata sensitif seperti koordinat GPS diganti dengan data acak yang realistis.</string>
-    <string name="help_item_other_title">File Lainnya</string>
-    <string name="help_item_other_body">Format yang didukung: Belum ada.\n\nMetaJammer saat ini fokus pada file media. Pembaruan mendatang akan mencakup dukungan untuk PDF dan dokumen. Nantikan!</string>
+    <string name="help_item_image_body">Format yang didukung: JPG, PNG, WebP, HEIF.\n\nMetaJammer menghapus metadata EXIF dari gambar-gambar ini. Dalam mode \"Poison\", metadata sensitif seperti koordinat GPS diganti dengan data acak yang realistis.</string>
+    <string name="help_item_other_title">Pemrosesan PDF &amp; Dokumen</string>
+    <string name="help_item_other_body">Format yang didukung: PDF.\n\nMetaJammer kini sepenuhnya mendukung dokumen PDF. Anda dapat membaca, menghapus, dan \"meracuni\" metadata seperti Judul, Penulis, Subjek, Kata Kunci, Pembuat, dan Produser. Ini juga menghapus tanda air dan anotasi tersembunyi untuk memastikan dokumen Anda bersih sebelum dibagikan.</string>
     <string name="help_report_issue_title">Laporkan Masalah</string>
     <string name="help_report_issue_body">Menemukan bug atau memiliki permintaan fitur? Silakan laporkan di halaman GitHub kami.</string>
     <string name="help_open_github">Buka GitHub Issues</string>
@@ -88,15 +90,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">Pengaturan</string>
-    <string name="category_file_management">Manajemen File</string>
+    <string name="category_folder_management">Manajemen Folder</string>
+    <string name="category_file_management">Metadata &amp; Nama File</string>
     <string name="category_image_file">Gambar / File</string>
     <string name="category_shared_files">Perilaku File Bersama</string>
     <string name="category_ui">UI</string>
 
+    <string name="setting_folder_structure_title">Struktur Folder</string>
+    <string name="setting_folder_structure_unified">Terpadu (Satu folder untuk semua)</string>
+    <string name="setting_folder_structure_split">Terpisah (Folder terpisah berdasarkan tipe)</string>
+    <string name="setting_use_subfolders_title">Gunakan subfolder dalam mode terpadu</string>
+    <string name="setting_use_subfolders_sub">Atur berdasarkan tipe (Gambar, Film, dll.) di dalam folder terpadu</string>
+
+    <string name="setting_unified_path_title">Folder penyimpanan terpadu</string>
+    <string name="setting_pictures_path_title">Folder penyimpanan Gambar</string>
+    <string name="setting_music_path_title">Folder penyimpanan Musik</string>
+    <string name="setting_movies_path_title">Folder penyimpanan Film</string>
+    <string name="setting_documents_path_title">Folder penyimpanan Dokumen</string>
+
+    <string name="setting_configure_split_folders">Konfigurasi Folder Terpisah</string>
+    <string name="setting_split_folders_desc">Kelola folder individual untuk setiap kategori file</string>
+
     <string name="setting_random_names_title">Gunakan nama file acak</string>
     <string name="setting_random_names_sub">Hasilkan nama output acak alih-alih menggunakan nama file asli</string>
     <string name="setting_default_path_title">Jalur penyimpanan default</string>
-    <string name="setting_reset_path">Atur ulang ke Pictures/MetaJammer</string>
+    <string name="setting_reset_path_pictures">Setel ulang ke Pictures/MetaJammer</string>
+    <string name="setting_reset_path_download">Setel ulang ke Download/MetaJammer</string>
+    <string name="setting_reset_path_music">Setel ulang ke Music/MetaJammer</string>
+    <string name="setting_reset_path_movies">Setel ulang ke Movies/MetaJammer</string>
+    <string name="setting_reset_path_documents">Setel ulang ke Documents/MetaJammer</string>
     <string name="setting_select_folder">Pilih Folder</string>
 
     <string name="setting_keep_orientation_title">Pertahankan orientasi gambar</string>
@@ -111,6 +133,8 @@
     <string name="setting_thumbnails_warning">Peringatan: Mempertahankan thumbnail asli dapat membocorkan metadata (lokasi, info perangkat) bahkan jika tag utama dihapus.</string>
     <string name="setting_enable_map_title">Aktifkan pemilih peta</string>
     <string name="setting_enable_map_sub">Izinkan aplikasi terhubung ke internet untuk menampilkan OpenStreetMap untuk pemilihan lokasi</string>
+    <string name="setting_nearby_scramble_title">Gunakan peracunan terlokalisasi</string>
+    <string name="setting_nearby_scramble_sub">Saat meracuni metadata, acak koordinat di dekat lokasi asli, bukan titik yang sepenuhnya acak</string>
 
     <string name="setting_quick_scrub_title">Quick Scrub &amp; Bagikan</string>
     <string name="setting_quick_scrub_sub">Hapus metadata secara otomatis dan buka kembali Lembar Berbagi untuk file yang dibagikan</string>

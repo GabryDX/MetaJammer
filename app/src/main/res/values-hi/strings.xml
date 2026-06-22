@@ -23,8 +23,8 @@
     <!-- HomeScreen -->
     <string name="hero_title">अपनी गोपनीयता की रक्षा करें</string>
     <string name="hero_subtitle">अपनी फ़ाइलें साझा करने से पहले संवेदनशील मेटाडेटा को साफ़ करें या बदलें।</string>
-    <string name="feature_images_video_title">इमेज और वीडियो</string>
-    <string name="feature_images_video_desc">फ़ोटो से मेटाडेटा हटाने और ट्रैकिंग हटाने के लिए वीडियो को रीमक्स करने का पूरा समर्थन।</string>
+    <string name="feature_images_video_title">चित्र, वीडियो, ऑडियो और PDF</string>
+    <string name="feature_images_video_desc">फ़ोटो से मेटाडेटा हटाने और ट्रैकिंग हटाने के लिए वीडियो, ऑडियो और PDF दस्तावेजों को रिमक्स (remuxing) करने का पूर्ण समर्थन।</string>
     <string name="feature_poisoning_title">मेटाडेटा पॉइज़निंग</string>
     <string name="feature_poisoning_desc">केवल डेटा न हटाएं—गोपनीयता बनाए रखने और ट्रैकर्स को भ्रमित करने के लिए इसे यथार्थवादी नकली डेटा से बदलें।</string>
     <string name="feature_background_title">बैकग्राउंड प्रोसेसिंग</string>
@@ -56,6 +56,8 @@
     <string name="preview_of_changes">परिवर्तनों का पूर्वावलोकन</string>
     <string name="no_preview_available">कोई पूर्वावलोकन उपलब्ध नहीं</string>
     <string name="change_location_map">मानचित्र पर स्थान बदलें</string>
+    <string name="process_and_continue">संसाधित करें और जारी रखें</string>
+    <string name="processing_complete">प्रसंस्करण पूर्ण</string>
     <string name="process_files">फ़ाइलें प्रोसेस करें</string>
     <string name="processing_foreground">फोरग्राउंड में प्रोसेसिंग...</string>
     <string name="background_progress">बैकग्राउंड प्रगति: %1$d%%</string>
@@ -66,9 +68,9 @@
     <string name="help_item_video_title">Video Processing</string>
     <string name="help_item_video_body">Supported formats: MP4, MOV.\n\nFull re-muxing is supported for these containers. This process strips GPS, dates, and device atoms to protect your privacy.</string>
     <string name="help_item_image_title">Image Processing</string>
-    <string name="help_item_image_body">Supported formats: JPG, PNG.\n\nMetaJammer strips EXIF metadata from these images. In \"Poison\" mode, it replaces sensitive tags like GPS coordinates with realistic random data.</string>
-    <string name="help_item_other_title">Other Files</string>
-    <string name="help_item_other_body">Supported formats: None currently.\n\nMetaJammer currently focuses on media files. Future updates will include support for PDFs and documents. Stay tuned!</string>
+    <string name="help_item_image_body">Supported formats: JPG, PNG, WebP, HEIF.\n\nMetaJammer strips EXIF metadata from these images. In \"Poison\" mode, it replaces sensitive tags like GPS coordinates with realistic random data.</string>
+    <string name="help_item_other_title">PDF और दस्तावेज़ प्रसंस्करण</string>
+    <string name="help_item_other_body">समर्थित प्रारूप: PDF।\n\nMetaJammer अब पूरी तरह से PDF दस्तावेजों का समर्थन करता है। आप शीर्षक, लेखक, विषय, कीवर्ड, निर्माता और उत्पादक जैसे मेटाडेटा को पढ़ सकते हैं, हटा सकते हैं और \"पॉइजन\" कर सकते हैं। यह साझा करने से पहले आपके दस्तावेज़ों को साफ सुनिश्चित करने के लिए छिपे हुए वॉटरमार्क और एनोटेशन को भी हटा देता है।</string>
     <string name="help_report_issue_title">Report an Issue</string>
     <string name="help_report_issue_body">Found a bug or have a feature request? Please report it on our GitHub page.</string>
     <string name="help_open_github">Open GitHub Issues</string>
@@ -88,15 +90,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">सेटिंग्स</string>
-    <string name="category_file_management">फ़ाइल प्रबंधन</string>
+    <string name="category_folder_management">फ़ोल्डर प्रबंधन</string>
+    <string name="category_file_management">मेटाडेटा और फ़ाइल नाम</string>
     <string name="category_image_file">इमेज / फ़ाइल</string>
     <string name="category_shared_files">साझा फ़ाइलों का व्यवहार</string>
     <string name="category_ui">UI</string>
 
+    <string name="setting_folder_structure_title">फ़ोल्डर संरचना</string>
+    <string name="setting_folder_structure_unified">एकीकृत (सभी के लिए एक फ़ोल्डर)</string>
+    <string name="setting_folder_structure_split">विभाजित (प्रकार के अनुसार अलग फ़ोल्डर)</string>
+    <string name="setting_use_subfolders_title">एकीकृत में उपफ़ोल्डर का उपयोग करें</string>
+    <string name="setting_use_subfolders_sub">एकीकृत फ़ोल्डर के अंदर प्रकार (चित्र, फिल्में, आदि) के अनुसार व्यवस्थित करें</string>
+
+    <string name="setting_unified_path_title">एकीकृत बचत फ़ोल्डर</string>
+    <string name="setting_pictures_path_title">चित्र बचत फ़ोल्डर</string>
+    <string name="setting_music_path_title">संगीत बचत फ़ोल्डर</string>
+    <string name="setting_movies_path_title">फिल्म बचत फ़ोल्डर</string>
+    <string name="setting_documents_path_title">दस्तावेज़ बचत फ़ोल्डर</string>
+
+    <string name="setting_configure_split_folders">विभाजित फ़ोल्डर कॉन्फ़िगर करें</string>
+    <string name="setting_split_folders_desc">प्रत्येक फ़ाइल श्रेणी के लिए व्यक्तिगत फ़ोल्डर प्रबंधित करें</string>
+
     <string name="setting_random_names_title">रैंडम फ़ाइल नामों का उपयोग करें</string>
     <string name="setting_random_names_sub">मूल फ़ाइल नाम के बजाय रैंडम आउटपुट नाम जनरेट करें</string>
     <string name="setting_default_path_title">डिफ़ॉल्ट सहेजने का पाथ</string>
-    <string name="setting_reset_path">Pictures/MetaJammer पर रीसेट करें</string>
+    <string name="setting_reset_path_pictures">Pictures/MetaJammer पर रीसेट करें</string>
+    <string name="setting_reset_path_download">Download/MetaJammer पर रीसेट करें</string>
+    <string name="setting_reset_path_music">Music/MetaJammer पर रीसेट करें</string>
+    <string name="setting_reset_path_movies">Movies/MetaJammer पर रीसेट करें</string>
+    <string name="setting_reset_path_documents">Documents/MetaJammer पर रीसेट करें</string>
     <string name="setting_select_folder">फ़ोल्डर चुनें</string>
 
     <string name="setting_keep_orientation_title">इमेज ओरिएंटेशन रखें</string>
@@ -107,10 +129,12 @@
     <string name="setting_suffix_title">डिफ़ॉल्ट प्रत्यय (Suffix)</string>
     <string name="setting_not_set">सेट नहीं है</string>
     <string name="setting_keep_thumbnails_title">मूल थंबनेल रखें</string>
-    <string name="setting_keep_thumbnails_sub">यदि फ़ाइल में एम्बेडेड थंबनेल है, तो इसे वैसे ही रखें। यदि अक्षम है, तो अधिकतम गोपनीयता के लिए किसी भी मौजूदा थंबनेल को हटा दिया जाएगा।</string>
+    <string name="setting_keep_thumbnails_sub">यदि फ़ाइल में एम्बेेड थंबनेल है, तो इसे वैसे ही रखें। यदि अक्षम है, तो अधिकतम गोपनीयता के लिए किसी भी मौजूदा थंबनेल को हटा दिया जाएगा।</string>
     <string name="setting_thumbnails_warning">चेतावनी: मूल थंबनेल रखने से मेटाडेटा (स्थान, डिवाइस की जानकारी) लीक हो सकता है, भले ही मुख्य टैग हटा दिए गए हों।</string>
     <string name="setting_enable_map_title">मैप पिकर सक्षम करें</string>
     <string name="setting_enable_map_sub">स्थान चयन के लिए OpenStreetMap दिखाने हेतु ऐप को इंटरनेट से कनेक्ट करने की अनुमति दें</string>
+    <string name="setting_nearby_scramble_title">स्थानीयकृत पॉइजनिंग का उपयोग करें</string>
+    <string name="setting_nearby_scramble_sub">मेटाडेटा पॉइजनिंग करते समय, पूरी तरह से यादृच्छिक बिंदु के बजाय मूल स्थान के पास के निर्देशांकों को यादृच्छिक बनाएं</string>
 
     <string name="setting_quick_scrub_title">क्विक स्क्रब और साझा करें</string>
     <string name="setting_quick_scrub_sub">साझा की गई फ़ाइलों के लिए मेटाडेटा स्वचालित रूप से हटाएं और शेयर शीट फिर से खोलें</string>

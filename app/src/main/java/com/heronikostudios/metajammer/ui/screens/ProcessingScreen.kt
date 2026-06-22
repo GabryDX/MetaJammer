@@ -35,7 +35,6 @@ fun ProcessingScreen(
     onModeSelected: (ProcessingMode) -> Unit,
     onRegeneratePlans: () -> Unit,
     onProcess: () -> Unit,
-    onNext: () -> Unit,
     onEditLocation: (Uri) -> Unit,
     hasProcessedFiles: Boolean,
     modifier: Modifier = Modifier
@@ -104,16 +103,29 @@ fun ProcessingScreen(
 
                             HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
-                            val entries = changePreview[file.uri].orEmpty()
+                            val currentEntries = changePreview[file.uri].orEmpty()
 
-                            if (entries.isEmpty()) {
+                            if (currentEntries.isEmpty()) {
                                 Text(stringResource(R.string.no_preview_available))
                             } else {
-                                entries.forEach { entry ->
-                                    Text(
-                                        text = "${entry.key}: ${entry.value}",
-                                        style = MaterialTheme.typography.bodySmall
-                                    )
+                                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    currentEntries.forEach { entry ->
+                                        Column(modifier = Modifier.fillMaxWidth()) {
+                                            Text(
+                                                text = entry.key,
+                                                style = MaterialTheme.typography.labelSmall,
+                                                color = MaterialTheme.colorScheme.primary
+                                            )
+                                            Text(
+                                                text = entry.value,
+                                                style = MaterialTheme.typography.bodySmall,
+                                                color = if (selectedMode == ProcessingMode.POISON_METADATA) 
+                                                    MaterialTheme.colorScheme.tertiary 
+                                                else 
+                                                    MaterialTheme.colorScheme.error
+                                            )
+                                        }
+                                    }
                                 }
                                 
                                 if (selectedMode == ProcessingMode.POISON_METADATA) {
@@ -136,7 +148,7 @@ fun ProcessingScreen(
             enabled = !processing && selectedMode != null,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(stringResource(R.string.process_files))
+            Text(if (hasProcessedFiles) stringResource(R.string.continue_label) else stringResource(R.string.process_and_continue))
         }
 
         if (processing) {
@@ -163,15 +175,6 @@ fun ProcessingScreen(
                     )
                     Text(stringResource(R.string.background_progress, progress), style = MaterialTheme.typography.bodySmall)
                 }
-            }
-        }
-
-        if (hasProcessedFiles) {
-            Button(
-                onClick = onNext,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(stringResource(R.string.continue_to_output))
             }
         }
     }

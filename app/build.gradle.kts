@@ -13,12 +13,13 @@ android {
         minSdk = 33
         targetSdk = 37
         versionCode = 1
-        versionName = "0.2.4"
+        versionName = "0.3.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     androidResources {
+        @Suppress("UnstableApiUsage")
         localeFilters += listOf("en", "es", "it", "fr", "de", "zh", "hi", "pt", "ru", "el", "ar", "ja", "in", "tr", "ko", "vi", "th", "pl", "nl", "uk", "fa", "he", "iw", "la", "ro")
     }
 
@@ -41,6 +42,15 @@ android {
     buildFeatures {
         compose = true
         buildConfig = true
+    }
+}
+
+androidComponents {
+    onVariants { variant ->
+        variant.outputs.forEach { output ->
+            @Suppress("UnstableApiUsage")
+            output.outputFileName.set("MetaJammer-v${output.versionName.get()}.apk")
+        }
     }
 }
 
@@ -76,6 +86,7 @@ dependencies {
     implementation(libs.timber)
     implementation(libs.coil.compose)
     implementation(libs.coil.video)
+    implementation(libs.pdfbox.android)
 
     testImplementation(libs.junit)
 

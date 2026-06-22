@@ -17,14 +17,14 @@
     <string name="dismiss">Dispensar</string>
     <string name="warning">Aviso</string>
     <string name="none">Nenhum</string>
-    <string name="unknown">desconhecido</string>
+    <string name="unknown">desconocido</string>
     <string name="delete">Eliminar</string>
 
     <!-- HomeScreen -->
     <string name="hero_title">Proteja a sua privacidade</string>
     <string name="hero_subtitle">Limpe ou substitua metadados sensíveis antes de partilhar os seus ficheiros.</string>
-    <string name="feature_images_video_title">Imagens e Vídeo</string>
-    <string name="feature_images_video_desc">Suporte total para remover metadados de fotos e remuxar vídeos para remover o rastreio.</string>
+    <string name="feature_images_video_title">Imagens, Vídeo, Áudio e PDF</string>
+    <string name="feature_images_video_desc">Suporte completo para remover metadados de fotos e remuxar vídeos, áudio e documentos PDF para remover o rastreio.</string>
     <string name="feature_poisoning_title">Envenenamento de metadados</string>
     <string name="feature_poisoning_desc">Não remova apenas dados—substitua-os por falsificações realistas para preservar a privacidade e confundir os rastreadores.</string>
     <string name="feature_background_title">Processamento em segundo plano</string>
@@ -56,6 +56,8 @@
     <string name="preview_of_changes">Pré-visualização das alterações</string>
     <string name="no_preview_available">Nenhuma pré-visualização disponível</string>
     <string name="change_location_map">Alterar localização no mapa</string>
+    <string name="process_and_continue">Processar e continuar</string>
+    <string name="processing_complete">Processamento concluído</string>
     <string name="process_files">Processar ficheiros</string>
     <string name="processing_foreground">A processar em primeiro plano...</string>
     <string name="background_progress">Progresso em segundo plano: %1$d%%</string>
@@ -66,9 +68,9 @@
     <string name="help_item_video_title">Processamento de vídeo</string>
     <string name="help_item_video_body">Formatos suportados: MP4, MOV.\n\nO remuxing completo é suportado para estes contentores. Este processo remove GPS, datas e átomos do dispositivo para proteger a sua privacidade.</string>
     <string name="help_item_image_title">Processamento de imagem</string>
-    <string name="help_item_image_body">Formatos suportados: JPG, PNG.\n\nO MetaJammer remove os metadados EXIF destas imagens. No modo \"Envenenar\", substitui etiquetas sensíveis como coordenadas GPS por dados aleatórios realistas.</string>
-    <string name="help_item_other_title">Outros ficheiros</string>
-    <string name="help_item_other_body">Formatos suportados: Nenhum atualmente.\n\nO MetaJammer foca-se atualmente em ficheiros multimédia. Atualizações futuras incluirão suporte para PDFs e documentos. Fique atento!</string>
+    <string name="help_item_image_body">Formatos suportados: JPG, PNG, WebP, HEIF.\n\nO MetaJammer remove os metadados EXIF destas imagens. No modo \"Envenenar\", substitui etiquetas sensíveis como coordenadas GPS por dados aleatórios realistas.</string>
+    <string name="help_item_other_title">Processamento de PDF e Documentos</string>
+    <string name="help_item_other_body">Formatos suportados: PDF.\n\nO MetaJammer agora suporta totalmente documentos PDF. Você pode ler, remover e \"envenenar\" metadados como Título, Autor, Assunto, Palavras-chave, Criador e Produtor. Ele também remove marcas d\'água ocultas e anotações para garantir que seus documentos estejam limpos antes de serem compartilhados.</string>
     <string name="help_report_issue_title">Comunicar um problema</string>
     <string name="help_report_issue_body">Encontrou um erro ou tem um pedido de funcionalidade? Por favor, reporte na nossa página do GitHub.</string>
     <string name="help_open_github">Abrir problemas no GitHub</string>
@@ -88,15 +90,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">Definições</string>
-    <string name="category_file_management">Gestão de ficheiros</string>
+    <string name="category_folder_management">Gestão de pastas</string>
+    <string name="category_file_management">Metadados e nomes de ficheiros</string>
     <string name="category_image_file">Imagem / Ficheiro</string>
     <string name="category_shared_files">Comportamento de ficheiros partilhados</string>
     <string name="category_ui">Interface do utilizador</string>
 
+    <string name="setting_folder_structure_title">Estrutura de pastas</string>
+    <string name="setting_folder_structure_unified">Unificada (Uma pasta para todos)</string>
+    <string name="setting_folder_structure_split">Dividida (Pastas separadas por tipo)</string>
+    <string name="setting_use_subfolders_title">Usar subpastas no modo unificado</string>
+    <string name="setting_use_subfolders_sub">Organizar por tipo (Imagens, Filmes, etc.) dentro da pasta unificada</string>
+
+    <string name="setting_unified_path_title">Pasta de gravação unificada</string>
+    <string name="setting_pictures_path_title">Pasta de gravação de Imagens</string>
+    <string name="setting_music_path_title">Pasta de gravação de Música</string>
+    <string name="setting_movies_path_title">Pasta de gravação de Filmes</string>
+    <string name="setting_documents_path_title">Pasta de gravação de Documentos</string>
+
+    <string name="setting_configure_split_folders">Configurar pastas divididas</string>
+    <string name="setting_split_folders_desc">Gerir pastas individuais para cada categoria de ficheiro</string>
+
     <string name="setting_random_names_title">Utilizar nomes de ficheiros aleatórios</string>
-    <string name="setting_random_names_sub">Gerar nomes de saída aleatórios em vez de utilizar o nome original do ficheiro</string>
+    <string name="setting_random_names_sub">Gerar nomes de saída aleatórios envez de utilizar o nome original do ficheiro</string>
     <string name="setting_default_path_title">Caminho de gravação predefinido</string>
-    <string name="setting_reset_path">Repor para Pictures/MetaJammer</string>
+    <string name="setting_reset_path_pictures">Repor para Pictures/MetaJammer</string>
+    <string name="setting_reset_path_download">Repor para Download/MetaJammer</string>
+    <string name="setting_reset_path_music">Repor para Music/MetaJammer</string>
+    <string name="setting_reset_path_movies">Repor para Movies/MetaJammer</string>
+    <string name="setting_reset_path_documents">Repor para Documents/MetaJammer</string>
     <string name="setting_select_folder">Selecionar pasta</string>
 
     <string name="setting_keep_orientation_title">Manter orientação da imagem</string>
@@ -111,6 +133,8 @@
     <string name="setting_thumbnails_warning">Aviso: Manter as miniaturas originais pode revelar metadados (localização, informações do dispositivo) mesmo que as etiquetas principais sejam removidas.</string>
     <string name="setting_enable_map_title">Ativar seletor de mapa</string>
     <string name="setting_enable_map_sub">Permitir que a aplicação se ligue à internet para mostrar o OpenStreetMap para a seleção da localização</string>
+    <string name="setting_nearby_scramble_title">Utilizar envenenamento localizado</string>
+    <string name="setting_nearby_scramble_sub">Ao envenenar metadados, randomize as coordenadas perto do local original em vez de um ponto totalmente aleatório</string>
 
     <string name="setting_quick_scrub_title">Quick Scrub e Partilha</string>
     <string name="setting_quick_scrub_sub">Remover metadados automaticamente e reabrir a folha de partilha para ficheiros partilhados</string>

@@ -23,8 +23,8 @@
     <!-- HomeScreen -->
     <string name="hero_title">Schütze deine Privatsphäre</string>
     <string name="hero_subtitle">Bereinige oder ersetze sensible Metadaten, bevor du deine Dateien teilst.</string>
-    <string name="feature_images_video_title">Bilder &amp; Video</string>
-    <string name="feature_images_video_desc">Vollständige Unterstützung für das Entfernen von Metadaten aus Fotos und das Remuxen von Videos, um Tracking zu unterbinden.</string>
+    <string name="feature_images_video_title">Bilder, Video, Audio &amp; PDF</string>
+    <string name="feature_images_video_desc">Volle Unterstützung für das Entfernen von Metadaten aus Fotos sowie das Remuxen von Videos, Audio- und PDF-Dokumenten, um Tracking zu verhindern.</string>
     <string name="feature_poisoning_title">Metadaten-Vergiftung</string>
     <string name="feature_poisoning_desc">Entferne nicht nur Daten – ersetze sie durch realistische Fälschungen, um die Privatsphäre zu wahren und Tracker zu verwirren.</string>
     <string name="feature_background_title">Hintergrundverarbeitung</string>
@@ -56,6 +56,8 @@
     <string name="preview_of_changes">Vorschau der Änderungen</string>
     <string name="no_preview_available">Keine Vorschau verfügbar</string>
     <string name="change_location_map">Standort auf der Karte ändern</string>
+    <string name="process_and_continue">Verarbeiten und fortfahren</string>
+    <string name="processing_complete">Verarbeitung abgeschlossen</string>
     <string name="process_files">Dateien verarbeiten</string>
     <string name="processing_foreground">Verarbeitung im Vordergrund...</string>
     <string name="background_progress">Hintergrund-Fortschritt: %1$d%%</string>
@@ -66,9 +68,9 @@
     <string name="help_item_video_title">Videoverarbeitung</string>
     <string name="help_item_video_body">Unterstützte Formate: MP4, MOV.\n\nVollständiges Remuxing wird für diese Container unterstützt. Dieser Vorgang entfernt GPS, Daten und Geräteatome, um Ihre Privatsphäre zu schützen.</string>
     <string name="help_item_image_title">Bildverarbeitung</string>
-    <string name="help_item_image_body">Unterstützte Formate: JPG, PNG.\n\nMetaJammer entfernt EXIF-Metadaten aus diesen Bildern. Im Modus „Vergiften“ werden sensible Tags wie GPS-Koordinaten durch realistische Zufallsdaten ersetzt.</string>
-    <string name="help_item_other_title">Andere Dateien</string>
-    <string name="help_item_other_body">Unterstützte Formate: Derzeit keine.\n\nMetaJammer konzentriert sich aktuell auf Mediendateien. Zukünftige Updates werden Unterstützung für PDFs und Dokumente enthalten. Bleiben Sie auf dem Laufenden!</string>
+    <string name="help_item_image_body">Unterstützte Formate: JPG, PNG, WebP, HEIF.\n\nMetaJammer entfernt EXIF-Metadaten aus diesen Bildern. Im Modus „Vergiften“ werden sensible Tags wie GPS-Koordinaten durch realistische Zufallsdaten ersetzt.</string>
+    <string name="help_item_other_title">PDF- &amp; Dokumentenverarbeitung</string>
+    <string name="help_item_other_body">Unterstützte Formate: PDF.\n\nMetaJammer unterstützt jetzt PDF-Dokumente vollständig. Sie können Metadaten wie Titel, Autor, Thema, Schlagwörter, Ersteller und Produzent lesen, entfernen und „vergiften“. Außerdem werden versteckte Wasserzeichen und Anmerkungen entfernt, um sicherzustellen, dass Ihre Dokumente vor der Freigabe sauber sind.</string>
     <string name="help_report_issue_title">Ein Problem melden</string>
     <string name="help_report_issue_body">Haben Sie einen Fehler gefunden oder haben Sie einen Funktionswunsch? Bitte melden Sie dies auf einer GitHub-Seite.</string>
     <string name="help_open_github">GitHub-Issues öffnen</string>
@@ -88,15 +90,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">Einstellungen</string>
-    <string name="category_file_management">Dateiverwaltung</string>
+    <string name="category_folder_management">Ordnerverwaltung</string>
+    <string name="category_file_management">Metadaten &amp; Dateinamen</string>
     <string name="category_image_file">Bild / Datei</string>
     <string name="category_shared_files">Verhalten bei geteilten Dateien</string>
     <string name="category_ui">Benutzeroberfläche</string>
 
+    <string name="setting_folder_structure_title">Ordnerstruktur</string>
+    <string name="setting_folder_structure_unified">Einheitlich (Ein Ordner für alle)</string>
+    <string name="setting_folder_structure_split">Getrennt (Separate Ordner nach Typ)</string>
+    <string name="setting_use_subfolders_title">Unterordner in einheitlicher Struktur verwenden</string>
+    <string name="setting_use_subfolders_sub">Nach Typ organisieren (Bilder, Filme usw.) innerhalb des einheitlichen Ordners</string>
+
+    <string name="setting_unified_path_title">Einheitlicher Speicherordner</string>
+    <string name="setting_pictures_path_title">Speicherordner für Bilder</string>
+    <string name="setting_music_path_title">Speicherordner für Musik</string>
+    <string name="setting_movies_path_title">Speicherordner für Filme</string>
+    <string name="setting_documents_path_title">Speicherordner für Dokumente</string>
+
+    <string name="setting_configure_split_folders">Getrennte Ordner konfigurieren</string>
+    <string name="setting_split_folders_desc">Individuelle Ordner für jede Dateikategorie verwalten</string>
+
     <string name="setting_random_names_title">Zufällige Dateinamen verwenden</string>
     <string name="setting_random_names_sub">Zufällige Ausgabenamen generieren, anstatt den ursprünglichen Dateinamen zu verwenden</string>
     <string name="setting_default_path_title">Standard-Speicherpfad</string>
-    <string name="setting_reset_path">Zurücksetzen auf Pictures/MetaJammer</string>
+    <string name="setting_reset_path_pictures">Auf Pictures/MetaJammer zurücksetzen</string>
+    <string name="setting_reset_path_download">Auf Download/MetaJammer zurücksetzen</string>
+    <string name="setting_reset_path_music">Auf Music/MetaJammer zurücksetzen</string>
+    <string name="setting_reset_path_movies">Auf Movies/MetaJammer zurücksetzen</string>
+    <string name="setting_reset_path_documents">Auf Documents/MetaJammer zurücksetzen</string>
     <string name="setting_select_folder">Ordner auswählen</string>
 
     <string name="setting_keep_orientation_title">Bildausrichtung beibehalten</string>
@@ -111,6 +133,8 @@
     <string name="setting_thumbnails_warning">Warnung: Das Beibehalten von Original-Thumbnails kann Metadaten (Standort, Geräteinfo) preisgeben, auch wenn die Haupt-Tags entfernt wurden.</string>
     <string name="setting_enable_map_title">Karten-Picker aktivieren</string>
     <string name="setting_enable_map_sub">Der App erlauben, eine Verbindung zum Internet herzustellen, um OpenStreetMap für die Standortwahl anzuzeigen</string>
+    <string name="setting_nearby_scramble_title">Lokalisierte Vergiftung verwenden</string>
+    <string name="setting_nearby_scramble_sub">Bei der Vergiftung von Metadaten werden Koordinaten in der Nähe des ursprünglichen Standorts randomisiert, anstatt eines völlig zufälligen Punkts</string>
 
     <string name="setting_quick_scrub_title">Quick Scrub &amp; Share</string>
     <string name="setting_quick_scrub_sub">Metadaten automatisch entfernen und das Share-Sheet für geteilte Dateien erneut öffnen</string>

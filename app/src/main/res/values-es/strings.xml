@@ -23,8 +23,8 @@
     <!-- HomeScreen -->
     <string name="hero_title">Protege tu privacidad</string>
     <string name="hero_subtitle">Limpia o reemplaza metadatos sensibles antes de compartir tus archivos.</string>
-    <string name="feature_images_video_title">Imágenes y vídeo</string>
-    <string name="feature_images_video_desc">Soporte completo para eliminar metadatos de fotos y remezclar vídeos para eliminar el seguimiento.</string>
+    <string name="feature_images_video_title">Imágenes, Video, Audio y PDF</string>
+    <string name="feature_images_video_desc">Soporte completo para eliminar metadatos de fotos y remezclar (remuxing) videos, audio y documentos PDF para eliminar el rastreo.</string>
     <string name="feature_poisoning_title">Envenenamiento de metadatos</string>
     <string name="feature_poisoning_desc">No te limites a borrar datos: sustitúyelos por información falsa realista para proteger tu privacidad y despistar a los rastreadores.</string>
     <string name="feature_background_title">Procesamiento en segundo plano</string>
@@ -56,6 +56,8 @@
     <string name="preview_of_changes">Vista previa de cambios</string>
     <string name="no_preview_available">Vista previa no disponible</string>
     <string name="change_location_map">Cambiar ubicación en el mapa</string>
+    <string name="process_and_continue">Procesar y continuar</string>
+    <string name="processing_complete">Procesamiento completado</string>
     <string name="process_files">Procesar archivos</string>
     <string name="processing_foreground">Procesando en primer plano...</string>
     <string name="background_progress">Progreso en segundo plano: %1$d%%</string>
@@ -66,9 +68,9 @@
     <string name="help_item_video_title">Procesamiento de vídeo</string>
     <string name="help_item_video_body">Formatos compatibles: MP4, MOV.\n\nSe admite el "remuxing" (remezcla) completo para estos contenedores. Este proceso elimina el GPS, las fechas y los átomos del dispositivo para proteger tu privacidad.</string>
     <string name="help_item_image_title">Procesamiento de imágenes</string>
-    <string name="help_item_image_body">Formatos compatibles: JPG, PNG.\n\nMetaJammer elimina los metadatos EXIF de estas imágenes. En el modo \"Envenenar\", reemplaza las etiquetas sensibles como las coordenadas GPS con datos aleatorios realistas.</string>
-    <string name="help_item_other_title">Otros archivos</string>
-    <string name="help_item_other_body">Formatos compatibles: Ninguno actualmente.\n\nMetaJammer se centra actualmente en archivos multimedia. Las futuras actualizaciones incluirán soporte para PDF y documentos. ¡Mantente atento!</string>
+    <string name="help_item_image_body">Formatos compatibles: JPG, PNG, WebP, HEIF.\n\nMetaJammer elimina los metadatos EXIF de estas imágenes. En el modo \"Envenenar\", reemplaza las etiquetas sensibles como las coordenadas GPS con datos aleatorios realistas.</string>
+    <string name="help_item_other_title">Procesamiento de PDF y documentos</string>
+    <string name="help_item_other_body">Formatos compatibles: PDF.\n\nMetaJammer ahora es totalmente compatible con documentos PDF. Puedes leer, eliminar y \"envenenar\" metadatos como Título, Autor, Asunto, Palabras clave, Creador y Productor. También elimina marcas de agua ocultas y anotaciones para garantizar que tus documentos estén limpios antes de compartirlos.</string>
     <string name="help_report_issue_title">Informar de un problema</string>
     <string name="help_report_issue_body">¿Has encontrado un error o tienes una petición de funcionalidad? Por favor, infórmanos en nuestra página de GitHub.</string>
     <string name="help_open_github">Abrir problemas en GitHub</string>
@@ -88,15 +90,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">Ajustes</string>
-    <string name="category_file_management">Gestión de archivos</string>
+    <string name="category_folder_management">Gestión de carpetas</string>
+    <string name="category_file_management">Metadatos y nombres de archivo</string>
     <string name="category_image_file">Imagen / Archivo</string>
     <string name="category_shared_files">Comportamiento de archivos compartidos</string>
     <string name="category_ui">Interfaz de usuario</string>
 
+    <string name="setting_folder_structure_title">Estructura de carpetas</string>
+    <string name="setting_folder_structure_unified">Unificada (Una sola carpeta para todo)</string>
+    <string name="setting_folder_structure_split">Dividida (Carpetas separadas por tipo)</string>
+    <string name="setting_use_subfolders_title">Usar subcarpetas en modo unificado</string>
+    <string name="setting_use_subfolders_sub">Organizar por tipo (Imágenes, Películas, etc.) dentro de la carpeta unificada</string>
+
+    <string name="setting_unified_path_title">Carpeta de guardado unificada</string>
+    <string name="setting_pictures_path_title">Carpeta de guardado de Imágenes</string>
+    <string name="setting_music_path_title">Carpeta de guardado de Música</string>
+    <string name="setting_movies_path_title">Carpeta de guardado de Películas</string>
+    <string name="setting_documents_path_title">Carpeta de guardado de Documentos</string>
+
+    <string name="setting_configure_split_folders">Configurar carpetas divididas</string>
+    <string name="setting_split_folders_desc">Gestionar carpetas individuales para cada categoría</string>
+
     <string name="setting_random_names_title">Usar nombres de archivo aleatorios</string>
     <string name="setting_random_names_sub">Generar nombres de salida aleatorios en lugar de usar el nombre de archivo original</string>
     <string name="setting_default_path_title">Ruta de guardado predeterminada</string>
-    <string name="setting_reset_path">Restablecer a Pictures/MetaJammer</string>
+    <string name="setting_reset_path_pictures">Restablecer a Pictures/MetaJammer</string>
+    <string name="setting_reset_path_download">Restablecer a Download/MetaJammer</string>
+    <string name="setting_reset_path_music">Restablecer a Music/MetaJammer</string>
+    <string name="setting_reset_path_movies">Restablecer a Movies/MetaJammer</string>
+    <string name="setting_reset_path_documents">Restablecer a Documents/MetaJammer</string>
     <string name="setting_select_folder">Seleccionar carpeta</string>
 
     <string name="setting_keep_orientation_title">Mantener orientación de imagen</string>
@@ -111,6 +133,8 @@
     <string name="setting_thumbnails_warning">Advertencia: Mantener las miniaturas originales puede filtrar metadatos (ubicación, información del dispositivo) incluso si se eliminan las etiquetas principales.</string>
     <string name="setting_enable_map_title">Activar selector de mapa</string>
     <string name="setting_enable_map_sub">Permitir que la aplicación se conecte a Internet para mostrar OpenStreetMap para la selección de ubicación</string>
+    <string name="setting_nearby_scramble_title">Usar envenenamiento localizado</string>
+    <string name="setting_nearby_scramble_sub">Al envenenar metadatos, aleatoriza las coordenadas cerca de la ubicación original en lugar de un punto totalmente aleatorio</string>
 
     <string name="setting_quick_scrub_title">Limpieza rápida y compartir</string>
     <string name="setting_quick_scrub_sub">Eliminar metadatos automáticamente y volver a abrir el menú de compartir para archivos compartidos</string>

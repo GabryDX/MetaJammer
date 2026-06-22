@@ -23,8 +23,8 @@
     <!-- HomeScreen -->
     <string name="hero_title">Protejează-ți confidențialitatea</string>
     <string name="hero_subtitle">Curăță sau înlocuiește metadatele sensibile înainte de a-ți partaja fișierele.</string>
-    <string name="feature_images_video_title">Imagini și video</string>
-    <string name="feature_images_video_desc">Suport complet pentru eliminarea metadatelor din fotografii și remuxarea videoclipurilor pentru a elimina urmărirea.</string>
+    <string name="feature_images_video_title">Imagini, Video, Audio și PDF</string>
+    <string name="feature_images_video_desc">Suport complet pentru eliminarea metadatelor din fotografii și remuxarea videoclipurilor, fișierelor audio și documentelor PDF pentru a elimina urmărirea.</string>
     <string name="feature_poisoning_title">Alterarea metadatelor</string>
     <string name="feature_poisoning_desc">Nu doar șterge datele—înlocuiește-le cu unele false, dar realiste, pentru a-ți păstra confidențialitatea și a induce în eroare sistemele de urmărire.</string>
     <string name="feature_background_title">Procesare pe fundal</string>
@@ -56,6 +56,8 @@
     <string name="preview_of_changes">Previzualizare modificări</string>
     <string name="no_preview_available">Nicio previzualizare disponibilă</string>
     <string name="change_location_map">Schimbă locația pe hartă</string>
+    <string name="process_and_continue">Procesează și continuă</string>
+    <string name="processing_complete">Procesare finalizată</string>
     <string name="process_files">Procesează fișierele</string>
     <string name="processing_foreground">Se procesează în prim-plan...</string>
     <string name="background_progress">Progres pe fundal: %1$d%%</string>
@@ -66,9 +68,9 @@
     <string name="help_item_video_title">Procesare video</string>
     <string name="help_item_video_body">Formate suportate: MP4, MOV.\n\nRemuxarea completă este suportată pentru aceste containere. Acest proces elimină datele GPS, datele calendaristice și atomii de dispozitiv pentru a-ți proteja confidențialitatea.</string>
     <string name="help_item_image_title">Procesare imagini</string>
-    <string name="help_item_image_body">Formate suportate: JPG, PNG.\n\nMetaJammer elimină metadatele EXIF din aceste imagini. În modul \"Alterare\", acesta înlocuiește etichetele sensibile (cum ar fi coordonatele GPS) cu date aleatorii realiste.</string>
-    <string name="help_item_other_title">Alte fișiere</string>
-    <string name="help_item_other_body">Formate suportate: Momentan niciunul.\n\nMetaJammer se concentrează în prezent pe fișierele media. Actualizările viitoare vor include suport pentru PDF-uri și documente. Rămâi pe recepție!</string>
+    <string name="help_item_image_body">Formate suportate: JPG, PNG, WebP, HEIF.\n\nMetaJammer elimină metadatele EXIF din aceste imagini. În modul \"Alterare\", acesta înlocuiește etichetele sensibile (cum ar fi coordonatele GPS) cu date aleatorii realiste.</string>
+    <string name="help_item_other_title">Procesare PDF și documente</string>
+    <string name="help_item_other_body">Formate suportate: PDF.\n\nMetaJammer acceptă acum pe deplin documentele PDF. Puteți citi, elimina și „otrăvi” metadate precum Titlu, Autor, Subiect, Cuvinte cheie, Creator și Producător. De asemenea, elimină filigranele ascunse și adnotările pentru a vă asigura că documentele sunt curate înainte de a fi partajate.</string>
     <string name="help_report_issue_title">Raportează o problemă</string>
     <string name="help_report_issue_body">Ai găsit o eroare sau ai o sugestie de funcționalitate? Te rugăm să o raportezi pe pagina noastră de GitHub.</string>
     <string name="help_open_github">Deschide probleme GitHub</string>
@@ -88,15 +90,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">Setări</string>
-    <string name="category_file_management">Gestionare fișiere</string>
+    <string name="category_folder_management">Gestionare foldere</string>
+    <string name="category_file_management">Metadate și nume de fișiere</string>
     <string name="category_image_file">Imagine / Fișier</string>
     <string name="category_shared_files">Comportament fișiere partajate</string>
     <string name="category_ui">Interfață utilizator</string>
 
+    <string name="setting_folder_structure_title">Structură foldere</string>
+    <string name="setting_folder_structure_unified">Unificată (Un seul folder pentru toate)</string>
+    <string name="setting_folder_structure_split">Separată (Foldere separate după tip)</string>
+    <string name="setting_use_subfolders_title">Utilizați subfoldere în modul unificat</string>
+    <string name="setting_use_subfolders_sub">Organizați după tip (Imagini, Filme etc.) în folderul unificat</string>
+
+    <string name="setting_unified_path_title">Folder de salvare unificat</string>
+    <string name="setting_pictures_path_title">Folder de salvare Imagini</string>
+    <string name="setting_music_path_title">Folder de salvare Muzică</string>
+    <string name="setting_movies_path_title">Folder de salvare Filme</string>
+    <string name="setting_documents_path_title">Folder de salvare Documente</string>
+
+    <string name="setting_configure_split_folders">Configurare foldere separate</string>
+    <string name="setting_split_folders_desc">Gestionați foldere individuale pentru fiecare categorie</string>
+
     <string name="setting_random_names_title">Folosește nume de fișiere aleatorii</string>
     <string name="setting_random_names_sub">Generează nume de ieșire aleatorii în loc de a folosi numele original al fișierului</string>
     <string name="setting_default_path_title">Cale de salvare implicită</string>
-    <string name="setting_reset_path">Resetare la Pictures/MetaJammer</string>
+    <string name="setting_reset_path_pictures">Resetare la Pictures/MetaJammer</string>
+    <string name="setting_reset_path_download">Resetare la Download/MetaJammer</string>
+    <string name="setting_reset_path_music">Resetare la Music/MetaJammer</string>
+    <string name="setting_reset_path_movies">Resetare la Movies/MetaJammer</string>
+    <string name="setting_reset_path_documents">Resetare la Documents/MetaJammer</string>
     <string name="setting_select_folder">Selectare dosar</string>
 
     <string name="setting_keep_orientation_title">Păstrează orientarea imaginii</string>
@@ -111,6 +133,8 @@
     <string name="setting_thumbnails_warning">Avertisment: Păstrarea miniaturilor originale poate duce la scurgerea de metadate (locație, informații despre dispozitiv) chiar dacă etichetele principale sunt eliminate.</string>
     <string name="setting_enable_map_title">Activează selectorul de hartă</string>
     <string name="setting_enable_map_sub">Permite aplicației să se conecteze la internet pentru a afișa OpenStreetMap pentru selectarea locației</string>
+    <string name="setting_nearby_scramble_title">Folosește otrăvirea localizată</string>
+    <string name="setting_nearby_scramble_sub">Când otrăvești metadatele, alege coordonate aleatorii lângă locația originală în loc de un punct complet aleatoriu</string>
 
     <string name="setting_quick_scrub_title">Curățare și partajare rapidă</string>
     <string name="setting_quick_scrub_sub">Elimină automat metadatele și redeschide meniul de partajare pentru fișierele partajate</string>

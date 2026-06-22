@@ -34,6 +34,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -48,6 +49,7 @@ import com.heronikostudios.metajammer.ui.screens.HelpScreen
 import com.heronikostudios.metajammer.ui.screens.HomeScreen
 import com.heronikostudios.metajammer.ui.screens.LocationPickerScreen
 import com.heronikostudios.metajammer.ui.screens.MetadataPreviewScreen
+import kotlinx.coroutines.launch
 import com.heronikostudios.metajammer.ui.screens.OutputOptionsScreen
 import com.heronikostudios.metajammer.ui.screens.ProcessingScreen
 import com.heronikostudios.metajammer.ui.screens.SettingsScreen
@@ -59,6 +61,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Security: Protect against tapjacking (overlay) attacks
+        // This ensures the app doesn't receive touches if it's being obscured by another window
+        findViewById<android.view.View>(android.R.id.content)?.filterTouchesWhenObscured = true
 
         enableEdgeToEdge()
         sharedUris = extractSharedUris(intent)
@@ -144,6 +150,7 @@ fun MetaJammerApp(
 ) {
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
     val shareFileUseCase = remember { ShareFileUseCase() }
 
     val selectedFiles by viewModel.selectedFiles.collectAsStateWithLifecycle()
@@ -228,6 +235,13 @@ fun MetaJammerApp(
             }
         } else {
             navigateTo(AppStep.PREVIEW)
+        }
+    }
+
+    val workInfo by viewModel.workInfo.collectAsStateWithLifecycle()
+    LaunchedEffect(workInfo) {
+        if (currentStep == AppStep.PROCESS && workInfo?.state == WorkInfo.State.SUCCEEDED) {
+            navigateTo(AppStep.OUTPUT)
         }
     }
 
@@ -338,6 +352,8 @@ fun MetaJammerApp(
                 }
 
                 AppStep.PROCESS -> {
+                    val hasProcessedFiles = processedFiles.isNotEmpty() || viewModel.workInfo.collectAsStateWithLifecycle().value?.state == WorkInfo.State.SUCCEEDED
+
                     ProcessingScreen(
                         selectedFiles = selectedFiles,
                         selectedMode = selectedMode,
@@ -346,9 +362,14 @@ fun MetaJammerApp(
                         workInfo = viewModel.workInfo.collectAsStateWithLifecycle().value,
                         onModeSelected = viewModel::setProcessingMode,
                         onRegeneratePlans = viewModel::regeneratePoisonPlans,
-                        onProcess = viewModel::processFiles,
-                        onNext = {
-                            if (processedFiles.isNotEmpty()) navigateTo(AppStep.OUTPUT)
+                        onProcess = {
+                            if (hasProcessedFiles) {
+                                navigateTo(AppStep.OUTPUT)
+                            } else {
+                                viewModel.processFiles(onSuccess = {
+                                    navigateTo(AppStep.OUTPUT)
+                                })
+                            }
                         },
                         onEditLocation = { uri ->
                             uriToEditLocation = uri
@@ -358,7 +379,7 @@ fun MetaJammerApp(
                                 showInternetPermissionExplanation = true
                             }
                         },
-                        hasProcessedFiles = processedFiles.isNotEmpty() || viewModel.workInfo.collectAsStateWithLifecycle().value?.state == WorkInfo.State.SUCCEEDED,
+                        hasProcessedFiles = hasProcessedFiles,
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -384,42 +405,52 @@ fun MetaJammerApp(
                     OutputOptionsScreen(
                         shareResultAsDefault = appSettings.shareResultAsDefault,
                         onSaveDefault = {
-                            val firstProcessed = processedFiles.firstOrNull()
-                            val savedUris = viewModel.saveProcessedFilesToDefault()
+                            coroutineScope.launch {
+                                val firstProcessed = processedFiles.firstOrNull()
+                                val savedUris = viewModel.saveProcessedFilesToDefault()
 
-                            if (appSettings.shareResultAsDefault) {
-                                val firstSavedUri = savedUris.firstOrNull()
-                                if (firstSavedUri != null && firstProcessed != null) {
-                                    shareFileUseCase.shareUri(
-                                        context = context,
-                                        uri = firstSavedUri,
-                                        mimeType = firstProcessed.first.mimeType
-                                    )
+                                if (appSettings.shareResultAsDefault) {
+                                    val firstSavedUri = savedUris.firstOrNull()
+                                    if (firstSavedUri != null && firstProcessed != null) {
+                                        shareFileUseCase.shareUri(
+                                            context = context,
+                                            uri = firstSavedUri,
+                                            mimeType = firstProcessed.first.mimeType
+                                        )
+                                    }
                                 }
                             }
                         },
                         onSaveCustom = { treeUri ->
-                            val firstProcessed = processedFiles.firstOrNull()
-                            val savedUris = viewModel.saveProcessedFilesToCustom(treeUri)
+                            coroutineScope.launch {
+                                val firstProcessed = processedFiles.firstOrNull()
+                                val savedUris = viewModel.saveProcessedFilesToCustom(treeUri)
 
-                            if (appSettings.shareResultAsDefault) {
-                                val firstSavedUri = savedUris.firstOrNull()
-                                if (firstSavedUri != null && firstProcessed != null) {
-                                    shareFileUseCase.shareUri(
-                                        context = context,
-                                        uri = firstSavedUri,
-                                        mimeType = firstProcessed.first.mimeType
-                                    )
+                                if (appSettings.shareResultAsDefault) {
+                                    val firstSavedUri = savedUris.firstOrNull()
+                                    if (firstSavedUri != null && firstProcessed != null) {
+                                        shareFileUseCase.shareUri(
+                                            context = context,
+                                            uri = firstSavedUri,
+                                            mimeType = firstProcessed.first.mimeType
+                                        )
+                                    }
                                 }
                             }
                         },
                         onShareOnly = {
-                            viewModel.getFirstProcessedFileForSharing()?.let { (selectedFile, file) ->
-                                shareFileUseCase.shareFile(
-                                    context = context,
-                                    file = file,
-                                    mimeType = selectedFile.mimeType
-                                )
+                            coroutineScope.launch {
+                                val filesToShare = viewModel.getProcessedFilesForSharing()
+                                if (filesToShare.isNotEmpty()) {
+                                    val firstProcessedMime = processedFiles.firstOrNull()?.first?.mimeType
+                                    val allSameMime = processedFiles.all { it.first.mimeType == firstProcessedMime }
+                                    
+                                    shareFileUseCase.shareFiles(
+                                        context = context,
+                                        files = filesToShare,
+                                        mimeType = if (allSameMime) firstProcessedMime else "*/*"
+                                    )
+                                }
                             }
                         },
                         modifier = Modifier.weight(1f)
@@ -430,7 +461,13 @@ fun MetaJammerApp(
                     SettingsScreen(
                         settings = appSettings,
                         onUseRandomFileNamesChanged = viewModel::setUseRandomFileNames,
-                        onDefaultSavingPathSelected = viewModel::persistAndSetDefaultSavingPath,
+                        onFolderStructureChanged = viewModel::setFolderStructure,
+                        onUseSubfoldersInUnifiedChanged = viewModel::setUseSubfoldersInUnified,
+                        onUnifiedSavingPathSelected = viewModel::persistAndSetUnifiedSavingPath,
+                        onPicturesSavingPathSelected = viewModel::persistAndSetPicturesSavingPath,
+                        onMusicSavingPathSelected = viewModel::persistAndSetMusicSavingPath,
+                        onMoviesSavingPathSelected = viewModel::persistAndSetMoviesSavingPath,
+                        onDocumentsSavingPathSelected = viewModel::persistAndSetDocumentsSavingPath,
                         onKeepImageOrientationChanged = viewModel::setKeepImageOrientation,
                         onShareResultAsDefaultChanged = viewModel::setShareResultAsDefault,
                         onDefaultPrefixChanged = viewModel::setDefaultPrefix,
@@ -443,6 +480,7 @@ fun MetaJammerApp(
                         onSharedFilesCustomPathSelected = viewModel::persistAndSetSharedFilesCustomPath,
                         onThumbnailHandlingChanged = viewModel::setThumbnailHandling,
                         onAllowInternetForMapChanged = viewModel::setAllowInternetForMap,
+                        onUseNearbyScrambleChanged = viewModel::setUseNearbyScramble,
                         onLanguageChanged = viewModel::setLanguage,
                         modifier = Modifier.weight(1f)
                     )

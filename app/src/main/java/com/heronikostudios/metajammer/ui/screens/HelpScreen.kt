@@ -52,12 +52,6 @@ fun HelpScreen(
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text(
-            text = stringResource(R.string.help_title),
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold
-        )
-
         HelpItem(
             icon = painterResource(R.drawable.ic_photo_library),
             title = stringResource(R.string.help_item_image_title),

@@ -56,6 +56,8 @@
     <string name="preview_of_changes">معاينة التغييرات</string>
     <string name="no_preview_available">لا توجد معاينة متاحة</string>
     <string name="change_location_map">تغيير الموقع على الخريطة</string>
+    <string name="process_and_continue">معالجة ومتابعة</string>
+    <string name="processing_complete">اكتملت المعالجة</string>
     <string name="process_files">معالجة الملفات</string>
     <string name="processing_foreground">جاري المعالجة في الواجهة...</string>
     <string name="background_progress">تقدم الخلفية: %1$d%%</string>
@@ -66,9 +68,9 @@
     <string name="help_item_video_title">معالجة الفيديو</string>
     <string name="help_item_video_body">التنسيقات المدعومة: MP4, MOV.\n\nيتم دعم إعادة دمج الحاويات بالكامل لهذه الملفات. تقوم هذه العملية بإزالة بيانات GPS والتواريخ ومعلومات الجهاز لحماية خصوصيتك.</string>
     <string name="help_item_image_title">معالجة الصور</string>
-    <string name="help_item_image_body">التنسيقات المدعومة: JPG, PNG.\n\nيقوم MetaJammer بإزالة بيانات EXIF من هذه الصور. في وضع \"التسميم\" (Poison)، يستبدل العلامات الحساسة مثل إحداثيات GPS ببيانات عشوائية واقعية.</string>
+    <string name="help_item_image_body">التنسيقات المدعومة: JPG, PNG, WebP, HEIF.\n\nيقوم MetaJammer بإزالة بيانات EXIF من هذه الصور. في وضع \"التسميم\" (Poison)، يستبدل العلامات الحساسة مثل إحداثيات GPS ببيانات عشوائية واقعية.</string>
     <string name="help_item_other_title">ملفات أخرى</string>
-    <string name="help_item_other_body">التنسيقات المدعومة: لا يوجد حالياً.\n\nيركز MetaJammer حالياً على ملفات الوسائط. ستشمل التحديثات المستقبلية دعم ملفات PDF والمستندات. ابقوا على اطلاع!</string>
+    <string name="help_item_other_body">الصيغ المدعومة: PDF.\n\nيدعم MetaJammer الآن ملفات PDF بشكل كامل. يمكنك قراءة وإزالة وتسميم البيانات الوصفية مثل العنوان، والمؤلف، والموضوع، والكلمات المفتاحية، والمنشئ، والمنتج. كما يقوم بتجريد العلامات المائية المخفية والتعليقات التوضيحية لضمان نظافة مستنداتك قبل مشاركتها.</string>
     <string name="help_report_issue_title">الإبلاغ عن مشكلة</string>
     <string name="help_report_issue_body">هل وجدت خللاً أو لديك طلب ميزة؟ يرجى الإبلاغ عنها على صفحتنا في GitHub.</string>
     <string name="help_open_github">فتح مشاكل GitHub</string>
@@ -88,15 +90,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">الإعدادات</string>
-    <string name="category_file_management">إدارة الملفات</string>
+    <string name="category_folder_management">إدارة المجلدات</string>
+    <string name="category_file_management">البيانات الوصفية وأسماء الملفات</string>
     <string name="category_image_file">الصورة / الملف</string>
     <string name="category_shared_files">سلوك الملفات المشتركة</string>
     <string name="category_ui">واجهة المستخدم</string>
 
+    <string name="setting_folder_structure_title">هيكل المجلد</string>
+    <string name="setting_folder_structure_unified">موحد (مجلد واحد للكل)</string>
+    <string name="setting_folder_structure_split">مقسم (مجلدات منفصلة حسب النوع)</string>
+    <string name="setting_use_subfolders_title">استخدام المجلدات الفرعية في المجلد الموحد</string>
+    <string name="setting_use_subfolders_sub">التنظيم حسب النوع (صور، أفلام، إلخ) داخل المجلد الموحد</string>
+
+    <string name="setting_unified_path_title">مجلد حفظ موحد</string>
+    <string name="setting_pictures_path_title">مجلد حفظ الصور</string>
+    <string name="setting_music_path_title">مجلد حفظ الموسيقى</string>
+    <string name="setting_movies_path_title">مجلد حفظ الأفلام</string>
+    <string name="setting_documents_path_title">مجلد حفظ المستندات</string>
+
+    <string name="setting_configure_split_folders">تكوين المجلدات المقسمة</string>
+    <string name="setting_split_folders_desc">إدارة المجلدات الفردية لكل فئة ملفات</string>
+
     <string name="setting_random_names_title">استخدام أسماء ملفات عشوائية</string>
     <string name="setting_random_names_sub">توليد أسماء إخراج عشوائية بدلاً من استخدام اسم الملف الأصلي</string>
     <string name="setting_default_path_title">مسار الحفظ الافتراضي</string>
-    <string name="setting_reset_path">إعادة الضبط إلى Pictures/MetaJammer</string>
+    <string name="setting_reset_path_pictures">إعادة الضبط إلى Pictures/MetaJammer</string>
+    <string name="setting_reset_path_download">إعادة الضبط إلى Download/MetaJammer</string>
+    <string name="setting_reset_path_music">إعادة الضبط إلى Music/MetaJammer</string>
+    <string name="setting_reset_path_movies">إعادة الضبط إلى Movies/MetaJammer</string>
+    <string name="setting_reset_path_documents">إعادة الضبط إلى Documents/MetaJammer</string>
     <string name="setting_select_folder">اختيار مجلد</string>
 
     <string name="setting_keep_orientation_title">الحفاظ على اتجاه الصورة</string>
@@ -111,6 +133,8 @@
     <string name="setting_thumbnails_warning">تحذير: قد يؤدي الحفاظ على المصغرات الأصلية إلى تسريب بيانات وصفية (الموقع، معلومات الجهاز) حتى لو تم إزالة العلامات الرئيسية.</string>
     <string name="setting_enable_map_title">تفعيل منتقي الخريطة</string>
     <string name="setting_enable_map_sub">السماح للتطبيق بالاتصال بالإنترنت لعرض OpenStreetMap لاختيار الموقع</string>
+    <string name="setting_nearby_scramble_title">استخدام التسميم الموضعي</string>
+    <string name="setting_nearby_scramble_sub">عند تسميم البيانات الوصفية، قم بتبديل الإحداثيات بالقرب من الموقع الأصلي بدلاً من نقطة عشوائية تمامًا</string>
 
     <string name="setting_quick_scrub_title">التنظيف السريع والمشاركة</string>
     <string name="setting_quick_scrub_sub">تجريد البيانات الوصفية تلقائياً وإعادة فتح قائمة المشاركة للملفات المشتركة</string>

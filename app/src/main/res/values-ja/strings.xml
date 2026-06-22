@@ -23,8 +23,8 @@
     <!-- HomeScreen -->
     <string name="hero_title">プライバシーを守る</string>
     <string name="hero_subtitle">ファイルを共有する前に、機密性の高いメタデータをクリーンアップまたは置換します。</string>
-    <string name="feature_images_video_title">画像とビデオ</string>
-    <string name="feature_images_video_desc">写真からのメタデータ削除と、トラッキングを排除するためのビデオのリマックを完全にサポートしています。</string>
+    <string name="feature_images_video_title">画像、ビデオ、オーディオ、PDF</string>
+    <string name="feature_images_video_desc">写真からのメタデータ削除、および追跡を排除するためのビデオ、オーディオ、PDFドキュメントのリマックス（remuxing）を完全にサポートしています。</string>
     <string name="feature_poisoning_title">メタデータポイズニング</string>
     <string name="feature_poisoning_desc">単にデータを削除するだけでなく、現実的な偽のデータに置き換えることでプライバシーを保護し、トラッカーを混乱させます。</string>
     <string name="feature_background_title">バックグラウンド処理</string>
@@ -56,6 +56,8 @@
     <string name="preview_of_changes">変更のプレビュー</string>
     <string name="no_preview_available">プレビューを利用できません</string>
     <string name="change_location_map">地図上で位置を変更</string>
+    <string name="process_and_continue">処理して続行</string>
+    <string name="processing_complete">処理完了</string>
     <string name="process_files">ファイルを処理</string>
     <string name="processing_foreground">フォアグラウンドで処理中...</string>
     <string name="background_progress">バックグラウンド進行状況：%1$d%%</string>
@@ -66,9 +68,9 @@
     <string name="help_item_video_title">ビデオ処理</string>
     <string name="help_item_video_body">サポートされている形式：MP4、MOV。\n\nこれらのコンテナの完全なリマックがサポートされています。このプロセスにより、プライバシーを保護するためにGPS、日付、およびデバイスアトムが削除されます。</string>
     <string name="help_item_image_title">画像処理</string>
-    <string name="help_item_image_body">サポートされている形式：JPG、PNG。\n\nMetaJammerはこれらの画像からEXIFメタデータを削除します。「ポイズン」モードでは、GPS座標などの機密タグを現実的なランダムデータに置き換えます。</string>
-    <string name="help_item_other_title">その他のファイル</string>
-    <string name="help_item_other_body">サポートされている形式：現在はなし。\n\nMetaJammerは現在、メディアファイルに焦点を当てています。将来のアップデートでは、PDFやドキュメントのサポートが含まれる予定です。ご期待ください！</string>
+    <string name="help_item_image_body">サポートされている形式：JPG, PNG, WebP, HEIF。\n\nMetaJammerはこれらの画像からEXIFメタデータを削除します。「ポイズン」モードでは、GPS座標などの機密タグを現実的なランダムデータに置き換えます。</string>
+    <string name="help_item_other_title">PDFおよびドキュメント処理</string>
+    <string name="help_item_other_body">対応フォーマット：PDF。\n\nMetaJammerはPDFドキュメントに完全対応しました。タイトル、作成者、件名、キーワード、作成アプリ、プロデューサーなどのメタデータを読み取り、削除、および「ポイズニング（偽装）」することができます。また、隠しウォーターマークや注釈も除去し、共有前にドキュメントがクリーンであることを保証します。</string>
     <string name="help_report_issue_title">問題を報告する</string>
     <string name="help_report_issue_body">バグを見つけたか、機能のリクエストがありますか？GitHubページで報告してください。</string>
     <string name="help_open_github">GitHub Issuesを開く</string>
@@ -88,15 +90,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">設定</string>
-    <string name="category_file_management">ファイル管理</string>
+    <string name="category_folder_management">フォルダ管理</string>
+    <string name="category_file_management">メタデータとファイル名</string>
     <string name="category_image_file">画像 / ファイル</string>
     <string name="category_shared_files">共有ファイルの動作</string>
     <string name="category_ui">UI</string>
 
+    <string name="setting_folder_structure_title">フォルダ構造</string>
+    <string name="setting_folder_structure_unified">統合（すべてを1つのフォルダに）</string>
+    <string name="setting_folder_structure_split">分割（タイプ別に個別のフォルダ）</string>
+    <string name="setting_use_subfolders_title">統合フォルダ内でサブフォルダを使用する</string>
+    <string name="setting_use_subfolders_sub">統合フォルダ内でタイプ別（画像、動画など）に整理する</string>
+
+    <string name="setting_unified_path_title">統合保存フォルダ</string>
+    <string name="setting_pictures_path_title">画像保存フォルダ</string>
+    <string name="setting_music_path_title">音楽保存フォルダ</string>
+    <string name="setting_movies_path_title">動画保存フォルダ</string>
+    <string name="setting_documents_path_title">ドキュメント保存フォルダ</string>
+
+    <string name="setting_configure_split_folders">分割フォルダの設定</string>
+    <string name="setting_split_folders_desc">ファイルカテゴリごとに個別のフォルダを管理する</string>
+
     <string name="setting_random_names_title">ランダムなファイル名を使用</string>
     <string name="setting_random_names_sub">元のファイル名を使用する代わりに、ランダムな出力名を生成します</string>
     <string name="setting_default_path_title">デフォルトの保存パス</string>
-    <string name="setting_reset_path">Pictures/MetaJammer にリセット</string>
+    <string name="setting_reset_path_pictures">Pictures/MetaJammer にリセット</string>
+    <string name="setting_reset_path_download">Download/MetaJammer にリセット</string>
+    <string name="setting_reset_path_music">Music/MetaJammer にリセット</string>
+    <string name="setting_reset_path_movies">Movies/MetaJammer にリセット</string>
+    <string name="setting_reset_path_documents">Documents/MetaJammer にリセット</string>
     <string name="setting_select_folder">フォルダを選択</string>
 
     <string name="setting_keep_orientation_title">画像の向きを維持</string>
@@ -111,6 +133,8 @@
     <string name="setting_thumbnails_warning">警告：元のサムネイルを保持すると、メインのタグが削除されていてもメタデータ（位置、デバイス情報）が漏洩する可能性があります。</string>
     <string name="setting_enable_map_title">マップピッカーを有効にする</string>
     <string name="setting_enable_map_sub">位置選択のためにOpenStreetMapを表示するため、アプリのインターネット接続を許可します</string>
+    <string name="setting_nearby_scramble_title">ローカライズされたポイズニングを使用する</string>
+    <string name="setting_nearby_scramble_sub">メタデータをポイズニングする際、完全にランダムな地点ではなく、元の場所の近くの座標をランダム化します</string>
 
     <string name="setting_quick_scrub_title">クイッククリーンと共有</string>
     <string name="setting_quick_scrub_sub">共有ファイルに対してメタデータを自動的に削除し、共有シートを再度開きます</string>

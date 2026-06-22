@@ -23,8 +23,8 @@
     <!-- HomeScreen -->
     <string name="hero_title">프라이버시 보호</string>
     <string name="hero_subtitle">파일을 공유하기 전에 민감한 메타데이터를 정리하거나 교체하세요.</string>
-    <string name="feature_images_video_title">이미지 및 동영상</string>
-    <string name="feature_images_video_desc">사진에서 메타데이터를 제거하고 동영상을 리먹싱하여 추적을 방지하는 기능을 완벽하게 지원합니다.</string>
+    <string name="feature_images_video_title">이미지, 비디오, 오디오 및 PDF</string>
+    <string name="feature_images_video_desc">사진에서 메타데이터를 제거하고 추적을 방지하기 위해 비디오, 오디오 및 PDF 문서를 리맥싱(remuxing)하는 기능을 완벽하게 지원합니다.</string>
     <string name="feature_poisoning_title">메타데이터 포이즈닝</string>
     <string name="feature_poisoning_desc">단순히 데이터를 제거하는 데 그치지 않고 실제와 유사한 가짜 데이터로 교체하여 프라이버시를 보호하고 추적기를 혼란스럽게 만듭니다.</string>
     <string name="feature_background_title">백그라운드 처리</string>
@@ -56,6 +56,8 @@
     <string name="preview_of_changes">변경 사항 미리보기</string>
     <string name="no_preview_available">미리보기 불가</string>
     <string name="change_location_map">지도에서 위치 변경</string>
+    <string name="process_and_continue">처리 및 계속</string>
+    <string name="processing_complete">처리 완료</string>
     <string name="process_files">파일 처리</string>
     <string name="processing_foreground">포그라운드에서 처리 중...</string>
     <string name="background_progress">백그라운드 진행률: %1$d%%</string>
@@ -66,9 +68,9 @@
     <string name="help_item_video_title">동영상 처리</string>
     <string name="help_item_video_body">지원되는 형식: MP4, MOV.\n\n이러한 컨테이너에 대해 전체 리먹싱이 지원됩니다. 이 프로세스는 개인 정보를 보호하기 위해 GPS, 날짜 및 장치 원자를 제거합니다.</string>
     <string name="help_item_image_title">이미지 처리</string>
-    <string name="help_item_image_body">지원되는 형식: JPG, PNG.\n\nMetaJammer는 이러한 이미지에서 EXIF 메타데이터를 제거합니다. \"포이즌\" 모드에서는 GPS 좌표와 같은 민감한 태그를 실제와 유사한 무작위 데이터로 대체합니다.</string>
-    <string name="help_item_other_title">기타 파일</string>
-    <string name="help_item_other_body">지원되는 형식: 현재 없음.\n\nMetaJammer는 현재 미디어 파일에 집중하고 있습니다. 향후 업데이트에는 PDF 및 문서에 대한 지원이 포함될 예정입니다. 기대해 주세요!</string>
+    <string name="help_item_image_body">지원되는 형식: JPG, PNG, WebP, HEIF.\n\nMetaJammer는 이러한 이미지에서 EXIF 메타데이터를 제거합니다. \"포이즌\" 모드에서는 GPS 좌표와 같은 민감한 태그를 실제와 유사한 무작위 데이터로 대체합니다.</string>
+    <string name="help_item_other_title">PDF 및 문서 처리</string>
+    <string name="help_item_other_body">지원 형식: PDF.\n\nMetaJammer가 이제 PDF 문서를 완벽하게 지원합니다. 제목, 작성자, 주제, 키워드, 생성자 및 제작자와 같은 메타데이터를 읽고, 삭제하고, \"포이즈닝(변조)\"할 수 있습니다. 또한, 숨겨진 워터마크와 주석을 제거하여 공유하기 전에 문서가 깨끗한지 확인합니다.</string>
     <string name="help_report_issue_title">문제 보고</string>
     <string name="help_report_issue_body">버그를 발견하셨나요? 아니면 기능 요청이 있으신가요? 저희 GitHub 페이지에 보고해 주세요.</string>
     <string name="help_open_github">GitHub Issues 열기</string>
@@ -88,15 +90,35 @@
 
     <!-- SettingsScreen -->
     <string name="settings">설정</string>
-    <string name="category_file_management">파일 관리</string>
+    <string name="category_folder_management">폴더 관리</string>
+    <string name="category_file_management">메타데이터 및 파일 이름</string>
     <string name="category_image_file">이미지 / 파일</string>
     <string name="category_shared_files">공유 파일 동작</string>
     <string name="category_ui">UI</string>
 
+    <string name="setting_folder_structure_title">폴더 구조</string>
+    <string name="setting_folder_structure_unified">통합 (모든 파일을 하나의 폴더로)</string>
+    <string name="setting_folder_structure_split">분할 (유형별로 별도의 폴더)</string>
+    <string name="setting_use_subfolders_title">통합 폴더 내 하위 폴더 사용</string>
+    <string name="setting_use_subfolders_sub">통합 폴더 내에서 유형별(사진, 영화 등)로 정리</string>
+
+    <string name="setting_unified_path_title">통합 저장 폴더</string>
+    <string name="setting_pictures_path_title">사진 저장 폴더</string>
+    <string name="setting_music_path_title">음악 저장 폴더</string>
+    <string name="setting_movies_path_title">영화 저장 폴더</string>
+    <string name="setting_documents_path_title">문서 저장 폴더</string>
+
+    <string name="setting_configure_split_folders">분할 폴더 구성</string>
+    <string name="setting_split_folders_desc">각 파일 카테고리별로 개별 폴더 관리</string>
+
     <string name="setting_random_names_title">무작위 파일명 사용</string>
     <string name="setting_random_names_sub">원본 파일명 대신 무작위로 생성된 출력 파일명을 사용합니다.</string>
     <string name="setting_default_path_title">기본 저장 경로</string>
-    <string name="setting_reset_path">Pictures/MetaJammer로 재설정</string>
+    <string name="setting_reset_path_pictures">Pictures/MetaJammer로 초기화</string>
+    <string name="setting_reset_path_download">Download/MetaJammer로 초기화</string>
+    <string name="setting_reset_path_music">Music/MetaJammer로 초기화</string>
+    <string name="setting_reset_path_movies">Movies/MetaJammer로 초기화</string>
+    <string name="setting_reset_path_documents">Documents/MetaJammer로 초기화</string>
     <string name="setting_select_folder">폴더 선택</string>
 
     <string name="setting_keep_orientation_title">이미지 방향 유지</string>
@@ -110,7 +132,9 @@
     <string name="setting_keep_thumbnails_sub">파일에 포함된 썸네일이 있으면 그대로 보존합니다. 비활성화하면 프라이버시를 위해 기존 썸네일이 제거됩니다.</string>
     <string name="setting_thumbnails_warning">경고: 원본 썸네일을 유지하면 주요 태그가 제거되더라도 메타데이터(위치, 기기 정보)가 유출될 수 있습니다.</string>
     <string name="setting_enable_map_title">지도 선택기 활성화</string>
-    <string name="setting_enable_map_sub">위치 선택을 위해 OpenStreetMap을 표시할 수 있도록 앱의 인터넷 연결을 허용합니다.</string>
+    <string name="setting_enable_map_sub">위치 선택을 위해 OpenStreetMap을 표시할 수 있도록 앱의 internet 연결을 허용합니다.</string>
+    <string name="setting_nearby_scramble_title">지역화된 포이즈닝 사용</string>
+    <string name="setting_nearby_scramble_sub">메타데이터를 포이즈닝할 때 완전히 무작위 지점 대신 원래 위치 근처의 좌표를 무작위화합니다.</string>
 
     <string name="setting_quick_scrub_title">빠른 정리 및 공유</string>
     <string name="setting_quick_scrub_sub">공유된 파일에 대해 메타데이터를 자동으로 제거하고 공유 시트를 다시 엽니다.</string>
