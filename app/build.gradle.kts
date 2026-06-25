@@ -8,6 +8,11 @@ android {
     namespace = "com.heronikostudios.metajammer"
     compileSdk = 37
 
+    androidResources {
+        @Suppress("UnstableApiUsage")
+        localeFilters += listOf("en", "es", "it", "fr", "de", "zh", "hi", "pt", "ru", "el", "ar", "ja", "in", "tr", "ko", "vi", "th", "pl", "nl", "uk", "fa", "he", "iw", "la", "ro")
+    }
+
     defaultConfig {
         applicationId = "com.heronikostudios.metajammer"
         minSdk = 33
@@ -18,11 +23,6 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    androidResources {
-        @Suppress("UnstableApiUsage")
-        localeFilters += listOf("en", "es", "it", "fr", "de", "zh", "hi", "pt", "ru", "el", "ar", "ja", "in", "tr", "ko", "vi", "th", "pl", "nl", "uk", "fa", "he", "iw", "la", "ro")
-    }
-
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -31,6 +31,32 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        debug {
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-debug"
+        }
+    }
+
+    lint {
+        checkDependencies = true
+        abortOnError = false
+        ignoreWarnings = false
+        showAll = true
+    }
+
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "META-INF/DEPENDENCIES"
+            excludes += "META-INF/LICENSE"
+            excludes += "META-INF/LICENSE.txt"
+            excludes += "META-INF/license.txt"
+            excludes += "META-INF/NOTICE"
+            excludes += "META-INF/NOTICE.txt"
+            excludes += "META-INF/notice.txt"
+            excludes += "META-INF/ASL2.0"
+            excludes += "META-INF/*.kotlin_module"
         }
     }
 
