@@ -7,7 +7,7 @@ import java.io.File
 class SaveFileUseCase(
     private val fileRepository: FileRepository
 ) {
-    fun saveToDefaultFolder(
+    suspend fun saveToDefaultFolder(
         sourceFile: File,
         displayName: String,
         mimeType: String?,
@@ -23,7 +23,7 @@ class SaveFileUseCase(
         )
     }
 
-    fun saveToCustomFolder(
+    suspend fun saveToCustomFolder(
         treeUri: Uri,
         sourceFile: File,
         displayName: String,

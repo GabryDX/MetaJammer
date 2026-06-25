@@ -68,10 +68,10 @@ class MetadataRepository(
                 when (mode) {
                     ProcessingMode.POISON_METADATA -> {
                         val plan = requireNotNull(replacementPlan) { "Plan required for poison mode" }
-                        imageProcessor.poisonMetadata(selectedFile.uri, plan, keepOrientation, thumbnailHandling)
+                        imageProcessor.poisonMetadata(selectedFile.uri, plan, keepOrientation, thumbnailHandling, mime)
                     }
                     ProcessingMode.REMOVE_METADATA -> {
-                        imageProcessor.removeMetadata(selectedFile.uri, keepOrientation, thumbnailHandling)
+                        imageProcessor.removeMetadata(selectedFile.uri, keepOrientation, thumbnailHandling, mime)
                     }
                 }
             }
@@ -80,9 +80,9 @@ class MetadataRepository(
                 when (mode) {
                     ProcessingMode.POISON_METADATA -> {
                         val plan = requireNotNull(replacementPlan) { "Plan required for poison mode" }
-                        mediaProcessor.poisonMetadata(selectedFile.uri, plan)
+                        mediaProcessor.poisonMetadata(selectedFile.uri, plan, mime)
                     }
-                    ProcessingMode.REMOVE_METADATA -> mediaProcessor.removeMetadata(selectedFile.uri)
+                    ProcessingMode.REMOVE_METADATA -> mediaProcessor.removeMetadata(selectedFile.uri, mime)
                 }
             }
 

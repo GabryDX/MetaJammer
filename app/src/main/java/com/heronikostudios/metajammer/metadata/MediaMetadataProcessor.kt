@@ -23,8 +23,12 @@ class MediaMetadataProcessor(
         private const val BUFFER_SIZE = 1024 * 1024 // 1MB buffer
     }
 
-    fun removeMetadata(inputUri: Uri): File {
-        val extension = fileRepository.getExtension(inputUri)
+    fun removeMetadata(inputUri: Uri, mimeType: String? = null): File {
+        val extension = if (mimeType != null) {
+            fileRepository.getExtensionFromMime(mimeType)
+        } else {
+            fileRepository.getExtension(inputUri)
+        }
         val outputFile = fileRepository.createSharedTempFile("media_clean_", extension)
         
         return try {
@@ -38,8 +42,12 @@ class MediaMetadataProcessor(
         }
     }
 
-    fun poisonMetadata(inputUri: Uri, plan: MetadataReplacementPlan): File {
-        val extension = fileRepository.getExtension(inputUri)
+    fun poisonMetadata(inputUri: Uri, plan: MetadataReplacementPlan, mimeType: String? = null): File {
+        val extension = if (mimeType != null) {
+            fileRepository.getExtensionFromMime(mimeType)
+        } else {
+            fileRepository.getExtension(inputUri)
+        }
         val outputFile = fileRepository.createSharedTempFile("media_poisoned_", extension)
         
         return try {

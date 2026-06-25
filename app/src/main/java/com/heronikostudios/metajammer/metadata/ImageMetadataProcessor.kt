@@ -86,9 +86,10 @@ class ImageMetadataProcessor(
     fun removeMetadata(
         inputUri: Uri,
         keepOrientation: Boolean = true,
-        thumbnailHandling: ThumbnailHandling = ThumbnailHandling.REMOVE
+        thumbnailHandling: ThumbnailHandling = ThumbnailHandling.REMOVE,
+        mimeType: String? = null
     ): File {
-        return processImage(inputUri, "img_clean_", keepOrientation, thumbnailHandling) { exif ->
+        return processImage(inputUri, "img_clean_", keepOrientation, thumbnailHandling, mimeType) { exif ->
             ALL_PRIVACY_TAGS.forEach { tag -> exif.setAttribute(tag, null) }
         }
     }
@@ -100,9 +101,10 @@ class ImageMetadataProcessor(
         inputUri: Uri,
         plan: MetadataReplacementPlan,
         keepOrientation: Boolean = true,
-        thumbnailHandling: ThumbnailHandling = ThumbnailHandling.REMOVE
+        thumbnailHandling: ThumbnailHandling = ThumbnailHandling.REMOVE,
+        mimeType: String? = null
     ): File {
-        return processImage(inputUri, "img_poisoned_", keepOrientation, thumbnailHandling) { exif ->
+        return processImage(inputUri, "img_poisoned_", keepOrientation, thumbnailHandling, mimeType) { exif ->
             // Set fake values
             exif.setAttribute(ExifInterface.TAG_DATETIME, plan.dateTime)
             exif.setAttribute(ExifInterface.TAG_DATETIME_ORIGINAL, plan.dateTime)
@@ -131,9 +133,14 @@ class ImageMetadataProcessor(
         prefix: String,
         keepOrientation: Boolean,
         thumbnailHandling: ThumbnailHandling,
+        mimeType: String?,
         action: (ExifInterface) -> Unit
     ): File {
-        val extension = fileRepository.getExtension(inputUri)
+        val extension = if (mimeType != null) {
+            fileRepository.getExtensionFromMime(mimeType)
+        } else {
+            fileRepository.getExtension(inputUri)
+        }
         val outputFile = fileRepository.copyUriToCache(inputUri, prefix = prefix, suffix = extension)
 
         val exif = ExifInterface(outputFile.absolutePath)
