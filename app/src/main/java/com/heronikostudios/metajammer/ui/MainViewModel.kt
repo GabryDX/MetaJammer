@@ -9,6 +9,8 @@ import androidx.work.Data
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
+import com.heronikostudios.metajammer.worker.CleanupWorker
+import java.util.concurrent.TimeUnit
 import com.heronikostudios.metajammer.data.FileRepository
 import com.heronikostudios.metajammer.data.MetadataRepository
 import com.heronikostudios.metajammer.data.SettingsRepository
@@ -22,6 +24,8 @@ import com.heronikostudios.metajammer.util.SanitizationUtils
 import com.heronikostudios.metajammer.worker.MetadataProcessingWorker
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -43,6 +47,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val workManager = WorkManager.getInstance(appContext)
     private val processFileUseCase = ProcessFileUseCase(metadataRepository)
     private val saveFileUseCase = SaveFileUseCase(fileRepository)
+
+    private var isQuickScrubActive = false
 
     private val _selectedFiles = MutableStateFlow<List<SelectedFile>>(emptyList())
     val selectedFiles: StateFlow<List<SelectedFile>> = _selectedFiles.asStateFlow()
@@ -224,9 +230,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    suspend fun setIncomingUrisSuspend(uris: List<Uri>) {
+    suspend fun setIncomingUrisSuspend(uris: List<Uri>, loadMetadata: Boolean = true) {
         val files = withContext(Dispatchers.IO) {
-            uris.distinct().map(fileRepository::getSelectedFile)
+            uris.distinct().map { uri ->
+                async { fileRepository.getSelectedFile(uri) }
+            }.awaitAll()
         }
         clearTempFiles()
         _selectedFiles.value = files
@@ -234,7 +242,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _changePreview.value = emptyMap()
         _replacementPlans.value = emptyMap()
         _selectedMode.value = null
-        loadMetadataPreview(files)
+        if (loadMetadata) {
+            loadMetadataPreview(files)
+        }
     }
 
     fun clearSelection() {
@@ -270,11 +280,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             runCatching {
                 withContext(Dispatchers.IO) {
-                    files.map { file ->
-                        async {
-                            file.uri to metadataRepository.readMetadata(file)
-                        }
-                    }.awaitAll().toMap()
+                    coroutineScope {
+                        files.map { file ->
+                            async {
+                                file.uri to metadataRepository.readMetadata(file)
+                            }
+                        }.awaitAll().toMap()
+                    }
                 }
             }.onSuccess {
                 _metadataPreview.value = it
@@ -469,15 +481,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             _processing.value = true
             runCatching {
                 withContext(Dispatchers.IO) {
-                    files.map { selectedFile ->
-                        val plan = _replacementPlans.value[selectedFile.uri]
-                        selectedFile to processFileUseCase(
-                            selectedFile = selectedFile,
-                            processingMode = mode,
-                            keepOrientation = _appSettings.value.keepImageOrientation,
-                            thumbnailHandling = _appSettings.value.thumbnailHandling,
-                            replacementPlan = plan
-                        )
+                    coroutineScope {
+                        files.map { selectedFile ->
+                            async {
+                                val plan = _replacementPlans.value[selectedFile.uri]
+                                selectedFile to processFileUseCase(
+                                    selectedFile = selectedFile,
+                                    processingMode = mode,
+                                    keepOrientation = _appSettings.value.keepImageOrientation,
+                                    thumbnailHandling = _appSettings.value.thumbnailHandling,
+                                    replacementPlan = plan
+                                )
+                            }
+                        }.awaitAll()
                     }
                 }
             }.onSuccess {
@@ -538,6 +554,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     suspend fun autoHandleSharedInput(
         onShareFilesReady: (List<File>, String?) -> Unit
     ) {
+        isQuickScrubActive = true
         val files = _selectedFiles.value
         if (files.isEmpty()) {
             _message.value = "No shared files received"
@@ -577,15 +594,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _processing.value = true
         runCatching {
             val results = withContext(Dispatchers.IO) {
-                files.map { selectedFile ->
-                    val plan = _replacementPlans.value[selectedFile.uri]
-                    selectedFile to processFileUseCase(
-                        selectedFile = selectedFile,
-                        processingMode = mode,
-                        keepOrientation = keepOrientation,
-                        thumbnailHandling = _appSettings.value.thumbnailHandling,
-                        replacementPlan = plan
-                    )
+                coroutineScope {
+                    files.map { selectedFile ->
+                        async {
+                            val plan = _replacementPlans.value[selectedFile.uri]
+                            selectedFile to processFileUseCase(
+                                selectedFile = selectedFile,
+                                processingMode = mode,
+                                keepOrientation = keepOrientation,
+                                thumbnailHandling = _appSettings.value.thumbnailHandling,
+                                replacementPlan = plan
+                            )
+                        }
+                    }.awaitAll()
                 }
             }
             _processedFiles.value = results
@@ -629,23 +650,27 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _processing.value = false
     }
 
-    fun saveProcessedFilesToDefault(): List<Uri> {
-        val results = _processedFiles.value.mapNotNull { (selectedFile, processedFile) ->
-            val (configuredPath, subPath) = resolveSavingPath(selectedFile.mimeType)
-            saveFileUseCase.saveToDefaultFolder(
-                sourceFile = processedFile,
-                displayName = buildOutputName(selectedFile.displayName),
-                mimeType = selectedFile.mimeType,
-                configuredPath = configuredPath,
-                subPath = subPath
-            )
+    suspend fun saveProcessedFilesToDefault(): List<Uri> = withContext(Dispatchers.IO) {
+        val results = coroutineScope {
+            _processedFiles.value.map { (selectedFile, processedFile) ->
+                async {
+                    val (configuredPath, subPath) = resolveSavingPath(selectedFile.mimeType)
+                    saveFileUseCase.saveToDefaultFolder(
+                        sourceFile = processedFile,
+                        displayName = buildOutputName(selectedFile.displayName),
+                        mimeType = selectedFile.mimeType,
+                        configuredPath = configuredPath,
+                        subPath = subPath
+                    )
+                }
+            }.awaitAll().filterNotNull()
         }
         if (results.isNotEmpty()) {
             _message.value = "Saved ${results.size} file(s)"
         } else if (_processedFiles.value.isNotEmpty()) {
             _message.value = "Failed to save files"
         }
-        return results
+        results
     }
 
     private fun resolveSavingPath(mimeType: String?): Pair<String?, String?> {
@@ -671,21 +696,25 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun saveProcessedFilesToCustom(treeUri: Uri): List<Uri> {
-        val results = _processedFiles.value.mapNotNull { (selectedFile, processedFile) ->
-            saveFileUseCase.saveToCustomFolder(
-                treeUri = treeUri,
-                sourceFile = processedFile,
-                displayName = buildOutputName(selectedFile.displayName),
-                mimeType = selectedFile.mimeType
-            )
+    suspend fun saveProcessedFilesToCustom(treeUri: Uri): List<Uri> = withContext(Dispatchers.IO) {
+        val results = coroutineScope {
+            _processedFiles.value.map { (selectedFile, processedFile) ->
+                async {
+                    saveFileUseCase.saveToCustomFolder(
+                        treeUri = treeUri,
+                        sourceFile = processedFile,
+                        displayName = buildOutputName(selectedFile.displayName),
+                        mimeType = selectedFile.mimeType
+                    )
+                }
+            }.awaitAll().filterNotNull()
         }
         if (results.isNotEmpty()) {
             _message.value = "Saved ${results.size} file(s) to custom folder"
         } else if (_processedFiles.value.isNotEmpty()) {
             _message.value = "Failed to save files"
         }
-        return results
+        results
     }
 
     suspend fun getProcessedFilesForSharing(): List<File> = withContext(Dispatchers.IO) {
@@ -698,25 +727,46 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         prepareFilesForSharing(processedFilesList, selectedFilesList)
     }
 
-    private fun prepareFilesForSharing(processedFiles: List<File>, selectedFiles: List<SelectedFile>): List<File> {
+    private suspend fun prepareFilesForSharing(processedFiles: List<File>, selectedFiles: List<SelectedFile>): List<File> = withContext(Dispatchers.IO) {
         val sharedDir = File(appContext?.cacheDir, "shared/outgoing_${System.currentTimeMillis()}")
         if (!sharedDir.exists()) {
             sharedDir.mkdirs()
         }
 
-        return processedFiles.mapIndexed { index, file ->
-            val selectedFile = selectedFiles[index]
-            val niceName = buildOutputName(selectedFile.displayName)
-            val sharedFile = File(sharedDir, niceName)
-            
-            runCatching {
-                file.copyTo(sharedFile, overwrite = true)
-            }.onFailure {
-                Timber.e(it, "Failed to copy file for sharing: %s", niceName)
-            }
-            
-            sharedFile
+        val results = coroutineScope {
+            processedFiles.mapIndexed { index, file ->
+                async {
+                    val selectedFile = selectedFiles[index]
+                    val niceName = buildOutputName(selectedFile.displayName)
+                    val sharedFile = File(sharedDir, niceName)
+                    
+                    val success = runCatching {
+                        // Performance: Try to rename (move) the file instead of copying
+                        // Since both are in cacheDir, this should be an O(1) operation
+                        if (!file.renameTo(sharedFile)) {
+                            file.copyTo(sharedFile, overwrite = true)
+                            file.delete()
+                        }
+                        true
+                    }.onFailure {
+                        Timber.e(it, "Failed to move/copy file for sharing: %s", niceName)
+                    }.getOrDefault(false)
+                    
+                    if (success) sharedFile else null
+                }
+            }.awaitAll().filterNotNull()
         }
+
+        // Update _processedFiles with new locations to ensure correct cleanup later
+        _processedFiles.update { current ->
+            current.mapIndexed { index, pair ->
+                if (index < results.size) {
+                    pair.copy(second = results[index])
+                } else pair
+            }
+        }
+
+        results
     }
 
     fun persistAndSetUnifiedSavingPath(uri: Uri?) {
@@ -906,19 +956,36 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun clearProcessedFiles() {
-        _processedFiles.value.forEach { (_, file) -> runCatching { file.delete() } }
+        val files = _processedFiles.value
         _processedFiles.value = emptyList()
         _workInfo.value = null
+        
+        viewModelScope.launch(Dispatchers.IO) {
+            files.forEach { (_, file) -> runCatching { file.delete() } }
+        }
     }
 
     fun clearTempFiles() {
         clearProcessedFiles()
-        fileRepository.clearCache()
+        viewModelScope.launch(Dispatchers.IO) {
+            fileRepository.clearCache()
+        }
     }
 
     override fun onCleared() {
         super.onCleared()
-        clearTempFiles()
+        if (isQuickScrubActive) {
+            // Schedule background cleanup after 5 minutes to give receiving apps time to read files
+            val cleanupRequest = OneTimeWorkRequestBuilder<CleanupWorker>()
+                .setInitialDelay(5, TimeUnit.MINUTES)
+                .build()
+            workManager.enqueue(cleanupRequest)
+            
+            // Still clear in-memory state
+            clearProcessedFiles()
+        } else {
+            clearTempFiles()
+        }
     }
 
     private fun buildOutputName(originalName: String): String {

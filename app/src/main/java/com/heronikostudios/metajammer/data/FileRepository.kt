@@ -13,6 +13,8 @@ import timber.log.Timber
 import java.io.File
 import java.util.Locale
 import androidx.core.net.toUri
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class FileRepository(private val context: Context) {
 
@@ -52,27 +54,21 @@ class FileRepository(private val context: Context) {
         )
     }
 
-    fun copyUriToCache(uri: Uri, prefix: String = "input_", suffix: String? = null): File {
+    fun copyUriToCache(uri: Uri, prefix: String, suffix: String? = null): File {
         val resolvedSuffix = suffix ?: getExtension(uri)
         val tempFile = createSharedTempFile(prefix, resolvedSuffix)
         context.contentResolver.openInputStream(uri)?.use { input ->
             tempFile.outputStream().use { output ->
-                input.copyTo(output, bufferSize = 64 * 1024)
+                input.copyTo(output)
             }
-        } ?: run {
-            Timber.e("Unable to open input stream for %s", uri)
-            throw java.io.IOException("Unable to open input stream for $uri")
         }
         return tempFile
     }
 
     fun getExtension(uri: Uri): String {
-        val mimeType = context.contentResolver.getType(uri)
-        var extension: String? = null
-
-        if (mimeType != null) {
-            extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
-        }
+        val resolver = context.contentResolver
+        val mimeType = resolver.getType(uri)
+        var extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
 
         if (extension == null) {
             val path = uri.path
@@ -87,13 +83,30 @@ class FileRepository(private val context: Context) {
         return if (extension != null) ".$extension" else ""
     }
 
-    fun saveToDefaultFolder(
+    fun getExtensionFromMime(mimeType: String?): String {
+        return when {
+            mimeType?.startsWith("image/jpeg") == true -> ".jpg"
+            mimeType?.startsWith("image/png") == true -> ".png"
+            mimeType?.startsWith("image/webp") == true -> ".webp"
+            mimeType?.startsWith("image/heif") == true -> ".heic"
+            mimeType?.startsWith("image/heic") == true -> ".heic"
+            mimeType?.startsWith("video/mp4") == true -> ".mp4"
+            mimeType?.startsWith("video/quicktime") == true -> ".mov"
+            mimeType?.startsWith("audio/mpeg") == true -> ".mp3"
+            mimeType?.startsWith("audio/mp4") == true -> ".m4a"
+            mimeType?.startsWith("audio/x-m4a") == true -> ".m4a"
+            mimeType == "application/pdf" -> ".pdf"
+            else -> ".bin"
+        }
+    }
+
+    suspend fun saveToDefaultFolder(
         sourceFile: File,
         displayName: String,
         mimeType: String?,
         configuredPath: String?,
         subPath: String? = null
-    ): Uri? {
+    ): Uri? = withContext(Dispatchers.IO) {
         val path = configuredPath ?: "Download/MetaJammer"
         val finalRelativePath = if (subPath != null) {
             if (path.endsWith("/")) "$path$subPath" else "$path/$subPath"
@@ -101,7 +114,7 @@ class FileRepository(private val context: Context) {
             path
         }
 
-        return if (path.startsWith("content://")) {
+        if (path.startsWith("content://")) {
             saveToCustomFolder(
                 treeUri = path.toUri(),
                 sourceFile = sourceFile,
@@ -162,16 +175,16 @@ class FileRepository(private val context: Context) {
         return uri
     }
 
-    fun saveToCustomFolder(
+    suspend fun saveToCustomFolder(
         treeUri: Uri,
         sourceFile: File,
         displayName: String,
         mimeType: String?,
         subPath: String? = null
-    ): Uri? {
+    ): Uri? = withContext(Dispatchers.IO) {
         val rootFolder = DocumentFile.fromTreeUri(context, treeUri) ?: run {
             Timber.e("Failed to get DocumentFile from tree URI: %s", treeUri)
-            return null
+            return@withContext null
         }
 
         val targetFolder = if (subPath != null) {
@@ -180,7 +193,7 @@ class FileRepository(private val context: Context) {
             parts.forEach { part ->
                 currentFolder = currentFolder.findFile(part) ?: currentFolder.createDirectory(part) ?: run {
                     Timber.e("Failed to find or create subdirectory: %s", part)
-                    return null
+                    return@withContext null
                 }
             }
             currentFolder
@@ -190,7 +203,7 @@ class FileRepository(private val context: Context) {
 
         val outFile = targetFolder.createFile(mimeType ?: "application/octet-stream", displayName) ?: run {
             Timber.e("Failed to create file in custom folder")
-            return null
+            return@withContext null
         }
 
         context.contentResolver.openOutputStream(outFile.uri)?.use { output ->
@@ -199,10 +212,10 @@ class FileRepository(private val context: Context) {
             }
         } ?: run {
             Timber.e("Failed to open output stream for custom folder file: %s", outFile.uri)
-            return null
+            return@withContext null
         }
 
-        return outFile.uri
+        outFile.uri
     }
 
     /**
@@ -238,5 +251,4 @@ class FileRepository(private val context: Context) {
             }
         }
     }
-
 }

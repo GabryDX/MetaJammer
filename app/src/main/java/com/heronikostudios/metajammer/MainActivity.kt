@@ -221,7 +221,7 @@ fun MetaJammerApp(
         if (handledSharedSignature == sharedSignature) return@LaunchedEffect
 
         handledSharedSignature = sharedSignature
-        viewModel.setIncomingUrisSuspend(sharedUris)
+        viewModel.setIncomingUrisSuspend(sharedUris, loadMetadata = !appSettings.autoHandleSharedFiles)
 
         if (appSettings.autoHandleSharedFiles) {
             viewModel.autoHandleSharedInput { files, mimeType ->
