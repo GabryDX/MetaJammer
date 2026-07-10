@@ -38,6 +38,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -49,13 +50,14 @@ import com.heronikostudios.metajammer.ui.screens.HelpScreen
 import com.heronikostudios.metajammer.ui.screens.HomeScreen
 import com.heronikostudios.metajammer.ui.screens.LocationPickerScreen
 import com.heronikostudios.metajammer.ui.screens.MetadataPreviewScreen
+import com.heronikostudios.metajammer.ui.screens.QuickScrubScreen
 import kotlinx.coroutines.launch
 import com.heronikostudios.metajammer.ui.screens.OutputOptionsScreen
 import com.heronikostudios.metajammer.ui.screens.ProcessingScreen
 import com.heronikostudios.metajammer.ui.screens.SettingsScreen
 import com.heronikostudios.metajammer.ui.theme.MetaJammerTheme
 
-class MainActivity : AppCompatActivity() {
+open class MainActivity : AppCompatActivity() {
 
     private var sharedUris by mutableStateOf<List<Uri>>(emptyList())
 
@@ -127,7 +129,8 @@ private enum class AppStep {
     LOCATION_PICKER,
     OUTPUT,
     SETTINGS,
-    HELP
+    HELP,
+    QUICK_SCRUB
 }
 
 private fun previousStep(step: AppStep): AppStep? = when (step) {
@@ -138,6 +141,7 @@ private fun previousStep(step: AppStep): AppStep? = when (step) {
     AppStep.OUTPUT -> AppStep.PROCESS
     AppStep.SETTINGS -> null
     AppStep.HELP -> AppStep.HOME
+    AppStep.QUICK_SCRUB -> null
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -224,6 +228,7 @@ fun MetaJammerApp(
         viewModel.setIncomingUrisSuspend(sharedUris, loadMetadata = !appSettings.autoHandleSharedFiles)
 
         if (appSettings.autoHandleSharedFiles) {
+            navigateTo(AppStep.QUICK_SCRUB)
             viewModel.autoHandleSharedInput { files, mimeType ->
                 shareFileUseCase.shareFiles(
                     context = context,
@@ -247,8 +252,10 @@ fun MetaJammerApp(
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
+        containerColor = if (currentStep == AppStep.QUICK_SCRUB) Color.Transparent else MaterialTheme.colorScheme.background,
         topBar = {
-            CenterAlignedTopAppBar(
+            if (currentStep != AppStep.QUICK_SCRUB) {
+                CenterAlignedTopAppBar(
                 title = {
                     Text(
                         text = when (currentStep) {
@@ -259,6 +266,7 @@ fun MetaJammerApp(
                             AppStep.OUTPUT -> stringResource(R.string.output_options)
                             AppStep.SETTINGS -> stringResource(R.string.settings)
                             AppStep.HELP -> stringResource(R.string.help_title)
+                            AppStep.QUICK_SCRUB -> ""
                         },
                         style = when (currentStep) {
                             AppStep.HOME -> MaterialTheme.typography.headlineMedium
@@ -274,7 +282,7 @@ fun MetaJammerApp(
                                 contentDescription = stringResource(R.string.help)
                             )
                         }
-                    } else if (currentStep != AppStep.HOME) {
+                    } else if (currentStep != AppStep.HOME && currentStep != AppStep.QUICK_SCRUB) {
                         IconButton(onClick = { navigateBack() }) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -284,17 +292,22 @@ fun MetaJammerApp(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { currentStep = AppStep.SETTINGS }) {
-                        Icon(
-                            imageVector = Icons.Filled.Settings,
-                            contentDescription = stringResource(R.string.settings)
-                        )
+                    if (currentStep != AppStep.QUICK_SCRUB) {
+                        IconButton(onClick = { currentStep = AppStep.SETTINGS }) {
+                            Icon(
+                                imageVector = Icons.Filled.Settings,
+                                contentDescription = stringResource(R.string.settings)
+                            )
+                        }
                     }
                 }
             )
+          }
         },
         snackbarHost = {
-            SnackbarHost(snackbarHostState)
+            if (currentStep != AppStep.QUICK_SCRUB) {
+                SnackbarHost(snackbarHostState)
+            }
         }
     ) { innerPadding ->
         Column(
@@ -483,6 +496,12 @@ fun MetaJammerApp(
                         onUseNearbyScrambleChanged = viewModel::setUseNearbyScramble,
                         onLanguageChanged = viewModel::setLanguage,
                         modifier = Modifier.weight(1f)
+                    )
+                }
+
+                AppStep.QUICK_SCRUB -> {
+                    QuickScrubScreen(
+                        modifier = Modifier.fillMaxSize()
                     )
                 }
             }

@@ -187,6 +187,7 @@
     <string name="output_action_default_folder">保存到默认文件夹</string>
     <string name="output_action_shared_folder">保存到专用文件夹</string>
     <string name="output_action_reshare">重新分享已清理的文件</string>
+    <string name="quick_scrub_processing">正在干燥您的文件…</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">地图选择器和互联网访问</string>

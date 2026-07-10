@@ -187,6 +187,7 @@
     <string name="output_action_default_folder">Varsayılan klasöre kaydet</string>
     <string name="output_action_shared_folder">Özel klasöre kaydet</string>
     <string name="output_action_reshare">Temizlenen dosyaları yeniden paylaş</string>
+    <string name="quick_scrub_processing">Dosyalarınız kurutuluyor…</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">Harita Seçici ve İnternet Erişimi</string>
