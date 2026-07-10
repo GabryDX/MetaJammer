@@ -16,6 +16,8 @@ data class MetadataReplacementPlan(
     val focalLength: String,
     val whiteBalance: String,
     val flash: String,
+    val lensMake: String? = null,
+    val lensModel: String? = null,
     val latitude: Double,
     val longitude: Double,
     val latitudeRef: String,

@@ -9,6 +9,5 @@ class MetaJammerApplication : Application() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
-        com.tom_roush.pdfbox.android.PDFBoxResourceLoader.init(this)
     }
 }

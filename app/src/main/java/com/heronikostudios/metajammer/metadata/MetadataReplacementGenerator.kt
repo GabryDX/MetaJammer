@@ -82,6 +82,20 @@ object MetadataReplacementGenerator {
         "Food photography", "Abstract", "Long exposure", "Golden hour"
     )
 
+    private val lensModelsByMake = mapOf(
+        "Canon" to listOf("EF 50mm f/1.8 STM", "RF 24-70mm F2.8 L IS USM", "EF 24-105mm f/4L IS II USM", "RF 35mm F1.8 Macro IS STM"),
+        "Nikon" to listOf("NIKKOR Z 24-70mm f/4 S", "AF-S DX NIKKOR 35mm f/1.8G", "NIKKOR Z 50mm f/1.8 S", "AF-S NIKKOR 24-120mm f/4G ED VR"),
+        "Sony" to listOf("FE 24-70mm F2.8 GM II", "FE 50mm F1.8", "E 16-50mm F3.5-5.6 OSS", "FE 35mm F1.8"),
+        "Fujifilm" to listOf("XF18-55mmF2.8-4 R LM OIS", "XF35mmF2 R WR", "XF23mmF2 R WR", "XF16-80mmF4 R OIS WR"),
+        "Panasonic" to listOf("LUMIX G VARIO 12-32mm / F3.5-5.6 ASPH.", "LEICA DG SUMMILUX 25mm / F1.4 II ASPH.", "LUMIX S 20-60mm F3.5-5.6"),
+        "Olympus" to listOf("M.ZUIKO DIGITAL ED 12-40mm F2.8 PRO", "M.ZUIKO DIGITAL 25mm F1.8", "M.ZUIKO DIGITAL ED 14-42mm F3.5-5.6 EZ"),
+        "Apple" to listOf("iPhone 15 Pro back triple camera 6.86mm f/1.78", "iPhone 14 back main camera 5.7mm f/1.5"),
+        "Samsung" to listOf("Galaxy S23 Ultra back camera 6.3mm f/1.7", "Galaxy S22 back camera 5.4mm f/1.8"),
+        "Google" to listOf("Pixel 8 Pro back camera 6.9mm f/1.68", "Pixel 7 back camera 6.81mm f/1.85"),
+        "DJI" to listOf("DJI Mini 3 Pro Lens", "Mavic 3 Hasselblad L2D-20c"),
+        "Leica" to listOf("Summilux 28mm f/1.7 ASPH", "Summicron-M 35mm f/2 ASPH"),
+    )
+
     private val realisticDescriptions = listOf(
         "Morning walk in the park", "Sunset over the water", "Weekend trip downtown",
         "Coffee shop window seat", "View from the hotel balcony", "Quiet street after rain",
@@ -154,6 +168,7 @@ object MetadataReplacementGenerator {
         "System User", "MetaJammer PDF", "Office Worker", "Document Editor", "Administrator",
         "Legal Dept", "HR", "Finance Team", "Automated System", "Guest User", "Consultant"
     )
+
     private val pdfTitles = listOf(
         "Document", "Report", "Export", "Scanned File", "Summary", "Project Draft", "Meeting Notes",
         "Invoice", "Q3 Report", "User Manual", "Confidential Draft", "Whitepaper", "Research Paper",
@@ -241,6 +256,12 @@ object MetadataReplacementGenerator {
         return listOf("1.8", "2.2", "4.2", "4.5", "5.4", "6.0", "14.0", "24.0", "35.0", "50.0", "70.0", "85.0", "105.0", "200.0").random()
     }
 
+    fun randomLensMake(make: String): String = make
+
+    fun randomLensModel(make: String): String {
+        return lensModelsByMake[make]?.random() ?: "$make Lens ${Random.nextInt(10, 100)}mm"
+    }
+
     fun randomWhiteBalance(): String {
         return listOf("0", "1").random()
     }
@@ -276,6 +297,8 @@ object MetadataReplacementGenerator {
             focalLength = randomFocalLength(),
             whiteBalance = randomWhiteBalance(),
             flash = randomFlash(),
+            lensMake = randomLensMake(make),
+            lensModel = randomLensModel(make),
             latitude = latitude,
             longitude = longitude,
             latitudeRef = if (latitude >= 0) "N" else "S",

@@ -5,6 +5,8 @@ import android.net.Uri
 import com.heronikostudios.metajammer.data.FileRepository
 import com.heronikostudios.metajammer.domain.model.MetadataEntry
 import com.heronikostudios.metajammer.domain.model.MetadataReplacementPlan
+import com.tom_roush.pdfbox.android.PDFBoxResourceLoader
+import com.tom_roush.pdfbox.io.MemoryUsageSetting
 import com.tom_roush.pdfbox.pdmodel.PDDocument
 import com.tom_roush.pdfbox.pdmodel.PDDocumentInformation
 import kotlinx.coroutines.Dispatchers
@@ -21,12 +23,17 @@ class PdfMetadataProcessor(
     private val fileRepository: FileRepository
 ) {
 
+    private fun ensureInitialized() {
+        PDFBoxResourceLoader.init(context)
+    }
+
     suspend fun readMetadata(uri: Uri): List<MetadataEntry> = withContext(Dispatchers.IO) {
+        ensureInitialized()
         val entries = mutableListOf<MetadataEntry>()
 
         runCatching {
             context.contentResolver.openInputStream(uri)?.use { inputStream ->
-                PDDocument.load(inputStream).use { document ->
+                PDDocument.load(inputStream, MemoryUsageSetting.setupTempFileOnly()).use { document ->
                     entries.add(MetadataEntry("Page Count", document.numberOfPages.toString()))
                     
                     val info = document.documentInformation
@@ -46,11 +53,12 @@ class PdfMetadataProcessor(
     }
 
     suspend fun poisonMetadata(inputUri: Uri, plan: MetadataReplacementPlan): File? = withContext(Dispatchers.IO) {
+        ensureInitialized()
         runCatching {
             val outputFile = fileRepository.createCacheFile(prefix = "pdf_poisoned_", suffix = ".pdf")
             
             context.contentResolver.openInputStream(inputUri)?.use { inputStream ->
-                PDDocument.load(inputStream).use { document ->
+                PDDocument.load(inputStream, MemoryUsageSetting.setupTempFileOnly()).use { document ->
                     
                     // Replace with fake data
                     val info = PDDocumentInformation().apply {
@@ -63,6 +71,7 @@ class PdfMetadataProcessor(
                     }
                     
                     document.documentInformation = info
+                    document.documentCatalog.metadata = null
                     stripWatermarks(document)
                     document.save(FileOutputStream(outputFile))
                 }
@@ -74,14 +83,16 @@ class PdfMetadataProcessor(
     }
 
     suspend fun removeMetadata(inputUri: Uri): File? = withContext(Dispatchers.IO) {
+        ensureInitialized()
         runCatching {
             val outputFile = fileRepository.createCacheFile(prefix = "pdf_clean_", suffix = ".pdf")
             
             context.contentResolver.openInputStream(inputUri)?.use { inputStream ->
-                PDDocument.load(inputStream).use { document ->
+                PDDocument.load(inputStream, MemoryUsageSetting.setupTempFileOnly()).use { document ->
                     
                     // Overwrite metadata with a blank information dictionary
                     document.documentInformation = PDDocumentInformation()
+                    document.documentCatalog.metadata = null
                     stripWatermarks(document)
                     document.save(FileOutputStream(outputFile))
                 }
