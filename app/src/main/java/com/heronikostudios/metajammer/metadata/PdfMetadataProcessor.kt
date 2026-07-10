@@ -63,6 +63,7 @@ class PdfMetadataProcessor(
                     }
                     
                     document.documentInformation = info
+                    document.documentCatalog.metadata = null
                     stripWatermarks(document)
                     document.save(FileOutputStream(outputFile))
                 }
@@ -82,6 +83,7 @@ class PdfMetadataProcessor(
                     
                     // Overwrite metadata with a blank information dictionary
                     document.documentInformation = PDDocumentInformation()
+                    document.documentCatalog.metadata = null
                     stripWatermarks(document)
                     document.save(FileOutputStream(outputFile))
                 }

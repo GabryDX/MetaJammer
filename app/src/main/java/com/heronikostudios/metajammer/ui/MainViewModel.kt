@@ -395,6 +395,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                                 targetMap["Make"] = plan.make
                                 targetMap["Model"] = plan.model
                                 targetMap["Software"] = plan.software
+                                currentMap["ImageWidth"]?.let { targetMap["ImageWidth"] = it }
+                                currentMap["ImageLength"]?.let { targetMap["ImageLength"] = it }
                                 targetMap["ImageDescription"] = plan.imageDescription
                                 targetMap["UserComment"] = plan.userComment
                                 targetMap["PhotographicSensitivity"] = plan.photographicSensitivity
@@ -403,6 +405,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                                 targetMap["FocalLength"] = plan.focalLength
                                 targetMap["WhiteBalance"] = plan.whiteBalance
                                 targetMap["Flash"] = plan.flash
+                                plan.lensMake?.let { targetMap["LensMake"] = it }
+                                plan.lensModel?.let { targetMap["LensModel"] = it }
                                 targetMap["GPSLatitude"] = plan.latitude.toString()
                                 targetMap["GPSLatitudeRef"] = plan.latitudeRef
                                 targetMap["GPSLongitude"] = plan.longitude.toString()
@@ -445,7 +449,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                             val newValue = targetMap[key]
                             val value = when {
                                 oldValue == null && newValue != null -> "[ADDED] $newValue"
-                                oldValue != null && newValue == null -> "[UNCHANGED] $oldValue"
+                                oldValue != null && newValue == null -> "[REMOVED] $oldValue"
                                 oldValue == newValue -> "[UNCHANGED] ${oldValue ?: ""}"
                                 else -> "[CHANGED] $oldValue  →  $newValue"
                             }

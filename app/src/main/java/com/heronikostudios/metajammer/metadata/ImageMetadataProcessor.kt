@@ -13,71 +13,24 @@ class ImageMetadataProcessor(
 ) {
 
     companion object {
-        private val ALL_PRIVACY_TAGS = listOf(
-            ExifInterface.TAG_ARTIST,
-            ExifInterface.TAG_COPYRIGHT,
-            ExifInterface.TAG_DATETIME,
-            ExifInterface.TAG_DATETIME_DIGITIZED,
-            ExifInterface.TAG_DATETIME_ORIGINAL,
-            ExifInterface.TAG_DEVICE_SETTING_DESCRIPTION,
-            ExifInterface.TAG_IMAGE_DESCRIPTION,
-            ExifInterface.TAG_IMAGE_UNIQUE_ID,
-            ExifInterface.TAG_MAKE,
-            ExifInterface.TAG_MODEL,
-            ExifInterface.TAG_SOFTWARE,
-            ExifInterface.TAG_SUBSEC_TIME,
-            ExifInterface.TAG_SUBSEC_TIME_DIGITIZED,
-            ExifInterface.TAG_SUBSEC_TIME_ORIGINAL,
-            ExifInterface.TAG_USER_COMMENT,
-            ExifInterface.TAG_GPS_ALTITUDE,
-            ExifInterface.TAG_GPS_ALTITUDE_REF,
-            ExifInterface.TAG_GPS_DATESTAMP,
-            ExifInterface.TAG_GPS_DEST_BEARING,
-            ExifInterface.TAG_GPS_DEST_BEARING_REF,
-            ExifInterface.TAG_GPS_IMG_DIRECTION,
-            ExifInterface.TAG_GPS_IMG_DIRECTION_REF,
-            ExifInterface.TAG_GPS_LATITUDE,
-            ExifInterface.TAG_GPS_LATITUDE_REF,
-            ExifInterface.TAG_GPS_LONGITUDE,
-            ExifInterface.TAG_GPS_LONGITUDE_REF,
-            ExifInterface.TAG_GPS_PROCESSING_METHOD,
-            ExifInterface.TAG_GPS_SPEED,
-            ExifInterface.TAG_GPS_SPEED_REF,
-            ExifInterface.TAG_GPS_TIMESTAMP,
-            ExifInterface.TAG_GPS_MAP_DATUM,
-            ExifInterface.TAG_GPS_SATELLITES,
-            ExifInterface.TAG_GPS_STATUS,
-            ExifInterface.TAG_GPS_MEASURE_MODE,
-            ExifInterface.TAG_GPS_DOP,
-            ExifInterface.TAG_GPS_TRACK,
-            ExifInterface.TAG_GPS_TRACK_REF,
-            ExifInterface.TAG_GPS_VERSION_ID,
-            ExifInterface.TAG_FLASH,
-            ExifInterface.TAG_FOCAL_LENGTH,
-            ExifInterface.TAG_WHITE_BALANCE,
-            ExifInterface.TAG_EXPOSURE_TIME,
-            ExifInterface.TAG_F_NUMBER,
-            ExifInterface.TAG_PHOTOGRAPHIC_SENSITIVITY,
-            ExifInterface.TAG_BODY_SERIAL_NUMBER,
-            ExifInterface.TAG_LENS_MAKE,
-            ExifInterface.TAG_LENS_MODEL,
-            ExifInterface.TAG_LENS_SERIAL_NUMBER,
-            ExifInterface.TAG_XMP,
-            ExifInterface.TAG_CAMERA_OWNER_NAME,
-            "OwnerName",
-            "ImageResources",
-            "PrintIM"
-        )
-
-        private val POISON_LEAK_PROTECTION_TAGS = listOf(
-            ExifInterface.TAG_ARTIST,
-            ExifInterface.TAG_COPYRIGHT,
-            ExifInterface.TAG_GPS_ALTITUDE,
-            ExifInterface.TAG_GPS_ALTITUDE_REF,
-            ExifInterface.TAG_BODY_SERIAL_NUMBER,
-            ExifInterface.TAG_LENS_SERIAL_NUMBER,
-            ExifInterface.TAG_XMP
-        )
+        /**
+         * Dynamically find all TAG_ constants in ExifInterface using reflection.
+         * This ensures that when we clear metadata, we target every tag the library knows about,
+         * including obscure ones.
+         */
+        private val ALL_SUPPORTED_TAGS by lazy {
+            ExifInterface::class.java.fields
+                .filter { it.name.startsWith("TAG_") && it.type == String::class.java }
+                .mapNotNull {
+                    try {
+                        it.get(null) as? String
+                    } catch (_: Exception) {
+                        null
+                    }
+                }
+                .plus(listOf("ImageResources", "PrintIM", "OwnerName")) // Include known custom strings
+                .distinct()
+        }
     }
 
     /**
@@ -90,7 +43,7 @@ class ImageMetadataProcessor(
         mimeType: String? = null
     ): File {
         return processImage(inputUri, "img_clean_", keepOrientation, thumbnailHandling, mimeType) { exif ->
-            ALL_PRIVACY_TAGS.forEach { tag -> exif.setAttribute(tag, null) }
+            ALL_SUPPORTED_TAGS.forEach { tag -> exif.setAttribute(tag, null) }
         }
     }
 
@@ -105,7 +58,11 @@ class ImageMetadataProcessor(
         mimeType: String? = null
     ): File {
         return processImage(inputUri, "img_poisoned_", keepOrientation, thumbnailHandling, mimeType) { exif ->
-            // Set fake values
+            // First, clear ALL supported tags to ensure no non-standard or obscure metadata remains.
+            // This satisfies the requirement to delete all "extra" metadata instead of leaving it.
+            ALL_SUPPORTED_TAGS.forEach { tag -> exif.setAttribute(tag, null) }
+
+            // Set fake values from the plan
             exif.setAttribute(ExifInterface.TAG_DATETIME, plan.dateTime)
             exif.setAttribute(ExifInterface.TAG_DATETIME_ORIGINAL, plan.dateTime)
             exif.setAttribute(ExifInterface.TAG_DATETIME_DIGITIZED, plan.dateTime)
@@ -121,8 +78,8 @@ class ImageMetadataProcessor(
             exif.setAttribute(ExifInterface.TAG_WHITE_BALANCE, plan.whiteBalance)
             exif.setAttribute(ExifInterface.TAG_FLASH, plan.flash)
 
-            // Clear other sensitive tags to ensure no leaks
-            POISON_LEAK_PROTECTION_TAGS.forEach { exif.setAttribute(it, null) }
+            plan.lensMake?.let { exif.setAttribute(ExifInterface.TAG_LENS_MAKE, it) }
+            plan.lensModel?.let { exif.setAttribute(ExifInterface.TAG_LENS_MODEL, it) }
 
             exif.setLatLong(plan.latitude, plan.longitude)
         }
@@ -145,6 +102,8 @@ class ImageMetadataProcessor(
 
         val exif = ExifInterface(outputFile.absolutePath)
         val originalOrientation = if (keepOrientation) exif.getAttribute(ExifInterface.TAG_ORIENTATION) else null
+        val originalWidth = exif.getAttribute(ExifInterface.TAG_IMAGE_WIDTH)
+        val originalHeight = exif.getAttribute(ExifInterface.TAG_IMAGE_LENGTH)
 
         action(exif)
 
@@ -153,6 +112,10 @@ class ImageMetadataProcessor(
         } else if (!keepOrientation) {
             exif.setAttribute(ExifInterface.TAG_ORIENTATION, null)
         }
+
+        // Always restore dimensions as they are intrinsic to the file structure
+        if (!originalWidth.isNullOrBlank()) exif.setAttribute(ExifInterface.TAG_IMAGE_WIDTH, originalWidth)
+        if (!originalHeight.isNullOrBlank()) exif.setAttribute(ExifInterface.TAG_IMAGE_LENGTH, originalHeight)
 
         if (thumbnailHandling == ThumbnailHandling.REMOVE) {
             exif.setAttribute(ExifInterface.TAG_JPEG_INTERCHANGE_FORMAT, null)
