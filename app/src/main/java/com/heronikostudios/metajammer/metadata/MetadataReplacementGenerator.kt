@@ -259,7 +259,7 @@ object MetadataReplacementGenerator {
     fun randomLensMake(make: String): String = make
 
     fun randomLensModel(make: String): String {
-        return lensModelsByMake[make]?.random() ?: "${make} Lens ${Random.nextInt(10, 100)}mm"
+        return lensModelsByMake[make]?.random() ?: "$make Lens ${Random.nextInt(10, 100)}mm"
     }
 
     fun randomWhiteBalance(): String {

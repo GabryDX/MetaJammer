@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.heronikostudios.metajammer.domain.model.AppLanguage
+import com.heronikostudios.metajammer.domain.model.AppSettings
 import com.heronikostudios.metajammer.domain.model.FolderStructure
 import com.heronikostudios.metajammer.domain.model.NightModeSetting
 import com.heronikostudios.metajammer.domain.model.ProcessingMode
@@ -45,32 +46,17 @@ class SettingsRepository(private val context: Context) {
         private val LANGUAGE = stringPreferencesKey("language")
     }
 
-    val useRandomFileNamesFlow: Flow<Boolean> =
-        context.dataStore.data.map { it[USE_RANDOM_FILE_NAMES] ?: false }
-
     suspend fun setUseRandomFileNames(enabled: Boolean) {
         context.dataStore.edit { it[USE_RANDOM_FILE_NAMES] = enabled }
     }
-
-    val folderStructureFlow: Flow<FolderStructure> =
-        context.dataStore.data.map { preferences ->
-            preferences[FOLDER_STRUCTURE]?.let { runCatching { FolderStructure.valueOf(it) }.getOrNull() }
-                ?: FolderStructure.SPLIT
-        }
 
     suspend fun setFolderStructure(structure: FolderStructure) {
         context.dataStore.edit { it[FOLDER_STRUCTURE] = structure.name }
     }
 
-    val useSubfoldersInUnifiedFlow: Flow<Boolean> =
-        context.dataStore.data.map { it[USE_SUBFOLDERS_IN_UNIFIED] ?: true }
-
     suspend fun setUseSubfoldersInUnified(enabled: Boolean) {
         context.dataStore.edit { it[USE_SUBFOLDERS_IN_UNIFIED] = enabled }
     }
-
-    val unifiedSavingPathFlow: Flow<String?> =
-        context.dataStore.data.map { it[UNIFIED_SAVING_PATH] ?: it[DEFAULT_SAVING_PATH] ?: "Download/MetaJammer" }
 
     suspend fun setUnifiedSavingPath(uri: Uri?) {
         context.dataStore.edit { preferences ->
@@ -78,17 +64,11 @@ class SettingsRepository(private val context: Context) {
         }
     }
 
-    val picturesSavingPathFlow: Flow<String?> =
-        context.dataStore.data.map { it[PICTURES_SAVING_PATH] ?: it[DEFAULT_SAVING_PATH] ?: "Pictures/MetaJammer" }
-
     suspend fun setPicturesSavingPath(uri: Uri?) {
         context.dataStore.edit { preferences ->
             preferences[PICTURES_SAVING_PATH] = uri?.toString() ?: "Pictures/MetaJammer"
         }
     }
-
-    val musicSavingPathFlow: Flow<String?> =
-        context.dataStore.data.map { it[MUSIC_SAVING_PATH] ?: "Music/MetaJammer" }
 
     suspend fun setMusicSavingPath(uri: Uri?) {
         context.dataStore.edit { preferences ->
@@ -96,17 +76,11 @@ class SettingsRepository(private val context: Context) {
         }
     }
 
-    val moviesSavingPathFlow: Flow<String?> =
-        context.dataStore.data.map { it[MOVIES_SAVING_PATH] ?: "Movies/MetaJammer" }
-
     suspend fun setMoviesSavingPath(uri: Uri?) {
         context.dataStore.edit { preferences ->
             preferences[MOVIES_SAVING_PATH] = uri?.toString() ?: "Movies/MetaJammer"
         }
     }
-
-    val documentsSavingPathFlow: Flow<String?> =
-        context.dataStore.data.map { it[DOCUMENTS_SAVING_PATH] ?: "Documents/MetaJammer" }
 
     suspend fun setDocumentsSavingPath(uri: Uri?) {
         context.dataStore.edit { preferences ->
@@ -114,83 +88,41 @@ class SettingsRepository(private val context: Context) {
         }
     }
 
-    val keepImageOrientationFlow: Flow<Boolean> =
-        context.dataStore.data.map { it[KEEP_IMAGE_ORIENTATION] ?: true }
-
     suspend fun setKeepImageOrientation(enabled: Boolean) {
         context.dataStore.edit { it[KEEP_IMAGE_ORIENTATION] = enabled }
     }
-
-    val shareResultAsDefaultFlow: Flow<Boolean> =
-        context.dataStore.data.map { it[SHARE_RESULT_AS_DEFAULT] ?: false }
 
     suspend fun setShareResultAsDefault(enabled: Boolean) {
         context.dataStore.edit { it[SHARE_RESULT_AS_DEFAULT] = enabled }
     }
 
-    val defaultPrefixFlow: Flow<String> =
-        context.dataStore.data.map { it[DEFAULT_PREFIX] ?: "" }
-
     suspend fun setDefaultPrefix(value: String) {
         context.dataStore.edit { it[DEFAULT_PREFIX] = value }
     }
-
-    val defaultSuffixFlow: Flow<String> =
-        context.dataStore.data.map { it[DEFAULT_SUFFIX] ?: "_processed" }
 
     suspend fun setDefaultSuffix(value: String) {
         context.dataStore.edit { it[DEFAULT_SUFFIX] = value }
     }
 
-    val nightModeFlow: Flow<NightModeSetting> =
-        context.dataStore.data.map { preferences ->
-            preferences[NIGHT_MODE]
-                ?.let { runCatching { NightModeSetting.valueOf(it) }.getOrNull() }
-                ?: NightModeSetting.AUTOMATIC
-        }
-
     suspend fun setNightMode(mode: NightModeSetting) {
         context.dataStore.edit { it[NIGHT_MODE] = mode.name }
     }
-
-    val oledModeFlow: Flow<Boolean> =
-        context.dataStore.data.map { it[OLED_MODE] ?: false }
 
     suspend fun setOledMode(enabled: Boolean) {
         context.dataStore.edit { it[OLED_MODE] = enabled }
     }
 
-    val autoHandleSharedFilesFlow: Flow<Boolean> =
-        context.dataStore.data.map { it[AUTO_HANDLE_SHARED_FILES] ?: false }
-
     suspend fun setAutoHandleSharedFiles(enabled: Boolean) {
         context.dataStore.edit { it[AUTO_HANDLE_SHARED_FILES] = enabled }
     }
-
-    val sharedFilesProcessingModeFlow: Flow<ProcessingMode> =
-        context.dataStore.data.map { preferences ->
-            preferences[SHARED_FILES_PROCESSING_MODE]
-                ?.let { runCatching { ProcessingMode.valueOf(it) }.getOrNull() }
-                ?: ProcessingMode.REMOVE_METADATA
-        }
 
     suspend fun setSharedFilesProcessingMode(mode: ProcessingMode) {
         context.dataStore.edit { it[SHARED_FILES_PROCESSING_MODE] = mode.name }
     }
 
-    val sharedFilesOutputActionFlow: Flow<SharedInputOutputAction> =
-        context.dataStore.data.map { preferences ->
-            preferences[SHARED_FILES_OUTPUT_ACTION]
-                ?.let { runCatching { SharedInputOutputAction.valueOf(it) }.getOrNull() }
-                ?: SharedInputOutputAction.SHARE_TO_ANOTHER_APP
-        }
-
     suspend fun setSharedFilesOutputAction(action: SharedInputOutputAction) {
         context.dataStore.edit { it[SHARED_FILES_OUTPUT_ACTION] = action.name }
     }
-
-    val sharedFilesCustomPathFlow: Flow<String?> =
-        context.dataStore.data.map { it[SHARED_FILES_CUSTOM_PATH] }
 
     suspend fun setSharedFilesCustomPath(uri: Uri?) {
         context.dataStore.edit { preferences ->
@@ -202,39 +134,46 @@ class SettingsRepository(private val context: Context) {
         }
     }
 
-    val thumbnailHandlingFlow: Flow<ThumbnailHandling> =
-        context.dataStore.data.map { preferences ->
-            preferences[THUMBNAIL_HANDLING]
-                ?.let { runCatching { ThumbnailHandling.valueOf(it) }.getOrNull() }
-                ?: ThumbnailHandling.REMOVE
-        }
-
     suspend fun setThumbnailHandling(handling: ThumbnailHandling) {
         context.dataStore.edit { it[THUMBNAIL_HANDLING] = handling.name }
     }
-
-    val allowInternetForMapFlow: Flow<Boolean> =
-        context.dataStore.data.map { it[ALLOW_INTERNET_FOR_MAP] ?: false }
 
     suspend fun setAllowInternetForMap(allowed: Boolean) {
         context.dataStore.edit { it[ALLOW_INTERNET_FOR_MAP] = allowed }
     }
 
-    val useNearbyScrambleFlow: Flow<Boolean> =
-        context.dataStore.data.map { it[USE_NEARBY_SCRAMBLE] ?: false }
-
     suspend fun setUseNearbyScramble(enabled: Boolean) {
         context.dataStore.edit { it[USE_NEARBY_SCRAMBLE] = enabled }
     }
 
-    val languageFlow: Flow<AppLanguage> =
-        context.dataStore.data.map { preferences ->
-            preferences[LANGUAGE]
-                ?.let { runCatching { AppLanguage.valueOf(it) }.getOrNull() }
-                ?: AppLanguage.SYSTEM
-        }
-
     suspend fun setLanguage(language: AppLanguage) {
         context.dataStore.edit { it[LANGUAGE] = language.name }
+    }
+
+    val appSettingsFlow: Flow<AppSettings> = context.dataStore.data.map { preferences ->
+        AppSettings(
+            useRandomFileNames = preferences[USE_RANDOM_FILE_NAMES] ?: false,
+            folderStructure = preferences[FOLDER_STRUCTURE]?.let { runCatching { FolderStructure.valueOf(it) }.getOrNull() } ?: FolderStructure.SPLIT,
+            useSubfoldersInUnified = preferences[USE_SUBFOLDERS_IN_UNIFIED] ?: true,
+            unifiedSavingPath = preferences[UNIFIED_SAVING_PATH] ?: preferences[DEFAULT_SAVING_PATH] ?: "Download/MetaJammer",
+            picturesSavingPath = preferences[PICTURES_SAVING_PATH] ?: preferences[DEFAULT_SAVING_PATH] ?: "Pictures/MetaJammer",
+            musicSavingPath = preferences[MUSIC_SAVING_PATH] ?: "Music/MetaJammer",
+            moviesSavingPath = preferences[MOVIES_SAVING_PATH] ?: "Movies/MetaJammer",
+            documentsSavingPath = preferences[DOCUMENTS_SAVING_PATH] ?: "Documents/MetaJammer",
+            keepImageOrientation = preferences[KEEP_IMAGE_ORIENTATION] ?: true,
+            shareResultAsDefault = preferences[SHARE_RESULT_AS_DEFAULT] ?: false,
+            defaultPrefix = preferences[DEFAULT_PREFIX] ?: "",
+            defaultSuffix = preferences[DEFAULT_SUFFIX] ?: "_processed",
+            nightMode = preferences[NIGHT_MODE]?.let { runCatching { NightModeSetting.valueOf(it) }.getOrNull() } ?: NightModeSetting.AUTOMATIC,
+            oledMode = preferences[OLED_MODE] ?: false,
+            autoHandleSharedFiles = preferences[AUTO_HANDLE_SHARED_FILES] ?: false,
+            sharedFilesProcessingMode = preferences[SHARED_FILES_PROCESSING_MODE]?.let { runCatching { ProcessingMode.valueOf(it) }.getOrNull() } ?: ProcessingMode.REMOVE_METADATA,
+            sharedFilesOutputAction = preferences[SHARED_FILES_OUTPUT_ACTION]?.let { runCatching { SharedInputOutputAction.valueOf(it) }.getOrNull() } ?: SharedInputOutputAction.SHARE_TO_ANOTHER_APP,
+            sharedFilesCustomPath = preferences[SHARED_FILES_CUSTOM_PATH],
+            thumbnailHandling = preferences[THUMBNAIL_HANDLING]?.let { runCatching { ThumbnailHandling.valueOf(it) }.getOrNull() } ?: ThumbnailHandling.REMOVE,
+            allowInternetForMap = preferences[ALLOW_INTERNET_FOR_MAP] ?: false,
+            useNearbyScramble = preferences[USE_NEARBY_SCRAMBLE] ?: false,
+            language = preferences[LANGUAGE]?.let { runCatching { AppLanguage.valueOf(it) }.getOrNull() } ?: AppLanguage.SYSTEM
+        )
     }
 }

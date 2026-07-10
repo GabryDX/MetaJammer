@@ -20,7 +20,7 @@ class MediaMetadataProcessor(
 ) {
 
     companion object {
-        private const val BUFFER_SIZE = 1024 * 1024 // 1MB buffer
+        private const val DEFAULT_BUFFER_SIZE = 1024 * 1024 // 1MB fallback
     }
 
     fun removeMetadata(inputUri: Uri, mimeType: String? = null): File {
@@ -102,9 +102,23 @@ class MediaMetadataProcessor(
                 throw IllegalStateException("No valid video or audio tracks found")
             }
 
+            // Calculate optimal buffer size based on tracks' MAX_INPUT_SIZE
+            var maxInputSize = 0
+            for (i in 0 until trackCount) {
+                if (trackMap.containsKey(i)) {
+                    val format = extractor.getTrackFormat(i)
+                    if (format.containsKey(MediaFormat.KEY_MAX_INPUT_SIZE)) {
+                        val size = format.getInteger(MediaFormat.KEY_MAX_INPUT_SIZE)
+                        if (size > maxInputSize) maxInputSize = size
+                    }
+                }
+            }
+            val bufferSize = if (maxInputSize > 0) maxInputSize else DEFAULT_BUFFER_SIZE
+            Timber.d("Using buffer size: $bufferSize bytes (maxInputSize: $maxInputSize)")
+
             muxer?.start()
 
-            val byteBuffer = ByteBuffer.allocateDirect(BUFFER_SIZE)
+            val byteBuffer = ByteBuffer.allocateDirect(bufferSize)
             val bufferInfo = MediaCodec.BufferInfo()
 
             while (true) {

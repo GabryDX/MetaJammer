@@ -25,7 +25,6 @@ import com.heronikostudios.metajammer.worker.MetadataProcessingWorker
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -84,125 +83,34 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val workInfo: StateFlow<WorkInfo?> = _workInfo.asStateFlow()
 
     init {
-        fileRepository.clearCache()
+        viewModelScope.launch(Dispatchers.IO) {
+            fileRepository.clearCache()
+        }
         observeSettings()
     }
 
     private fun observeSettings() {
         viewModelScope.launch {
-            settingsRepository.useRandomFileNamesFlow.collect { value ->
-                _appSettings.update { it.copy(useRandomFileNames = value) }
-            }
-        }
-        viewModelScope.launch {
-            settingsRepository.folderStructureFlow.collect { value ->
-                _appSettings.update { it.copy(folderStructure = value) }
-            }
-        }
-        viewModelScope.launch {
-            settingsRepository.useSubfoldersInUnifiedFlow.collect { value ->
-                _appSettings.update { it.copy(useSubfoldersInUnified = value) }
-            }
-        }
-        viewModelScope.launch {
-            settingsRepository.unifiedSavingPathFlow.collect { value ->
-                _appSettings.update { it.copy(unifiedSavingPath = value) }
-            }
-        }
-        viewModelScope.launch {
-            settingsRepository.picturesSavingPathFlow.collect { value ->
-                _appSettings.update { it.copy(picturesSavingPath = value) }
-            }
-        }
-        viewModelScope.launch {
-            settingsRepository.musicSavingPathFlow.collect { value ->
-                _appSettings.update { it.copy(musicSavingPath = value) }
-            }
-        }
-        viewModelScope.launch {
-            settingsRepository.moviesSavingPathFlow.collect { value ->
-                _appSettings.update { it.copy(moviesSavingPath = value) }
-            }
-        }
-        viewModelScope.launch {
-            settingsRepository.documentsSavingPathFlow.collect { value ->
-                _appSettings.update { it.copy(documentsSavingPath = value) }
-            }
-        }
-        viewModelScope.launch {
-            settingsRepository.keepImageOrientationFlow.collect { value ->
-                _appSettings.update { it.copy(keepImageOrientation = value) }
-            }
-        }
-        viewModelScope.launch {
-            settingsRepository.shareResultAsDefaultFlow.collect { value ->
-                _appSettings.update { it.copy(shareResultAsDefault = value) }
-            }
-        }
-        viewModelScope.launch {
-            settingsRepository.defaultPrefixFlow.collect { value ->
-                _appSettings.update { it.copy(defaultPrefix = value) }
-            }
-        }
-        viewModelScope.launch {
-            settingsRepository.defaultSuffixFlow.collect { value ->
-                _appSettings.update { it.copy(defaultSuffix = value) }
-            }
-        }
-        viewModelScope.launch {
-            settingsRepository.nightModeFlow.collect { value ->
-                _appSettings.update { it.copy(nightMode = value) }
-            }
-        }
-        viewModelScope.launch {
-            settingsRepository.oledModeFlow.collect { value ->
-                _appSettings.update { it.copy(oledMode = value) }
-            }
-        }
-        viewModelScope.launch {
             var firstEmission = true
-            settingsRepository.autoHandleSharedFilesFlow.collect { value ->
-                _appSettings.update { it.copy(autoHandleSharedFiles = value) }
+            settingsRepository.appSettingsFlow.collect { settings ->
+                val oldSettings = _appSettings.value
+                _appSettings.value = settings
+                
                 if (firstEmission) {
                     _settingsInitialized.value = true
                     firstEmission = false
                 }
-            }
-        }
-        viewModelScope.launch {
-            settingsRepository.sharedFilesProcessingModeFlow.collect { value ->
-                _appSettings.update { it.copy(sharedFilesProcessingMode = value) }
-            }
-        }
-        viewModelScope.launch {
-            settingsRepository.sharedFilesOutputActionFlow.collect { value ->
-                _appSettings.update { it.copy(sharedFilesOutputAction = value) }
-            }
-        }
-        viewModelScope.launch {
-            settingsRepository.sharedFilesCustomPathFlow.collect { value ->
-                _appSettings.update { it.copy(sharedFilesCustomPath = value) }
-            }
-        }
-        viewModelScope.launch {
-            settingsRepository.thumbnailHandlingFlow.collect { value ->
-                _appSettings.update { it.copy(thumbnailHandling = value) }
-            }
-        }
-        viewModelScope.launch {
-            settingsRepository.allowInternetForMapFlow.collect { value ->
-                _appSettings.update { it.copy(allowInternetForMap = value) }
-            }
-        }
-        viewModelScope.launch {
-            settingsRepository.useNearbyScrambleFlow.collect { value ->
-                _appSettings.update { it.copy(useNearbyScramble = value) }
-            }
-        }
-        viewModelScope.launch {
-            settingsRepository.languageFlow.collect { language ->
-                _appSettings.update { it.copy(language = language) }
-                applyLanguage(language)
+                
+                if (settings.language != oldSettings.language) {
+                    applyLanguage(settings.language)
+                }
+                
+                if (settings.keepImageOrientation != oldSettings.keepImageOrientation ||
+                    settings.thumbnailHandling != oldSettings.thumbnailHandling ||
+                    settings.useNearbyScramble != oldSettings.useNearbyScramble) {
+                    clearProcessedFiles()
+                    if (_selectedMode.value != null) generateChangePreview()
+                }
             }
         }
     }
@@ -366,100 +274,102 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
         val keepOrientation = _appSettings.value.keepImageOrientation
 
-        _changePreview.value = _selectedFiles.value.associate { file ->
-            val currentMetadata = _metadataPreview.value[file.uri].orEmpty()
-            val currentMap = currentMetadata.associate { it.key to it.value }
+        viewModelScope.launch(Dispatchers.Default) {
+            val preview = _selectedFiles.value.associate { file ->
+                val currentMetadata = _metadataPreview.value[file.uri].orEmpty()
+                val currentMap = currentMetadata.associate { it.key to it.value }
 
-            val entries = when (mode) {
-                ProcessingMode.REMOVE_METADATA -> {
-                    if (currentMetadata.isEmpty()) {
-                        listOf(MetadataEntry("Info", "No metadata would be removed"))
-                    } else {
-                        currentMetadata.map { MetadataEntry(it.key, "${it.value}  →  [REMOVED]") }
-                    }
-                }
-
-                ProcessingMode.POISON_METADATA -> {
-                    val plan = _replacementPlans.value[file.uri]
-                    if (plan == null) {
-                        listOf(MetadataEntry("Info", "No replacement plan available"))
-                    } else {
-                        val targetMap = linkedMapOf<String, String>()
-                        val mime = file.mimeType ?: ""
-
-                        when {
-                            mime.startsWith("image/") -> {
-                                targetMap["DateTime"] = plan.dateTime
-                                targetMap["DateTimeOriginal"] = plan.dateTime
-                                targetMap["DateTimeDigitized"] = plan.dateTime
-                                targetMap["Make"] = plan.make
-                                targetMap["Model"] = plan.model
-                                targetMap["Software"] = plan.software
-                                currentMap["ImageWidth"]?.let { targetMap["ImageWidth"] = it }
-                                currentMap["ImageLength"]?.let { targetMap["ImageLength"] = it }
-                                targetMap["ImageDescription"] = plan.imageDescription
-                                targetMap["UserComment"] = plan.userComment
-                                targetMap["PhotographicSensitivity"] = plan.photographicSensitivity
-                                targetMap["ExposureTime"] = plan.exposureTime
-                                targetMap["FNumber"] = plan.fNumber
-                                targetMap["FocalLength"] = plan.focalLength
-                                targetMap["WhiteBalance"] = plan.whiteBalance
-                                targetMap["Flash"] = plan.flash
-                                plan.lensMake?.let { targetMap["LensMake"] = it }
-                                plan.lensModel?.let { targetMap["LensModel"] = it }
-                                targetMap["GPSLatitude"] = plan.latitude.toString()
-                                targetMap["GPSLatitudeRef"] = plan.latitudeRef
-                                targetMap["GPSLongitude"] = plan.longitude.toString()
-                                targetMap["GPSLongitudeRef"] = plan.longitudeRef
-                            }
-                            mime.startsWith("video/") -> {
-                                targetMap["Location"] = "${plan.latitude}, ${plan.longitude}"
-                                plan.title?.let { targetMap["Title"] = it }
-                                plan.artist?.let { targetMap["Director"] = it }
-                                plan.year?.let { targetMap["Year"] = it }
-                                plan.genre?.let { targetMap["Genre"] = it }
-                                plan.mediaDate?.let { targetMap["Date"] = it }
-                            }
-                            mime.startsWith("audio/") -> {
-                                targetMap["Location"] = "${plan.latitude}, ${plan.longitude}"
-                                plan.title?.let { targetMap["Title"] = it }
-                                plan.artist?.let { targetMap["Artist"] = it }
-                                plan.album?.let { targetMap["Album"] = it }
-                                plan.year?.let { targetMap["Year"] = it }
-                                plan.genre?.let { targetMap["Genre"] = it }
-                                plan.mediaDate?.let { targetMap["Date"] = it }
-                            }
-                            mime == "application/pdf" -> {
-                                plan.pdfTitle?.let { targetMap["Title"] = it }
-                                plan.author?.let { targetMap["Author"] = it }
-                                plan.creator?.let { targetMap["Creator"] = it }
-                                plan.producer?.let { targetMap["Producer"] = it }
-                            }
-                        }
-
-                        if (keepOrientation && mime.startsWith("image/")) {
-                            currentMap["Orientation"]?.let { targetMap["Orientation"] = it }
-                        }
-
-                        linkedSetOf<String>().apply {
-                            addAll(currentMap.keys)
-                            addAll(targetMap.keys)
-                        }.map { key ->
-                            val oldValue = currentMap[key]
-                            val newValue = targetMap[key]
-                            val value = when {
-                                oldValue == null && newValue != null -> "[ADDED] $newValue"
-                                oldValue != null && newValue == null -> "[REMOVED] $oldValue"
-                                oldValue == newValue -> "[UNCHANGED] ${oldValue ?: ""}"
-                                else -> "[CHANGED] $oldValue  →  $newValue"
-                            }
-                            MetadataEntry(key, value)
+                val entries = when (mode) {
+                    ProcessingMode.REMOVE_METADATA -> {
+                        if (currentMetadata.isEmpty()) {
+                            listOf(MetadataEntry("Info", "No metadata would be removed"))
+                        } else {
+                            currentMetadata.map { MetadataEntry(it.key, "${it.value}  →  [REMOVED]") }
                         }
                     }
+
+                    ProcessingMode.POISON_METADATA -> {
+                        val plan = _replacementPlans.value[file.uri]
+                        if (plan == null) {
+                            listOf(MetadataEntry("Info", "No replacement plan available"))
+                        } else {
+                            val targetMap = linkedMapOf<String, String>()
+                            val mime = file.mimeType ?: ""
+
+                            when {
+                                mime.startsWith("image/") -> {
+                                    targetMap["DateTime"] = plan.dateTime
+                                    targetMap["DateTimeOriginal"] = plan.dateTime
+                                    targetMap["DateTimeDigitized"] = plan.dateTime
+                                    targetMap["Make"] = plan.make
+                                    targetMap["Model"] = plan.model
+                                    targetMap["Software"] = plan.software
+                                    currentMap["ImageWidth"]?.let { targetMap["ImageWidth"] = it }
+                                    currentMap["ImageLength"]?.let { targetMap["ImageLength"] = it }
+                                    targetMap["ImageDescription"] = plan.imageDescription
+                                    targetMap["UserComment"] = plan.userComment
+                                    targetMap["PhotographicSensitivity"] = plan.photographicSensitivity
+                                    targetMap["ExposureTime"] = plan.exposureTime
+                                    targetMap["FNumber"] = plan.fNumber
+                                    targetMap["FocalLength"] = plan.focalLength
+                                    targetMap["WhiteBalance"] = plan.whiteBalance
+                                    targetMap["Flash"] = plan.flash
+                                    plan.lensMake?.let { targetMap["LensMake"] = it }
+                                    plan.lensModel?.let { targetMap["LensModel"] = it }
+                                    targetMap["GPSLatitude"] = plan.latitude.toString()
+                                    targetMap["GPSLatitudeRef"] = plan.latitudeRef
+                                    targetMap["GPSLongitude"] = plan.longitude.toString()
+                                    targetMap["GPSLongitudeRef"] = plan.longitudeRef
+                                }
+                                mime.startsWith("video/") -> {
+                                    targetMap["Location"] = "${plan.latitude}, ${plan.longitude}"
+                                    plan.title?.let { targetMap["Title"] = it }
+                                    plan.artist?.let { targetMap["Director"] = it }
+                                    plan.year?.let { targetMap["Year"] = it }
+                                    plan.genre?.let { targetMap["Genre"] = it }
+                                    plan.mediaDate?.let { targetMap["Date"] = it }
+                                }
+                                mime.startsWith("audio/") -> {
+                                    targetMap["Location"] = "${plan.latitude}, ${plan.longitude}"
+                                    plan.title?.let { targetMap["Title"] = it }
+                                    plan.artist?.let { targetMap["Artist"] = it }
+                                    plan.album?.let { targetMap["Album"] = it }
+                                    plan.year?.let { targetMap["Year"] = it }
+                                    plan.genre?.let { targetMap["Genre"] = it }
+                                    plan.mediaDate?.let { targetMap["Date"] = it }
+                                }
+                                mime == "application/pdf" -> {
+                                    plan.pdfTitle?.let { targetMap["Title"] = it }
+                                    plan.author?.let { targetMap["Author"] = it }
+                                    plan.creator?.let { targetMap["Creator"] = it }
+                                    plan.producer?.let { targetMap["Producer"] = it }
+                                }
+                            }
+
+                            if (keepOrientation && mime.startsWith("image/")) {
+                                currentMap["Orientation"]?.let { targetMap["Orientation"] = it }
+                            }
+
+                            linkedSetOf<String>().apply {
+                                addAll(currentMap.keys)
+                                addAll(targetMap.keys)
+                            }.map { key ->
+                                val oldValue = currentMap[key]
+                                val newValue = targetMap[key]
+                                val value = when {
+                                    oldValue == null && newValue != null -> "[ADDED] $newValue"
+                                    oldValue != null && newValue == null -> "[REMOVED] $oldValue"
+                                    oldValue == newValue -> "[UNCHANGED] ${oldValue ?: ""}"
+                                    else -> "[CHANGED] $oldValue  →  $newValue"
+                                }
+                                MetadataEntry(key, value)
+                            }
+                        }
+                    }
                 }
+                file.uri to entries
             }
-
-            file.uri to entries
+            _changePreview.value = preview
         }
     }
 
@@ -897,8 +807,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setKeepImageOrientation(enabled: Boolean) = launchSettingUpdate {
         settingsRepository.setKeepImageOrientation(enabled)
-        clearProcessedFiles()
-        if (_selectedMode.value != null) generateChangePreview()
     }
 
     fun setShareResultAsDefault(enabled: Boolean) = launchSettingUpdate {
@@ -935,7 +843,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setThumbnailHandling(handling: ThumbnailHandling) = launchSettingUpdate {
         settingsRepository.setThumbnailHandling(handling)
-        clearProcessedFiles()
     }
 
     fun setAllowInternetForMap(allowed: Boolean) = launchSettingUpdate {
@@ -944,7 +851,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setUseNearbyScramble(enabled: Boolean) = launchSettingUpdate {
         settingsRepository.setUseNearbyScramble(enabled)
-        clearProcessedFiles()
     }
 
     fun setLanguage(language: AppLanguage) = launchSettingUpdate {
