@@ -187,6 +187,7 @@
     <string name="output_action_default_folder">डिफ़ॉल्ट फ़ोल्डर में सहेजें</string>
     <string name="output_action_shared_folder">समर्पित फ़ोल्डर में सहेजें</string>
     <string name="output_action_reshare">साफ़ की गई फ़ाइलों को फिर से साझा करें</string>
+    <string name="quick_scrub_processing">आपकी फ़ाइलें सुखाई जा रही हैं…</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">मानचित्र चयनकर्ता और इंटरनेट एक्सेस</string>

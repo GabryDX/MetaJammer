@@ -187,6 +187,7 @@
     <string name="output_action_default_folder">In capsa defalta servare</string>
     <string name="output_action_shared_folder">In capsa propria servare</string>
     <string name="output_action_reshare">Fasciculos mundatos iterum communicare</string>
+    <string name="quick_scrub_processing">Fasciculos tuos siccans…</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">Tabula &amp; Interrete</string>

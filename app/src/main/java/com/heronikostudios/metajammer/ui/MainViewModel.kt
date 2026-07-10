@@ -481,14 +481,18 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         if (mode == ProcessingMode.POISON_METADATA) {
             val newPlans = mutableMapOf<Uri, MetadataReplacementPlan>()
             withContext(Dispatchers.IO) {
+                val useScramble = _appSettings.value.useNearbyScramble
                 for (selectedFile in files) {
-                    val metadata = metadataRepository.readMetadata(selectedFile)
-                    val lat = metadata.find { it.key == "GPSLatitude" }?.value?.toDoubleOrNull()
-                    val lon = metadata.find { it.key == "GPSLongitude" }?.value?.toDoubleOrNull()
+                    val plan = if (useScramble) {
+                        val metadata = metadataRepository.readMetadata(selectedFile)
+                        val lat = metadata.find { it.key == "GPSLatitude" }?.value?.toDoubleOrNull()
+                        val lon = metadata.find { it.key == "GPSLongitude" }?.value?.toDoubleOrNull()
 
-                    val useScramble = _appSettings.value.useNearbyScramble
-                    val plan = if (useScramble && lat != null && lon != null) {
-                        MetadataReplacementGenerator.generatePlan(selectedFile.mimeType, lat, lon)
+                        if (lat != null && lon != null) {
+                            MetadataReplacementGenerator.generatePlan(selectedFile.mimeType, lat, lon)
+                        } else {
+                            MetadataReplacementGenerator.generatePlan(selectedFile.mimeType)
+                        }
                     } else {
                         MetadataReplacementGenerator.generatePlan(selectedFile.mimeType)
                     }

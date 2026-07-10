@@ -187,6 +187,7 @@
     <string name="output_action_default_folder">デフォルトフォルダに保存</string>
     <string name="output_action_shared_folder">専用フォルダに保存</string>
     <string name="output_action_reshare">クリーンアップしたファイルを再共有</string>
+    <string name="quick_scrub_processing">ファイルを乾燥させています…</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">マップピッカーとインターネットアクセス</string>
