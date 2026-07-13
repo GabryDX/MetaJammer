@@ -66,9 +66,9 @@
     <!-- HelpScreen -->
     <string name="help_title">帮助与教程</string>
     <string name="help_item_video_title">视频处理</string>
-    <string name="help_item_video_body">支持的格式：MP4, MOV。\n\n这些格式支持完整的“重混”(Remuxing) 过程。该过程会删除 GPS、日期和设备信息，以保护您的隐私。</string>
-    <string name="help_item_image_title">图像处理</string>
-    <string name="help_item_image_body">支持的格式：JPG, PNG, WebP, HEIF。\n\nMetaJammer 会从这些图像中删除 EXIF 元数据。在“投毒”模式下，它会将 GPS 坐标等敏感标签替换为现实的随机数据。</string>
+    <string name="help_item_video_body">支持的格式：MP4, MOV, M4A, OGG。\n\n这些格式支持完整的“重混”(Remuxing) 过程。该过程会删除 GPS、日期和设备信息，以保护您的隐私。</string>
+    <string name="help_item_image_title">图像和矢量处理</string>
+    <string name="help_item_image_body">支持的格式：JPG, PNG, WebP, HEIF, SVG。\n\nMetaJammer 会从位图中删除 EXIF 元数据，并清理 SVG 中的 XML/RDF 元数据。在“投毒”模式下，它会将敏感标签替换为现实的随机数据。</string>
     <string name="help_item_other_title">PDF 和文档处理</string>
     <string name="help_item_other_body">支持的格式：PDF。\n\nMetaJammer 现在全面支持 PDF 文档。您可以读取、删除和“投毒”元数据，如标题、作者、主题、关键词、创建者和制作者。它还会清除隐藏的水印和注释，以确保您的文档在共享前保持干净。</string>
     <string name="help_report_issue_title">报告问题</string>
@@ -148,6 +148,8 @@
     <string name="setting_language_title">语言</string>
     <string name="setting_oled_mode_title">OLED 模式</string>
     <string name="setting_oled_mode_sub">为支持的深色主题使用更深的黑色调</string>
+    <string name="setting_dynamic_color_title">Material You (动态色彩)</string>
+    <string name="setting_dynamic_color_sub">将壁纸中的动态颜色应用到应用界面</string>
 
     <!-- Enums -->
     <string name="night_mode_always">始终</string>
@@ -197,4 +199,37 @@
 
     <string name="notification_permission_title">保持知情</string>
     <string name="notification_permission_message">MetaJammer 可以显示通知，让您随时了解大批量文件在后台处理的进度。\n\n这在您希望在 MetaJammer 完成工作时切换到另一个应用时特别有用。</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">欢迎使用 MetaJammer</string>
+    <string name="onboarding_welcome_desc">您的个人元数据隐私工具包。在与世界分享之前清理您的文件。</string>
+    <string name="onboarding_poison_vs_remove_title">投毒 vs 删除</string>
+    <string name="onboarding_poison_vs_remove_desc"><b>删除：</b> 删除所有元数据。简单明了。\n\n<b>投毒：</b> 用真实的虚假值替换敏感数据。这提供了 <i>可信的否认性</i> 并迷惑自动化追踪器。</string>
+    <string name="onboarding_permissions_title">准备就绪</string>
+    <string name="onboarding_permissions_desc">MetaJammer 需要一些权限才能发挥最佳作用。您可以选择启用后台任务通知和地图选择器网络权限。</string>
+    <string name="onboarding_finish_title">一切就绪！</string>
+    <string name="onboarding_finish_desc">您已准备好开始保护您的隐私。选择一些文件或从其他应用共享它们以开始。</string>
+    <string name="onboarding_get_started">开始使用</string>
+    <string name="onboarding_next">下一步</string>
+    <string name="onboarding_skip">跳过</string>
+
+    <!-- Processing History -->
+    <string name="category_privacy_history">隐私与历史记录</string>
+    <string name="setting_enable_history_title">启用处理历史记录</string>
+    <string name="setting_enable_history_sub">保留最近处理文件的日志。此数据存储在本地，绝不会离开您的设备。</string>
+    <string name="setting_history_retention_title">历史记录保留</string>
+    <string name="setting_history_shortcut_title">显示历史记录快捷方式</string>
+    <string name="setting_history_shortcut_sub">在主屏幕上添加历史记录快速访问图标</string>
+    <string name="setting_clear_history_now">立即清除历史记录</string>
+    <string name="setting_history_cleared">处理历史记录已清除。</string>
+    <string name="setting_history_title">处理历史记录</string>
+
+    <string name="retention_policy_100_items">保留最近的 100 个项目</string>
+    <string name="retention_policy_clear_on_exit">退出应用时清除历史记录</string>
+    <string name="retention_policy_clear_after_24h">24 小时后清除历史记录</string>
+
+    <string name="history_title">处理历史记录</string>
+    <string name="history_empty">尚无文件记录。</string>
+    <string name="history_clear_confirm_title">清除历史记录？</string>
+    <string name="history_clear_confirm_message">这将永久删除所有已处理文件的日志。原始文件不会被删除。</string>
 </resources>

@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.res.painterResource
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -77,7 +78,8 @@ open class MainActivity : AppCompatActivity() {
 
             MetaJammerTheme(
                 nightModeSetting = appSettings.nightMode,
-                oledMode = appSettings.oledMode
+                oledMode = appSettings.oledMode,
+                dynamicColor = appSettings.useDynamicColor
             ) {
                 MetaJammerApp(
                     sharedUris = sharedUris,
@@ -123,6 +125,7 @@ open class MainActivity : AppCompatActivity() {
 }
 
 private enum class AppStep {
+    ONBOARDING,
     HOME,
     PREVIEW,
     PROCESS,
@@ -130,10 +133,12 @@ private enum class AppStep {
     OUTPUT,
     SETTINGS,
     HELP,
-    QUICK_SCRUB
+    QUICK_SCRUB,
+    HISTORY
 }
 
 private fun previousStep(step: AppStep): AppStep? = when (step) {
+    AppStep.ONBOARDING -> null
     AppStep.HOME -> null
     AppStep.PREVIEW -> AppStep.HOME
     AppStep.PROCESS -> AppStep.PREVIEW
@@ -142,6 +147,7 @@ private fun previousStep(step: AppStep): AppStep? = when (step) {
     AppStep.SETTINGS -> null
     AppStep.HELP -> AppStep.HOME
     AppStep.QUICK_SCRUB -> null
+    AppStep.HISTORY -> null // Handled dynamically in navigateBack
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -183,15 +189,30 @@ fun MetaJammerApp(
     }
 
     var currentStep by rememberSaveable { mutableStateOf(AppStep.HOME) }
+    var initialStepSet by rememberSaveable { mutableStateOf(false) }
+
+    LaunchedEffect(settingsInitialized) {
+        if (settingsInitialized && !initialStepSet) {
+            if (!appSettings.isOnboardingCompleted) {
+                currentStep = AppStep.ONBOARDING
+            }
+            initialStepSet = true
+        }
+    }
+
     var previousNonSettingsStep by rememberSaveable { mutableStateOf(AppStep.HOME) }
+    var stepBeforeHistory by rememberSaveable { mutableStateOf(AppStep.HOME) }
     var handledSharedSignature by rememberSaveable { mutableStateOf<String?>(null) }
     var uriToEditLocation by remember { mutableStateOf<Uri?>(null) }
     var showInternetPermissionExplanation by remember { mutableStateOf(false) }
 
     fun navigateTo(step: AppStep) {
         viewModel.clearMessage()
-        if (step != AppStep.SETTINGS && step != AppStep.HELP) {
+        if (step != AppStep.SETTINGS && step != AppStep.HELP && step != AppStep.ONBOARDING && step != AppStep.HISTORY) {
             previousNonSettingsStep = step
+        }
+        if (step == AppStep.HISTORY) {
+            stepBeforeHistory = currentStep
         }
         currentStep = step
     }
@@ -199,6 +220,7 @@ fun MetaJammerApp(
     fun navigateBack() {
         when (currentStep) {
             AppStep.SETTINGS -> currentStep = previousNonSettingsStep
+            AppStep.HISTORY -> currentStep = stepBeforeHistory
             else -> {
                 val previous = previousStep(currentStep)
                 if (previous != null) currentStep = previous else onExitApp()
@@ -254,11 +276,12 @@ fun MetaJammerApp(
         modifier = modifier.fillMaxSize(),
         containerColor = if (currentStep == AppStep.QUICK_SCRUB) Color.Transparent else MaterialTheme.colorScheme.background,
         topBar = {
-            if (currentStep != AppStep.QUICK_SCRUB) {
+            if (currentStep != AppStep.QUICK_SCRUB && currentStep != AppStep.ONBOARDING) {
                 CenterAlignedTopAppBar(
                 title = {
                     Text(
                         text = when (currentStep) {
+                            AppStep.ONBOARDING -> ""
                             AppStep.HOME -> stringResource(R.string.app_name)
                             AppStep.PREVIEW -> stringResource(R.string.metadata_preview)
                             AppStep.PROCESS -> stringResource(R.string.process_files_title)
@@ -266,6 +289,7 @@ fun MetaJammerApp(
                             AppStep.OUTPUT -> stringResource(R.string.output_options)
                             AppStep.SETTINGS -> stringResource(R.string.settings)
                             AppStep.HELP -> stringResource(R.string.help_title)
+                            AppStep.HISTORY -> stringResource(R.string.history_title)
                             AppStep.QUICK_SCRUB -> ""
                         },
                         style = when (currentStep) {
@@ -292,6 +316,14 @@ fun MetaJammerApp(
                     }
                 },
                 actions = {
+                    if (currentStep == AppStep.HOME && appSettings.enableProcessingHistory && appSettings.showHistoryShortcut) {
+                        IconButton(onClick = { navigateTo(AppStep.HISTORY) }) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.List,
+                                contentDescription = stringResource(R.string.history_title)
+                            )
+                        }
+                    }
                     if (currentStep != AppStep.QUICK_SCRUB) {
                         IconButton(onClick = { currentStep = AppStep.SETTINGS }) {
                             Icon(
@@ -321,6 +353,16 @@ fun MetaJammerApp(
             }
 
             when (currentStep) {
+                AppStep.ONBOARDING -> {
+                    com.heronikostudios.metajammer.ui.screens.OnboardingScreen(
+                        onFinish = {
+                            viewModel.setOnboardingCompleted(true)
+                            navigateTo(AppStep.HOME)
+                        },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+
                 AppStep.HOME -> {
                     HomeScreen(
                         selectedFiles = selectedFiles,
@@ -495,6 +537,22 @@ fun MetaJammerApp(
                         onAllowInternetForMapChanged = viewModel::setAllowInternetForMap,
                         onUseNearbyScrambleChanged = viewModel::setUseNearbyScramble,
                         onLanguageChanged = viewModel::setLanguage,
+                        onUseDynamicColorChanged = viewModel::setUseDynamicColor,
+                        onEnableProcessingHistoryChanged = viewModel::setEnableProcessingHistory,
+                        onHistoryRetentionPolicyChanged = viewModel::setHistoryRetentionPolicy,
+                        onShowHistoryShortcutChanged = viewModel::setShowHistoryShortcut,
+                        onClearHistory = viewModel::clearProcessedFilesHistory,
+                        onViewHistory = { navigateTo(AppStep.HISTORY) },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+
+                AppStep.HISTORY -> {
+                    val history by viewModel.processedFilesHistory.collectAsStateWithLifecycle()
+                    com.heronikostudios.metajammer.ui.screens.HistoryScreen(
+                        history = history,
+                        onClearHistory = viewModel::clearProcessedFilesHistory,
+                        onShareFile = { log -> viewModel.shareHistoryFile(context, log) },
                         modifier = Modifier.weight(1f)
                     )
                 }

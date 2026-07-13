@@ -48,9 +48,9 @@
 
     <!-- ProcessingScreen -->
     <string name="process_files_title">Process Files</string>
-    <string name="pick_one_option">Pick one option:</string>
-    <string name="poison_metadata">Poison Metadata</string>
-    <string name="remove_metadata">Remove Metadata</string>
+    <string name="pick_one_option">Choose metadata action:</string>
+    <string name="poison_metadata">Poison</string>
+    <string name="remove_metadata">Remove</string>
     <string name="selected_mode">Selected: %1$s</string>
     <string name="regenerate_plans">Regenerate All Random Plans</string>
     <string name="preview_of_changes">Preview of Changes</string>
@@ -67,8 +67,8 @@
     <string name="help_title">Help &amp; Tutorials</string>
     <string name="help_item_video_title">Video &amp; Audio Processing</string>
     <string name="help_item_video_body">Supported formats: MP4, MOV, M4A, OGG.\n\nFull re-muxing is supported for these containers. This process strips GPS, dates, and device atoms to protect your privacy.</string>
-    <string name="help_item_image_title">Image Processing</string>
-    <string name="help_item_image_body">Supported formats: JPG, PNG, WebP, HEIF.\n\nMetaJammer strips EXIF metadata from these images. In \"Poison\" mode, it replaces sensitive tags like GPS coordinates with realistic random data.</string>
+    <string name="help_item_image_title">Image &amp; Vector Processing</string>
+    <string name="help_item_image_body">Supported formats: JPG, PNG, WebP, HEIF, SVG.\n\nMetaJammer strips EXIF metadata from bitmap images and cleans XML/RDF metadata from SVGs. In \"Poison\" mode, it replaces sensitive tags with realistic random data.</string>
     <string name="help_item_other_title">PDF &amp; Document Processing</string>
     <string name="help_item_other_body">Supported formats: PDF.\n\nMetaJammer now fully supports PDF documents. You can read, remove, and poison metadata like Title, Author, Subject, Keywords, Creator, and Producer. It also strips hidden watermarks and annotations to ensure your documents are clean before sharing.</string>
     <string name="help_report_issue_title">Report an Issue</string>
@@ -148,6 +148,8 @@
     <string name="setting_language_title">Language</string>
     <string name="setting_oled_mode_title">OLED mode</string>
     <string name="setting_oled_mode_sub">Use darker black tones for supported dark themes</string>
+    <string name="setting_dynamic_color_title">Material You</string>
+    <string name="setting_dynamic_color_sub">Apply dynamic colors from your wallpaper to the app interface</string>
 
     <!-- Enums -->
     <string name="night_mode_always">Always</string>
@@ -197,4 +199,37 @@
 
     <string name="notification_permission_title">Stay Informed</string>
     <string name="notification_permission_message">MetaJammer can show notifications to keep you updated on the progress of large file batches while they process in the background. \n\nThis is especially useful if you want to switch to another app while MetaJammer finishes its work.</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">Welcome to MetaJammer</string>
+    <string name="onboarding_welcome_desc">Your personal toolkit for metadata privacy. Clean your files before you share them with the world.</string>
+    <string name="onboarding_poison_vs_remove_title">Poison vs Remove</string>
+    <string name="onboarding_poison_vs_remove_desc"><b>Remove:</b> Deletes all metadata. Simple and clean.\n\n<b>Poison:</b> Replaces sensitive data with fake, realistic values. This provides <i>plausible deniability</i> and confuses automated trackers.</string>
+    <string name="onboarding_permissions_title">Getting Ready</string>
+    <string name="onboarding_permissions_desc">MetaJammer needs a few permissions to work best. You can choose to enable notifications for background tasks and internet for the map picker.</string>
+    <string name="onboarding_finish_title">All Set!</string>
+    <string name="onboarding_finish_desc">You\'re ready to start protecting your privacy. Pick some files or share them from other apps to begin.</string>
+    <string name="onboarding_get_started">Get Started</string>
+    <string name="onboarding_next">Next</string>
+    <string name="onboarding_skip">Skip</string>
+
+    <!-- Processing History -->
+    <string name="category_privacy_history">Privacy &amp; History</string>
+    <string name="setting_enable_history_title">Enable processing history</string>
+    <string name="setting_enable_history_sub">Keep a log of recently processed files. This data is stored locally and never leaves your device.</string>
+    <string name="setting_history_retention_title">History retention</string>
+    <string name="setting_history_shortcut_title">Show history shortcut</string>
+    <string name="setting_history_shortcut_sub">Add a quick-access icon for history on the home screen</string>
+    <string name="setting_clear_history_now">Clear History Now</string>
+    <string name="setting_history_cleared">Processing history has been cleared.</string>
+    <string name="setting_history_title">Processing History</string>
+
+    <string name="retention_policy_100_items">Keep 100 most recent items</string>
+    <string name="retention_policy_clear_on_exit">Clear history on app exit</string>
+    <string name="retention_policy_clear_after_24h">Clear history after 24 hours</string>
+
+    <string name="history_title">Processing History</string>
+    <string name="history_empty">No files have been logged yet.</string>
+    <string name="history_clear_confirm_title">Clear history?</string>
+    <string name="history_clear_confirm_message">This will permanently delete the log of all processed files. The actual files will not be deleted.</string>
 </resources>

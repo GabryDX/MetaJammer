@@ -9,6 +9,7 @@ import com.heronikostudios.metajammer.domain.model.ThumbnailHandling
 import com.heronikostudios.metajammer.metadata.ImageMetadataProcessor
 import com.heronikostudios.metajammer.metadata.MediaMetadataProcessor
 import com.heronikostudios.metajammer.metadata.PdfMetadataProcessor
+import com.heronikostudios.metajammer.metadata.SvgMetadataProcessor
 import timber.log.Timber
 import java.io.File
 
@@ -19,6 +20,7 @@ class MetadataRepository(
     private val imageProcessor = ImageMetadataProcessor(fileRepository)
     private val mediaProcessor = MediaMetadataProcessor(fileRepository)
     private val pdfProcessor = PdfMetadataProcessor(context, fileRepository)
+    private val svgProcessor = SvgMetadataProcessor(fileRepository)
 
     companion object {
         private val PREVIEW_TAGS = listOf(
@@ -97,6 +99,16 @@ class MetadataRepository(
                 result ?: fileRepository.copyUriToCache(selectedFile.uri, prefix = "pdf_failed_", suffix = ".pdf")
             }
 
+            mime == "image/svg+xml" -> {
+                when (mode) {
+                    ProcessingMode.POISON_METADATA -> {
+                        val plan = requireNotNull(replacementPlan) { "Plan required for poison mode" }
+                        svgProcessor.poisonMetadata(selectedFile.uri, plan)
+                    }
+                    ProcessingMode.REMOVE_METADATA -> svgProcessor.removeMetadata(selectedFile.uri)
+                }
+            }
+
             else -> fileRepository.copyUriToCache(selectedFile.uri, prefix = "generic_", suffix = null)
         }
     }
@@ -107,6 +119,7 @@ class MetadataRepository(
             mime.startsWith("image/") -> readImageMetadata(selectedFile)
             mime.startsWith("video/") || mime.startsWith("audio/") -> readMediaMetadata(selectedFile)
             mime == "application/pdf" -> pdfProcessor.readMetadata(selectedFile.uri)
+            mime == "image/svg+xml" -> svgProcessor.readMetadata(selectedFile.uri)
             else -> listOf(MetadataEntry("Info", "Metadata preview not yet supported for $mime"))
         }
     }

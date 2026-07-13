@@ -66,9 +66,9 @@
     <!-- HelpScreen -->
     <string name="help_title">Ayuda y tutoriales</string>
     <string name="help_item_video_title">Procesamiento de vídeo</string>
-    <string name="help_item_video_body">Formatos compatibles: MP4, MOV.\n\nSe admite el "remuxing" (remezcla) completo para estos contenedores. Este proceso elimina el GPS, las fechas y los átomos del dispositivo para proteger tu privacidad.</string>
-    <string name="help_item_image_title">Procesamiento de imágenes</string>
-    <string name="help_item_image_body">Formatos compatibles: JPG, PNG, WebP, HEIF.\n\nMetaJammer elimina los metadatos EXIF de estas imágenes. En el modo \"Envenenar\", reemplaza las etiquetas sensibles como las coordenadas GPS con datos aleatorios realistas.</string>
+    <string name="help_item_video_body">Formatos compatibles: MP4, MOV, M4A, OGG.\n\nSe admite el "remuxing" (remezcla) completo para estos contenedores. Este proceso elimina el GPS, las fechas y los átomos del dispositivo para proteger tu privacidad.</string>
+    <string name="help_item_image_title">Procesamiento de imágenes y vectores</string>
+    <string name="help_item_image_body">Formatos compatibles: JPG, PNG, WebP, HEIF, SVG.\n\nMetaJammer elimina los metadatos EXIF de las imágenes de mapa de bits y limpia los metadatos XML/RDF de los SVG. En el modo \"Envenenar\", reemplaza las etiquetas sensibles con datos aleatorios realistas.</string>
     <string name="help_item_other_title">Procesamiento de PDF y documentos</string>
     <string name="help_item_other_body">Formatos compatibles: PDF.\n\nMetaJammer ahora es totalmente compatible con documentos PDF. Puedes leer, eliminar y \"envenenar\" metadatos como Título, Autor, Asunto, Palabras clave, Creador y Productor. También elimina marcas de agua ocultas y anotaciones para garantizar que tus documentos estén limpios antes de compartirlos.</string>
     <string name="help_report_issue_title">Informar de un problema</string>
@@ -148,6 +148,8 @@
     <string name="setting_language_title">Idioma</string>
     <string name="setting_oled_mode_title">Modo OLED</string>
     <string name="setting_oled_mode_sub">Usar tonos negros más oscuros para los temas oscuros compatibles</string>
+    <string name="setting_dynamic_color_title">Material You</string>
+    <string name="setting_dynamic_color_sub">Aplica colores dinámicos de tu fondo de pantalla a la interfaz de la aplicación</string>
 
     <!-- Enums -->
     <string name="night_mode_always">Siempre</string>
@@ -197,4 +199,37 @@
 
     <string name="notification_permission_title">Mantente informado</string>
     <string name="notification_permission_message">MetaJammer puede mostrar notificaciones para mantenerte actualizado sobre el progreso de grandes lotes de archivos mientras se procesan en segundo plano. \n\nEsto es especialmente útil si quieres cambiar a otra aplicación mientras MetaJammer termina su trabajo.</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">Bienvenido a MetaJammer</string>
+    <string name="onboarding_welcome_desc">Tu kit de herramientas personal para la privacidad de metadatos. Limpia tus archivos antes de compartirlos con el mundo.</string>
+    <string name="onboarding_poison_vs_remove_title">Envenenar vs Eliminar</string>
+    <string name="onboarding_poison_vs_remove_desc"><b>Eliminar:</b> Borra todos los metadatos. Simple y limpio.\n\n<b>Envenenar:</b> Reemplaza los datos sensibles por valores falsos y realistas. Esto proporciona <i>negación plausible</i> y confunde a los rastreadores automatizados.</string>
+    <string name="onboarding_permissions_title">Preparando todo</string>
+    <string name="onboarding_permissions_desc">MetaJammer necesita algunos permisos para funcionar de la mejor manera. Puedes elegir activar las notificaciones para tareas en segundo plano e Internet para el selector de mapas.</string>
+    <string name="onboarding_finish_title">¡Todo listo!</string>
+    <string name="onboarding_finish_desc">Ya estás preparado para empezar a proteger tu privacidad. Elige algunos archivos o compártelos desde otras aplicaciones para empezar.</string>
+    <string name="onboarding_get_started">Empezar</string>
+    <string name="onboarding_next">Siguiente</string>
+    <string name="onboarding_skip">Omitir</string>
+
+    <!-- Processing History -->
+    <string name="category_privacy_history">Privacidad e Historial</string>
+    <string name="setting_enable_history_title">Activar historial de procesamiento</string>
+    <string name="setting_enable_history_sub">Mantiene un registro de los archivos procesados recientemente. Estos datos se almacenan localmente y nunca salen de tu dispositivo.</string>
+    <string name="setting_history_retention_title">Retención del historial</string>
+    <string name="setting_history_shortcut_title">Mostrar acceso directo al historial</string>
+    <string name="setting_history_shortcut_sub">Añade un icono de acceso rápido al historial en la pantalla de inicio</string>
+    <string name="setting_clear_history_now">Borrar historial ahora</string>
+    <string name="setting_history_cleared">Se ha borrado el historial de procesamiento.</string>
+    <string name="setting_history_title">Historial de procesamiento</string>
+
+    <string name="retention_policy_100_items">Mantener los 100 elementos más recientes</string>
+    <string name="retention_policy_clear_on_exit">Borrar historial al salir de la aplicación</string>
+    <string name="retention_policy_clear_after_24h">Borrar historial después de 24 horas</string>
+
+    <string name="history_title">Historial de procesamiento</string>
+    <string name="history_empty">Aún no se ha registrado ningún archivo.</string>
+    <string name="history_clear_confirm_title">¿Borrar historial?</string>
+    <string name="history_clear_confirm_message">Esto eliminará permanentemente el registro de todos los archivos procesados. Los archivos reales no se eliminarán.</string>
 </resources>

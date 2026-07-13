@@ -66,9 +66,9 @@
     <!-- HelpScreen -->
     <string name="help_title">Hilfe &amp; Tutorials</string>
     <string name="help_item_video_title">Videoverarbeitung</string>
-    <string name="help_item_video_body">Unterstützte Formate: MP4, MOV.\n\nVollständiges Remuxing wird für diese Container unterstützt. Dieser Vorgang entfernt GPS, Daten und Geräteatome, um Ihre Privatsphäre zu schützen.</string>
-    <string name="help_item_image_title">Bildverarbeitung</string>
-    <string name="help_item_image_body">Unterstützte Formate: JPG, PNG, WebP, HEIF.\n\nMetaJammer entfernt EXIF-Metadaten aus diesen Bildern. Im Modus „Vergiften“ werden sensible Tags wie GPS-Koordinaten durch realistische Zufallsdaten ersetzt.</string>
+    <string name="help_item_video_body">Unterstützte Formate: MP4, MOV, M4A, OGG.\n\nVollständiges Remuxing wird für diese Container unterstützt. Dieser Vorgang entfernt GPS, Daten und Geräteatome, um Ihre Privatsphäre zu schützen.</string>
+    <string name="help_item_image_title">Bild- &amp; Vektorverarbeitung</string>
+    <string name="help_item_image_body">Unterstützte Formate: JPG, PNG, WebP, HEIF, SVG.\n\nMetaJammer entfernt EXIF-Metadaten aus Bitmap-Bildern und bereinigt XML/RDF-Metadaten aus SVGs. Im Modus „Vergiften“ werden sensible Tags durch realistische Zufallsdaten ersetzt.</string>
     <string name="help_item_other_title">PDF- &amp; Dokumentenverarbeitung</string>
     <string name="help_item_other_body">Unterstützte Formate: PDF.\n\nMetaJammer unterstützt jetzt PDF-Dokumente vollständig. Sie können Metadaten wie Titel, Autor, Thema, Schlagwörter, Ersteller und Produzent lesen, entfernen und „vergiften“. Außerdem werden versteckte Wasserzeichen und Anmerkungen entfernt, um sicherzustellen, dass Ihre Dokumente vor der Freigabe sauber sind.</string>
     <string name="help_report_issue_title">Ein Problem melden</string>
@@ -148,6 +148,8 @@
     <string name="setting_language_title">Sprache</string>
     <string name="setting_oled_mode_title">OLED-Modus</string>
     <string name="setting_oled_mode_sub">Dunklere Schwarztöne für unterstützte dunkle Themes verwenden</string>
+    <string name="setting_dynamic_color_title">Material You</string>
+    <string name="setting_dynamic_color_sub">Dynamische Farben deines Hintergrundbilds auf die App-Oberfläche anwenden</string>
 
     <!-- Enums -->
     <string name="night_mode_always">Immer</string>
@@ -197,4 +199,37 @@
 
     <string name="notification_permission_title">Bleib informiert</string>
     <string name="notification_permission_message">MetaJammer kann Benachrichtigungen anzeigen, um dich über den Fortschritt großer Dateimengen auf dem Laufenden zu halten, während diese im Hintergrund verarbeitet werden. \n\nDies ist besonders nützlich, wenn du zu einer anderen App wechseln möchtest, während MetaJammer seine Arbeit beendet.</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">Willkommen bei MetaJammer</string>
+    <string name="onboarding_welcome_desc">Dein persönliches Toolkit für Metadaten-Privatsphäre. Bereinige deine Dateien, bevor du sie mit der Welt teilst.</string>
+    <string name="onboarding_poison_vs_remove_title">Vergiften vs. Entfernen</string>
+    <string name="onboarding_poison_vs_remove_desc"><b>Entfernen:</b> Löscht alle Metadaten. Einfach und sauber.\n\n<b>Vergiften:</b> Ersetzt sensible Daten durch gefälschte, realistische Werte. Dies bietet <i>glaubwürdige Abstreitbarkeit</i> und verwirrt automatisierte Tracker.</string>
+    <string name="onboarding_permissions_title">Vorbereitungen</string>
+    <string name="onboarding_permissions_desc">MetaJammer benötigt einige Berechtigungen, um optimal zu funktionieren. Du kannst Benachrichtigungen für Hintergrundaufgaben und das Internet für den Karten-Picker aktivieren.</string>
+    <string name="onboarding_finish_title">Alles fertig!</string>
+    <string name="onboarding_finish_desc">Du bist bereit, deine Privatsphäre zu schützen. Wähle einige Dateien aus oder teile sie aus anderen Apps, um zu beginnen.</string>
+    <string name="onboarding_get_started">Loslegen</string>
+    <string name="onboarding_next">Weiter</string>
+    <string name="onboarding_skip">Überspringen</string>
+
+    <!-- Processing History -->
+    <string name="category_privacy_history">Privatsphäre &amp; Verlauf</string>
+    <string name="setting_enable_history_title">Verarbeitungsverlauf aktivieren</string>
+    <string name="setting_enable_history_sub">Führt ein Protokoll der zuletzt verarbeiteten Dateien. Diese Daten werden lokal gespeichert und verlassen niemals dein Gerät.</string>
+    <string name="setting_history_retention_title">Aufbewahrung des Verlaufs</string>
+    <string name="setting_history_shortcut_title">Verlaufsverknüpfung anzeigen</string>
+    <string name="setting_history_shortcut_sub">Fügt ein Schnellzugriffssymbol für den Verlauf auf dem Startbildschirm hinzu</string>
+    <string name="setting_clear_history_now">Verlauf jetzt löschen</string>
+    <string name="setting_history_cleared">Der Verarbeitungsverlauf wurde gelöscht.</string>
+    <string name="setting_history_title">Verarbeitungsverlauf</string>
+
+    <string name="retention_policy_100_items">Die 100 neuesten Elemente behalten</string>
+    <string name="retention_policy_clear_on_exit">Verlauf beim Beenden der App löschen</string>
+    <string name="retention_policy_clear_after_24h">Verlauf nach 24 Stunden löschen</string>
+
+    <string name="history_title">Verarbeitungsverlauf</string>
+    <string name="history_empty">Bisher wurden keine Dateien protokolliert.</string>
+    <string name="history_clear_confirm_title">Verlauf löschen?</string>
+    <string name="history_clear_confirm_message">Dies wird das Protokoll aller verarbeiteten Dateien dauerhaft löschen. Die eigentlichen Dateien werden nicht gelöscht.</string>
 </resources>

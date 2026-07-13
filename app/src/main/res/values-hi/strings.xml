@@ -66,9 +66,9 @@
     <!-- HelpScreen -->
     <string name="help_title">Help &amp; Tutorials</string>
     <string name="help_item_video_title">Video Processing</string>
-    <string name="help_item_video_body">Supported formats: MP4, MOV.\n\nFull re-muxing is supported for these containers. This process strips GPS, dates, and device atoms to protect your privacy.</string>
-    <string name="help_item_image_title">Image Processing</string>
-    <string name="help_item_image_body">Supported formats: JPG, PNG, WebP, HEIF.\n\nMetaJammer strips EXIF metadata from these images. In \"Poison\" mode, it replaces sensitive tags like GPS coordinates with realistic random data.</string>
+    <string name="help_item_video_body">समर्थित प्रारूप: MP4, MOV, M4A, OGG।\n\nइन कंटेनरों के लिए पूर्ण रिमक्सिंग (re-muxing) समर्थित है। यह प्रक्रिया आपकी गोपनीयता की रक्षा के लिए GPS, तिथियां और डिवाइस विवरण हटा देती है।</string>
+    <string name="help_item_image_title">इमेज और वेक्टर प्रोसेसिंग</string>
+    <string name="help_item_image_body">समर्थित प्रारूप: JPG, PNG, WebP, HEIF, SVG।\n\nMetaJammer बिटमैप छवियों से EXIF मेटाडेटा हटाता है और SVG से XML/RDF मेटाडेटा साफ़ करता है। \"पॉइज़न\" मोड में, यह संवेदनशील टैग को वास्तविक यादृच्छिक डेटा से बदल देता है।</string>
     <string name="help_item_other_title">PDF और दस्तावेज़ प्रसंस्करण</string>
     <string name="help_item_other_body">समर्थित प्रारूप: PDF।\n\nMetaJammer अब पूरी तरह से PDF दस्तावेजों का समर्थन करता है। आप शीर्षक, लेखक, विषय, कीवर्ड, निर्माता और उत्पादक जैसे मेटाडेटा को पढ़ सकते हैं, हटा सकते हैं और \"पॉइजन\" कर सकते हैं। यह साझा करने से पहले आपके दस्तावेज़ों को साफ सुनिश्चित करने के लिए छिपे हुए वॉटरमार्क और एनोटेशन को भी हटा देता है।</string>
     <string name="help_report_issue_title">Report an Issue</string>
@@ -148,6 +148,8 @@
     <string name="setting_language_title">भाषा</string>
     <string name="setting_oled_mode_title">OLED मोड</string>
     <string name="setting_oled_mode_sub">समर्थित डार्क थीम के लिए गहरे काले टोन का उपयोग करें</string>
+    <string name="setting_dynamic_color_title">Material You (गतिशील रंग)</string>
+    <string name="setting_dynamic_color_sub">अपने वॉलपेपर के गतिशील रंगों को ऐप इंटरफ़ेस पर लागू करें</string>
 
     <!-- Enums -->
     <string name="night_mode_always">हमेशा</string>
@@ -197,4 +199,37 @@
 
     <string name="notification_permission_title">सूचित रहें</string>
     <string name="notification_permission_message">MetaJammer बैकग्राउंड में प्रोसेस होने के दौरान बड़े फ़ाइल बैचों की प्रगति के बारे में आपको अपडेट रखने के लिए सूचनाएं दिखा सकता है। \n\nयह विशेष रूप से तब उपयोगी होता है जब आप MetaJammer के अपना काम पूरा करने के दौरान किसी अन्य ऐप पर स्विच करना चाहते हैं।</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">MetaJammer में आपका स्वागत है</string>
+    <string name="onboarding_welcome_desc">मेटाडेटा गोपनीयता के लिए आपका व्यक्तिगत टूलकिट। दुनिया के साथ साझा करने से पहले अपनी फ़ाइलें साफ़ करें।</string>
+    <string name="onboarding_poison_vs_remove_title">पॉइज़न बनाम हटाना</string>
+    <string name="onboarding_poison_vs_remove_desc"><b>हटाना:</b> सभी मेटाडेटा हटा देता है। सरल और साफ।\n\n<b>पॉइज़न:</b> संवेदनशील डेटा को नकली, वास्तविक मूल्यों से बदल देता है। यह <i>विश्वसनीय इनकार</i> प्रदान करता है और स्वचालित ट्रैकर्स को भ्रमित करता है।</string>
+    <string name="onboarding_permissions_title">तैयार हो रहे हैं</string>
+    <string name="onboarding_permissions_desc">MetaJammer को बेहतर ढंग से काम करने के लिए कुछ अनुमतियों की आवश्यकता है। आप बैकग्राउंड कार्यों के लिए नोटिफिकेशन और मैप पिकर के लिए इंटरनेट सक्षम करना चुन सकते हैं।</string>
+    <string name="onboarding_finish_title">सब तैयार है!</string>
+    <string name="onboarding_finish_desc">आप अपनी गोपनीयता की रक्षा शुरू करने के लिए तैयार हैं। शुरू करने के लिए कुछ फ़ाइलें चुनें या अन्य ऐप्स से साझा करें।</string>
+    <string name="onboarding_get_started">शुरू करें</string>
+    <string name="onboarding_next">अगला</string>
+    <string name="onboarding_skip">छोड़ें</string>
+
+    <!-- Processing History -->
+    <string name="category_privacy_history">गोपनीयता और इतिहास</string>
+    <string name="setting_enable_history_title">प्रसंस्करण इतिहास सक्षम करें</string>
+    <string name="setting_enable_history_sub">हाल ही में संसाधित फ़ाइलों का लॉग रखें। यह डेटा स्थानीय रूप से संग्रहीत किया जाता है और आपके डिवाइस से कभी बाहर नहीं जाता है।</string>
+    <string name="setting_history_retention_title">इतिहास प्रतिधारण</string>
+    <string name="setting_history_shortcut_title">इतिहास शॉर्टकट दिखाएं</string>
+    <string name="setting_history_shortcut_sub">होम स्क्रीन पर इतिहास के लिए त्वरित-पहुंच आइकन जोड़ें</string>
+    <string name="setting_clear_history_now">इतिहास अभी साफ़ करें</string>
+    <string name="setting_history_cleared">प्रसंस्करण इतिहास साफ़ कर दिया गया है।</string>
+    <string name="setting_history_title">प्रसंस्करण इतिहास</string>
+
+    <string name="retention_policy_100_items">100 सबसे हालिया आइटम रखें</string>
+    <string name="retention_policy_clear_on_exit">ऐप से बाहर निकलने पर इतिहास साफ़ करें</string>
+    <string name="retention_policy_clear_after_24h">24 घंटे के बाद इतिहास साफ़ करें</string>
+
+    <string name="history_title">प्रसंस्करण इतिहास</string>
+    <string name="history_empty">अभी तक कोई फ़ाइल लॉग नहीं की गई है।</string>
+    <string name="history_clear_confirm_title">इतिहास साफ़ करें?</string>
+    <string name="history_clear_confirm_message">यह सभी संसाधित फ़ाइलों के लॉग को स्थायी रूप से हटा देगा। वास्तविक फ़ाइलें नहीं हटाई जाएंगी।</string>
 </resources>

@@ -66,9 +66,9 @@
     <!-- HelpScreen -->
     <string name="help_title">Hulp &amp; Tutorials</string>
     <string name="help_item_video_title">Videoverwerking</string>
-    <string name="help_item_video_body">Ondersteunde formaten: MP4, MOV.\n\nVolledige remuxing wordt ondersteund voor deze containers. Dit proces verwijdert GPS, datums en apparaat-atomen om uw privacy te beschermen.</string>
-    <string name="help_item_image_title">Beeldverwerking</string>
-    <string name="help_item_image_body">Ondersteunde formaten: JPG, PNG, WebP, HEIF.\n\nMetaJammer verwijdert EXIF-metadata van deze afbeeldingen. In de modus \"Poison\" worden gevoelige tags zoals GPS-coördinaten vervangen door realistische willekeurige gegevens.</string>
+    <string name="help_item_video_body">Ondersteunde formaten: MP4, MOV, M4A, OGG.\n\nVolledige remuxing wordt ondersteund voor deze containers. Dit proces verwijdert GPS, datums en apparaat-atomen om uw privacy te beschermen.</string>
+    <string name="help_item_image_title">Beeld- &amp; vectorverwerking</string>
+    <string name="help_item_image_body">Ondersteunde formaten: JPG, PNG, WebP, HEIF, SVG.\n\nMetaJammer verwijdert EXIF-metadata van bitmapafbeeldingen en schoont XML/RDF-metadata van SVG\'s op. In de modus \"Poison\" worden gevoelige tags vervangen door realistische willekeurige gegevens.</string>
     <string name="help_item_other_title">PDF- &amp; documentverwerking</string>
     <string name="help_item_other_body">Ondersteunde formaten: PDF.\n\nMetaJammer ondersteunt nu volledig PDF-documenten. U kunt metadata zoals Titel, Auteur, Onderwerp, Trefwoorden, Maker en Producent lezen, verwijderen en \"vergiftigen\". Het verwijdert ook verborgen watermerken en annotaties om ervoor te zorgen dat uw documenten schoon zijn voordat u ze deelt.</string>
     <string name="help_report_issue_title">Meld een probleem</string>
@@ -148,6 +148,8 @@
     <string name="setting_language_title">Taal</string>
     <string name="setting_oled_mode_title">OLED-modus</string>
     <string name="setting_oled_mode_sub">Gebruik diepere zwarttinten voor ondersteunde donkere thema\'s</string>
+    <string name="setting_dynamic_color_title">Material You (Dynamische kleuren)</string>
+    <string name="setting_dynamic_color_sub">Pas dynamische kleuren van je achtergrond toe op de app-interface</string>
 
     <!-- Enums -->
     <string name="night_mode_always">Altijd</string>
@@ -197,4 +199,37 @@
 
     <string name="notification_permission_title">Blijf op de hoogte</string>
     <string name="notification_permission_message">MetaJammer kan meldingen tonen om je op de hoogte te houden van de voortgang van grote batches bestanden terwijl ze op de achtergrond worden verwerkt. \n\nDit is vooral handig als je naar een andere app wilt overschakelen terwijl MetaJammer klaar is met zijn werk.</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">Welkom bij MetaJammer</string>
+    <string name="onboarding_welcome_desc">Je persoonlijke toolkit voor metadata-privacy. Maak je bestanden schoon voordat je ze met de wereld deelt.</string>
+    <string name="onboarding_poison_vs_remove_title">Vergiftigen vs Verwijderen</string>
+    <string name="onboarding_poison_vs_remove_desc"><b>Verwijderen:</b> Verwijdert alle metadata. Simpel en schoon.\n\n<b>Vergiftigen:</b> Vervangt gevoelige gegevens door valse, realistische waarden. Dit biedt <i>aannemelijke ontkenning</i> en misleidt automatische trackers.</string>
+    <string name="onboarding_permissions_title">Voorbereiding</string>
+    <string name="onboarding_permissions_desc">MetaJammer heeft een paar machtigingen nodig om optimaal te werken. Je kunt ervoor kiezen om meldingen voor achtergrondtaken en internet voor de kaartkiezer in te schakelen.</string>
+    <string name="onboarding_finish_title">Alles klaar!</string>
+    <string name="onboarding_finish_desc">Je bent klaar om je privacy te beschermen. Kies enkele bestanden of deel ze vanuit andere apps om te beginnen.</string>
+    <string name="onboarding_get_started">Aan de slag</string>
+    <string name="onboarding_next">Volgende</string>
+    <string name="onboarding_skip">Overslaan</string>
+
+    <!-- Processing History -->
+    <string name="category_privacy_history">Privacy &amp; geschiedenis</string>
+    <string name="setting_enable_history_title">Verwerkingsgeschiedenis inschakelen</string>
+    <string name="setting_enable_history_sub">Houd een logboek bij van recent verwerkte bestanden. Deze gegevens worden lokaal opgeslagen en verlaten nooit uw apparaat.</string>
+    <string name="setting_history_retention_title">Geschiedenisretentie</string>
+    <string name="setting_history_shortcut_title">Snelkoppeling geschiedenis tonen</string>
+    <string name="setting_history_shortcut_sub">Voeg een pictogram voor snelle toegang tot de geschiedenis toe aan het startscherm</string>
+    <string name="setting_clear_history_now">Geschiedenis nu wissen</string>
+    <string name="setting_history_cleared">Verwerkingsgeschiedenis is gewist.</string>
+    <string name="setting_history_title">Verwerkingsgeschiedenis</string>
+
+    <string name="retention_policy_100_items">100 meest recente items bewaren</string>
+    <string name="retention_policy_clear_on_exit">Geschiedenis wissen bij afsluiten app</string>
+    <string name="retention_policy_clear_after_24h">Geschiedenis wissen na 24 uur</string>
+
+    <string name="history_title">Verwerkingsgeschiedenis</string>
+    <string name="history_empty">Er zijn nog geen bestanden gelogd.</string>
+    <string name="history_clear_confirm_title">Geschiedenis wissen?</string>
+    <string name="history_clear_confirm_message">Dit zal het logboek van alle verwerkte bestanden permanent verwijderen. De werkelijke bestanden worden niet verwijderd.</string>
 </resources>

@@ -2,21 +2,16 @@ package com.heronikostudios.metajammer.data
 
 import android.content.Context
 import android.net.Uri
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
-import com.heronikostudios.metajammer.domain.model.AppLanguage
-import com.heronikostudios.metajammer.domain.model.AppSettings
-import com.heronikostudios.metajammer.domain.model.FolderStructure
-import com.heronikostudios.metajammer.domain.model.NightModeSetting
-import com.heronikostudios.metajammer.domain.model.ProcessingMode
-import com.heronikostudios.metajammer.domain.model.SharedInputOutputAction
-import com.heronikostudios.metajammer.domain.model.ThumbnailHandling
+import com.heronikostudios.metajammer.domain.model.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
-private val Context.dataStore by preferencesDataStore(name = "meta_jammer_settings")
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 class SettingsRepository(private val context: Context) {
 
@@ -29,7 +24,7 @@ class SettingsRepository(private val context: Context) {
         private val MUSIC_SAVING_PATH = stringPreferencesKey("music_saving_path")
         private val MOVIES_SAVING_PATH = stringPreferencesKey("movies_saving_path")
         private val DOCUMENTS_SAVING_PATH = stringPreferencesKey("documents_saving_path")
-        private val DEFAULT_SAVING_PATH = stringPreferencesKey("default_saving_path") // Deprecated, kept for migration
+        private val DEFAULT_SAVING_PATH = stringPreferencesKey("default_saving_path")
         private val KEEP_IMAGE_ORIENTATION = booleanPreferencesKey("keep_image_orientation")
         private val SHARE_RESULT_AS_DEFAULT = booleanPreferencesKey("share_result_as_default")
         private val DEFAULT_PREFIX = stringPreferencesKey("default_prefix")
@@ -44,6 +39,13 @@ class SettingsRepository(private val context: Context) {
         private val ALLOW_INTERNET_FOR_MAP = booleanPreferencesKey("allow_internet_for_map")
         private val USE_NEARBY_SCRAMBLE = booleanPreferencesKey("use_nearby_scramble")
         private val LANGUAGE = stringPreferencesKey("language")
+        private val USE_DYNAMIC_COLOR = booleanPreferencesKey("use_dynamic_color")
+        private val IS_ONBOARDING_COMPLETED = booleanPreferencesKey("is_onboarding_completed")
+        private val METADATA_TEMPLATES = stringSetPreferencesKey("metadata_templates")
+        private val PROCESSED_FILES_LOG = stringSetPreferencesKey("processed_files_log")
+        private val ENABLE_PROCESSING_HISTORY = booleanPreferencesKey("enable_processing_history")
+        private val HISTORY_RETENTION_POLICY = stringPreferencesKey("history_retention_policy")
+        private val SHOW_HISTORY_SHORTCUT = booleanPreferencesKey("show_history_shortcut")
     }
 
     suspend fun setUseRandomFileNames(enabled: Boolean) {
@@ -60,31 +62,36 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setUnifiedSavingPath(uri: Uri?) {
         context.dataStore.edit { preferences ->
-            preferences[UNIFIED_SAVING_PATH] = uri?.toString() ?: "Download/MetaJammer"
+            if (uri != null) preferences[UNIFIED_SAVING_PATH] = uri.toString()
+            else preferences.remove(UNIFIED_SAVING_PATH)
         }
     }
 
     suspend fun setPicturesSavingPath(uri: Uri?) {
         context.dataStore.edit { preferences ->
-            preferences[PICTURES_SAVING_PATH] = uri?.toString() ?: "Pictures/MetaJammer"
+            if (uri != null) preferences[PICTURES_SAVING_PATH] = uri.toString()
+            else preferences.remove(PICTURES_SAVING_PATH)
         }
     }
 
     suspend fun setMusicSavingPath(uri: Uri?) {
         context.dataStore.edit { preferences ->
-            preferences[MUSIC_SAVING_PATH] = uri?.toString() ?: "Music/MetaJammer"
+            if (uri != null) preferences[MUSIC_SAVING_PATH] = uri.toString()
+            else preferences.remove(MUSIC_SAVING_PATH)
         }
     }
 
     suspend fun setMoviesSavingPath(uri: Uri?) {
         context.dataStore.edit { preferences ->
-            preferences[MOVIES_SAVING_PATH] = uri?.toString() ?: "Movies/MetaJammer"
+            if (uri != null) preferences[MOVIES_SAVING_PATH] = uri.toString()
+            else preferences.remove(MOVIES_SAVING_PATH)
         }
     }
 
     suspend fun setDocumentsSavingPath(uri: Uri?) {
         context.dataStore.edit { preferences ->
-            preferences[DOCUMENTS_SAVING_PATH] = uri?.toString() ?: "Documents/MetaJammer"
+            if (uri != null) preferences[DOCUMENTS_SAVING_PATH] = uri.toString()
+            else preferences.remove(DOCUMENTS_SAVING_PATH)
         }
     }
 
@@ -96,12 +103,12 @@ class SettingsRepository(private val context: Context) {
         context.dataStore.edit { it[SHARE_RESULT_AS_DEFAULT] = enabled }
     }
 
-    suspend fun setDefaultPrefix(value: String) {
-        context.dataStore.edit { it[DEFAULT_PREFIX] = value }
+    suspend fun setDefaultPrefix(prefix: String) {
+        context.dataStore.edit { it[DEFAULT_PREFIX] = prefix }
     }
 
-    suspend fun setDefaultSuffix(value: String) {
-        context.dataStore.edit { it[DEFAULT_SUFFIX] = value }
+    suspend fun setDefaultSuffix(suffix: String) {
+        context.dataStore.edit { it[DEFAULT_SUFFIX] = suffix }
     }
 
     suspend fun setNightMode(mode: NightModeSetting) {
@@ -126,10 +133,10 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setSharedFilesCustomPath(uri: Uri?) {
         context.dataStore.edit { preferences ->
-            if (uri == null) {
-                preferences.remove(SHARED_FILES_CUSTOM_PATH)
-            } else {
+            if (uri != null) {
                 preferences[SHARED_FILES_CUSTOM_PATH] = uri.toString()
+            } else {
+                preferences.remove(SHARED_FILES_CUSTOM_PATH)
             }
         }
     }
@@ -148,6 +155,69 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setLanguage(language: AppLanguage) {
         context.dataStore.edit { it[LANGUAGE] = language.name }
+    }
+
+    suspend fun setUseDynamicColor(enabled: Boolean) {
+        context.dataStore.edit { it[USE_DYNAMIC_COLOR] = enabled }
+    }
+
+    suspend fun setIsOnboardingCompleted(completed: Boolean) {
+        context.dataStore.edit { it[IS_ONBOARDING_COMPLETED] = completed }
+    }
+
+    suspend fun setEnableProcessingHistory(enabled: Boolean) {
+        context.dataStore.edit { it[ENABLE_PROCESSING_HISTORY] = enabled }
+    }
+
+    suspend fun setHistoryRetentionPolicy(policy: HistoryRetentionPolicy) {
+        context.dataStore.edit { it[HISTORY_RETENTION_POLICY] = policy.name }
+    }
+
+    suspend fun setShowHistoryShortcut(show: Boolean) {
+        context.dataStore.edit { it[SHOW_HISTORY_SHORTCUT] = show }
+    }
+
+    suspend fun logProcessedFile(log: ProcessedFileLog) {
+        context.dataStore.edit { preferences ->
+            if (preferences[ENABLE_PROCESSING_HISTORY] != true) return@edit
+            
+            val current = preferences[PROCESSED_FILES_LOG] ?: emptySet()
+            val updated = current.toMutableSet()
+            updated.add(Json.encodeToString(log))
+            
+            // Limit log size to 100 most recent items if needed
+            if (updated.size > 100) {
+                 val sorted = updated.map { Json.decodeFromString<ProcessedFileLog>(it) }
+                     .sortedByDescending { it.timestamp }
+                 val limited = sorted.take(100).map { Json.encodeToString(it) }
+                 preferences[PROCESSED_FILES_LOG] = limited.toSet()
+            } else {
+                 preferences[PROCESSED_FILES_LOG] = updated
+            }
+        }
+    }
+
+    suspend fun clearProcessedFilesLog() {
+        context.dataStore.edit { it.remove(PROCESSED_FILES_LOG) }
+    }
+
+    suspend fun performMaintenance() {
+        context.dataStore.edit { preferences ->
+            val policy = preferences[HISTORY_RETENTION_POLICY]?.let {
+                runCatching { HistoryRetentionPolicy.valueOf(it) }.getOrNull()
+            } ?: HistoryRetentionPolicy.KEEP_100_ITEMS
+
+            if (policy == HistoryRetentionPolicy.CLEAR_ON_EXIT) {
+                preferences.remove(PROCESSED_FILES_LOG)
+            } else if (policy == HistoryRetentionPolicy.CLEAR_AFTER_24_HOURS) {
+                val current = preferences[PROCESSED_FILES_LOG] ?: emptySet()
+                val cutoff = System.currentTimeMillis() - (24 * 60 * 60 * 1000)
+                val filtered = current.map { Json.decodeFromString<ProcessedFileLog>(it) }
+                    .filter { it.timestamp > cutoff }
+                    .map { Json.encodeToString(it) }
+                preferences[PROCESSED_FILES_LOG] = filtered.toSet()
+            }
+        }
     }
 
     val appSettingsFlow: Flow<AppSettings> = context.dataStore.data.map { preferences ->
@@ -173,7 +243,17 @@ class SettingsRepository(private val context: Context) {
             thumbnailHandling = preferences[THUMBNAIL_HANDLING]?.let { runCatching { ThumbnailHandling.valueOf(it) }.getOrNull() } ?: ThumbnailHandling.REMOVE,
             allowInternetForMap = preferences[ALLOW_INTERNET_FOR_MAP] ?: false,
             useNearbyScramble = preferences[USE_NEARBY_SCRAMBLE] ?: false,
-            language = preferences[LANGUAGE]?.let { runCatching { AppLanguage.valueOf(it) }.getOrNull() } ?: AppLanguage.SYSTEM
+            language = preferences[LANGUAGE]?.let { runCatching { AppLanguage.valueOf(it) }.getOrNull() } ?: AppLanguage.SYSTEM,
+            useDynamicColor = preferences[USE_DYNAMIC_COLOR] ?: true,
+            isOnboardingCompleted = preferences[IS_ONBOARDING_COMPLETED] ?: false,
+            enableProcessingHistory = preferences[ENABLE_PROCESSING_HISTORY] ?: false,
+            historyRetentionPolicy = preferences[HISTORY_RETENTION_POLICY]?.let { runCatching { HistoryRetentionPolicy.valueOf(it) }.getOrNull() } ?: HistoryRetentionPolicy.KEEP_100_ITEMS,
+            showHistoryShortcut = preferences[SHOW_HISTORY_SHORTCUT] ?: false
         )
+    }
+
+    val processedFilesLog: Flow<List<ProcessedFileLog>> = context.dataStore.data.map { preferences ->
+        preferences[PROCESSED_FILES_LOG]?.map { Json.decodeFromString<ProcessedFileLog>(it) }
+            ?.sortedByDescending { it.timestamp } ?: emptyList()
     }
 }

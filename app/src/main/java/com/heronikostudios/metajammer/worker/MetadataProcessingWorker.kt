@@ -12,8 +12,10 @@ import androidx.work.workDataOf
 import com.heronikostudios.metajammer.R
 import com.heronikostudios.metajammer.data.FileRepository
 import com.heronikostudios.metajammer.data.MetadataRepository
+import com.heronikostudios.metajammer.data.SettingsRepository
 import com.heronikostudios.metajammer.domain.model.FolderStructure
 import com.heronikostudios.metajammer.domain.model.MetadataReplacementPlan
+import com.heronikostudios.metajammer.domain.model.ProcessedFileLog
 import com.heronikostudios.metajammer.domain.model.ProcessingMode
 import com.heronikostudios.metajammer.domain.model.ThumbnailHandling
 import com.heronikostudios.metajammer.util.SanitizationUtils
@@ -34,6 +36,7 @@ class MetadataProcessingWorker(
 ) : CoroutineWorker(context, parameters) {
 
     private val fileRepository = FileRepository(applicationContext)
+    private val settingsRepository = SettingsRepository(applicationContext)
     private val metadataRepository = MetadataRepository(fileRepository)
 
     companion object {
@@ -162,9 +165,20 @@ class MetadataProcessingWorker(
                             subPath = subPath
                         )
                         
-                        runCatching { processedFile.delete() }
+                        savedUri?.let { uri ->
+                            savedUris.add(uri.toString())
+                            settingsRepository.logProcessedFile(
+                                ProcessedFileLog(
+                                    uri = uri.toString(),
+                                    displayName = displayName,
+                                    mimeType = selectedFile.mimeType,
+                                    timestamp = System.currentTimeMillis(),
+                                    sizeBytes = processedFile.length()
+                                )
+                            )
+                        }
                         
-                        savedUri?.let { savedUris.add(it.toString()) }
+                        runCatching { processedFile.delete() }
                         val currentCount = processedCount.incrementAndGet()
                         
                         setProgress(workDataOf("progress" to currentCount * 100 / inputUriStrings.size))

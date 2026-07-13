@@ -66,9 +66,9 @@
     <!-- HelpScreen -->
     <string name="help_title">Справка и руководства</string>
     <string name="help_item_video_title">Обработка видео</string>
-    <string name="help_item_video_body">Поддерживаемые форматы: MP4, MOV.\n\nПолный ремуксинг поддерживается для этих контейнеров. Этот процесс удаляет GPS, даты и атомы устройства для защиты вашей конфиденциальности.</string>
-    <string name="help_item_image_title">Обработка изображений</string>
-    <string name="help_item_image_body">Поддерживаемые форматы: JPG, PNG, WebP, HEIF.\n\nMetaJammer удаляет метаданные EXIF из этих изображений. В режиме «Отравление» он заменяет конфиденциальные теги, такие как координаты GPS, реалистичными случайными данными.</string>
+    <string name="help_item_video_body">Поддерживаемые форматы: MP4, MOV, M4A, OGG.\n\nПолный ремуксинг поддерживается для этих контейнеров. Этот процесс удаляет GPS, даты и атомы устройства для защиты вашей конфиденциальности.</string>
+    <string name="help_item_image_title">Обработка изображений и векторов</string>
+    <string name="help_item_image_body">Поддерживаемые форматы: JPG, PNG, WebP, HEIF, SVG.\n\nMetaJammer удаляет метаданные EXIF из растровых изображений и очищает метаданные XML/RDF из SVG. В режиме «Отравление» он заменяет конфиденциальные теги реалистичными случайными данными.</string>
     <string name="help_item_other_title">Обработка PDF и документов</string>
     <string name="help_item_other_body">Поддерживаемые форматы: PDF.\n\nMetaJammer теперь полностью поддерживает PDF-документы. Вы можете читать, удалять и «отравлять» (подменять) метаданные, такие как заголовок, автор, тема, ключевые слова, создатель и производитель. Программа также удаляет скрытые водяные знаки и аннотации, чтобы ваши документы были чистыми перед отправкой.</string>
     <string name="help_report_issue_title">Сообщить о проблеме</string>
@@ -148,6 +148,8 @@
     <string name="setting_language_title">Язык</string>
     <string name="setting_oled_mode_title">Режим OLED</string>
     <string name="setting_oled_mode_sub">Использовать более темные черные тона для поддерживаемых темных тем</string>
+    <string name="setting_dynamic_color_title">Material You (Динамические цвета)</string>
+    <string name="setting_dynamic_color_sub">Применять динамические цвета ваших обоев к интерфейсу приложения</string>
 
     <!-- Enums -->
     <string name="night_mode_always">Всегда</string>
@@ -197,4 +199,37 @@
 
     <string name="notification_permission_title">Будьте в курсе</string>
     <string name="notification_permission_message">MetaJammer может показывать уведомления, чтобы держать вас в курсе прогресса обработки больших партий файлов в фоновом режиме. \n\nЭто особенно полезно, если вы хотите переключиться на другое приложение, пока MetaJammer заканчивает свою работу.</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">Добро пожаловать в MetaJammer</string>
+    <string name="onboarding_welcome_desc">Ваш персональный инструментарий для конфиденциальности метаданных. Очистите свои файлы перед тем, как поделиться ими с миром.</string>
+    <string name="onboarding_poison_vs_remove_title">Отравление против Удаления</string>
+    <string name="onboarding_poison_vs_remove_desc"><b>Удаление:</b> Удаляет все метаданные. Просто и чисто.\n\n<b>Отравление:</b> Заменяет конфиденциальные данные ложными, реалистичными значениями. Это обеспечивает <i>правдоподобное отрицание</i> и запутывает автоматизированные трекеры.</string>
+    <string name="onboarding_permissions_title">Подготовка</string>
+    <string name="onboarding_permissions_desc">MetaJammer требуется несколько разрешений для наилучшей работы. Вы можете включить уведомления для фоновых задач и доступ к интернету для выбора местоположения на карте.</string>
+    <string name="onboarding_finish_title">Все готово!</string>
+    <string name="onboarding_finish_desc">Вы готовы начать защищать свою конфиденциальность. Выберите файлы или поделитесь ими из других приложений, чтобы начать.</string>
+    <string name="onboarding_get_started">Начать</string>
+    <string name="onboarding_next">Далее</string>
+    <string name="onboarding_skip">Пропустить</string>
+
+    <!-- Processing History -->
+    <string name="category_privacy_history">Конфиденциальность и история</string>
+    <string name="setting_enable_history_title">Включить историю обработки</string>
+    <string name="setting_enable_history_sub">Вести журнал недавно обработанных файлов. Эти данные хранятся локально и никогда не покидают ваше устройство.</string>
+    <string name="setting_history_retention_title">Хранение истории</string>
+    <string name="setting_history_shortcut_title">Показать ярлык истории</string>
+    <string name="setting_history_shortcut_sub">Добавить значок быстрого доступа к истории на главный экран</string>
+    <string name="setting_clear_history_now">Очистить историю сейчас</string>
+    <string name="setting_history_cleared">История обработки была очищена.</string>
+    <string name="setting_history_title">История обработки</string>
+
+    <string name="retention_policy_100_items">Сохранять 100 последних элементов</string>
+    <string name="retention_policy_clear_on_exit">Очищать историю при выходе из приложения</string>
+    <string name="retention_policy_clear_after_24h">Очищать историю через 24 часа</string>
+
+    <string name="history_title">История обработки</string>
+    <string name="history_empty">Файлы еще не записаны в журнал.</string>
+    <string name="history_clear_confirm_title">Очистить историю?</string>
+    <string name="history_clear_confirm_message">Это безвозвратно удалит журнал всех обработанных файлов. Сами файлы удалены не будут.</string>
 </resources>

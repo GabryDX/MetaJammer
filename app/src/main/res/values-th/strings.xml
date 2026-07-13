@@ -66,9 +66,9 @@
     <!-- HelpScreen -->
     <string name="help_title">Help &amp; Tutorials</string>
     <string name="help_item_video_title">Video Processing</string>
-    <string name="help_item_video_body">Supported formats: MP4, MOV.\n\nFull re-muxing is supported for these containers. This process strips GPS, dates, and device atoms to protect your privacy.</string>
-    <string name="help_item_image_title">Image Processing</string>
-    <string name="help_item_image_body">Supported formats: JPG, PNG, WebP, HEIF.\n\nMetaJammer strips EXIF metadata from these images. In \"Poison\" mode, it replaces sensitive tags like GPS coordinates with realistic random data.</string>
+    <string name="help_item_video_body">รูปแบบที่รองรับ: MP4, MOV, M4A, OGG\n\nรองรับการ remux อย่างเต็มรูปแบบสำหรับคอนเทนเนอร์เหล่านี้ กระบวนการนี้จะลบ GPS วันที่ และข้อมูลอุปกรณ์เพื่อปกป้องความเป็นส่วนตัวของคุณ</string>
+    <string name="help_item_image_title">การประมวลผลรูปภาพและเวกเตอร์</string>
+    <string name="help_item_image_body">รูปแบบที่รองรับ: JPG, PNG, WebP, HEIF, SVG\n\nMetaJammer ลบข้อมูลเมตา EXIF จากรูปภาพบิตแมป และล้างข้อมูลเมตา XML/RDF จาก SVG ในโหมด \"วางยา\" มันจะแทนที่แท็กที่ละเอียดอ่อนด้วยข้อมูลสุ่มที่สมจริง</string>
     <string name="help_item_other_title">การประมวลผล PDF และเอกสาร</string>
     <string name="help_item_other_body">รูปแบบที่รองรับ: PDF\n\nขณะนี้ MetaJammer รองรับเอกสาร PDF อย่างเต็มรูปแบบแล้ว คุณสามารถอ่าน ลบ และ \"วางยา\" ข้อมูลเมตา เช่น ชื่อเรื่อง ผู้เขียน หัวข้อ คำสำคัญ ผู้สร้าง และผู้ผลิต นอกจากนี้ยังลบลายน้ำและคำอธิบายประกอบที่ซ่อนอยู่ เพื่อให้แน่ใจว่าเอกสารของคุณสะอาดก่อนที่จะแชร์</string>
     <string name="help_report_issue_title">Report an Issue</string>
@@ -148,6 +148,8 @@
     <string name="setting_language_title">ภาษา</string>
     <string name="setting_oled_mode_title">โหมด OLED</string>
     <string name="setting_oled_mode_sub">ใช้โทนสีดำที่เข้มขึ้นสำหรับธีมมืดที่รองรับ</string>
+    <string name="setting_dynamic_color_title">Material You (สีแบบไดนามิก)</string>
+    <string name="setting_dynamic_color_sub">ใช้สีแบบไดนามิกจากวอลเปเปอร์ของคุณกับอินเทอร์เฟซของแอป</string>
 
     <!-- Enums -->
     <string name="night_mode_always">ตลอดเวลา</string>
@@ -197,4 +199,37 @@
 
     <string name="notification_permission_title">รับทราบข้อมูลอยู่เสมอ</string>
     <string name="notification_permission_message">MetaJammer สามารถแสดงการแจ้งเตือนเพื่อให้คุณทราบถึงความคืบหน้าของการประมวลผลไฟล์จำนวนมากในเบื้องหลัง \n\nซึ่งมีประโยชน์อย่างยิ่งหากคุณต้องการสลับไปใช้แอปอื่นในขณะที่ MetaJammer ทำงานเสร็จสิ้น</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">ยินดีต้อนรับสู่ MetaJammer</string>
+    <string name="onboarding_welcome_desc">ชุดเครื่องมือส่วนตัวของคุณเพื่อความเป็นส่วนตัวของข้อมูลเมตา ล้างไฟล์ของคุณก่อนแชร์กับคนทั้งโลก</string>
+    <string name="onboarding_poison_vs_remove_title">วางยา vs ลบ</string>
+    <string name="onboarding_poison_vs_remove_desc"><b>ลบ:</b> ลบข้อมูลเมตาทั้งหมด เรียบง่ายและสะอาดตา\n\n<b>วางยา:</b> แทนที่ข้อมูลที่ละเอียดอ่อนด้วยค่าจำลองที่สมจริง สิ่งนี้ให้ <i>การปฏิเสธที่สมเหตุสมผล</i> และทำให้ผู้ติดตามอัตโนมัติสับสน</string>
+    <string name="onboarding_permissions_title">เตรียมความพร้อม</string>
+    <string name="onboarding_permissions_desc">MetaJammer ต้องการสิทธิ์บางอย่างเพื่อให้ทำงานได้ดีที่สุด คุณสามารถเลือกเปิดการแจ้งเตือนสำหรับงานเบื้องหลังและอินเทอร์เน็ตสำหรับตัวเลือกแผนที่</string>
+    <string name="onboarding_finish_title">เรียบร้อยแล้ว!</string>
+    <string name="onboarding_finish_desc">คุณพร้อมที่จะเริ่มปกป้องความเป็นส่วนตัวของคุณแล้ว เลือกไฟล์หรือแชร์จากแอปอื่นเพื่อเริ่มต้น</string>
+    <string name="onboarding_get_started">เริ่มต้นใช้งาน</string>
+    <string name="onboarding_next">ถัดไป</string>
+    <string name="onboarding_skip">ข้าม</string>
+
+    <!-- Processing History -->
+    <string name="category_privacy_history">ความเป็นส่วนตัวและประวัติ</string>
+    <string name="setting_enable_history_title">เปิดใช้งานประวัติการประมวลผล</string>
+    <string name="setting_enable_history_sub">เก็บประวัติไฟล์ที่ประมวลผลล่าสุด ข้อมูลนี้จะถูกเก็บไว้ในเครื่องและไม่ถูกส่งออกนอกอุปกรณ์ของคุณ</string>
+    <string name="setting_history_retention_title">การเก็บรักษาประวัติ</string>
+    <string name="setting_history_shortcut_title">แสดงทางลัดประวัติ</string>
+    <string name="setting_history_shortcut_sub">เพิ่มไอคอนเข้าถึงประวัติอย่างรวดเร็วบนหน้าจอหลัก</string>
+    <string name="setting_clear_history_now">ล้างประวัติทันที</string>
+    <string name="setting_history_cleared">ล้างประวัติการประมวลผลแล้ว</string>
+    <string name="setting_history_title">ประวัติการประมวลผล</string>
+
+    <string name="retention_policy_100_items">เก็บรายการล่าสุด 100 รายการ</string>
+    <string name="retention_policy_clear_on_exit">ล้างประวัติเมื่อออกจากแอป</string>
+    <string name="retention_policy_clear_after_24h">ล้างประวัติหลังจาก 24 ชั่วโมง</string>
+
+    <string name="history_title">ประวัติการประมวลผล</string>
+    <string name="history_empty">ยังไม่มีการบันทึกไฟล์</string>
+    <string name="history_clear_confirm_title">ล้างประวัติหรือไม่?</string>
+    <string name="history_clear_confirm_message">การดำเนินการนี้จะลบประวัติของไฟล์ที่ประมวลผลทั้งหมดอย่างถาวร ไฟล์จริงจะไม่ถูกลบ</string>
 </resources>

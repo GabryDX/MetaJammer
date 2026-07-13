@@ -66,9 +66,9 @@
     <!-- HelpScreen -->
     <string name="help_title">Help &amp; Tutorials</string>
     <string name="help_item_video_title">Video Processing</string>
-    <string name="help_item_video_body">Supported formats: MP4, MOV.\n\nFull re-muxing is supported for these containers. This process strips GPS, dates, and device atoms to protect your privacy.</string>
-    <string name="help_item_image_title">Image Processing</string>
-    <string name="help_item_image_body">Supported formats: JPG, PNG, WebP, HEIF.\n\nMetaJammer strips EXIF metadata from these images. In \"Poison\" mode, it replaces sensitive tags like GPS coordinates with realistic random data.</string>
+    <string name="help_item_video_body">فرمت‌های پشتیبانی شده: MP4, MOV, M4A, OGG.\n\nریمکس کامل برای این ظروف پشتیبانی می‌شود. این فرآیند GPS، تاریخ‌ها و اتم‌های دستگاه را برای محافظت از حریم خصوصی شما حذف می‌کند.</string>
+    <string name="help_item_image_title">پردازش تصویر و برداری</string>
+    <string name="help_item_image_body">فرمت‌های پشتیبانی شده: JPG, PNG, WebP, HEIF, SVG.\n\nMetaJammer متاداده EXIF را از تصاویر بیت‌مپ حذف می‌کند و متاداده XML/RDF را از SVGها پاک می‌کند. در حالت \"مسموم‌سازی\"، تگ‌های حساس را با داده‌های تصادفی واقع‌گرایانه جایگزین می‌کند.</string>
     <string name="help_item_other_title">پردازش PDF و اسناد</string>
     <string name="help_item_other_body">فرمت‌های پشتیبانی شده: PDF.\n\nنرم‌افزار MetaJammer اکنون به‌طور کامل از اسناد PDF پشتیبانی می‌کند. شما می‌توانید متادیتاهایی مانند عنوان، نویسنده، موضوع، کلمات کلیدی، سازنده و تولیدکننده را بخوانید، حذف کنید و مسموم کنید. همچنین واترمارک‌های پنهان و یادداشت‌ها را پاک می‌کند تا از تمیز بودن اسناد شما قبل از اشتراک‌گذاری اطمینان حاصل شود.</string>
     <string name="help_report_issue_title">Report an Issue</string>
@@ -148,6 +148,8 @@
     <string name="setting_language_title">زبان</string>
     <string name="setting_oled_mode_title">حالت OLED</string>
     <string name="setting_oled_mode_sub">استفاده از رنگ‌های سیاه تیره‌تر برای تم‌های تیره پشتیبانی شده</string>
+    <string name="setting_dynamic_color_title">Material You (رنگ‌های پویا)</string>
+    <string name="setting_dynamic_color_sub">رنگ‌های پویای تصویر پس‌زمینه خود را روی رابط کاربری برنامه اعمال کنید</string>
 
     <!-- Enums -->
     <string name="night_mode_always">همیشه</string>
@@ -197,4 +199,37 @@
 
     <string name="notification_permission_title">مطلع بمانید</string>
     <string name="notification_permission_message">MetaJammer می‌تواند اعلان‌هایی را برای به‌روز نگه داشتن شما از پیشرفت دسته‌های بزرگ فایل در حالی که در پس‌زمینه پردازش می‌شوند، نشان دهد. \n\nاین به‌ویژه زمانی مفید است که می‌خواهید در حین اتمام کار MetaJammer به برنامه دیگری بروید.</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">به MetaJammer خوش آمدید</string>
+    <string name="onboarding_welcome_desc">جعبه ابزار شخصی شما برای حریم خصوصی متاداده. فایل‌های خود را قبل از اشتراک‌گذاری با دنیا پاکسازی کنید.</string>
+    <string name="onboarding_poison_vs_remove_title">مسموم‌سازی در مقابل حذف</string>
+    <string name="onboarding_poison_vs_remove_desc"><b>حذف:</b> تمام متاداده‌ها را پاک می‌کند. ساده و تمیز.\n\n<b>مسموم‌سازی:</b> داده‌های حساس را با مقادیر جعلی و واقع‌گرایانه جایگزین می‌کند. این کار <i>انکار موجه</i> ایجاد کرده و ردیاب‌های خودکار را گمراه می‌کند.</string>
+    <string name="onboarding_permissions_title">آماده‌سازی</string>
+    <string name="onboarding_permissions_desc">MetaJammer برای عملکرد بهتر به چند مجوز نیاز دارد. می‌توانید اعلان‌ها برای کارهای پس‌زمینه و اینترنت برای انتخابگر نقشه را فعال کنید.</string>
+    <string name="onboarding_finish_title">همه چیز آماده است!</string>
+    <string name="onboarding_finish_desc">شما آماده‌اید تا محافظت از حریم خصوصی خود را شروع کنید. چند فایل انتخاب کنید یا از برنامه‌های دیگر به اشتراک بگذارید تا شروع کنید.</string>
+    <string name="onboarding_get_started">شروع کنید</string>
+    <string name="onboarding_next">بعدی</string>
+    <string name="onboarding_skip">رد کردن</string>
+
+    <!-- Processing History -->
+    <string name="category_privacy_history">حریم خصوصی و تاریخچه</string>
+    <string name="setting_enable_history_title">فعال‌سازی تاریخچه پردازش</string>
+    <string name="setting_enable_history_sub">نگهداری گزارشی از فایل‌های پردازش شده اخیر. این داده‌ها به‌صورت محلی ذخیره می‌شوند و هرگز از دستگاه شما خارج نمی‌شوند.</string>
+    <string name="setting_history_retention_title">نگهداری تاریخچه</string>
+    <string name="setting_history_shortcut_title">نمایش میانبر تاریخچه</string>
+    <string name="setting_history_shortcut_sub">افزودن یک آیکون دسترسی سریع برای تاریخچه در صفحه اصلی</string>
+    <string name="setting_clear_history_now">پاکسازی تاریخچه در حال حاضر</string>
+    <string name="setting_history_cleared">تاریخچه پردازش پاکسازی شد.</string>
+    <string name="setting_history_title">تاریخچه پردازش</string>
+
+    <string name="retention_policy_100_items">نگهداری ۱۰۰ مورد اخیر</string>
+    <string name="retention_policy_clear_on_exit">پاکسازی تاریخچه هنگام خروج از برنامه</string>
+    <string name="retention_policy_clear_after_24h">پاکسازی تاریخچه پس از ۲۴ ساعت</string>
+
+    <string name="history_title">تاریخچه پردازش</string>
+    <string name="history_empty">هنوز هیچ فایلی ثبت نشده است.</string>
+    <string name="history_clear_confirm_title">پاکسازی تاریخچه؟</string>
+    <string name="history_clear_confirm_message">این کار گزارش تمام فایل‌های پردازش شده را برای همیشه حذف می‌کند. فایل‌های اصلی حذف نخواهند شد.</string>
 </resources>

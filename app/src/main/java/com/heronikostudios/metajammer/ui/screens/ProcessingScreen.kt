@@ -9,6 +9,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
@@ -50,23 +53,35 @@ fun ProcessingScreen(
                 modifier = Modifier.padding(12.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text(stringResource(R.string.pick_one_option))
+                Text(
+                    text = stringResource(R.string.pick_one_option),
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.primary
+                )
 
-                Button(
-                    onClick = { onModeSelected(ProcessingMode.POISON_METADATA) },
-                    modifier = Modifier.fillMaxWidth()
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Text(stringResource(R.string.poison_metadata))
-                }
+                    val poisonSelected = selectedMode == ProcessingMode.POISON_METADATA
+                    val removeSelected = selectedMode == ProcessingMode.REMOVE_METADATA
 
-                Button(
-                    onClick = { onModeSelected(ProcessingMode.REMOVE_METADATA) },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(stringResource(R.string.remove_metadata))
-                }
+                    Button(
+                        onClick = { onModeSelected(ProcessingMode.POISON_METADATA) },
+                        modifier = Modifier.weight(1f),
+                        colors = if (poisonSelected) ButtonDefaults.buttonColors() else ButtonDefaults.filledTonalButtonColors()
+                    ) {
+                        Text(stringResource(R.string.poison_metadata))
+                    }
 
-                Text(stringResource(R.string.selected_mode, selectedMode?.name ?: stringResource(R.string.none)))
+                    Button(
+                        onClick = { onModeSelected(ProcessingMode.REMOVE_METADATA) },
+                        modifier = Modifier.weight(1f),
+                        colors = if (removeSelected) ButtonDefaults.buttonColors() else ButtonDefaults.filledTonalButtonColors()
+                    ) {
+                        Text(stringResource(R.string.remove_metadata))
+                    }
+                }
 
                 if (selectedMode == ProcessingMode.POISON_METADATA) {
                     Button(

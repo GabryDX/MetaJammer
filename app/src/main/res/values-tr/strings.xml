@@ -66,9 +66,9 @@
     <!-- HelpScreen -->
     <string name="help_title">Yardım ve Eğitimler</string>
     <string name="help_item_video_title">Video İşleme</string>
-    <string name="help_item_video_body">Desteklenen formatlar: MP4, MOV.\n\nBu kapsayıcılar için tam remuxing desteklenir. Bu işlem, gizliliğinizi korumak için GPS, tarih ve cihaz atomlarını kaldırır.</string>
-    <string name="help_item_image_title">Görüntü İşleme</string>
-    <string name="help_item_image_body">Desteklenen formatlar: JPG, PNG, WebP, HEIF.\n\nMetaJammer bu görüntülerden EXIF metadatalarını temizler. \"Zehirleme\" modunda, GPS koordinatları gibi hassas etiketleri gerçekçi rastgele verilerle değiştirir.</string>
+    <string name="help_item_video_body">Desteklenen formatlar: MP4, MOV, M4A, OGG.\n\nBu kapsayıcılar için tam remuxing desteklenir. Bu işlem, gizliliğinizi korumak için GPS, tarih ve cihaz atomlarını kaldırır.</string>
+    <string name="help_item_image_title">Görüntü ve Vektör İşleme</string>
+    <string name="help_item_image_body">Desteklenen formatlar: JPG, PNG, WebP, HEIF, SVG.\n\nMetaJammer, bitmap görüntülerden EXIF meta verilerini temizler ve SVG\'lerden XML/RDF meta verilerini temizler. \"Zehirleme\" modunda, hassas etiketleri gerçekçi rastgele verilerle değiştirir.</string>
     <string name="help_item_other_title">PDF ve Belge İşleme</string>
     <string name="help_item_other_body">Desteklenen formatlar: PDF.\n\nMetaJammer artık PDF belgelerini tam olarak destekliyor. Başlık, Yazar, Konu, Anahtar Kelimeler, Oluşturucu ve Üretici gibi meta verileri okuyabilir, silebilir ve \"zehirleyebilirsiniz\". Ayrıca, paylaşmadan önce belgelerinizin temiz olduğundan emin olmak için gizli filigranları ve açıklamaları da temizler.</string>
     <string name="help_report_issue_title">Sorun Bildir</string>
@@ -148,6 +148,8 @@
     <string name="setting_language_title">Dil</string>
     <string name="setting_oled_mode_title">OLED modu</string>
     <string name="setting_oled_mode_sub">Desteklenen koyu temalar için daha koyu siyah tonları kullanın</string>
+    <string name="setting_dynamic_color_title">Material You (Dinamik Renkler)</string>
+    <string name="setting_dynamic_color_sub">Duvar kağıdınızdaki dinamik renkleri uygulama arayüzüne uygulayın</string>
 
     <!-- Enums -->
     <string name="night_mode_always">Her zaman</string>
@@ -197,4 +199,37 @@
 
     <string name="notification_permission_title">Haberdar Olun</string>
     <string name="notification_permission_message">MetaJammer, arka planda işlenirken büyük dosya gruplarının ilerlemesi hakkında sizi bilgilendirmek için bildirimler gösterebilir. \n\nBu, özellikle MetaJammer işini bitirirken başka bir uygulamaya geçmek istediğinizde kullanışlıdır.</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">MetaJammer\'a Hoş Geldiniz</string>
+    <string name="onboarding_welcome_desc">Metadata gizliliği için kişisel araç takımınız. Dosyalarınızı dünyayla paylaşmadan önce temizleyin.</string>
+    <string name="onboarding_poison_vs_remove_title">Zehirle vs Kaldır</string>
+    <string name="onboarding_poison_vs_remove_desc"><b>Kaldır:</b> Tüm metadataları siler. Basit ve temiz.\n\n<b>Zehirle:</b> Hassas verileri sahte, gerçekçi değerlerle değiştirir. Bu, <i>makul reddedilebilirlik</i> sağlar ve otomatik takipçileri şaşırtır.</string>
+    <string name="onboarding_permissions_title">Hazırlanıyoruz</string>
+    <string name="onboarding_permissions_desc">MetaJammer\'ın en iyi şekilde çalışması için birkaç izne ihtiyacı var. Arka plan görevleri için bildirimleri ve harita seçici için interneti etkinleştirmeyi seçebilirsiniz.</string>
+    <string name="onboarding_finish_title">Her Şey Hazır!</string>
+    <string name="onboarding_finish_desc">Gizliliğinizi korumaya başlamaya hazırsınız. Başlamak için bazı dosyalar seçin veya diğer uygulamalardan paylaşın.</string>
+    <string name="onboarding_get_started">Başlayın</string>
+    <string name="onboarding_next">Sonraki</string>
+    <string name="onboarding_skip">Atla</string>
+
+    <!-- Processing History -->
+    <string name="category_privacy_history">Gizlilik ve Geçmiş</string>
+    <string name="setting_enable_history_title">İşlem geçmişini etkinleştir</string>
+    <string name="setting_enable_history_sub">Son işlenen dosyaların günlüğünü tutar. Bu veriler yerel olarak depolanır ve cihazınızdan asla çıkmaz.</string>
+    <string name="setting_history_retention_title">Geçmişi saklama</string>
+    <string name="setting_history_shortcut_title">Geçmiş kısayolunu göster</string>
+    <string name="setting_history_shortcut_sub">Ana ekrana geçmiş için hızlı erişim simgesi ekler</string>
+    <string name="setting_clear_history_now">Geçmişi Şimdi Temizle</string>
+    <string name="setting_history_cleared">İşlem geçmişi temizlendi.</string>
+    <string name="setting_history_title">İşlem Geçmişi</string>
+
+    <string name="retention_policy_100_items">En son 100 öğeyi tut</string>
+    <string name="retention_policy_clear_on_exit">Uygulamadan çıkışta geçmişi temizle</string>
+    <string name="retention_policy_clear_after_24h">24 saat sonra geçmişi temizle</string>
+
+    <string name="history_title">İşlem Geçmişi</string>
+    <string name="history_empty">Henüz hiçbir dosya kaydedilmedi.</string>
+    <string name="history_clear_confirm_title">Geçmiş temizlensin mi?</string>
+    <string name="history_clear_confirm_message">Bu, işlenen tüm dosyaların günlüğünü kalıcı olarak silecektir. Gerçek dosyalar silinmeyecektir.</string>
 </resources>

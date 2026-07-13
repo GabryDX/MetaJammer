@@ -30,6 +30,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
@@ -82,9 +85,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _workInfo = MutableStateFlow<WorkInfo?>(null)
     val workInfo: StateFlow<WorkInfo?> = _workInfo.asStateFlow()
 
+    val processedFilesHistory: StateFlow<List<ProcessedFileLog>> = settingsRepository.processedFilesLog
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
     init {
         viewModelScope.launch(Dispatchers.IO) {
             fileRepository.clearCache()
+            settingsRepository.performMaintenance()
         }
         observeSettings()
     }
@@ -573,13 +580,26 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             _processedFiles.value.map { (selectedFile, processedFile) ->
                 async {
                     val (configuredPath, subPath) = resolveSavingPath(selectedFile.mimeType)
-                    saveFileUseCase.saveToDefaultFolder(
+                    val savedUri = saveFileUseCase.saveToDefaultFolder(
                         sourceFile = processedFile,
                         displayName = buildOutputName(selectedFile.displayName),
                         mimeType = selectedFile.mimeType,
                         configuredPath = configuredPath,
                         subPath = subPath
                     )
+                    
+                    if (savedUri != null) {
+                        settingsRepository.logProcessedFile(
+                            ProcessedFileLog(
+                                uri = savedUri.toString(),
+                                displayName = buildOutputName(selectedFile.displayName),
+                                mimeType = selectedFile.mimeType,
+                                timestamp = System.currentTimeMillis(),
+                                sizeBytes = processedFile.length()
+                            )
+                        )
+                    }
+                    savedUri
                 }
             }.awaitAll().filterNotNull()
         }
@@ -618,12 +638,25 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         val results = coroutineScope {
             _processedFiles.value.map { (selectedFile, processedFile) ->
                 async {
-                    saveFileUseCase.saveToCustomFolder(
+                    val savedUri = saveFileUseCase.saveToCustomFolder(
                         treeUri = treeUri,
                         sourceFile = processedFile,
                         displayName = buildOutputName(selectedFile.displayName),
                         mimeType = selectedFile.mimeType
                     )
+
+                    if (savedUri != null) {
+                        settingsRepository.logProcessedFile(
+                            ProcessedFileLog(
+                                uri = savedUri.toString(),
+                                displayName = buildOutputName(selectedFile.displayName),
+                                mimeType = selectedFile.mimeType,
+                                timestamp = System.currentTimeMillis(),
+                                sizeBytes = processedFile.length()
+                            )
+                        )
+                    }
+                    savedUri
                 }
             }.awaitAll().filterNotNull()
         }
@@ -859,6 +892,41 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setLanguage(language: AppLanguage) = launchSettingUpdate {
         settingsRepository.setLanguage(language)
+    }
+
+    fun setUseDynamicColor(enabled: Boolean) = launchSettingUpdate {
+        settingsRepository.setUseDynamicColor(enabled)
+    }
+
+    fun setOnboardingCompleted(completed: Boolean) = launchSettingUpdate {
+        settingsRepository.setIsOnboardingCompleted(completed)
+    }
+
+    fun setEnableProcessingHistory(enabled: Boolean) = launchSettingUpdate {
+        settingsRepository.setEnableProcessingHistory(enabled)
+    }
+
+    fun setHistoryRetentionPolicy(policy: HistoryRetentionPolicy) = launchSettingUpdate {
+        settingsRepository.setHistoryRetentionPolicy(policy)
+    }
+
+    fun setShowHistoryShortcut(show: Boolean) = launchSettingUpdate {
+        settingsRepository.setShowHistoryShortcut(show)
+    }
+
+    fun clearProcessedFilesHistory() = launchSettingUpdate {
+        settingsRepository.clearProcessedFilesLog()
+        _message.value = appContext.getString(com.heronikostudios.metajammer.R.string.setting_history_cleared)
+    }
+
+    fun shareHistoryFile(context: android.content.Context, log: ProcessedFileLog) {
+        val shareFileUseCase = com.heronikostudios.metajammer.domain.usecase.ShareFileUseCase()
+        val uri = log.uri.toUri()
+        shareFileUseCase.shareUri(
+            context = context,
+            uri = uri,
+            mimeType = log.mimeType ?: "*/*"
+        )
     }
 
     private fun launchSettingUpdate(block: suspend () -> Unit) {

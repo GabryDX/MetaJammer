@@ -22,5 +22,10 @@ data class AppSettings(
     val thumbnailHandling: ThumbnailHandling = ThumbnailHandling.REMOVE,
     val allowInternetForMap: Boolean = false,
     val useNearbyScramble: Boolean = false,
-    val language: AppLanguage = AppLanguage.SYSTEM
+    val language: AppLanguage = AppLanguage.SYSTEM,
+    val useDynamicColor: Boolean = true,
+    val isOnboardingCompleted: Boolean = false,
+    val enableProcessingHistory: Boolean = false,
+    val historyRetentionPolicy: HistoryRetentionPolicy = HistoryRetentionPolicy.KEEP_100_ITEMS,
+    val showHistoryShortcut: Boolean = false
 )

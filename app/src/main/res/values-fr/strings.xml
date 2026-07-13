@@ -66,9 +66,9 @@
     <!-- HelpScreen -->
     <string name="help_title">Aide et tutoriels</string>
     <string name="help_item_video_title">Traitement vidéo</string>
-    <string name="help_item_video_body">Formats pris en charge : MP4, MOV.\n\nLe remuxage complet est pris en charge pour ces conteneurs. Ce processus supprime le GPS, les dates et les atomes de l\'appareil pour protéger votre vie privée.</string>
-    <string name="help_item_image_title">Traitement d\'image</string>
-    <string name="help_item_image_body">Formats pris en charge : JPG, PNG, WebP, HEIF.\n\nMetaJammer supprime les métadonnées EXIF de ces images. En mode \"Poison\", il remplace les balises sensibles telles que les coordonnées GPS par des données aléatoires réalistes.</string>
+    <string name="help_item_video_body">Formats pris en charge : MP4, MOV, M4A, OGG.\n\nLe remuxage complet est pris en charge pour ces conteneurs. Ce processus supprime le GPS, les dates et les atomes de l\'appareil pour protéger votre vie privée.</string>
+    <string name="help_item_image_title">Traitement d\'images et de vecteurs</string>
+    <string name="help_item_image_body">Formats pris en charge : JPG, PNG, WebP, HEIF, SVG.\n\nMetaJammer supprime les métadonnées EXIF des images bitmap et nettoie les métadonnées XML/RDF des SVG. En mode \"Poison\", il remplace les balises sensibles par des données aléatoires réalistes.</string>
     <string name="help_item_other_title">Traitement de PDF et de documents</string>
     <string name="help_item_other_body">Formats pris en charge : PDF.\n\nMetaJammer prend désormais entièrement en charge les documents PDF. Vous pouvez lire, supprimer et « empoisonner » les métadonnées telles que le titre, l\'auteur, le sujet, les mots-clés, le créateur et le producteur. Il supprime également les filigranes et les annotations invisibles pour garantir que vos documents sont propres avant de les partager.</string>
     <string name="help_report_issue_title">Signaler un problème</string>
@@ -148,6 +148,8 @@
     <string name="setting_language_title">Langue</string>
     <string name="setting_oled_mode_title">Mode OLED</string>
     <string name="setting_oled_mode_sub">Utiliser des tons noirs plus sombres pour les thèmes sombres pris en charge</string>
+    <string name="setting_dynamic_color_title">Material You</string>
+    <string name="setting_dynamic_color_sub">Appliquer les couleurs dynamiques de votre fond d\'écran à l\'interface de l\'application</string>
 
     <!-- Enums -->
     <string name="night_mode_always">Toujours</string>
@@ -197,4 +199,37 @@
 
     <string name="notification_permission_title">Restez informé</string>
     <string name="notification_permission_message">MetaJammer peut afficher des notifications pour vous tenir au courant de la progression de grands lots de fichiers pendant qu\'ils sont traités en arrière-plan. \n\nC\'est particulièrement utile si vous souhaitez passer à une autre application pendant que MetaJammer termine son travail.</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">Bienvenue sur MetaJammer</string>
+    <string name="onboarding_welcome_desc">Votre boîte à outils personnelle pour la confidentialité des métadonnées. Nettoyez vos fichiers avant de les partager avec le monde.</string>
+    <string name="onboarding_poison_vs_remove_title">Empoisonner vs Supprimer</string>
+    <string name="onboarding_poison_vs_remove_desc"><b>Supprimer :</b> Supprime toutes les métadonnées. Simple et propre.\n\n<b>Empoisonner :</b> Remplace les données sensibles par de fausses valeurs réalistes. Cela offre une <i>dénégation plausible</i> et déroute les traqueurs automatisés.</string>
+    <string name="onboarding_permissions_title">Préparation</string>
+    <string name="onboarding_permissions_desc">MetaJammer a besoin de quelques autorisations pour fonctionner au mieux. Vous pouvez choisir d\'activer les notifications pour les tâches en arrière-plan et Internet pour le sélecteur de carte.</string>
+    <string name="onboarding_finish_title">Tout est prêt !</string>
+    <string name="onboarding_finish_desc">Vous êtes prêt à commencer à protéger votre vie privée. Choisissez des fichiers ou partagez-les depuis d\'autres applications pour commencer.</string>
+    <string name="onboarding_get_started">Commencer</string>
+    <string name="onboarding_next">Suivant</string>
+    <string name="onboarding_skip">Passer</string>
+
+    <!-- Processing History -->
+    <string name="category_privacy_history">Confidentialité et historique</string>
+    <string name="setting_enable_history_title">Activer l\'historique de traitement</string>
+    <string name="setting_enable_history_sub">Conserve un journal des fichiers récemment traités. Ces données sont stockées localement et ne quittent jamais votre appareil.</string>
+    <string name="setting_history_retention_title">Rétention de l\'historique</string>
+    <string name="setting_history_shortcut_title">Afficher le raccourci de l\'historique</string>
+    <string name="setting_history_shortcut_sub">Ajoute une icône d\'accès rapide à l\'historique sur l\'écran d\'accueil</string>
+    <string name="setting_clear_history_now">Effacer l\'historique maintenant</string>
+    <string name="setting_history_cleared">L\'historique de traitement a été effacé.</string>
+    <string name="setting_history_title">Historique de traitement</string>
+
+    <string name="retention_policy_100_items">Conserver les 100 éléments les plus récents</string>
+    <string name="retention_policy_clear_on_exit">Effacer l\'historique à la fermeture de l\'application</string>
+    <string name="retention_policy_clear_after_24h">Effacer l\'historique après 24 heures</string>
+
+    <string name="history_title">Historique de traitement</string>
+    <string name="history_empty">Aucun fichier n\'a encore été enregistré.</string>
+    <string name="history_clear_confirm_title">Effacer l\'historique ?</string>
+    <string name="history_clear_confirm_message">Cela supprimera définitivement le journal de tous les fichiers traités. Les fichiers réels ne seront pas supprimés.</string>
 </resources>

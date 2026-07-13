@@ -66,9 +66,9 @@
     <!-- HelpScreen -->
     <string name="help_title">도움말 및 튜토리얼</string>
     <string name="help_item_video_title">동영상 처리</string>
-    <string name="help_item_video_body">지원되는 형식: MP4, MOV.\n\n이러한 컨테이너에 대해 전체 리먹싱이 지원됩니다. 이 프로세스는 개인 정보를 보호하기 위해 GPS, 날짜 및 장치 원자를 제거합니다.</string>
-    <string name="help_item_image_title">이미지 처리</string>
-    <string name="help_item_image_body">지원되는 형식: JPG, PNG, WebP, HEIF.\n\nMetaJammer는 이러한 이미지에서 EXIF 메타데이터를 제거합니다. \"포이즌\" 모드에서는 GPS 좌표와 같은 민감한 태그를 실제와 유사한 무작위 데이터로 대체합니다.</string>
+    <string name="help_item_video_body">지원되는 형식: MP4, MOV, M4A, OGG.\n\n이러한 컨테이너에 대해 전체 리먹싱이 지원됩니다. 이 프로세스는 개인 정보를 보호하기 위해 GPS, 날짜 및 장치 원자를 제거합니다.</string>
+    <string name="help_item_image_title">이미지 및 벡터 처리</string>
+    <string name="help_item_image_body">지원되는 형식: JPG, PNG, WebP, HEIF, SVG.\n\nMetaJammer는 비트맵 이미지에서 EXIF 메타데이터를 제거하고 SVG에서 XML/RDF 메타데이터를 정리합니다. \"포이즌\" 모드에서는 민감한 태그를 실제와 유사한 무작위 데이터로 대체합니다.</string>
     <string name="help_item_other_title">PDF 및 문서 처리</string>
     <string name="help_item_other_body">지원 형식: PDF.\n\nMetaJammer가 이제 PDF 문서를 완벽하게 지원합니다. 제목, 작성자, 주제, 키워드, 생성자 및 제작자와 같은 메타데이터를 읽고, 삭제하고, \"포이즈닝(변조)\"할 수 있습니다. 또한, 숨겨진 워터마크와 주석을 제거하여 공유하기 전에 문서가 깨끗한지 확인합니다.</string>
     <string name="help_report_issue_title">문제 보고</string>
@@ -148,6 +148,8 @@
     <string name="setting_language_title">언어</string>
     <string name="setting_oled_mode_title">OLED 모드</string>
     <string name="setting_oled_mode_sub">지원되는 다크 테마에서 더 어두운 검정색 톤을 사용합니다.</string>
+    <string name="setting_dynamic_color_title">Material You (다이내믹 컬러)</string>
+    <string name="setting_dynamic_color_sub">배경화면의 다이내믹 컬러를 앱 인터페이스에 적용합니다.</string>
 
     <!-- Enums -->
     <string name="night_mode_always">항상</string>
@@ -197,4 +199,37 @@
 
     <string name="notification_permission_title">정보 유지</string>
     <string name="notification_permission_message">MetaJammer는 대량의 파일이 백그라운드에서 처리되는 동안 진행 상황을 알려주는 알림을 표시할 수 있습니다.\n\n이는 MetaJammer가 작업을 마치는 동안 다른 앱으로 전환하고 싶을 때 특히 유용합니다.</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">MetaJammer에 오신 것을 환영합니다</string>
+    <string name="onboarding_welcome_desc">메타데이터 프라이버시를 위한 개인용 도구 상자입니다. 전 세계와 공유하기 전에 파일을 깨끗하게 정리하세요.</string>
+    <string name="onboarding_poison_vs_remove_title">포이즌(변조) vs 제거</string>
+    <string name="onboarding_poison_vs_remove_desc"><b>제거:</b> 모든 메타데이터를 삭제합니다. 간단하고 깔끔합니다.\n\n<b>포이즌:</b> 민감한 데이터를 가짜 정보로 대체합니다. 이는 <i>그럴듯한 부인</i>을 가능하게 하고 자동 추적기를 혼란에 빠뜨립니다.</string>
+    <string name="onboarding_permissions_title">준비하기</string>
+    <string name="onboarding_permissions_desc">MetaJammer가 최적으로 작동하려면 몇 가지 권한이 필요합니다. 백그라운드 작업을 위한 알림과 지도 선택기를 위한 인터넷 연결을 활성화할 수 있습니다.</string>
+    <string name="onboarding_finish_title">모든 준비 완료!</string>
+    <string name="onboarding_finish_desc">프라이버시 보호를 시작할 준비가 되었습니다. 파일을 선택하거나 다른 앱에서 공유하여 시작해 보세요.</string>
+    <string name="onboarding_get_started">시작하기</string>
+    <string name="onboarding_next">다음</string>
+    <string name="onboarding_skip">건너뛰기</string>
+
+    <!-- Processing History -->
+    <string name="category_privacy_history">개인정보 및 기록</string>
+    <string name="setting_enable_history_title">처리 기록 활성화</string>
+    <string name="setting_enable_history_sub">최근에 처리된 파일의 로그를 유지합니다. 이 데이터는 로컬에 저장되며 기기를 절대 떠나지 않습니다.</string>
+    <string name="setting_history_retention_title">기록 보관</string>
+    <string name="setting_history_shortcut_title">기록 바로가기 표시</string>
+    <string name="setting_history_shortcut_sub">홈 화면에 기록 빠른 액세스 아이콘 추가</string>
+    <string name="setting_clear_history_now">지금 기록 지우기</string>
+    <string name="setting_history_cleared">처리 기록이 삭제되었습니다.</string>
+    <string name="setting_history_title">처리 기록</string>
+
+    <string name="retention_policy_100_items">최근 항목 100개 유지</string>
+    <string name="retention_policy_clear_on_exit">앱 종료 시 기록 지우기</string>
+    <string name="retention_policy_clear_after_24h">24시간 후 기록 지우기</string>
+
+    <string name="history_title">처리 기록</string>
+    <string name="history_empty">아직 기록된 파일이 없습니다.</string>
+    <string name="history_clear_confirm_title">기록을 지우시겠습니까?</string>
+    <string name="history_clear_confirm_message">이 작업은 처리된 모든 파일의 로그를 영구적으로 삭제합니다. 실제 파일은 삭제되지 않습니다.</string>
 </resources>
