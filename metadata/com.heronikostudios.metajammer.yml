@@ -1,0 +1,46 @@
+Categories:
+  - Security
+  - Multimedia
+  - Graphics
+License: ISC
+AuthorName: GabryDX
+WebSite: https://github.com/GabryDX/MetaJammer
+SourceCode: https://github.com/GabryDX/MetaJammer
+IssueTracker: https://github.com/GabryDX/MetaJammer/issues
+
+Summary: Privacy-focused metadata scrubber and poisoner for media files
+Description: |-
+    MetaJammer is a privacy-focused Android application designed to scramble,
+    fake, or completely strip metadata from your media files. It provides users
+    with total control over their digital footprint before sharing photos or
+    videos online.
+
+    Key Features:
+    - Deep Metadata Stripping: Targets XMP, GPS coordinates, hardware serial numbers, and embedded thumbnails to ensure no "leaks" remain.
+    - Metadata Poisoning: Don't just remove data—confuse it. Generate highly realistic fake metadata to blend in.
+    - Metadata Preview: Inspect the existing metadata of your files before processing.
+    - Interactive Map Picker: Visually choose a "fake" location on an OpenStreetMap interface.
+    - Quick Scrub & Share: Share a file to MetaJammer, let it auto-process, and immediately re-open the share sheet.
+    - Background Batch Processing: Reliable processing for 50+ high-resolution files at once.
+    - Multi-Format Support: JPEG, WebP, HEIF/HEIC, MP4, MOV, and PDF.
+
+    Privacy & Security:
+    - Zero Broad Permissions: The app requires NO storage permissions. It uses modern Scoped Storage and SAF.
+    - 100% FOSS: Built entirely with Free and Open Source Software. No proprietary SDKs or trackers.
+    - Opt-in Internet: Internet access is strictly restricted to the optional Map Picker.
+
+RepoType: git
+Repo: https://github.com/GabryDX/MetaJammer.git
+
+Builds:
+  - versionName: 0.4.0
+    versionCode: 1
+    commit: v0.4.0
+    subdir: app
+    gradle:
+      - floss
+
+AutoUpdateMode: Version v%v
+UpdateCheckMode: Tags
+CurrentVersion: 0.4.0
+CurrentVersionCode: 1

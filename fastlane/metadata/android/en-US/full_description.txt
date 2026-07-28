@@ -1,0 +1,16 @@
+MetaJammer is a privacy-focused Android application designed to scramble, fake, or completely strip metadata from your media files. It provides users with total control over their digital footprint before sharing photos or videos online.
+
+Key Features:
+- Deep Metadata Stripping: Targets XMP, GPS coordinates, hardware serial numbers, and embedded thumbnails to ensure no "leaks" remain.
+- Metadata Poisoning: Don't just remove data—confuse it. Generate highly realistic fake metadata (camera models, exposure settings, software versions) to blend in.
+- Metadata Preview: Inspect the existing metadata of your files before processing them to see exactly what information is being exposed.
+- Interactive Map Picker: Visually choose a "fake" location on an OpenStreetMap interface for your poisoned metadata.
+- Quick Scrub & Share: Share a file to MetaJammer, let it auto-process, and immediately re-open the share sheet with the clean version.
+- Background Batch Processing: Reliable processing for 50+ high-resolution files at once using Android WorkManager.
+- Multi-Format Support: Full compatibility with modern image formats (JPEG, WebP, HEIF/HEIC), video containers (MP4, MOV), and PDF documents.
+
+Privacy & Security:
+- Zero Broad Permissions: The app requires NO storage permissions. It uses modern Scoped Storage and SAF.
+- 100% FOSS: Built entirely with Free and Open Source Software. No proprietary SDKs, trackers, or "phone-home" analytics.
+- Opt-in Internet: Internet access is strictly restricted to the optional Map Picker and is only active after explicit user consent.
+- No Cloud Leaks: Android Auto-Backup is disabled to ensure unstripped metadata never leaves your device during processing.

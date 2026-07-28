@@ -34,6 +34,15 @@ MetaJammer is built on the **Principle of Least Privilege**:
 
 MetaJammer is committed to transparency and user trust. A comprehensive [FOSS Compliance Audit](foss_audit.md) is available to verify that no proprietary or non-free components are used in the project.
 
+## F-Droid
+
+MetaJammer is designed for F-Droid. You can build the F-Droid version using the `floss` flavor:
+```bash
+./gradlew assembleFlossRelease
+```
+
+The app is 100% FOSS and follows F-Droid's inclusion policy. Metadata for F-Droid is located in the `fastlane` and `metadata` directories.
+
 ## Getting Started
 
 1. **Clone this repo:**  
