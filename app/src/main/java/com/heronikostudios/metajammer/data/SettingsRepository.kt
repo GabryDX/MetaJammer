@@ -8,7 +8,6 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.heronikostudios.metajammer.domain.model.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
@@ -41,7 +40,6 @@ class SettingsRepository(private val context: Context) {
         private val LANGUAGE = stringPreferencesKey("language")
         private val USE_DYNAMIC_COLOR = booleanPreferencesKey("use_dynamic_color")
         private val IS_ONBOARDING_COMPLETED = booleanPreferencesKey("is_onboarding_completed")
-        private val METADATA_TEMPLATES = stringSetPreferencesKey("metadata_templates")
         private val PROCESSED_FILES_LOG = stringSetPreferencesKey("processed_files_log")
         private val ENABLE_PROCESSING_HISTORY = booleanPreferencesKey("enable_processing_history")
         private val HISTORY_RETENTION_POLICY = stringPreferencesKey("history_retention_policy")
