@@ -189,12 +189,17 @@ class MetadataProcessingWorker(
             }
         }.awaitAll()
 
-        showCompletionNotification(processedCount.get())
+        val totalProcessed = processedCount.get()
+        showCompletionNotification(totalProcessed)
 
         // Cleanup plans file
         plansFilePath?.let { File(it).delete() }
 
-        Result.success(workDataOf("saved_uris" to savedUris.toTypedArray()))
+        if (totalProcessed == 0 && inputUriStrings.isNotEmpty()) {
+            Result.failure(workDataOf("error" to "Failed to process files"))
+        } else {
+            Result.success(workDataOf("saved_uris" to savedUris.toTypedArray()))
+        }
     }
 
     private fun createForegroundInfo(totalFiles: Int): ForegroundInfo {

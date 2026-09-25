@@ -89,14 +89,13 @@ class MetadataRepository(
             }
 
             mime == "application/pdf" -> {
-                val result = when (mode) {
+                when (mode) {
                     ProcessingMode.POISON_METADATA -> {
                         val plan = requireNotNull(replacementPlan) { "Plan required for poison mode" }
                         pdfProcessor.poisonMetadata(selectedFile.uri, plan)
                     }
                     ProcessingMode.REMOVE_METADATA -> pdfProcessor.removeMetadata(selectedFile.uri)
                 }
-                result ?: fileRepository.copyUriToCache(selectedFile.uri, prefix = "pdf_failed_", suffix = ".pdf")
             }
 
             mime == "image/svg+xml" -> {
@@ -109,7 +108,7 @@ class MetadataRepository(
                 }
             }
 
-            else -> fileRepository.copyUriToCache(selectedFile.uri, prefix = "generic_", suffix = null)
+            else -> throw IllegalArgumentException("Unsupported file format for metadata processing: ${mime.ifBlank { "unknown" }} (${selectedFile.displayName})")
         }
     }
 

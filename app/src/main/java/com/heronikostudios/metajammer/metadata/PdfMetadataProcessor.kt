@@ -52,14 +52,12 @@ class PdfMetadataProcessor(
         return@withContext entries
     }
 
-    suspend fun poisonMetadata(inputUri: Uri, plan: MetadataReplacementPlan): File? = withContext(Dispatchers.IO) {
+    suspend fun poisonMetadata(inputUri: Uri, plan: MetadataReplacementPlan): File = withContext(Dispatchers.IO) {
         ensureInitialized()
-        runCatching {
-            val outputFile = fileRepository.createCacheFile(prefix = "pdf_poisoned_", suffix = ".pdf")
-            
+        val outputFile = fileRepository.createCacheFile(prefix = "pdf_poisoned_", suffix = ".pdf")
+        try {
             context.contentResolver.openInputStream(inputUri)?.use { inputStream ->
                 PDDocument.load(inputStream, MemoryUsageSetting.setupTempFileOnly()).use { document ->
-                    
                     // Replace with fake data
                     val info = PDDocumentInformation().apply {
                         title = plan.pdfTitle
@@ -75,32 +73,34 @@ class PdfMetadataProcessor(
                     stripWatermarks(document)
                     document.save(FileOutputStream(outputFile))
                 }
-            }
+            } ?: throw IllegalStateException("Could not open input stream for $inputUri")
             outputFile
-        }.onFailure {
-            Timber.e(it, "Failed to poison PDF metadata for %s", inputUri)
-        }.getOrNull()
+        } catch (e: Exception) {
+            outputFile.delete()
+            Timber.e(e, "Failed to poison PDF metadata for %s", inputUri)
+            throw e
+        }
     }
 
-    suspend fun removeMetadata(inputUri: Uri): File? = withContext(Dispatchers.IO) {
+    suspend fun removeMetadata(inputUri: Uri): File = withContext(Dispatchers.IO) {
         ensureInitialized()
-        runCatching {
-            val outputFile = fileRepository.createCacheFile(prefix = "pdf_clean_", suffix = ".pdf")
-            
+        val outputFile = fileRepository.createCacheFile(prefix = "pdf_clean_", suffix = ".pdf")
+        try {
             context.contentResolver.openInputStream(inputUri)?.use { inputStream ->
                 PDDocument.load(inputStream, MemoryUsageSetting.setupTempFileOnly()).use { document ->
-                    
                     // Overwrite metadata with a blank information dictionary
                     document.documentInformation = PDDocumentInformation()
                     document.documentCatalog.metadata = null
                     stripWatermarks(document)
                     document.save(FileOutputStream(outputFile))
                 }
-            }
+            } ?: throw IllegalStateException("Could not open input stream for $inputUri")
             outputFile
-        }.onFailure {
-            Timber.e(it, "Failed to strip PDF metadata for %s", inputUri)
-        }.getOrNull()
+        } catch (e: Exception) {
+            outputFile.delete()
+            Timber.e(e, "Failed to strip PDF metadata for %s", inputUri)
+            throw e
+        }
     }
 
     private fun stripWatermarks(document: PDDocument) {
