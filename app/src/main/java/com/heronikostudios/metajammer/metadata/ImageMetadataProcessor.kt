@@ -19,71 +19,71 @@ class ImageMetadataProcessor(
          * including obscure ones.
          */
         private val ALL_SUPPORTED_TAGS by lazy {
-            // A hardcoded list of common tags is much faster than reflection.
-            // We still include some obscure ones to ensure thorough cleaning.
-            listOf(
-                ExifInterface.TAG_ARTIST,
-                ExifInterface.TAG_BODY_SERIAL_NUMBER,
-                ExifInterface.TAG_CAMERA_OWNER_NAME,
-                ExifInterface.TAG_COPYRIGHT,
-                ExifInterface.TAG_DATETIME,
-                ExifInterface.TAG_DATETIME_DIGITIZED,
-                ExifInterface.TAG_DATETIME_ORIGINAL,
-                ExifInterface.TAG_DEVICE_SETTING_DESCRIPTION,
-                ExifInterface.TAG_EXPOSURE_TIME,
-                ExifInterface.TAG_F_NUMBER,
-                ExifInterface.TAG_FLASH,
-                ExifInterface.TAG_FOCAL_LENGTH,
-                ExifInterface.TAG_GPS_ALTITUDE,
-                ExifInterface.TAG_GPS_ALTITUDE_REF,
-                ExifInterface.TAG_GPS_AREA_INFORMATION,
-                ExifInterface.TAG_GPS_DATESTAMP,
-                ExifInterface.TAG_GPS_DEST_BEARING,
-                ExifInterface.TAG_GPS_DEST_BEARING_REF,
-                ExifInterface.TAG_GPS_DEST_DISTANCE,
-                ExifInterface.TAG_GPS_DEST_DISTANCE_REF,
-                ExifInterface.TAG_GPS_DEST_LATITUDE,
-                ExifInterface.TAG_GPS_DEST_LATITUDE_REF,
-                ExifInterface.TAG_GPS_DEST_LONGITUDE,
-                ExifInterface.TAG_GPS_DEST_LONGITUDE_REF,
-                ExifInterface.TAG_GPS_DOP,
-                ExifInterface.TAG_GPS_IMG_DIRECTION,
-                ExifInterface.TAG_GPS_IMG_DIRECTION_REF,
-                ExifInterface.TAG_GPS_LATITUDE,
-                ExifInterface.TAG_GPS_LATITUDE_REF,
-                ExifInterface.TAG_GPS_LONGITUDE,
-                ExifInterface.TAG_GPS_LONGITUDE_REF,
-                ExifInterface.TAG_GPS_MAP_DATUM,
-                ExifInterface.TAG_GPS_MEASURE_MODE,
-                ExifInterface.TAG_GPS_PROCESSING_METHOD,
-                ExifInterface.TAG_GPS_SATELLITES,
-                ExifInterface.TAG_GPS_SPEED,
-                ExifInterface.TAG_GPS_SPEED_REF,
-                ExifInterface.TAG_GPS_STATUS,
-                ExifInterface.TAG_GPS_TIMESTAMP,
-                ExifInterface.TAG_GPS_TRACK,
-                ExifInterface.TAG_GPS_TRACK_REF,
-                ExifInterface.TAG_GPS_VERSION_ID,
-                ExifInterface.TAG_IMAGE_DESCRIPTION,
-                ExifInterface.TAG_IMAGE_UNIQUE_ID,
-                ExifInterface.TAG_LENS_MAKE,
-                ExifInterface.TAG_LENS_MODEL,
-                ExifInterface.TAG_LENS_SERIAL_NUMBER,
-                ExifInterface.TAG_LENS_SPECIFICATION,
-                ExifInterface.TAG_MAKE,
-                ExifInterface.TAG_MODEL,
-                ExifInterface.TAG_PHOTOGRAPHIC_SENSITIVITY,
-                ExifInterface.TAG_SOFTWARE,
-                ExifInterface.TAG_SUBSEC_TIME,
-                ExifInterface.TAG_SUBSEC_TIME_DIGITIZED,
-                ExifInterface.TAG_SUBSEC_TIME_ORIGINAL,
-                ExifInterface.TAG_USER_COMMENT,
-                ExifInterface.TAG_WHITE_BALANCE,
-                ExifInterface.TAG_XMP,
+            val reflectionTags = ExifInterface::class.java.fields
+                .filter { it.name.startsWith("TAG_") && it.type == String::class.java }
+                .mapNotNull {
+                    try {
+                        it.get(null) as? String
+                    } catch (_: Exception) {
+                        null
+                    }
+                }
+
+            val customTags = listOf(
                 "ImageResources",
                 "OwnerName",
-                "PrintIM"
-            ).distinct()
+                "PrintIM",
+                "SensitivityType",
+                "StandardOutputSensitivity",
+                "RecommendedExposureIndex"
+            )
+
+            (reflectionTags + customTags).distinct()
+        }
+
+        private val PNG_SIGNATURE = byteArrayOf(0x89.toByte(), 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A)
+        private val PNG_METADATA_CHUNKS = setOf("tEXt", "zTXt", "iTXt", "eXIf")
+
+        /**
+         * Strips ancillary metadata chunks (tEXt, zTXt, iTXt, eXIf) from a PNG byte stream
+         * without recompressing or altering image raster pixels.
+         */
+        fun stripPngChunks(inputFile: File, outputFile: File): Boolean {
+            val bytes = inputFile.readBytes()
+            if (bytes.size < 8) return false
+            for (i in 0 until 8) {
+                if (bytes[i] != PNG_SIGNATURE[i]) return false
+            }
+
+            val output = java.io.ByteArrayOutputStream(bytes.size)
+            output.write(PNG_SIGNATURE)
+
+            var offset = 8
+            val buffer = java.nio.ByteBuffer.wrap(bytes)
+
+            while (offset + 8 <= bytes.size) {
+                buffer.position(offset)
+                val length = buffer.int
+                if (length < 0 || offset + 12L + length > bytes.size) {
+                    return false
+                }
+                val typeBytes = ByteArray(4)
+                buffer.get(typeBytes)
+                val chunkType = String(typeBytes, Charsets.US_ASCII)
+
+                val totalChunkSize = 12 + length
+                if (chunkType in PNG_METADATA_CHUNKS) {
+                    Timber.d("Stripped PNG metadata chunk: %s (%d bytes)", chunkType, totalChunkSize)
+                } else {
+                    output.write(bytes, offset, totalChunkSize)
+                }
+
+                offset += totalChunkSize
+                if (chunkType == "IEND") break
+            }
+
+            outputFile.writeBytes(output.toByteArray())
+            return true
         }
     }
 
@@ -153,6 +153,19 @@ class ImageMetadataProcessor(
             fileRepository.getExtension(inputUri)
         }
         val outputFile = fileRepository.copyUriToCache(inputUri, prefix = prefix, suffix = extension)
+
+        // For PNG images: strip ancillary metadata chunks (tEXt, zTXt, iTXt, eXIf)
+        if (mimeType == "image/png" || extension.equals(".png", ignoreCase = true)) {
+            runCatching {
+                val tempCleanPng = fileRepository.createCacheFile(prefix = "png_chunk_clean_", suffix = ".png")
+                if (stripPngChunks(outputFile, tempCleanPng)) {
+                    tempCleanPng.copyTo(outputFile, overwrite = true)
+                }
+                tempCleanPng.delete()
+            }.onFailure {
+                Timber.w(it, "Failed to strip PNG chunks, proceeding with ExifInterface")
+            }
+        }
 
         val exif = ExifInterface(outputFile.absolutePath)
         val originalOrientation = if (keepOrientation) exif.getAttribute(ExifInterface.TAG_ORIENTATION) else null
