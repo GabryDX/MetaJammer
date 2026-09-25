@@ -16,11 +16,11 @@ import androidx.core.net.toUri
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class FileRepository(private val context: Context) {
+open class FileRepository(private val context: Context) {
 
     fun getContext(): Context = context
 
-    fun getSelectedFile(uri: Uri): SelectedFile {
+    open fun getSelectedFile(uri: Uri): SelectedFile {
         val resolver = context.contentResolver
         var name = "unknown"
         var size: Long? = null
