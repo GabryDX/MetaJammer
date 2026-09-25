@@ -22,9 +22,24 @@ class SanitizationUtilsTest {
 
     @Test
     fun `sanitizeFileName replaces illegal characters with underscores`() {
-        val input = "my file!@#$%^&*().jpg"
+        val input = "my:file*with?quotes\"<>.jpg"
         val result = SanitizationUtils.sanitizeFileName(input)
-        assertEquals("my_file__________.jpg", result)
+        assertEquals("my_file_with_quotes___.jpg", result)
+    }
+
+    @Test
+    fun `sanitizeFileName preserves unicode letters and spaces`() {
+        val japanese = "家族写真 2024.jpg"
+        assertEquals("家族写真 2024.jpg", SanitizationUtils.sanitizeFileName(japanese))
+
+        val greek = "Διακοπές στην Ελλάδα.png"
+        assertEquals("Διακοπές στην Ελλάδα.png", SanitizationUtils.sanitizeFileName(greek))
+
+        val arabic = "صورة شخصية.pdf"
+        assertEquals("صورة شخصية.pdf", SanitizationUtils.sanitizeFileName(arabic))
+
+        val cyrillic = "Отпуск 2024.mp4"
+        assertEquals("Отпуск 2024.mp4", SanitizationUtils.sanitizeFileName(cyrillic))
     }
 
     @Test
@@ -54,9 +69,9 @@ class SanitizationUtilsTest {
 
     @Test
     fun `sanitizeSimple cleans prefixes and suffixes`() {
-        val input = "my-prefix!"
+        val input = "my:prefix/test*"
         val result = SanitizationUtils.sanitizeSimple(input)
-        assertEquals("my-prefix_", result)
+        assertEquals("my_prefix_test_", result)
     }
 
     @Test
