@@ -327,22 +327,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                                     targetMap["GPSLongitude"] = plan.longitude.toString()
                                     targetMap["GPSLongitudeRef"] = plan.longitudeRef
                                 }
-                                mime.startsWith("video/") -> {
+                                mime.startsWith("video/") || mime.startsWith("audio/") -> {
                                     targetMap["Location"] = "${plan.latitude}, ${plan.longitude}"
-                                    plan.title?.let { targetMap["Title"] = it }
-                                    plan.artist?.let { targetMap["Director"] = it }
-                                    plan.year?.let { targetMap["Year"] = it }
-                                    plan.genre?.let { targetMap["Genre"] = it }
-                                    plan.mediaDate?.let { targetMap["Date"] = it }
-                                }
-                                mime.startsWith("audio/") -> {
-                                    targetMap["Location"] = "${plan.latitude}, ${plan.longitude}"
-                                    plan.title?.let { targetMap["Title"] = it }
-                                    plan.artist?.let { targetMap["Artist"] = it }
-                                    plan.album?.let { targetMap["Album"] = it }
-                                    plan.year?.let { targetMap["Year"] = it }
-                                    plan.genre?.let { targetMap["Genre"] = it }
-                                    plan.mediaDate?.let { targetMap["Date"] = it }
                                 }
                                 mime == "application/pdf" -> {
                                     plan.pdfTitle?.let { targetMap["Title"] = it }

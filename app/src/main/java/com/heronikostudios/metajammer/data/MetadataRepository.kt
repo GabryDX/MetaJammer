@@ -147,7 +147,7 @@ class MetadataRepository(
                         entries.add(MetadataEntry("Date", it))
                     }
                     r.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_LOCATION)?.let {
-                        entries.add(MetadataEntry("Location (Raw)", it))
+                        entries.add(MetadataEntry("Location", it))
                     }
                     
                     // Video specific
