@@ -17,11 +17,15 @@ kotlinxSerializationJson = "1.11.0"
 timber = "5.0.1"
 coil = "2.7.0"
 pdfbox-android = "2.0.27.0"
-room = "2.6.1"
-navigationCompose = "2.8.8"
-koin = "4.0.0"
+room = "2.8.5"
+navigationCompose = "2.10.2"
+koin = "4.2.2"
+kotlinxCoroutines = "1.9.0"
+robolectric = "4.14.1"
 
 [libraries]
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
+robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
 koin-test = { group = "io.insert-koin", name = "koin-test", version.ref = "koin" }
@@ -61,5 +65,4 @@ pdfbox-android = { module = "com.tom-roush:pdfbox-android", version.ref = "pdfbo
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-ksp = { id = "com.google.devtools.ksp", version = "2.3.10" }
-
+ksp = { id = "com.google.devtools.ksp", version = "2.3.11" }

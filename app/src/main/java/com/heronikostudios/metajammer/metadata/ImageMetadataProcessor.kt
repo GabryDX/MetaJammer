@@ -107,7 +107,7 @@ class ImageMetadataProcessor(
             output.write(0xFF)
             output.write(0xD8)
             var offset = 2
-            while (offset + 4 <= bytes.size) {
+            while (offset + 1 < bytes.size) {
                 if ((bytes[offset].toInt() and 0xFF) != 0xFF) {
                     output.write(bytes, offset, bytes.size - offset)
                     break
@@ -126,6 +126,10 @@ class ImageMetadataProcessor(
                     output.write(bytes, offset, 2)
                     offset += 2
                     continue
+                }
+                if (offset + 4 > bytes.size) {
+                    output.write(bytes, offset, bytes.size - offset)
+                    break
                 }
                 val length = ((bytes[offset + 2].toInt() and 0xFF) shl 8) or (bytes[offset + 3].toInt() and 0xFF)
                 val totalLength = 2 + length
