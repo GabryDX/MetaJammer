@@ -5,7 +5,7 @@ import android.content.Context
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.heronikostudios.metajammer.data.SettingsRepository
+import com.heronikostudios.metajammer.data.HistoryRepository
 import com.heronikostudios.metajammer.domain.model.ProcessedFileLog
 import com.heronikostudios.metajammer.domain.usecase.ShareFileUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,18 +16,18 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 /**
- * ViewModel managing processed file history display, deletion, and sharing.
+ * ViewModel managing processed file history backed by Room database.
  */
 class HistoryViewModel(
-    private val settingsRepository: SettingsRepository,
+    private val historyRepository: HistoryRepository,
     private val shareFileUseCase: ShareFileUseCase = ShareFileUseCase()
 ) : ViewModel() {
 
     constructor(application: Application) : this(
-        settingsRepository = SettingsRepository(application.applicationContext)
+        historyRepository = HistoryRepository(application.applicationContext)
     )
 
-    val processedFilesHistory: StateFlow<List<ProcessedFileLog>> = settingsRepository.processedFilesLog
+    val processedFilesHistory: StateFlow<List<ProcessedFileLog>> = historyRepository.processedFilesFlow
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     private val _message = MutableStateFlow<String?>(null)
@@ -35,7 +35,7 @@ class HistoryViewModel(
 
     fun clearProcessedFilesHistory(clearedNotice: String? = null) {
         viewModelScope.launch {
-            settingsRepository.clearProcessedFilesLog()
+            historyRepository.clearHistory()
             clearedNotice?.let { _message.value = it }
         }
     }

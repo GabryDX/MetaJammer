@@ -9,6 +9,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.heronikostudios.metajammer.data.FileRepository
+import com.heronikostudios.metajammer.data.HistoryRepository
 import com.heronikostudios.metajammer.data.MetadataRepository
 import com.heronikostudios.metajammer.data.SettingsRepository
 import com.heronikostudios.metajammer.domain.model.*
@@ -42,6 +43,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val fileRepository = FileRepository(appContext)
     private val metadataRepository = MetadataRepository(fileRepository)
     private val settingsRepository = SettingsRepository(appContext)
+    private val historyRepository = HistoryRepository(appContext)
     private val workManager = WorkManager.getInstance(appContext)
     private val processFileUseCase = ProcessFileUseCase(metadataRepository)
     private val saveFileUseCase = SaveFileUseCase(fileRepository)
@@ -57,7 +59,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         workManager = workManager,
         cacheDir = appContext.cacheDir
     )
-    val historyViewModel = HistoryViewModel(settingsRepository)
+    val historyViewModel = HistoryViewModel(historyRepository)
     val quickScrubHandler = QuickScrubHandler(
         metadataRepository = metadataRepository,
         processFileUseCase = processFileUseCase,

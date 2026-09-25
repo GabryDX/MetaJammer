@@ -7,10 +7,11 @@ import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
 import com.heronikostudios.metajammer.domain.model.*
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.json.Json
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+internal val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 class SettingsRepository(private val context: Context) {
 
@@ -40,7 +41,6 @@ class SettingsRepository(private val context: Context) {
         private val LANGUAGE = stringPreferencesKey("language")
         private val USE_DYNAMIC_COLOR = booleanPreferencesKey("use_dynamic_color")
         private val IS_ONBOARDING_COMPLETED = booleanPreferencesKey("is_onboarding_completed")
-        private val PROCESSED_FILES_LOG = stringSetPreferencesKey("processed_files_log")
         private val ENABLE_PROCESSING_HISTORY = booleanPreferencesKey("enable_processing_history")
         private val HISTORY_RETENTION_POLICY = stringPreferencesKey("history_retention_policy")
         private val SHOW_HISTORY_SHORTCUT = booleanPreferencesKey("show_history_shortcut")
@@ -175,47 +175,21 @@ class SettingsRepository(private val context: Context) {
         context.dataStore.edit { it[SHOW_HISTORY_SHORTCUT] = show }
     }
 
+    private val historyRepository by lazy { HistoryRepository(context) }
+
     suspend fun logProcessedFile(log: ProcessedFileLog) {
-        context.dataStore.edit { preferences ->
-            if (preferences[ENABLE_PROCESSING_HISTORY] != true) return@edit
-            
-            val current = preferences[PROCESSED_FILES_LOG] ?: emptySet()
-            val updated = current.toMutableSet()
-            updated.add(Json.encodeToString(log))
-            
-            // Limit log size to 100 most recent items if needed
-            if (updated.size > 100) {
-                 val sorted = updated.map { Json.decodeFromString<ProcessedFileLog>(it) }
-                     .sortedByDescending { it.timestamp }
-                 val limited = sorted.take(100).map { Json.encodeToString(it) }
-                 preferences[PROCESSED_FILES_LOG] = limited.toSet()
-            } else {
-                 preferences[PROCESSED_FILES_LOG] = updated
-            }
-        }
+        val currentSettings = appSettingsFlow.first()
+        if (!currentSettings.enableProcessingHistory) return
+        historyRepository.logProcessedFile(log, currentSettings.historyRetentionPolicy)
     }
 
     suspend fun clearProcessedFilesLog() {
-        context.dataStore.edit { it.remove(PROCESSED_FILES_LOG) }
+        historyRepository.clearHistory()
     }
 
     suspend fun performMaintenance() {
-        context.dataStore.edit { preferences ->
-            val policy = preferences[HISTORY_RETENTION_POLICY]?.let {
-                runCatching { HistoryRetentionPolicy.valueOf(it) }.getOrNull()
-            } ?: HistoryRetentionPolicy.KEEP_100_ITEMS
-
-            if (policy == HistoryRetentionPolicy.CLEAR_ON_EXIT) {
-                preferences.remove(PROCESSED_FILES_LOG)
-            } else if (policy == HistoryRetentionPolicy.CLEAR_AFTER_24_HOURS) {
-                val current = preferences[PROCESSED_FILES_LOG] ?: emptySet()
-                val cutoff = System.currentTimeMillis() - (24 * 60 * 60 * 1000)
-                val filtered = current.map { Json.decodeFromString<ProcessedFileLog>(it) }
-                    .filter { it.timestamp > cutoff }
-                    .map { Json.encodeToString(it) }
-                preferences[PROCESSED_FILES_LOG] = filtered.toSet()
-            }
-        }
+        val currentSettings = appSettingsFlow.first()
+        historyRepository.performMaintenance(currentSettings.historyRetentionPolicy)
     }
 
     val appSettingsFlow: Flow<AppSettings> = context.dataStore.data.map { preferences ->
@@ -250,8 +224,5 @@ class SettingsRepository(private val context: Context) {
         )
     }
 
-    val processedFilesLog: Flow<List<ProcessedFileLog>> = context.dataStore.data.map { preferences ->
-        preferences[PROCESSED_FILES_LOG]?.map { Json.decodeFromString<ProcessedFileLog>(it) }
-            ?.sortedByDescending { it.timestamp } ?: emptyList()
-    }
+    val processedFilesLog: Flow<List<ProcessedFileLog>> = historyRepository.processedFilesFlow
 }
