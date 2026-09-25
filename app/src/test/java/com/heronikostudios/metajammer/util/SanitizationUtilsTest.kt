@@ -100,4 +100,25 @@ class SanitizationUtilsTest {
         val result = SanitizationUtils.generateOutputName(originalName, false, "PRE_", "_POST")
         assertEquals("PRE_photo_POST.png", result)
     }
+
+    @Test
+    fun `sanitizeFileName eliminates control characters and null bytes`() {
+        val input = "file\u0000with\u0007control\u001Fchars\r\n.jpg"
+        val result = SanitizationUtils.sanitizeFileName(input)
+        assertEquals("file_with_control_chars__.jpg", result)
+    }
+
+    @Test
+    fun `sanitizeFileName handles mixed slashes and pipe character`() {
+        val input = "C:/Users\\test/docs\\secret|file.pdf"
+        val result = SanitizationUtils.sanitizeFileName(input)
+        assertEquals("secret_file.pdf", result)
+    }
+
+    @Test
+    fun `generateOutputName handles multiple dots correctly`() {
+        val originalName = "archive.tar.gz"
+        val result = SanitizationUtils.generateOutputName(originalName, false, "clean_", "_done")
+        assertEquals("clean_archive.tar_done.gz", result)
+    }
 }
