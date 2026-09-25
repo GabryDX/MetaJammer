@@ -7,6 +7,6 @@ data class ProcessedFileLog(
     val uri: String,
     val displayName: String,
     val mimeType: String?,
-    val timestamp: Long,
-    val sizeBytes: Long?
+    val timestamp: Long = System.currentTimeMillis(),
+    val sizeBytes: Long? = null
 )
