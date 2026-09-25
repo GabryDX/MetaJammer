@@ -45,6 +45,7 @@ import com.heronikostudios.metajammer.ui.components.MessageBanner
 import com.heronikostudios.metajammer.ui.screens.*
 import com.heronikostudios.metajammer.ui.theme.MetaJammerTheme
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 open class MainActivity : AppCompatActivity() {
 
@@ -60,7 +61,7 @@ open class MainActivity : AppCompatActivity() {
         sharedUris = extractSharedUris(intent)
 
         setContent {
-            val viewModel: MainViewModel = viewModel()
+            val viewModel: MainViewModel = koinViewModel()
             val appSettings by viewModel.appSettings.collectAsStateWithLifecycle()
 
             MetaJammerTheme(

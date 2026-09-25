@@ -37,38 +37,43 @@ import java.util.concurrent.TimeUnit
  * - [HistoryViewModel]: Processed files log observation and re-sharing
  * - [QuickScrubHandler]: Background automated scrub-and-share flow
  */
-class MainViewModel(application: Application) : AndroidViewModel(application) {
+class MainViewModel(
+    application: Application,
+    private val fileRepository: FileRepository = FileRepository(application.applicationContext),
+    private val metadataRepository: MetadataRepository = MetadataRepository(fileRepository),
+    private val settingsRepository: SettingsRepository = SettingsRepository(application.applicationContext),
+    private val historyRepository: HistoryRepository = HistoryRepository(application.applicationContext),
+    private val workManager: WorkManager = WorkManager.getInstance(application.applicationContext),
+    private val processFileUseCase: ProcessFileUseCase = ProcessFileUseCase(metadataRepository),
+    private val saveFileUseCase: SaveFileUseCase = SaveFileUseCase(fileRepository),
+    val homeViewModel: HomeViewModel = HomeViewModel(fileRepository),
+    val settingsViewModel: SettingsViewModel = SettingsViewModel(
+        settingsRepository = settingsRepository,
+        fileRepository = fileRepository,
+        contentResolver = application.applicationContext.contentResolver
+    ),
+    val processingViewModel: ProcessingViewModel = ProcessingViewModel(
+        metadataRepository = metadataRepository,
+        fileRepository = fileRepository,
+        settingsRepository = settingsRepository,
+        processFileUseCase = processFileUseCase,
+        saveFileUseCase = saveFileUseCase,
+        workManager = workManager,
+        cacheDir = application.applicationContext.cacheDir
+    ),
+    val historyViewModel: HistoryViewModel = HistoryViewModel(historyRepository),
+    val quickScrubHandler: QuickScrubHandler = QuickScrubHandler(
+        metadataRepository = metadataRepository,
+        processFileUseCase = processFileUseCase,
+        saveFileUseCase = saveFileUseCase,
+        settingsRepository = settingsRepository,
+        fileRepository = fileRepository,
+        workManager = workManager,
+        cacheDir = application.applicationContext.cacheDir
+    )
+) : AndroidViewModel(application) {
 
     private val appContext = getApplication<Application>().applicationContext
-    private val fileRepository = FileRepository(appContext)
-    private val metadataRepository = MetadataRepository(fileRepository)
-    private val settingsRepository = SettingsRepository(appContext)
-    private val historyRepository = HistoryRepository(appContext)
-    private val workManager = WorkManager.getInstance(appContext)
-    private val processFileUseCase = ProcessFileUseCase(metadataRepository)
-    private val saveFileUseCase = SaveFileUseCase(fileRepository)
-
-    val homeViewModel = HomeViewModel(fileRepository)
-    val settingsViewModel = SettingsViewModel(settingsRepository, fileRepository, appContext.contentResolver)
-    val processingViewModel = ProcessingViewModel(
-        metadataRepository = metadataRepository,
-        fileRepository = fileRepository,
-        settingsRepository = settingsRepository,
-        processFileUseCase = processFileUseCase,
-        saveFileUseCase = saveFileUseCase,
-        workManager = workManager,
-        cacheDir = appContext.cacheDir
-    )
-    val historyViewModel = HistoryViewModel(historyRepository)
-    val quickScrubHandler = QuickScrubHandler(
-        metadataRepository = metadataRepository,
-        processFileUseCase = processFileUseCase,
-        saveFileUseCase = saveFileUseCase,
-        settingsRepository = settingsRepository,
-        fileRepository = fileRepository,
-        workManager = workManager,
-        cacheDir = appContext.cacheDir
-    )
 
     private var isQuickScrubActive = false
 
