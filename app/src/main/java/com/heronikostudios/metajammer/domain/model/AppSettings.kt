@@ -29,5 +29,10 @@ data class AppSettings(
     val historyRetentionPolicy: HistoryRetentionPolicy = HistoryRetentionPolicy.KEEP_100_ITEMS,
     val showHistoryShortcut: Boolean = false,
     val poisoningProfile: PoisoningProfile = PoisoningProfile.RANDOM,
-    val locationPreset: LocationPreset = LocationPreset.RANDOM
+    val locationPreset: LocationPreset = LocationPreset.RANDOM,
+    val stripGps: Boolean = true,
+    val stripDeviceModel: Boolean = true,
+    val stripDateTime: Boolean = true,
+    val stripCameraSettings: Boolean = true,
+    val stripComments: Boolean = true
 )

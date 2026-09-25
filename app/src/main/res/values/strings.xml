@@ -56,6 +56,17 @@
     <string name="preview_of_changes">Preview of Changes</string>
     <string name="hardware_profile_label">Hardware Profile:</string>
     <string name="location_preset_label">Location Preset:</string>
+    <string name="category_metadata_tags">Metadata Categories</string>
+    <string name="tag_category_gps_title">GPS &amp; Location</string>
+    <string name="tag_category_gps_sub">Strip or spoof coordinates, altitude, and bearing</string>
+    <string name="tag_category_device_title">Device &amp; Hardware</string>
+    <string name="tag_category_device_sub">Strip or spoof camera make, model, software, and serial numbers</string>
+    <string name="tag_category_datetime_title">Date &amp; Timestamp</string>
+    <string name="tag_category_datetime_sub">Strip or spoof creation and modification timestamps</string>
+    <string name="tag_category_camera_title">Camera Technical Settings</string>
+    <string name="tag_category_camera_sub">Strip or spoof ISO, aperture, focal length, flash, and shutter speed</string>
+    <string name="tag_category_comments_title">Comments &amp; Descriptions</string>
+    <string name="tag_category_comments_sub">Strip or spoof user comments, titles, and image descriptions</string>
     <string name="no_preview_available">No preview available</string>
     <string name="change_location_map">Change Location on Map</string>
     <string name="process_and_continue">Process and Continue</string>

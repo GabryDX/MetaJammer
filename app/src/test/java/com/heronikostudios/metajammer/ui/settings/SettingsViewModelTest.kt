@@ -49,6 +49,21 @@ private class FakeSettingsRepository(context: Context) : SettingsRepository(cont
     override suspend fun setLocationPreset(preset: com.heronikostudios.metajammer.domain.model.LocationPreset) {
         _settings.update { it.copy(locationPreset = preset) }
     }
+    override suspend fun setStripGps(enabled: Boolean) {
+        _settings.update { it.copy(stripGps = enabled) }
+    }
+    override suspend fun setStripDeviceModel(enabled: Boolean) {
+        _settings.update { it.copy(stripDeviceModel = enabled) }
+    }
+    override suspend fun setStripDateTime(enabled: Boolean) {
+        _settings.update { it.copy(stripDateTime = enabled) }
+    }
+    override suspend fun setStripCameraSettings(enabled: Boolean) {
+        _settings.update { it.copy(stripCameraSettings = enabled) }
+    }
+    override suspend fun setStripComments(enabled: Boolean) {
+        _settings.update { it.copy(stripComments = enabled) }
+    }
     override suspend fun performMaintenance() {}
 }
 
@@ -105,6 +120,21 @@ class SettingsViewModelTest {
 
         viewModel.setLocationPreset(com.heronikostudios.metajammer.domain.model.LocationPreset.TOKYO)
         assertEquals(com.heronikostudios.metajammer.domain.model.LocationPreset.TOKYO, settingsRepository.appSettingsFlow.first().locationPreset)
+
+        viewModel.setStripGps(false)
+        assertFalse(settingsRepository.appSettingsFlow.first().stripGps)
+
+        viewModel.setStripDeviceModel(false)
+        assertFalse(settingsRepository.appSettingsFlow.first().stripDeviceModel)
+
+        viewModel.setStripDateTime(false)
+        assertFalse(settingsRepository.appSettingsFlow.first().stripDateTime)
+
+        viewModel.setStripCameraSettings(false)
+        assertFalse(settingsRepository.appSettingsFlow.first().stripCameraSettings)
+
+        viewModel.setStripComments(false)
+        assertFalse(settingsRepository.appSettingsFlow.first().stripComments)
     }
 
     @Test

@@ -121,7 +121,12 @@ class QuickScrubHandler(
                                 processingMode = mode,
                                 keepOrientation = keepOrientation,
                                 thumbnailHandling = appSettings.thumbnailHandling,
-                                replacementPlan = plan
+                                replacementPlan = plan,
+                                stripGps = appSettings.stripGps,
+                                stripDeviceModel = appSettings.stripDeviceModel,
+                                stripDateTime = appSettings.stripDateTime,
+                                stripCameraSettings = appSettings.stripCameraSettings,
+                                stripComments = appSettings.stripComments
                             )
                         }
                     }.awaitAll()

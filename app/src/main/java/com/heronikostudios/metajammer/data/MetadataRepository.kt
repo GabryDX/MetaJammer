@@ -62,7 +62,12 @@ class MetadataRepository(
         mode: ProcessingMode,
         keepOrientation: Boolean,
         thumbnailHandling: ThumbnailHandling = ThumbnailHandling.REMOVE,
-        replacementPlan: MetadataReplacementPlan? = null
+        replacementPlan: MetadataReplacementPlan? = null,
+        stripGps: Boolean = true,
+        stripDeviceModel: Boolean = true,
+        stripDateTime: Boolean = true,
+        stripCameraSettings: Boolean = true,
+        stripComments: Boolean = true
     ): File {
         val mime = selectedFile.mimeType ?: ""
         return when {
@@ -70,10 +75,31 @@ class MetadataRepository(
                 when (mode) {
                     ProcessingMode.POISON_METADATA -> {
                         val plan = requireNotNull(replacementPlan) { "Plan required for poison mode" }
-                        imageProcessor.poisonMetadata(selectedFile.uri, plan, keepOrientation, thumbnailHandling, mime)
+                        imageProcessor.poisonMetadata(
+                            inputUri = selectedFile.uri,
+                            plan = plan,
+                            keepOrientation = keepOrientation,
+                            thumbnailHandling = thumbnailHandling,
+                            mimeType = mime,
+                            stripGps = stripGps,
+                            stripDeviceModel = stripDeviceModel,
+                            stripDateTime = stripDateTime,
+                            stripCameraSettings = stripCameraSettings,
+                            stripComments = stripComments
+                        )
                     }
                     ProcessingMode.REMOVE_METADATA -> {
-                        imageProcessor.removeMetadata(selectedFile.uri, keepOrientation, thumbnailHandling, mime)
+                        imageProcessor.removeMetadata(
+                            inputUri = selectedFile.uri,
+                            keepOrientation = keepOrientation,
+                            thumbnailHandling = thumbnailHandling,
+                            mimeType = mime,
+                            stripGps = stripGps,
+                            stripDeviceModel = stripDeviceModel,
+                            stripDateTime = stripDateTime,
+                            stripCameraSettings = stripCameraSettings,
+                            stripComments = stripComments
+                        )
                     }
                 }
             }

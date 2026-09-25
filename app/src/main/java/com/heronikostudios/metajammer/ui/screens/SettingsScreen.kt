@@ -52,6 +52,11 @@ fun SettingsScreen(
     onViewHistory: () -> Unit,
     onPoisoningProfileChanged: (PoisoningProfile) -> Unit = {},
     onLocationPresetChanged: (LocationPreset) -> Unit = {},
+    onStripGpsChanged: (Boolean) -> Unit = {},
+    onStripDeviceModelChanged: (Boolean) -> Unit = {},
+    onStripDateTimeChanged: (Boolean) -> Unit = {},
+    onStripCameraSettingsChanged: (Boolean) -> Unit = {},
+    onStripCommentsChanged: (Boolean) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val unifiedFolderPicker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { 
@@ -191,6 +196,39 @@ fun SettingsScreen(
                 title = stringResource(R.string.location_preset_label),
                 value = settings.locationPreset.displayName,
                 onClick = { activeDialog = SettingsDialog.LocationPresetDialog(settings.locationPreset) }
+            )
+        }
+
+        SettingsCategory(title = stringResource(R.string.category_metadata_tags)) {
+            SettingSwitchRow(
+                title = stringResource(R.string.tag_category_gps_title),
+                subtitle = stringResource(R.string.tag_category_gps_sub),
+                checked = settings.stripGps,
+                onCheckedChange = onStripGpsChanged
+            )
+            SettingSwitchRow(
+                title = stringResource(R.string.tag_category_device_title),
+                subtitle = stringResource(R.string.tag_category_device_sub),
+                checked = settings.stripDeviceModel,
+                onCheckedChange = onStripDeviceModelChanged
+            )
+            SettingSwitchRow(
+                title = stringResource(R.string.tag_category_datetime_title),
+                subtitle = stringResource(R.string.tag_category_datetime_sub),
+                checked = settings.stripDateTime,
+                onCheckedChange = onStripDateTimeChanged
+            )
+            SettingSwitchRow(
+                title = stringResource(R.string.tag_category_camera_title),
+                subtitle = stringResource(R.string.tag_category_camera_sub),
+                checked = settings.stripCameraSettings,
+                onCheckedChange = onStripCameraSettingsChanged
+            )
+            SettingSwitchRow(
+                title = stringResource(R.string.tag_category_comments_title),
+                subtitle = stringResource(R.string.tag_category_comments_sub),
+                checked = settings.stripComments,
+                onCheckedChange = onStripCommentsChanged
             )
         }
 

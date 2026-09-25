@@ -55,6 +55,11 @@ class MetadataProcessingWorker(
         const val KEY_DEFAULT_PREFIX = "default_prefix"
         const val KEY_DEFAULT_SUFFIX = "default_suffix"
         const val KEY_USE_RANDOM_NAMES = "use_random_names"
+        const val KEY_STRIP_GPS = "strip_gps"
+        const val KEY_STRIP_DEVICE_MODEL = "strip_device_model"
+        const val KEY_STRIP_DATE_TIME = "strip_date_time"
+        const val KEY_STRIP_CAMERA_SETTINGS = "strip_camera_settings"
+        const val KEY_STRIP_COMMENTS = "strip_comments"
 
         @Deprecated("Use specific saving paths", ReplaceWith("KEY_UNIFIED_SAVING_PATH"))
         const val KEY_SAVING_PATH = "saving_path"
@@ -83,6 +88,11 @@ class MetadataProcessingWorker(
         val defaultPrefix = inputData.getString(KEY_DEFAULT_PREFIX) ?: ""
         val defaultSuffix = inputData.getString(KEY_DEFAULT_SUFFIX) ?: "_processed"
         val useRandomNames = inputData.getBoolean(KEY_USE_RANDOM_NAMES, false)
+        val stripGps = inputData.getBoolean(KEY_STRIP_GPS, true)
+        val stripDeviceModel = inputData.getBoolean(KEY_STRIP_DEVICE_MODEL, true)
+        val stripDateTime = inputData.getBoolean(KEY_STRIP_DATE_TIME, true)
+        val stripCameraSettings = inputData.getBoolean(KEY_STRIP_CAMERA_SETTINGS, true)
+        val stripComments = inputData.getBoolean(KEY_STRIP_COMMENTS, true)
 
         val mode = ProcessingMode.valueOf(modeString)
         val thumbnailHandling = ThumbnailHandling.valueOf(thumbnailHandlingString)
@@ -127,7 +137,12 @@ class MetadataProcessingWorker(
                             mode = mode,
                             keepOrientation = keepOrientation,
                             thumbnailHandling = thumbnailHandling,
-                            replacementPlan = plan
+                            replacementPlan = plan,
+                            stripGps = stripGps,
+                            stripDeviceModel = stripDeviceModel,
+                            stripDateTime = stripDateTime,
+                            stripCameraSettings = stripCameraSettings,
+                            stripComments = stripComments
                         )
 
                         val displayName = SanitizationUtils.generateOutputName(

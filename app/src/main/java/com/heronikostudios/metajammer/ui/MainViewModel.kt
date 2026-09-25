@@ -128,7 +128,12 @@ class MainViewModel(
         settingsViewModel.observeSettings { oldSettings, newSettings ->
             if (newSettings.keepImageOrientation != oldSettings.keepImageOrientation ||
                 newSettings.thumbnailHandling != oldSettings.thumbnailHandling ||
-                newSettings.useNearbyScramble != oldSettings.useNearbyScramble
+                newSettings.useNearbyScramble != oldSettings.useNearbyScramble ||
+                newSettings.stripGps != oldSettings.stripGps ||
+                newSettings.stripDeviceModel != oldSettings.stripDeviceModel ||
+                newSettings.stripDateTime != oldSettings.stripDateTime ||
+                newSettings.stripCameraSettings != oldSettings.stripCameraSettings ||
+                newSettings.stripComments != oldSettings.stripComments
             ) {
                 processingViewModel.clearProcessedFiles()
                 if (processingViewModel.selectedMode.value != null) {
@@ -242,6 +247,11 @@ class MainViewModel(
     fun setShowHistoryShortcut(show: Boolean) = settingsViewModel.setShowHistoryShortcut(show)
     fun setPoisoningProfile(profile: PoisoningProfile) = settingsViewModel.setPoisoningProfile(profile)
     fun setLocationPreset(preset: LocationPreset) = settingsViewModel.setLocationPreset(preset)
+    fun setStripGps(enabled: Boolean) = settingsViewModel.setStripGps(enabled)
+    fun setStripDeviceModel(enabled: Boolean) = settingsViewModel.setStripDeviceModel(enabled)
+    fun setStripDateTime(enabled: Boolean) = settingsViewModel.setStripDateTime(enabled)
+    fun setStripCameraSettings(enabled: Boolean) = settingsViewModel.setStripCameraSettings(enabled)
+    fun setStripComments(enabled: Boolean) = settingsViewModel.setStripComments(enabled)
 
     fun persistAndSetUnifiedSavingPath(uri: Uri?) = settingsViewModel.persistAndSetUnifiedSavingPath(uri)
     fun persistAndSetPicturesSavingPath(uri: Uri?) = settingsViewModel.persistAndSetPicturesSavingPath(uri)

@@ -153,4 +153,79 @@ class ImageMetadataProcessorTest {
         assertEquals(0xFF.toByte(), stripped[stripped.size - 2])
         assertEquals(0xD9.toByte(), stripped[stripped.size - 1])
     }
+
+    @Test
+    fun testGranularRemoveMetadataPreservesUncheckedCategories() {
+        val originalFile = createTestJpegWithExif()
+        val originalUri = originalFile.toUri()
+
+        // Strip everything EXCEPT GPS
+        val cleanedExceptGps = processor.removeMetadata(
+            inputUri = originalUri,
+            keepOrientation = true,
+            mimeType = "image/jpeg",
+            stripGps = false,
+            stripDeviceModel = true,
+            stripDateTime = true,
+            stripCameraSettings = true,
+            stripComments = true
+        )
+
+        val exifExceptGps = ExifInterface(cleanedExceptGps.absolutePath)
+        assertNotNull("GPS coordinates should be preserved when stripGps is false", exifExceptGps.latLong)
+        assertEquals(48.8584, exifExceptGps.latLong!![0], 0.001)
+        assertNull("Camera Make should still be stripped", exifExceptGps.getAttribute(ExifInterface.TAG_MAKE))
+
+        // Strip everything EXCEPT Device Model
+        val cleanedExceptDevice = processor.removeMetadata(
+            inputUri = originalUri,
+            keepOrientation = true,
+            mimeType = "image/jpeg",
+            stripGps = true,
+            stripDeviceModel = false,
+            stripDateTime = true,
+            stripCameraSettings = true,
+            stripComments = true
+        )
+
+        val exifExceptDevice = ExifInterface(cleanedExceptDevice.absolutePath)
+        assertEquals("RealCameraMake", exifExceptDevice.getAttribute(ExifInterface.TAG_MAKE))
+        assertEquals("RealCameraModel", exifExceptDevice.getAttribute(ExifInterface.TAG_MODEL))
+        assertNull("GPS coordinates should be stripped", exifExceptDevice.latLong)
+    }
+
+    @Test
+    fun testGranularPoisonMetadataSelectivelySpoofs() {
+        val originalFile = createTestJpegWithExif()
+        val originalUri = originalFile.toUri()
+
+        val fakePlan = MetadataReplacementPlan(
+            make = "SpoofedBrand",
+            model = "SpoofedModelX",
+            dateTime = "2025:12:31 23:59:59",
+            latitude = -33.8568,
+            longitude = 151.2153,
+            software = "MetaJammer 0.4.0",
+            imageDescription = "Fake Description",
+            userComment = "Poisoned Comment"
+        )
+
+        // Poison with stripGps = false: GPS should retain original Eiffel Tower coordinates, while Make should be spoofed
+        val poisonedPreservingGps = processor.poisonMetadata(
+            inputUri = originalUri,
+            plan = fakePlan,
+            mimeType = "image/jpeg",
+            stripGps = false,
+            stripDeviceModel = true,
+            stripDateTime = true,
+            stripCameraSettings = true,
+            stripComments = true
+        )
+
+        val exif = ExifInterface(poisonedPreservingGps.absolutePath)
+        assertEquals("SpoofedBrand", exif.getAttribute(ExifInterface.TAG_MAKE))
+        assertNotNull(exif.latLong)
+        assertEquals(48.8584, exif.latLong!![0], 0.001)
+        assertEquals(2.2945, exif.latLong!![1], 0.001)
+    }
 }

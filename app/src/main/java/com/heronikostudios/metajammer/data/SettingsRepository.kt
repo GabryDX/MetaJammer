@@ -46,6 +46,11 @@ open class SettingsRepository(private val context: Context) {
         private val SHOW_HISTORY_SHORTCUT = booleanPreferencesKey("show_history_shortcut")
         private val POISONING_PROFILE = stringPreferencesKey("poisoning_profile")
         private val LOCATION_PRESET = stringPreferencesKey("location_preset")
+        private val STRIP_GPS = booleanPreferencesKey("strip_gps")
+        private val STRIP_DEVICE_MODEL = booleanPreferencesKey("strip_device_model")
+        private val STRIP_DATE_TIME = booleanPreferencesKey("strip_date_time")
+        private val STRIP_CAMERA_SETTINGS = booleanPreferencesKey("strip_camera_settings")
+        private val STRIP_COMMENTS = booleanPreferencesKey("strip_comments")
     }
 
     open suspend fun setUseRandomFileNames(enabled: Boolean) {
@@ -185,6 +190,26 @@ open class SettingsRepository(private val context: Context) {
         context.dataStore.edit { it[LOCATION_PRESET] = preset.name }
     }
 
+    open suspend fun setStripGps(enabled: Boolean) {
+        context.dataStore.edit { it[STRIP_GPS] = enabled }
+    }
+
+    open suspend fun setStripDeviceModel(enabled: Boolean) {
+        context.dataStore.edit { it[STRIP_DEVICE_MODEL] = enabled }
+    }
+
+    open suspend fun setStripDateTime(enabled: Boolean) {
+        context.dataStore.edit { it[STRIP_DATE_TIME] = enabled }
+    }
+
+    open suspend fun setStripCameraSettings(enabled: Boolean) {
+        context.dataStore.edit { it[STRIP_CAMERA_SETTINGS] = enabled }
+    }
+
+    open suspend fun setStripComments(enabled: Boolean) {
+        context.dataStore.edit { it[STRIP_COMMENTS] = enabled }
+    }
+
     private val historyRepository by lazy { HistoryRepository(context) }
 
     suspend fun logProcessedFile(log: ProcessedFileLog) {
@@ -232,7 +257,12 @@ open class SettingsRepository(private val context: Context) {
             historyRetentionPolicy = preferences[HISTORY_RETENTION_POLICY]?.let { runCatching { HistoryRetentionPolicy.valueOf(it) }.getOrNull() } ?: HistoryRetentionPolicy.KEEP_100_ITEMS,
             showHistoryShortcut = preferences[SHOW_HISTORY_SHORTCUT] ?: false,
             poisoningProfile = preferences[POISONING_PROFILE]?.let { runCatching { PoisoningProfile.valueOf(it) }.getOrNull() } ?: PoisoningProfile.RANDOM,
-            locationPreset = preferences[LOCATION_PRESET]?.let { runCatching { LocationPreset.valueOf(it) }.getOrNull() } ?: LocationPreset.RANDOM
+            locationPreset = preferences[LOCATION_PRESET]?.let { runCatching { LocationPreset.valueOf(it) }.getOrNull() } ?: LocationPreset.RANDOM,
+            stripGps = preferences[STRIP_GPS] ?: true,
+            stripDeviceModel = preferences[STRIP_DEVICE_MODEL] ?: true,
+            stripDateTime = preferences[STRIP_DATE_TIME] ?: true,
+            stripCameraSettings = preferences[STRIP_CAMERA_SETTINGS] ?: true,
+            stripComments = preferences[STRIP_COMMENTS] ?: true
         )
     }
 

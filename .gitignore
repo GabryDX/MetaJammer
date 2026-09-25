@@ -46,7 +46,6 @@ local.properties
 .idea/
 .idea/*
 /.idea/caches
-/.idea/caches
 /.idea/libraries
 /.idea/modules.xml
 /.idea/workspace.xml
@@ -77,3 +76,8 @@ google-services.json
 
 # Android Profiling
 *.hprof
+
+# Custom
+images/background
+images/icons
+images/monochrome

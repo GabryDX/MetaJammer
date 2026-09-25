@@ -224,7 +224,21 @@ class ProcessingViewModel(
                         if (currentMetadata.isEmpty()) {
                             listOf(MetadataEntry("Info", "No metadata would be removed"))
                         } else {
-                            currentMetadata.map { MetadataEntry(it.key, "${it.value}  →  [REMOVED]") }
+                            currentMetadata.map { entry ->
+                                val willStrip = com.heronikostudios.metajammer.metadata.ImageMetadataProcessor.shouldStripTag(
+                                    entry.key,
+                                    appSettings.stripGps,
+                                    appSettings.stripDeviceModel,
+                                    appSettings.stripDateTime,
+                                    appSettings.stripCameraSettings,
+                                    appSettings.stripComments
+                                )
+                                if (willStrip) {
+                                    MetadataEntry(entry.key, "${entry.value}  →  [REMOVED]")
+                                } else {
+                                    MetadataEntry(entry.key, "${entry.value}  (KEPT)")
+                                }
+                            }
                         }
                     }
 
@@ -238,28 +252,68 @@ class ProcessingViewModel(
 
                             when {
                                 mime.startsWith("image/") -> {
-                                    targetMap["DateTime"] = plan.dateTime
-                                    targetMap["DateTimeOriginal"] = plan.dateTime
-                                    targetMap["DateTimeDigitized"] = plan.dateTime
-                                    targetMap["Make"] = plan.make
-                                    targetMap["Model"] = plan.model
-                                    targetMap["Software"] = plan.software
+                                    if (appSettings.stripDateTime) {
+                                        targetMap["DateTime"] = plan.dateTime
+                                        targetMap["DateTimeOriginal"] = plan.dateTime
+                                        targetMap["DateTimeDigitized"] = plan.dateTime
+                                    } else {
+                                        currentMap["DateTime"]?.let { targetMap["DateTime"] = it }
+                                        currentMap["DateTimeOriginal"]?.let { targetMap["DateTimeOriginal"] = it }
+                                        currentMap["DateTimeDigitized"]?.let { targetMap["DateTimeDigitized"] = it }
+                                    }
+
+                                    if (appSettings.stripDeviceModel) {
+                                        targetMap["Make"] = plan.make
+                                        targetMap["Model"] = plan.model
+                                        targetMap["Software"] = plan.software
+                                        plan.lensMake?.let { targetMap["LensMake"] = it }
+                                        plan.lensModel?.let { targetMap["LensModel"] = it }
+                                    } else {
+                                        currentMap["Make"]?.let { targetMap["Make"] = it }
+                                        currentMap["Model"]?.let { targetMap["Model"] = it }
+                                        currentMap["Software"]?.let { targetMap["Software"] = it }
+                                        currentMap["LensMake"]?.let { targetMap["LensMake"] = it }
+                                        currentMap["LensModel"]?.let { targetMap["LensModel"] = it }
+                                    }
+
                                     currentMap["ImageWidth"]?.let { targetMap["ImageWidth"] = it }
                                     currentMap["ImageLength"]?.let { targetMap["ImageLength"] = it }
-                                    targetMap["ImageDescription"] = plan.imageDescription
-                                    targetMap["UserComment"] = plan.userComment
-                                    targetMap["PhotographicSensitivity"] = plan.photographicSensitivity
-                                    targetMap["ExposureTime"] = plan.exposureTime
-                                    targetMap["FNumber"] = plan.fNumber
-                                    targetMap["FocalLength"] = plan.focalLength
-                                    targetMap["WhiteBalance"] = plan.whiteBalance
-                                    targetMap["Flash"] = plan.flash
-                                    plan.lensMake?.let { targetMap["LensMake"] = it }
-                                    plan.lensModel?.let { targetMap["LensModel"] = it }
-                                    targetMap["GPSLatitude"] = plan.latitude.toString()
-                                    targetMap["GPSLatitudeRef"] = plan.latitudeRef
-                                    targetMap["GPSLongitude"] = plan.longitude.toString()
-                                    targetMap["GPSLongitudeRef"] = plan.longitudeRef
+
+                                    if (appSettings.stripComments) {
+                                        targetMap["ImageDescription"] = plan.imageDescription
+                                        targetMap["UserComment"] = plan.userComment
+                                    } else {
+                                        currentMap["ImageDescription"]?.let { targetMap["ImageDescription"] = it }
+                                        currentMap["UserComment"]?.let { targetMap["UserComment"] = it }
+                                    }
+
+                                    if (appSettings.stripCameraSettings) {
+                                        targetMap["PhotographicSensitivity"] = plan.photographicSensitivity
+                                        targetMap["ExposureTime"] = plan.exposureTime
+                                        targetMap["FNumber"] = plan.fNumber
+                                        targetMap["FocalLength"] = plan.focalLength
+                                        targetMap["WhiteBalance"] = plan.whiteBalance
+                                        targetMap["Flash"] = plan.flash
+                                    } else {
+                                        currentMap["PhotographicSensitivity"]?.let { targetMap["PhotographicSensitivity"] = it }
+                                        currentMap["ExposureTime"]?.let { targetMap["ExposureTime"] = it }
+                                        currentMap["FNumber"]?.let { targetMap["FNumber"] = it }
+                                        currentMap["FocalLength"]?.let { targetMap["FocalLength"] = it }
+                                        currentMap["WhiteBalance"]?.let { targetMap["WhiteBalance"] = it }
+                                        currentMap["Flash"]?.let { targetMap["Flash"] = it }
+                                    }
+
+                                    if (appSettings.stripGps) {
+                                        targetMap["GPSLatitude"] = plan.latitude.toString()
+                                        targetMap["GPSLatitudeRef"] = plan.latitudeRef
+                                        targetMap["GPSLongitude"] = plan.longitude.toString()
+                                        targetMap["GPSLongitudeRef"] = plan.longitudeRef
+                                    } else {
+                                        currentMap["GPSLatitude"]?.let { targetMap["GPSLatitude"] = it }
+                                        currentMap["GPSLatitudeRef"]?.let { targetMap["GPSLatitudeRef"] = it }
+                                        currentMap["GPSLongitude"]?.let { targetMap["GPSLongitude"] = it }
+                                        currentMap["GPSLongitudeRef"]?.let { targetMap["GPSLongitudeRef"] = it }
+                                    }
                                 }
                                 mime.startsWith("video/") || mime.startsWith("audio/") -> {
                                     targetMap["Location"] = "${plan.latitude}, ${plan.longitude}"
@@ -334,7 +388,12 @@ class ProcessingViewModel(
                                     processingMode = mode,
                                     keepOrientation = appSettings.keepImageOrientation,
                                     thumbnailHandling = appSettings.thumbnailHandling,
-                                    replacementPlan = plan
+                                    replacementPlan = plan,
+                                    stripGps = appSettings.stripGps,
+                                    stripDeviceModel = appSettings.stripDeviceModel,
+                                    stripDateTime = appSettings.stripDateTime,
+                                    stripCameraSettings = appSettings.stripCameraSettings,
+                                    stripComments = appSettings.stripComments
                                 )
                             }
                         }.awaitAll()
@@ -378,6 +437,11 @@ class ProcessingViewModel(
             .putString(MetadataProcessingWorker.KEY_DEFAULT_PREFIX, settings.defaultPrefix)
             .putString(MetadataProcessingWorker.KEY_DEFAULT_SUFFIX, settings.defaultSuffix)
             .putBoolean(MetadataProcessingWorker.KEY_USE_RANDOM_NAMES, settings.useRandomFileNames)
+            .putBoolean(MetadataProcessingWorker.KEY_STRIP_GPS, settings.stripGps)
+            .putBoolean(MetadataProcessingWorker.KEY_STRIP_DEVICE_MODEL, settings.stripDeviceModel)
+            .putBoolean(MetadataProcessingWorker.KEY_STRIP_DATE_TIME, settings.stripDateTime)
+            .putBoolean(MetadataProcessingWorker.KEY_STRIP_CAMERA_SETTINGS, settings.stripCameraSettings)
+            .putBoolean(MetadataProcessingWorker.KEY_STRIP_COMMENTS, settings.stripComments)
             .build()
 
         val workRequest = OneTimeWorkRequestBuilder<MetadataProcessingWorker>()

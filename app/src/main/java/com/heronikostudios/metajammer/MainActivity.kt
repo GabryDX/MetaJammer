@@ -512,6 +512,11 @@ fun MetaJammerApp(
                         onViewHistory = { navController.navigate(Screen.History) },
                         onPoisoningProfileChanged = viewModel::setPoisoningProfile,
                         onLocationPresetChanged = viewModel::setLocationPreset,
+                        onStripGpsChanged = viewModel::setStripGps,
+                        onStripDeviceModelChanged = viewModel::setStripDeviceModel,
+                        onStripDateTimeChanged = viewModel::setStripDateTime,
+                        onStripCameraSettingsChanged = viewModel::setStripCameraSettings,
+                        onStripCommentsChanged = viewModel::setStripComments,
                         modifier = Modifier.fillMaxSize()
                     )
                 }

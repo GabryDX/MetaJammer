@@ -281,6 +281,26 @@ class SettingsViewModel(
         settingsRepository.setLocationPreset(preset)
     }
 
+    fun setStripGps(enabled: Boolean) = launchSettingUpdate {
+        settingsRepository.setStripGps(enabled)
+    }
+
+    fun setStripDeviceModel(enabled: Boolean) = launchSettingUpdate {
+        settingsRepository.setStripDeviceModel(enabled)
+    }
+
+    fun setStripDateTime(enabled: Boolean) = launchSettingUpdate {
+        settingsRepository.setStripDateTime(enabled)
+    }
+
+    fun setStripCameraSettings(enabled: Boolean) = launchSettingUpdate {
+        settingsRepository.setStripCameraSettings(enabled)
+    }
+
+    fun setStripComments(enabled: Boolean) = launchSettingUpdate {
+        settingsRepository.setStripComments(enabled)
+    }
+
     fun clearCache() {
         viewModelScope.launch(Dispatchers.IO) {
             fileRepository.clearCache()

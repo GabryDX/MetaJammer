@@ -158,57 +158,214 @@ class ImageMetadataProcessor(
             outputFile.writeBytes(stripped)
             return true
         }
+        val GPS_TAGS = setOf(
+            ExifInterface.TAG_GPS_LATITUDE,
+            ExifInterface.TAG_GPS_LATITUDE_REF,
+            ExifInterface.TAG_GPS_LONGITUDE,
+            ExifInterface.TAG_GPS_LONGITUDE_REF,
+            ExifInterface.TAG_GPS_ALTITUDE,
+            ExifInterface.TAG_GPS_ALTITUDE_REF,
+            ExifInterface.TAG_GPS_TIMESTAMP,
+            ExifInterface.TAG_GPS_DATESTAMP,
+            ExifInterface.TAG_GPS_PROCESSING_METHOD,
+            ExifInterface.TAG_GPS_AREA_INFORMATION,
+            ExifInterface.TAG_GPS_DOP,
+            ExifInterface.TAG_GPS_SPEED,
+            ExifInterface.TAG_GPS_SPEED_REF,
+            ExifInterface.TAG_GPS_TRACK,
+            ExifInterface.TAG_GPS_TRACK_REF,
+            ExifInterface.TAG_GPS_IMG_DIRECTION,
+            ExifInterface.TAG_GPS_IMG_DIRECTION_REF,
+            ExifInterface.TAG_GPS_MAP_DATUM,
+            ExifInterface.TAG_GPS_DEST_LATITUDE,
+            ExifInterface.TAG_GPS_DEST_LATITUDE_REF,
+            ExifInterface.TAG_GPS_DEST_LONGITUDE,
+            ExifInterface.TAG_GPS_DEST_LONGITUDE_REF,
+            ExifInterface.TAG_GPS_DEST_BEARING,
+            ExifInterface.TAG_GPS_DEST_BEARING_REF,
+            ExifInterface.TAG_GPS_DEST_DISTANCE,
+            ExifInterface.TAG_GPS_DEST_DISTANCE_REF,
+            ExifInterface.TAG_GPS_DIFFERENTIAL
+        )
+
+        val DEVICE_TAGS = setOf(
+            ExifInterface.TAG_MAKE,
+            ExifInterface.TAG_MODEL,
+            ExifInterface.TAG_SOFTWARE,
+            ExifInterface.TAG_BODY_SERIAL_NUMBER,
+            ExifInterface.TAG_CAMERA_OWNER_NAME,
+            ExifInterface.TAG_LENS_MAKE,
+            ExifInterface.TAG_LENS_MODEL,
+            ExifInterface.TAG_LENS_SERIAL_NUMBER,
+            ExifInterface.TAG_LENS_SPECIFICATION,
+            ExifInterface.TAG_DEVICE_SETTING_DESCRIPTION,
+            "OwnerName"
+        )
+
+        val DATE_TIME_TAGS = setOf(
+            ExifInterface.TAG_DATETIME,
+            ExifInterface.TAG_DATETIME_ORIGINAL,
+            ExifInterface.TAG_DATETIME_DIGITIZED,
+            ExifInterface.TAG_SUBSEC_TIME,
+            ExifInterface.TAG_SUBSEC_TIME_ORIGINAL,
+            ExifInterface.TAG_SUBSEC_TIME_DIGITIZED,
+            ExifInterface.TAG_OFFSET_TIME,
+            ExifInterface.TAG_OFFSET_TIME_ORIGINAL,
+            ExifInterface.TAG_OFFSET_TIME_DIGITIZED
+        )
+
+        val CAMERA_SETTINGS_TAGS = setOf(
+            ExifInterface.TAG_EXPOSURE_TIME,
+            ExifInterface.TAG_F_NUMBER,
+            ExifInterface.TAG_EXPOSURE_PROGRAM,
+            ExifInterface.TAG_SPECTRAL_SENSITIVITY,
+            ExifInterface.TAG_PHOTOGRAPHIC_SENSITIVITY,
+            ExifInterface.TAG_OECF,
+            ExifInterface.TAG_SHUTTER_SPEED_VALUE,
+            ExifInterface.TAG_APERTURE_VALUE,
+            ExifInterface.TAG_BRIGHTNESS_VALUE,
+            ExifInterface.TAG_EXPOSURE_BIAS_VALUE,
+            ExifInterface.TAG_MAX_APERTURE_VALUE,
+            ExifInterface.TAG_SUBJECT_DISTANCE,
+            ExifInterface.TAG_METERING_MODE,
+            ExifInterface.TAG_LIGHT_SOURCE,
+            ExifInterface.TAG_FLASH,
+            ExifInterface.TAG_FOCAL_LENGTH,
+            ExifInterface.TAG_SUBJECT_AREA,
+            ExifInterface.TAG_FLASH_ENERGY,
+            ExifInterface.TAG_SPATIAL_FREQUENCY_RESPONSE,
+            ExifInterface.TAG_FOCAL_PLANE_X_RESOLUTION,
+            ExifInterface.TAG_FOCAL_PLANE_Y_RESOLUTION,
+            ExifInterface.TAG_FOCAL_PLANE_RESOLUTION_UNIT,
+            ExifInterface.TAG_SUBJECT_LOCATION,
+            ExifInterface.TAG_EXPOSURE_INDEX,
+            ExifInterface.TAG_SENSING_METHOD,
+            ExifInterface.TAG_FILE_SOURCE,
+            ExifInterface.TAG_SCENE_TYPE,
+            ExifInterface.TAG_CFA_PATTERN,
+            ExifInterface.TAG_CUSTOM_RENDERED,
+            ExifInterface.TAG_EXPOSURE_MODE,
+            ExifInterface.TAG_WHITE_BALANCE,
+            ExifInterface.TAG_DIGITAL_ZOOM_RATIO,
+            ExifInterface.TAG_FOCAL_LENGTH_IN_35MM_FILM,
+            ExifInterface.TAG_SCENE_CAPTURE_TYPE,
+            ExifInterface.TAG_GAIN_CONTROL,
+            ExifInterface.TAG_CONTRAST,
+            ExifInterface.TAG_SATURATION,
+            ExifInterface.TAG_SHARPNESS,
+            ExifInterface.TAG_SUBJECT_DISTANCE_RANGE,
+            "SensitivityType",
+            "StandardOutputSensitivity",
+            "RecommendedExposureIndex"
+        )
+
+        val COMMENTS_TAGS = setOf(
+            ExifInterface.TAG_IMAGE_DESCRIPTION,
+            ExifInterface.TAG_ARTIST,
+            ExifInterface.TAG_COPYRIGHT,
+            ExifInterface.TAG_USER_COMMENT,
+            "XPAuthor",
+            "XPComment",
+            "XPKeywords",
+            "XPSubject",
+            "XPTitle"
+        )
+
+        fun shouldStripTag(
+            tag: String,
+            stripGps: Boolean,
+            stripDeviceModel: Boolean,
+            stripDateTime: Boolean,
+            stripCameraSettings: Boolean,
+            stripComments: Boolean
+        ): Boolean {
+            if (tag in GPS_TAGS || tag.startsWith("GPS")) return stripGps
+            if (tag in DEVICE_TAGS) return stripDeviceModel
+            if (tag in DATE_TIME_TAGS) return stripDateTime
+            if (tag in CAMERA_SETTINGS_TAGS) return stripCameraSettings
+            if (tag in COMMENTS_TAGS) return stripComments
+            return true
+        }
     }
 
     /**
-     * Removes metadata from an image.
+     * Removes metadata from an image with granular category control.
      */
     fun removeMetadata(
         inputUri: Uri,
         keepOrientation: Boolean = true,
         thumbnailHandling: ThumbnailHandling = ThumbnailHandling.REMOVE,
-        mimeType: String? = null
+        mimeType: String? = null,
+        stripGps: Boolean = true,
+        stripDeviceModel: Boolean = true,
+        stripDateTime: Boolean = true,
+        stripCameraSettings: Boolean = true,
+        stripComments: Boolean = true
     ): File {
         return processImage(inputUri, "img_clean_", keepOrientation, thumbnailHandling, mimeType) { exif ->
-            ALL_SUPPORTED_TAGS.forEach { tag -> exif.setAttribute(tag, null) }
+            ALL_SUPPORTED_TAGS.forEach { tag ->
+                if (shouldStripTag(tag, stripGps, stripDeviceModel, stripDateTime, stripCameraSettings, stripComments)) {
+                    exif.setAttribute(tag, null)
+                }
+            }
         }
     }
 
     /**
-     * Replaces existing metadata with "poisoned" (fake) values from a plan.
+     * Replaces existing metadata with "poisoned" (fake) values from a plan with granular category control.
      */
     fun poisonMetadata(
         inputUri: Uri,
         plan: MetadataReplacementPlan,
         keepOrientation: Boolean = true,
         thumbnailHandling: ThumbnailHandling = ThumbnailHandling.REMOVE,
-        mimeType: String? = null
+        mimeType: String? = null,
+        stripGps: Boolean = true,
+        stripDeviceModel: Boolean = true,
+        stripDateTime: Boolean = true,
+        stripCameraSettings: Boolean = true,
+        stripComments: Boolean = true
     ): File {
         return processImage(inputUri, "img_poisoned_", keepOrientation, thumbnailHandling, mimeType) { exif ->
-            // First, clear ALL supported tags to ensure no non-standard or obscure metadata remains.
-            // This satisfies the requirement to delete all "extra" metadata instead of leaving it.
-            ALL_SUPPORTED_TAGS.forEach { tag -> exif.setAttribute(tag, null) }
+            // Clear only categories marked for stripping or poisoning
+            ALL_SUPPORTED_TAGS.forEach { tag ->
+                if (shouldStripTag(tag, stripGps, stripDeviceModel, stripDateTime, stripCameraSettings, stripComments)) {
+                    exif.setAttribute(tag, null)
+                }
+            }
 
-            // Set fake values from the plan
-            exif.setAttribute(ExifInterface.TAG_DATETIME, plan.dateTime)
-            exif.setAttribute(ExifInterface.TAG_DATETIME_ORIGINAL, plan.dateTime)
-            exif.setAttribute(ExifInterface.TAG_DATETIME_DIGITIZED, plan.dateTime)
-            exif.setAttribute(ExifInterface.TAG_MAKE, plan.make)
-            exif.setAttribute(ExifInterface.TAG_MODEL, plan.model)
-            exif.setAttribute(ExifInterface.TAG_SOFTWARE, plan.software)
-            exif.setAttribute(ExifInterface.TAG_IMAGE_DESCRIPTION, plan.imageDescription)
-            exif.setAttribute(ExifInterface.TAG_USER_COMMENT, plan.userComment)
-            exif.setAttribute(ExifInterface.TAG_PHOTOGRAPHIC_SENSITIVITY, plan.photographicSensitivity)
-            exif.setAttribute(ExifInterface.TAG_EXPOSURE_TIME, plan.exposureTime)
-            exif.setAttribute(ExifInterface.TAG_F_NUMBER, plan.fNumber)
-            exif.setAttribute(ExifInterface.TAG_FOCAL_LENGTH, plan.focalLength)
-            exif.setAttribute(ExifInterface.TAG_WHITE_BALANCE, plan.whiteBalance)
-            exif.setAttribute(ExifInterface.TAG_FLASH, plan.flash)
+            // Set fake values only for categories marked for poisoning
+            if (stripDateTime) {
+                exif.setAttribute(ExifInterface.TAG_DATETIME, plan.dateTime)
+                exif.setAttribute(ExifInterface.TAG_DATETIME_ORIGINAL, plan.dateTime)
+                exif.setAttribute(ExifInterface.TAG_DATETIME_DIGITIZED, plan.dateTime)
+            }
 
-            plan.lensMake?.let { exif.setAttribute(ExifInterface.TAG_LENS_MAKE, it) }
-            plan.lensModel?.let { exif.setAttribute(ExifInterface.TAG_LENS_MODEL, it) }
+            if (stripDeviceModel) {
+                exif.setAttribute(ExifInterface.TAG_MAKE, plan.make)
+                exif.setAttribute(ExifInterface.TAG_MODEL, plan.model)
+                exif.setAttribute(ExifInterface.TAG_SOFTWARE, plan.software)
+                plan.lensMake?.let { exif.setAttribute(ExifInterface.TAG_LENS_MAKE, it) }
+                plan.lensModel?.let { exif.setAttribute(ExifInterface.TAG_LENS_MODEL, it) }
+            }
 
-            exif.setLatLong(plan.latitude, plan.longitude)
+            if (stripComments) {
+                exif.setAttribute(ExifInterface.TAG_IMAGE_DESCRIPTION, plan.imageDescription)
+                exif.setAttribute(ExifInterface.TAG_USER_COMMENT, plan.userComment)
+            }
+
+            if (stripCameraSettings) {
+                exif.setAttribute(ExifInterface.TAG_PHOTOGRAPHIC_SENSITIVITY, plan.photographicSensitivity)
+                exif.setAttribute(ExifInterface.TAG_EXPOSURE_TIME, plan.exposureTime)
+                exif.setAttribute(ExifInterface.TAG_F_NUMBER, plan.fNumber)
+                exif.setAttribute(ExifInterface.TAG_FOCAL_LENGTH, plan.focalLength)
+                exif.setAttribute(ExifInterface.TAG_WHITE_BALANCE, plan.whiteBalance)
+                exif.setAttribute(ExifInterface.TAG_FLASH, plan.flash)
+            }
+
+            if (stripGps) {
+                exif.setLatLong(plan.latitude, plan.longitude)
+            }
         }
     }
 
