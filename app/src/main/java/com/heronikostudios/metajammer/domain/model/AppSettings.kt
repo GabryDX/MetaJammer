@@ -27,5 +27,7 @@ data class AppSettings(
     val isOnboardingCompleted: Boolean = false,
     val enableProcessingHistory: Boolean = false,
     val historyRetentionPolicy: HistoryRetentionPolicy = HistoryRetentionPolicy.KEEP_100_ITEMS,
-    val showHistoryShortcut: Boolean = false
+    val showHistoryShortcut: Boolean = false,
+    val poisoningProfile: PoisoningProfile = PoisoningProfile.RANDOM,
+    val locationPreset: LocationPreset = LocationPreset.RANDOM
 )

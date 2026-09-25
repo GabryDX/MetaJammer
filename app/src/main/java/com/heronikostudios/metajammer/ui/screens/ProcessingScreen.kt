@@ -27,6 +27,12 @@ import com.heronikostudios.metajammer.domain.model.ProcessingMode
 import com.heronikostudios.metajammer.domain.model.SelectedFile
 import androidx.work.WorkInfo
 
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.FilterChip
+import com.heronikostudios.metajammer.domain.model.PoisoningProfile
+import com.heronikostudios.metajammer.domain.model.LocationPreset
+
 @Composable
 fun ProcessingScreen(
     selectedFiles: List<SelectedFile>,
@@ -39,6 +45,10 @@ fun ProcessingScreen(
     onProcess: () -> Unit,
     onEditLocation: (Uri) -> Unit,
     hasProcessedFiles: Boolean,
+    selectedProfile: PoisoningProfile = PoisoningProfile.RANDOM,
+    onProfileSelected: (PoisoningProfile) -> Unit = {},
+    selectedLocationPreset: LocationPreset = LocationPreset.RANDOM,
+    onLocationPresetSelected: (LocationPreset) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -83,6 +93,46 @@ fun ProcessingScreen(
                 }
 
                 if (selectedMode == ProcessingMode.POISON_METADATA) {
+                    Text(
+                        text = stringResource(R.string.hardware_profile_label),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .horizontalScroll(rememberScrollState()),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        PoisoningProfile.entries.forEach { profile ->
+                            FilterChip(
+                                selected = profile == selectedProfile,
+                                onClick = { onProfileSelected(profile) },
+                                label = { Text(profile.displayName) }
+                            )
+                        }
+                    }
+
+                    Text(
+                        text = stringResource(R.string.location_preset_label),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .horizontalScroll(rememberScrollState()),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        LocationPreset.entries.forEach { preset ->
+                            FilterChip(
+                                selected = preset == selectedLocationPreset,
+                                onClick = { onLocationPresetSelected(preset) },
+                                label = { Text(preset.displayName) }
+                            )
+                        }
+                    }
+
                     Button(
                         onClick = onRegeneratePlans,
                         modifier = Modifier.fillMaxWidth()

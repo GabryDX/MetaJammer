@@ -273,6 +273,14 @@ class SettingsViewModel(
         settingsRepository.setShowHistoryShortcut(show)
     }
 
+    fun setPoisoningProfile(profile: PoisoningProfile) = launchSettingUpdate {
+        settingsRepository.setPoisoningProfile(profile)
+    }
+
+    fun setLocationPreset(preset: LocationPreset) = launchSettingUpdate {
+        settingsRepository.setLocationPreset(preset)
+    }
+
     fun clearCache() {
         viewModelScope.launch(Dispatchers.IO) {
             fileRepository.clearCache()

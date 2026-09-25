@@ -43,6 +43,12 @@ private class FakeSettingsRepository(context: Context) : SettingsRepository(cont
     override suspend fun setThumbnailHandling(handling: ThumbnailHandling) {
         _settings.update { it.copy(thumbnailHandling = handling) }
     }
+    override suspend fun setPoisoningProfile(profile: com.heronikostudios.metajammer.domain.model.PoisoningProfile) {
+        _settings.update { it.copy(poisoningProfile = profile) }
+    }
+    override suspend fun setLocationPreset(preset: com.heronikostudios.metajammer.domain.model.LocationPreset) {
+        _settings.update { it.copy(locationPreset = preset) }
+    }
     override suspend fun performMaintenance() {}
 }
 
@@ -93,6 +99,12 @@ class SettingsViewModelTest {
 
         viewModel.setThumbnailHandling(ThumbnailHandling.KEEP_ORIGINAL)
         assertEquals(ThumbnailHandling.KEEP_ORIGINAL, settingsRepository.appSettingsFlow.first().thumbnailHandling)
+
+        viewModel.setPoisoningProfile(com.heronikostudios.metajammer.domain.model.PoisoningProfile.PRO_MIRRORLESS)
+        assertEquals(com.heronikostudios.metajammer.domain.model.PoisoningProfile.PRO_MIRRORLESS, settingsRepository.appSettingsFlow.first().poisoningProfile)
+
+        viewModel.setLocationPreset(com.heronikostudios.metajammer.domain.model.LocationPreset.TOKYO)
+        assertEquals(com.heronikostudios.metajammer.domain.model.LocationPreset.TOKYO, settingsRepository.appSettingsFlow.first().locationPreset)
     }
 
     @Test

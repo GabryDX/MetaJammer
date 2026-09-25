@@ -50,6 +50,8 @@ fun SettingsScreen(
     onShowHistoryShortcutChanged: (Boolean) -> Unit,
     onClearHistory: () -> Unit,
     onViewHistory: () -> Unit,
+    onPoisoningProfileChanged: (PoisoningProfile) -> Unit = {},
+    onLocationPresetChanged: (LocationPreset) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val unifiedFolderPicker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { 
@@ -178,6 +180,18 @@ fun SettingsScreen(
                 checked = settings.useNearbyScramble,
                 onCheckedChange = onUseNearbyScrambleChanged
             )
+
+            DialogSettingRow(
+                title = stringResource(R.string.hardware_profile_label),
+                value = settings.poisoningProfile.displayName,
+                onClick = { activeDialog = SettingsDialog.ProfileDialog(settings.poisoningProfile) }
+            )
+
+            DialogSettingRow(
+                title = stringResource(R.string.location_preset_label),
+                value = settings.locationPreset.displayName,
+                onClick = { activeDialog = SettingsDialog.LocationPresetDialog(settings.locationPreset) }
+            )
         }
 
         SettingsCategory(title = stringResource(R.string.category_shared_files)) {
@@ -302,7 +316,9 @@ fun SettingsScreen(
             onProcessingModeChanged = onSharedFilesProcessingModeChanged,
             onOutputActionChanged = onSharedFilesOutputActionChanged,
             onLanguageChanged = onLanguageChanged,
-            onHistoryRetentionPolicyChanged = onHistoryRetentionPolicyChanged
+            onHistoryRetentionPolicyChanged = onHistoryRetentionPolicyChanged,
+            onPoisoningProfileChanged = onPoisoningProfileChanged,
+            onLocationPresetChanged = onLocationPresetChanged
         )
     }
 }
@@ -424,6 +440,8 @@ private sealed class SettingsDialog {
     data class SharedOutputAction(val current: SharedInputOutputAction) : SettingsDialog()
     data class Language(val current: AppLanguage) : SettingsDialog()
     data class HistoryRetention(val current: HistoryRetentionPolicy) : SettingsDialog()
+    data class ProfileDialog(val current: PoisoningProfile) : SettingsDialog()
+    data class LocationPresetDialog(val current: LocationPreset) : SettingsDialog()
 }
 
 @Composable
@@ -446,9 +464,27 @@ private fun HandleSettingsDialog(
     onProcessingModeChanged: (ProcessingMode) -> Unit,
     onOutputActionChanged: (SharedInputOutputAction) -> Unit,
     onLanguageChanged: (AppLanguage) -> Unit,
-    onHistoryRetentionPolicyChanged: (HistoryRetentionPolicy) -> Unit
+    onHistoryRetentionPolicyChanged: (HistoryRetentionPolicy) -> Unit,
+    onPoisoningProfileChanged: (PoisoningProfile) -> Unit = {},
+    onLocationPresetChanged: (LocationPreset) -> Unit = {}
 ) {
     when (dialog) {
+        is SettingsDialog.ProfileDialog -> SingleSelectDialog(
+            title = stringResource(R.string.hardware_profile_label),
+            options = PoisoningProfile.entries,
+            selected = dialog.current,
+            labelProvider = { it.displayName },
+            onConfirm = onPoisoningProfileChanged,
+            onDismiss = onDismiss
+        )
+        is SettingsDialog.LocationPresetDialog -> SingleSelectDialog(
+            title = stringResource(R.string.location_preset_label),
+            options = LocationPreset.entries,
+            selected = dialog.current,
+            labelProvider = { it.displayName },
+            onConfirm = onLocationPresetChanged,
+            onDismiss = onDismiss
+        )
         is SettingsDialog.FolderStructureDialog -> SingleSelectDialog(
             title = stringResource(R.string.setting_folder_structure_title),
             options = FolderStructure.entries,

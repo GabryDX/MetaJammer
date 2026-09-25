@@ -62,6 +62,12 @@ class ProcessingViewModel(
     private val _selectedMode = MutableStateFlow<ProcessingMode?>(null)
     val selectedMode: StateFlow<ProcessingMode?> = _selectedMode.asStateFlow()
 
+    private val _selectedProfile = MutableStateFlow(PoisoningProfile.RANDOM)
+    val selectedProfile: StateFlow<PoisoningProfile> = _selectedProfile.asStateFlow()
+
+    private val _selectedLocationPreset = MutableStateFlow(LocationPreset.RANDOM)
+    val selectedLocationPreset: StateFlow<LocationPreset> = _selectedLocationPreset.asStateFlow()
+
     private val _processedFiles = MutableStateFlow<List<Pair<SelectedFile, File>>>(emptyList())
     val processedFiles: StateFlow<List<Pair<SelectedFile, File>>> = _processedFiles.asStateFlow()
 
@@ -105,18 +111,9 @@ class ProcessingViewModel(
         }
         _selectedMode.value = mode
         if (mode == ProcessingMode.POISON_METADATA && _replacementPlans.value.isEmpty()) {
-            _replacementPlans.value = selectedFiles.associate { selectedFile ->
-                val metadata = _metadataPreview.value[selectedFile.uri].orEmpty()
-                val lat = metadata.find { it.key == "GPSLatitude" }?.value?.toDoubleOrNull()
-                val lon = metadata.find { it.key == "GPSLongitude" }?.value?.toDoubleOrNull()
-
-                val useScramble = appSettings.useNearbyScramble
-                selectedFile.uri to if (useScramble && lat != null && lon != null) {
-                    MetadataReplacementGenerator.generatePlan(selectedFile.mimeType, lat, lon)
-                } else {
-                    MetadataReplacementGenerator.generatePlan(selectedFile.mimeType)
-                }
-            }
+            _selectedProfile.value = appSettings.poisoningProfile
+            _selectedLocationPreset.value = appSettings.locationPreset
+            regeneratePoisonPlansInternal(selectedFiles, appSettings)
         } else if (mode != ProcessingMode.POISON_METADATA) {
             _replacementPlans.value = emptyMap()
         }
@@ -132,7 +129,11 @@ class ProcessingViewModel(
     ) {
         val currentPlans = _replacementPlans.value.toMutableMap()
         val file = selectedFiles.find { it.uri == uri }
-        val plan = currentPlans[uri] ?: MetadataReplacementGenerator.generatePlan(file?.mimeType)
+        val plan = currentPlans[uri] ?: MetadataReplacementGenerator.generatePlan(
+            mimeType = file?.mimeType,
+            profile = _selectedProfile.value,
+            locationPreset = _selectedLocationPreset.value
+        )
 
         val latitudeRef = if (latitude >= 0) "N" else "S"
         val longitudeRef = if (longitude >= 0) "E" else "W"
@@ -150,20 +151,59 @@ class ProcessingViewModel(
 
     fun regeneratePoisonPlans(selectedFiles: List<SelectedFile>, appSettings: AppSettings) {
         if (_selectedMode.value != ProcessingMode.POISON_METADATA) return
+        regeneratePoisonPlansInternal(selectedFiles, appSettings)
+        clearProcessedFiles()
+        generateChangePreview(selectedFiles, appSettings)
+    }
+
+    private fun regeneratePoisonPlansInternal(selectedFiles: List<SelectedFile>, appSettings: AppSettings) {
+        val currentProfile = _selectedProfile.value
+        val currentPreset = _selectedLocationPreset.value
+        val useScramble = appSettings.useNearbyScramble
+
         _replacementPlans.value = selectedFiles.associate { selectedFile ->
             val metadata = _metadataPreview.value[selectedFile.uri].orEmpty()
             val lat = metadata.find { it.key == "GPSLatitude" }?.value?.toDoubleOrNull()
             val lon = metadata.find { it.key == "GPSLongitude" }?.value?.toDoubleOrNull()
 
-            val useScramble = appSettings.useNearbyScramble
-            selectedFile.uri to if (useScramble && lat != null && lon != null) {
-                MetadataReplacementGenerator.generatePlan(selectedFile.mimeType, lat, lon)
+            selectedFile.uri to if (useScramble && lat != null && lon != null && currentPreset == LocationPreset.RANDOM) {
+                MetadataReplacementGenerator.generatePlan(
+                    mimeType = selectedFile.mimeType,
+                    existingLat = lat,
+                    existingLon = lon,
+                    profile = currentProfile,
+                    locationPreset = currentPreset
+                )
             } else {
-                MetadataReplacementGenerator.generatePlan(selectedFile.mimeType)
+                MetadataReplacementGenerator.generatePlan(
+                    mimeType = selectedFile.mimeType,
+                    profile = currentProfile,
+                    locationPreset = currentPreset
+                )
             }
         }
-        clearProcessedFiles()
-        generateChangePreview(selectedFiles, appSettings)
+    }
+
+    fun setPoisoningProfile(
+        profile: PoisoningProfile,
+        selectedFiles: List<SelectedFile>,
+        appSettings: AppSettings
+    ) {
+        _selectedProfile.value = profile
+        if (_selectedMode.value == ProcessingMode.POISON_METADATA) {
+            regeneratePoisonPlans(selectedFiles, appSettings)
+        }
+    }
+
+    fun setLocationPreset(
+        preset: LocationPreset,
+        selectedFiles: List<SelectedFile>,
+        appSettings: AppSettings
+    ) {
+        _selectedLocationPreset.value = preset
+        if (_selectedMode.value == ProcessingMode.POISON_METADATA) {
+            regeneratePoisonPlans(selectedFiles, appSettings)
+        }
     }
 
     fun generateChangePreview(selectedFiles: List<SelectedFile>, appSettings: AppSettings) {

@@ -1,5 +1,6 @@
 package com.heronikostudios.metajammer.metadata
 
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
@@ -149,5 +150,80 @@ class MetadataReplacementGeneratorTest {
             assertTrue("Make '$make' must produce a valid model", model.isNotBlank())
             assertFalse("Model must not be generic fallback for supported make", model == "Generic Camera")
         }
+    }
+
+    @Test
+    fun `generatePlan with PRO_MIRRORLESS profile produces professional gear`() {
+        val plan = MetadataReplacementGenerator.generatePlan(
+            profile = com.heronikostudios.metajammer.domain.model.PoisoningProfile.PRO_MIRRORLESS
+        )
+        assertTrue(listOf("Sony", "Canon", "Nikon", "Fujifilm").contains(plan.make))
+        assertNotNull(plan.lensModel)
+        assertTrue(plan.lensModel!!.isNotBlank())
+        assertEquals("16", plan.flash) // Flash off
+        assertTrue(plan.fNumber.toDouble() <= 4.0) // Fast pro lenses
+    }
+
+    @Test
+    fun `generatePlan with MODERN_SMARTPHONE profile produces phone metadata`() {
+        val plan = MetadataReplacementGenerator.generatePlan(
+            profile = com.heronikostudios.metajammer.domain.model.PoisoningProfile.MODERN_SMARTPHONE
+        )
+        assertTrue(listOf("Apple", "Google", "Samsung").contains(plan.make))
+        assertNotNull(plan.lensModel)
+        val lens = plan.lensModel ?: ""
+        assertTrue(lens.contains("camera") || lens.contains("Lens"))
+    }
+
+    @Test
+    fun `generatePlan with VINTAGE_DIGITAL profile produces compact 90s-00s camera`() {
+        val plan = MetadataReplacementGenerator.generatePlan(
+            profile = com.heronikostudios.metajammer.domain.model.PoisoningProfile.VINTAGE_DIGITAL
+        )
+        assertTrue(listOf("Olympus", "Canon", "Nikon", "Sony").contains(plan.make))
+        assertEquals("Ver 1.0", plan.software)
+        assertTrue(plan.userComment.isBlank())
+    }
+
+    @Test
+    fun `generatePlan with ACTION_CAM profile produces wide action camera specs`() {
+        val plan = MetadataReplacementGenerator.generatePlan(
+            profile = com.heronikostudios.metajammer.domain.model.PoisoningProfile.ACTION_CAM
+        )
+        assertTrue(listOf("GoPro", "DJI").contains(plan.make))
+        assertTrue(plan.focalLength.toDouble() < 4.0) // Very wide angle
+        assertEquals("0", plan.flash)
+    }
+
+    @Test
+    fun `generatePlan with ANONYMOUS_MINIMAL profile strips hardware fingerprints`() {
+        val plan = MetadataReplacementGenerator.generatePlan(
+            profile = com.heronikostudios.metajammer.domain.model.PoisoningProfile.ANONYMOUS_MINIMAL
+        )
+        assertEquals("Digital Camera", plan.make)
+        assertEquals("Standard", plan.model)
+        assertNull(plan.lensMake)
+        assertNull(plan.lensModel)
+        assertTrue(plan.imageDescription.isBlank())
+        assertTrue(plan.userComment.isBlank())
+    }
+
+    @Test
+    fun `generatePlan with LocationPreset places coordinates near preset landmark`() {
+        val tokyoPlan = MetadataReplacementGenerator.generatePlan(
+            locationPreset = com.heronikostudios.metajammer.domain.model.LocationPreset.TOKYO
+        )
+        org.junit.Assert.assertEquals(35.6762, tokyoPlan.latitude, 0.01)
+        org.junit.Assert.assertEquals(139.6503, tokyoPlan.longitude, 0.01)
+        assertEquals("N", tokyoPlan.latitudeRef)
+        assertEquals("E", tokyoPlan.longitudeRef)
+
+        val sydneyPlan = MetadataReplacementGenerator.generatePlan(
+            locationPreset = com.heronikostudios.metajammer.domain.model.LocationPreset.SYDNEY
+        )
+        org.junit.Assert.assertEquals(-33.8688, sydneyPlan.latitude, 0.01)
+        org.junit.Assert.assertEquals(151.2093, sydneyPlan.longitude, 0.01)
+        assertEquals("S", sydneyPlan.latitudeRef)
+        assertEquals("E", sydneyPlan.longitudeRef)
     }
 }

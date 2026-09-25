@@ -222,23 +222,19 @@ fun LocationPickerScreen(
                 .horizontalScroll(rememberScrollState()),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            val presets = listOf(
-                "Tokyo" to (35.6762 to 139.6503),
-                "Paris" to (48.8566 to 2.3522),
-                "New York" to (40.7128 to -74.0060),
-                "London" to (51.5074 to -0.1278),
-                "Sydney" to (-33.8688 to 151.2093),
-                "Cairo" to (30.0444 to 31.2357)
-            )
+            val presets = com.heronikostudios.metajammer.domain.model.LocationPreset.entries
+                .filter { it.latitude != null && it.longitude != null }
 
-            presets.forEach { (cityName, coords) ->
+            presets.forEach { preset ->
+                val lat = preset.latitude!!
+                val lon = preset.longitude!!
                 SuggestionChip(
                     onClick = {
-                        selectedLat = coords.first
-                        selectedLon = coords.second
-                        webViewRef?.evaluateJavascript("window.setMapLocation(${coords.first}, ${coords.second});", null)
+                        selectedLat = lat
+                        selectedLon = lon
+                        webViewRef?.evaluateJavascript("window.setMapLocation($lat, $lon);", null)
                     },
-                    label = { Text(cityName) },
+                    label = { Text(preset.displayName) },
                     colors = SuggestionChipDefaults.suggestionChipColors(
                         containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)
                     )

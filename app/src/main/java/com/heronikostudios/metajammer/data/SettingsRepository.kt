@@ -44,6 +44,8 @@ open class SettingsRepository(private val context: Context) {
         private val ENABLE_PROCESSING_HISTORY = booleanPreferencesKey("enable_processing_history")
         private val HISTORY_RETENTION_POLICY = stringPreferencesKey("history_retention_policy")
         private val SHOW_HISTORY_SHORTCUT = booleanPreferencesKey("show_history_shortcut")
+        private val POISONING_PROFILE = stringPreferencesKey("poisoning_profile")
+        private val LOCATION_PRESET = stringPreferencesKey("location_preset")
     }
 
     open suspend fun setUseRandomFileNames(enabled: Boolean) {
@@ -175,6 +177,14 @@ open class SettingsRepository(private val context: Context) {
         context.dataStore.edit { it[SHOW_HISTORY_SHORTCUT] = show }
     }
 
+    open suspend fun setPoisoningProfile(profile: PoisoningProfile) {
+        context.dataStore.edit { it[POISONING_PROFILE] = profile.name }
+    }
+
+    open suspend fun setLocationPreset(preset: LocationPreset) {
+        context.dataStore.edit { it[LOCATION_PRESET] = preset.name }
+    }
+
     private val historyRepository by lazy { HistoryRepository(context) }
 
     suspend fun logProcessedFile(log: ProcessedFileLog) {
@@ -220,7 +230,9 @@ open class SettingsRepository(private val context: Context) {
             isOnboardingCompleted = preferences[IS_ONBOARDING_COMPLETED] ?: false,
             enableProcessingHistory = preferences[ENABLE_PROCESSING_HISTORY] ?: false,
             historyRetentionPolicy = preferences[HISTORY_RETENTION_POLICY]?.let { runCatching { HistoryRetentionPolicy.valueOf(it) }.getOrNull() } ?: HistoryRetentionPolicy.KEEP_100_ITEMS,
-            showHistoryShortcut = preferences[SHOW_HISTORY_SHORTCUT] ?: false
+            showHistoryShortcut = preferences[SHOW_HISTORY_SHORTCUT] ?: false,
+            poisoningProfile = preferences[POISONING_PROFILE]?.let { runCatching { PoisoningProfile.valueOf(it) }.getOrNull() } ?: PoisoningProfile.RANDOM,
+            locationPreset = preferences[LOCATION_PRESET]?.let { runCatching { LocationPreset.valueOf(it) }.getOrNull() } ?: LocationPreset.RANDOM
         )
     }
 

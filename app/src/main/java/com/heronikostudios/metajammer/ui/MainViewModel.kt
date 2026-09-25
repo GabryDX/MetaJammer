@@ -85,6 +85,8 @@ class MainViewModel(
     val changePreview: StateFlow<Map<Uri, List<MetadataEntry>>> = processingViewModel.changePreview
     val replacementPlans: StateFlow<Map<Uri, MetadataReplacementPlan>> = processingViewModel.replacementPlans
     val selectedMode: StateFlow<ProcessingMode?> = processingViewModel.selectedMode
+    val selectedProfile: StateFlow<PoisoningProfile> = processingViewModel.selectedProfile
+    val selectedLocationPreset: StateFlow<LocationPreset> = processingViewModel.selectedLocationPreset
     val processedFiles: StateFlow<List<Pair<SelectedFile, File>>> = processingViewModel.processedFiles
     val processing: StateFlow<Boolean> = processingViewModel.processing
     val workInfo: StateFlow<WorkInfo?> = processingViewModel.workInfo
@@ -179,6 +181,14 @@ class MainViewModel(
         processingViewModel.regeneratePoisonPlans(homeViewModel.selectedFiles.value, settingsViewModel.appSettings.value)
     }
 
+    fun setProcessingPoisoningProfile(profile: PoisoningProfile) {
+        processingViewModel.setPoisoningProfile(profile, homeViewModel.selectedFiles.value, settingsViewModel.appSettings.value)
+    }
+
+    fun setProcessingLocationPreset(preset: LocationPreset) {
+        processingViewModel.setLocationPreset(preset, homeViewModel.selectedFiles.value, settingsViewModel.appSettings.value)
+    }
+
     fun processFiles(onSuccess: (() -> Unit)? = null) {
         processingViewModel.processFiles(homeViewModel.selectedFiles.value, settingsViewModel.appSettings.value, onSuccess)
     }
@@ -230,6 +240,8 @@ class MainViewModel(
     fun setEnableProcessingHistory(enabled: Boolean) = settingsViewModel.setEnableProcessingHistory(enabled)
     fun setHistoryRetentionPolicy(policy: HistoryRetentionPolicy) = settingsViewModel.setHistoryRetentionPolicy(policy)
     fun setShowHistoryShortcut(show: Boolean) = settingsViewModel.setShowHistoryShortcut(show)
+    fun setPoisoningProfile(profile: PoisoningProfile) = settingsViewModel.setPoisoningProfile(profile)
+    fun setLocationPreset(preset: LocationPreset) = settingsViewModel.setLocationPreset(preset)
 
     fun persistAndSetUnifiedSavingPath(uri: Uri?) = settingsViewModel.persistAndSetUnifiedSavingPath(uri)
     fun persistAndSetPicturesSavingPath(uri: Uri?) = settingsViewModel.persistAndSetPicturesSavingPath(uri)

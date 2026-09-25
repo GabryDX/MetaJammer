@@ -130,6 +130,8 @@ fun MetaJammerApp(
     val metadataPreview by viewModel.metadataPreview.collectAsStateWithLifecycle()
     val changePreview by viewModel.changePreview.collectAsStateWithLifecycle()
     val selectedMode by viewModel.selectedMode.collectAsStateWithLifecycle()
+    val selectedProfile by viewModel.selectedProfile.collectAsStateWithLifecycle()
+    val selectedLocationPreset by viewModel.selectedLocationPreset.collectAsStateWithLifecycle()
     val processedFiles by viewModel.processedFiles.collectAsStateWithLifecycle()
     val processing by viewModel.processing.collectAsStateWithLifecycle()
     val message by viewModel.message.collectAsStateWithLifecycle()
@@ -397,6 +399,10 @@ fun MetaJammerApp(
                             }
                         },
                         hasProcessedFiles = hasProcessedFiles,
+                        selectedProfile = selectedProfile,
+                        onProfileSelected = viewModel::setProcessingPoisoningProfile,
+                        selectedLocationPreset = selectedLocationPreset,
+                        onLocationPresetSelected = viewModel::setProcessingLocationPreset,
                         modifier = Modifier.fillMaxSize()
                     )
                 }
@@ -504,6 +510,8 @@ fun MetaJammerApp(
                         onShowHistoryShortcutChanged = viewModel::setShowHistoryShortcut,
                         onClearHistory = viewModel::clearProcessedFilesHistory,
                         onViewHistory = { navController.navigate(Screen.History) },
+                        onPoisoningProfileChanged = viewModel::setPoisoningProfile,
+                        onLocationPresetChanged = viewModel::setLocationPreset,
                         modifier = Modifier.fillMaxSize()
                     )
                 }

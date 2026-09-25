@@ -67,18 +67,34 @@ class QuickScrubHandler(
             withContext(Dispatchers.IO) {
                 val useScramble = appSettings.useNearbyScramble
                 for (selectedFile in files) {
-                    val plan = if (useScramble) {
+                    val preset = appSettings.locationPreset
+                    val profile = appSettings.poisoningProfile
+                    val plan = if (useScramble && preset == com.heronikostudios.metajammer.domain.model.LocationPreset.RANDOM) {
                         val metadata = metadataRepository.readMetadata(selectedFile)
                         val lat = metadata.find { it.key == "GPSLatitude" }?.value?.toDoubleOrNull()
                         val lon = metadata.find { it.key == "GPSLongitude" }?.value?.toDoubleOrNull()
 
                         if (lat != null && lon != null) {
-                            MetadataReplacementGenerator.generatePlan(selectedFile.mimeType, lat, lon)
+                            MetadataReplacementGenerator.generatePlan(
+                                mimeType = selectedFile.mimeType,
+                                existingLat = lat,
+                                existingLon = lon,
+                                profile = profile,
+                                locationPreset = preset
+                            )
                         } else {
-                            MetadataReplacementGenerator.generatePlan(selectedFile.mimeType)
+                            MetadataReplacementGenerator.generatePlan(
+                                mimeType = selectedFile.mimeType,
+                                profile = profile,
+                                locationPreset = preset
+                            )
                         }
                     } else {
-                        MetadataReplacementGenerator.generatePlan(selectedFile.mimeType)
+                        MetadataReplacementGenerator.generatePlan(
+                            mimeType = selectedFile.mimeType,
+                            profile = profile,
+                            locationPreset = preset
+                        )
                     }
                     newPlans[selectedFile.uri] = plan
                 }

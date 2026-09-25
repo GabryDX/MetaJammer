@@ -54,6 +54,8 @@
     <string name="selected_mode">Selected: %1$s</string>
     <string name="regenerate_plans">Regenerate All Random Plans</string>
     <string name="preview_of_changes">Preview of Changes</string>
+    <string name="hardware_profile_label">Hardware Profile:</string>
+    <string name="location_preset_label">Location Preset:</string>
     <string name="no_preview_available">No preview available</string>
     <string name="change_location_map">Change Location on Map</string>
     <string name="process_and_continue">Process and Continue</string>
