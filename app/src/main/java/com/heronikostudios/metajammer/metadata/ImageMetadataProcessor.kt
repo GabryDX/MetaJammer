@@ -45,14 +45,13 @@ class ImageMetadataProcessor(
         private val PNG_METADATA_CHUNKS = setOf("tEXt", "zTXt", "iTXt", "eXIf")
 
         /**
-         * Strips ancillary metadata chunks (tEXt, zTXt, iTXt, eXIf) from a PNG byte stream
+         * Strips ancillary metadata chunks (tEXt, zTXt, iTXt, eXIf) from a PNG byte array
          * without recompressing or altering image raster pixels.
          */
-        fun stripPngChunks(inputFile: File, outputFile: File): Boolean {
-            val bytes = inputFile.readBytes()
-            if (bytes.size < 8) return false
+        fun stripPngChunks(bytes: ByteArray): ByteArray? {
+            if (bytes.size < 8) return null
             for (i in 0 until 8) {
-                if (bytes[i] != PNG_SIGNATURE[i]) return false
+                if (bytes[i] != PNG_SIGNATURE[i]) return null
             }
 
             val output = java.io.ByteArrayOutputStream(bytes.size)
@@ -65,7 +64,7 @@ class ImageMetadataProcessor(
                 buffer.position(offset)
                 val length = buffer.int
                 if (length < 0 || offset + 12L + length > bytes.size) {
-                    return false
+                    return null
                 }
                 val typeBytes = ByteArray(4)
                 buffer.get(typeBytes)
@@ -82,7 +81,77 @@ class ImageMetadataProcessor(
                 if (chunkType == "IEND") break
             }
 
-            outputFile.writeBytes(output.toByteArray())
+            return output.toByteArray()
+        }
+
+        /**
+         * Strips ancillary metadata chunks (tEXt, zTXt, iTXt, eXIf) from a PNG file
+         * without recompressing or altering image raster pixels.
+         */
+        fun stripPngChunks(inputFile: File, outputFile: File): Boolean {
+            val bytes = inputFile.readBytes()
+            val stripped = stripPngChunks(bytes) ?: return false
+            outputFile.writeBytes(stripped)
+            return true
+        }
+
+        /**
+         * Strips metadata APPn markers (APP1 Exif/XMP, APP2 ICC, APP13 IPTC, COM) from a JPEG byte array
+         * without recompressing raster image scan data.
+         */
+        fun stripJpegMarkers(bytes: ByteArray): ByteArray? {
+            if (bytes.size < 4 || (bytes[0].toInt() and 0xFF) != 0xFF || (bytes[1].toInt() and 0xFF) != 0xD8) {
+                return null
+            }
+            val output = java.io.ByteArrayOutputStream(bytes.size)
+            output.write(0xFF)
+            output.write(0xD8)
+            var offset = 2
+            while (offset + 4 <= bytes.size) {
+                if ((bytes[offset].toInt() and 0xFF) != 0xFF) {
+                    output.write(bytes, offset, bytes.size - offset)
+                    break
+                }
+                val marker = bytes[offset + 1].toInt() and 0xFF
+                if (marker == 0xD9) { // EOI
+                    output.write(0xFF)
+                    output.write(0xD9)
+                    break
+                }
+                if (marker == 0xDA) { // SOS (Start of Scan)
+                    output.write(bytes, offset, bytes.size - offset)
+                    break
+                }
+                if (marker == 0x00 || (marker in 0xD0..0xD7)) {
+                    output.write(bytes, offset, 2)
+                    offset += 2
+                    continue
+                }
+                val length = ((bytes[offset + 2].toInt() and 0xFF) shl 8) or (bytes[offset + 3].toInt() and 0xFF)
+                val totalLength = 2 + length
+                if (offset + totalLength > bytes.size) {
+                    output.write(bytes, offset, bytes.size - offset)
+                    break
+                }
+
+                val isMetadata = (marker in 0xE1..0xEF) || marker == 0xFE
+                if (!isMetadata) {
+                    output.write(bytes, offset, totalLength)
+                } else {
+                    Timber.d("Stripped JPEG metadata marker: 0xFF%02X (%d bytes)", marker, totalLength)
+                }
+                offset += totalLength
+            }
+            return output.toByteArray()
+        }
+
+        /**
+         * Strips metadata APPn markers from a JPEG file.
+         */
+        fun stripJpegMarkers(inputFile: File, outputFile: File): Boolean {
+            val bytes = inputFile.readBytes()
+            val stripped = stripJpegMarkers(bytes) ?: return false
+            outputFile.writeBytes(stripped)
             return true
         }
     }
