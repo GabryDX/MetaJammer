@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -11,6 +12,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.IntentCompat
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Column
@@ -94,12 +96,12 @@ open class MainActivity : AppCompatActivity() {
 
         val uris = when (action) {
             Intent.ACTION_SEND -> {
-                val uri = intent.getParcelableExtra(Intent.EXTRA_STREAM, Uri::class.java)
+                val uri = IntentCompat.getParcelableExtra(intent, Intent.EXTRA_STREAM, Uri::class.java)
                 uri?.let(::listOf) ?: emptyList()
             }
 
             Intent.ACTION_SEND_MULTIPLE -> {
-                intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM, Uri::class.java) ?: emptyList()
+                IntentCompat.getParcelableArrayListExtra(intent, Intent.EXTRA_STREAM, Uri::class.java) ?: emptyList()
             }
 
             else -> emptyList()
@@ -143,8 +145,10 @@ fun MetaJammerApp(
     var showNotificationPermissionExplanation by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        if (context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            showNotificationPermissionExplanation = true
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                showNotificationPermissionExplanation = true
+            }
         }
     }
 

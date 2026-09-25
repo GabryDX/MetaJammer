@@ -3,6 +3,8 @@ package com.heronikostudios.metajammer.data
 import android.content.ContentValues
 import android.content.Context
 import android.net.Uri
+import android.os.Build
+import android.os.Environment
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.webkit.MimeTypeMap
@@ -143,14 +145,31 @@ open class FileRepository(private val context: Context) {
         val collection = when {
             mimeType?.startsWith("image/") == true -> MediaStore.Images.Media.EXTERNAL_CONTENT_URI
             mimeType?.startsWith("video/") == true -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
-            else -> MediaStore.Downloads.EXTERNAL_CONTENT_URI
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> MediaStore.Downloads.EXTERNAL_CONTENT_URI
+            else -> MediaStore.Files.getContentUri("external")
         }
 
         val values = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, displayName)
             put(MediaStore.MediaColumns.MIME_TYPE, mimeType ?: "application/octet-stream")
-            put(MediaStore.MediaColumns.RELATIVE_PATH, relativePath)
-            put(MediaStore.MediaColumns.IS_PENDING, 1)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                put(MediaStore.MediaColumns.RELATIVE_PATH, relativePath)
+                put(MediaStore.MediaColumns.IS_PENDING, 1)
+            } else {
+                @Suppress("DEPRECATION")
+                val targetDir = when {
+                    mimeType?.startsWith("image/") == true ->
+                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                    mimeType?.startsWith("video/") == true ->
+                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES)
+                    else ->
+                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                }
+                val destFile = File(File(targetDir, "MetaJammer"), displayName)
+                destFile.parentFile?.mkdirs()
+                @Suppress("DEPRECATION")
+                put(MediaStore.MediaColumns.DATA, destFile.absolutePath)
+            }
         }
 
         val uri = resolver.insert(collection, values) ?: run {
@@ -167,10 +186,12 @@ open class FileRepository(private val context: Context) {
             return null
         }
 
-        val completedValues = ContentValues().apply {
-            put(MediaStore.MediaColumns.IS_PENDING, 0)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val completedValues = ContentValues().apply {
+                put(MediaStore.MediaColumns.IS_PENDING, 0)
+            }
+            resolver.update(uri, completedValues, null, null)
         }
-        resolver.update(uri, completedValues, null, null)
 
         return uri
     }
