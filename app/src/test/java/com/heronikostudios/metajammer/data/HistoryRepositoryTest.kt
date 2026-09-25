@@ -31,7 +31,7 @@ class HistoryRepositoryTest {
             .allowMainThreadQueries()
             .build()
         dao = database.processedFileDao()
-        repository = HistoryRepository(processedFileDao = dao, context = context)
+        repository = HistoryRepository(processedFileDao = dao, context = null)
     }
 
     @After

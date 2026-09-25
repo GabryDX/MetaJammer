@@ -6,5 +6,5 @@ data class SelectedFile(
     val uri: Uri,
     val displayName: String,
     val mimeType: String?,
-    val sizeBytes: Long?
+    val sizeBytes: Long? = null
 )

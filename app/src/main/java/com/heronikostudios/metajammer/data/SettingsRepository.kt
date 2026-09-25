@@ -13,7 +13,7 @@ import kotlinx.serialization.json.Json
 
 internal val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
-class SettingsRepository(private val context: Context) {
+open class SettingsRepository(private val context: Context) {
 
     companion object {
         private val USE_RANDOM_FILE_NAMES = booleanPreferencesKey("use_random_file_names")
@@ -46,7 +46,7 @@ class SettingsRepository(private val context: Context) {
         private val SHOW_HISTORY_SHORTCUT = booleanPreferencesKey("show_history_shortcut")
     }
 
-    suspend fun setUseRandomFileNames(enabled: Boolean) {
+    open suspend fun setUseRandomFileNames(enabled: Boolean) {
         context.dataStore.edit { it[USE_RANDOM_FILE_NAMES] = enabled }
     }
 
@@ -93,7 +93,7 @@ class SettingsRepository(private val context: Context) {
         }
     }
 
-    suspend fun setKeepImageOrientation(enabled: Boolean) {
+    open suspend fun setKeepImageOrientation(enabled: Boolean) {
         context.dataStore.edit { it[KEEP_IMAGE_ORIENTATION] = enabled }
     }
 
@@ -101,11 +101,11 @@ class SettingsRepository(private val context: Context) {
         context.dataStore.edit { it[SHARE_RESULT_AS_DEFAULT] = enabled }
     }
 
-    suspend fun setDefaultPrefix(prefix: String) {
+    open suspend fun setDefaultPrefix(prefix: String) {
         context.dataStore.edit { it[DEFAULT_PREFIX] = prefix }
     }
 
-    suspend fun setDefaultSuffix(suffix: String) {
+    open suspend fun setDefaultSuffix(suffix: String) {
         context.dataStore.edit { it[DEFAULT_SUFFIX] = suffix }
     }
 
@@ -139,7 +139,7 @@ class SettingsRepository(private val context: Context) {
         }
     }
 
-    suspend fun setThumbnailHandling(handling: ThumbnailHandling) {
+    open suspend fun setThumbnailHandling(handling: ThumbnailHandling) {
         context.dataStore.edit { it[THUMBNAIL_HANDLING] = handling.name }
     }
 
@@ -187,12 +187,12 @@ class SettingsRepository(private val context: Context) {
         historyRepository.clearHistory()
     }
 
-    suspend fun performMaintenance() {
+    open suspend fun performMaintenance() {
         val currentSettings = appSettingsFlow.first()
         historyRepository.performMaintenance(currentSettings.historyRetentionPolicy)
     }
 
-    val appSettingsFlow: Flow<AppSettings> = context.dataStore.data.map { preferences ->
+    open val appSettingsFlow: Flow<AppSettings> = context.dataStore.data.map { preferences ->
         AppSettings(
             useRandomFileNames = preferences[USE_RANDOM_FILE_NAMES] ?: false,
             folderStructure = preferences[FOLDER_STRUCTURE]?.let { runCatching { FolderStructure.valueOf(it) }.getOrNull() } ?: FolderStructure.SPLIT,
