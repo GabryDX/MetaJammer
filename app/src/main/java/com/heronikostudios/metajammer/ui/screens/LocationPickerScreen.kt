@@ -7,11 +7,18 @@ import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SuggestionChip
+import androidx.compose.material3.SuggestionChipDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 
@@ -35,26 +43,43 @@ fun LocationPickerScreen(
     onLocationPicked: (Double, Double) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+    var webViewRef by remember { mutableStateOf<WebView?>(null) }
     var selectedLat by remember { mutableDoubleStateOf(initialLat) }
     var selectedLon by remember { mutableDoubleStateOf(initialLon) }
     var isLoading by remember { mutableStateOf(true) }
 
+    val leafletCss = remember {
+        runCatching {
+            context.assets.open("leaflet/leaflet.css").bufferedReader().use { it.readText() }
+        }.getOrDefault("")
+    }
+
+    val leafletJs = remember {
+        runCatching {
+            context.assets.open("leaflet/leaflet.js").bufferedReader().use { it.readText() }
+        }.getOrDefault("")
+    }
+
     // Use a more stable zoom for starting point
     val startingZoom = if (initialLat == 0.0 && initialLon == 0.0) 2 else 13
 
-    val html = """
+    val htmlTemplate = """
         <!DOCTYPE html>
         <html>
         <head>
             <meta charset="utf-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-            <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-            <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
             <style>
+                /*LEAFLET_CSS*/
                 body { padding: 0; margin: 0; background-color: #f0f0f0; }
                 #map { height: 100vh; width: 100vw; background: #e0e0e0; }
                 .leaflet-container { background: #e0e0e0; }
+                .custom-svg-pin { background: transparent; border: none; }
             </style>
+            <script>
+                /*LEAFLET_JS*/
+            </script>
         </head>
         <body>
             <div id="map"></div>
@@ -73,8 +98,21 @@ fun LocationPickerScreen(
                         attribution: '© OSM'
                     }).addTo(map);
 
+                    var svgPin = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36">' +
+                        '<path fill="#E53935" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>' +
+                        '<circle cx="12" cy="9" r="2.5" fill="#FFFFFF"/>' +
+                        '</svg>';
+
+                    var pinIcon = L.divIcon({
+                        html: svgPin,
+                        className: 'custom-svg-pin',
+                        iconSize: [36, 36],
+                        iconAnchor: [18, 36]
+                    });
+
                     var marker = L.marker([$initialLat, $initialLon], {
-                        draggable: true
+                        draggable: true,
+                        icon: pinIcon
                     }).addTo(map);
 
                     function updateMarker(lat, lng) {
@@ -83,6 +121,11 @@ fun LocationPickerScreen(
                             window.Android.onLocationChanged(lat, lng);
                         }
                     }
+
+                    window.setMapLocation = function(lat, lng) {
+                        updateMarker(lat, lng);
+                        map.panTo([lat, lng]);
+                    };
 
                     map.on('click', function(e) {
                         updateMarker(e.latlng.lat, e.latlng.lng);
@@ -103,10 +146,17 @@ fun LocationPickerScreen(
         </html>
     """.trimIndent()
 
+    val html = remember(htmlTemplate, leafletCss, leafletJs) {
+        htmlTemplate
+            .replace("/*LEAFLET_CSS*/", leafletCss)
+            .replace("/*LEAFLET_JS*/", leafletJs)
+    }
+
     Box(modifier = modifier.fillMaxSize()) {
         AndroidView(
-            factory = { context ->
-                WebView(context).apply {
+            factory = { ctx ->
+                WebView(ctx).apply {
+                    webViewRef = this
                     layoutParams = ViewGroup.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT
@@ -123,13 +173,13 @@ fun LocationPickerScreen(
                             request: android.webkit.WebResourceRequest?,
                             error: android.webkit.WebResourceError?
                         ) {
-                            // Modern error handling
+                            // Offline or network error loading tiles
                         }
                     }
                     
                     settings.apply {
                         javaScriptEnabled = true
-                        domStorageEnabled = true // Leaflet needs this for some features
+                        domStorageEnabled = true
                         loadWithOverviewMode = true
                         useWideViewPort = true
                         setSupportZoom(true)
@@ -140,9 +190,8 @@ fun LocationPickerScreen(
                         mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
                         allowFileAccess = false
                         allowContentAccess = false
-                        setGeolocationEnabled(false) // Not needed as we pick manually
+                        setGeolocationEnabled(false)
                         
-                        // Disable access from file/content URLs for better security
                         @Suppress("DEPRECATION")
                         allowFileAccessFromFileURLs = false
                         @Suppress("DEPRECATION")
@@ -159,12 +208,43 @@ fun LocationPickerScreen(
                         }
                     }, "Android")
                     
-                    // Use a real URL base to avoid origin issues
                     loadDataWithBaseURL("https://www.openstreetmap.org", html, "text/html", "UTF-8", null)
                 }
             },
             modifier = Modifier.fillMaxSize()
         )
+
+        // Preset Location Chips for quick & offline location selection
+        Row(
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(top = 16.dp, start = 16.dp, end = 16.dp)
+                .horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            val presets = listOf(
+                "Tokyo" to (35.6762 to 139.6503),
+                "Paris" to (48.8566 to 2.3522),
+                "New York" to (40.7128 to -74.0060),
+                "London" to (51.5074 to -0.1278),
+                "Sydney" to (-33.8688 to 151.2093),
+                "Cairo" to (30.0444 to 31.2357)
+            )
+
+            presets.forEach { (cityName, coords) ->
+                SuggestionChip(
+                    onClick = {
+                        selectedLat = coords.first
+                        selectedLon = coords.second
+                        webViewRef?.evaluateJavascript("window.setMapLocation(${coords.first}, ${coords.second});", null)
+                    },
+                    label = { Text(cityName) },
+                    colors = SuggestionChipDefaults.suggestionChipColors(
+                        containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)
+                    )
+                )
+            }
+        }
 
         if (isLoading) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
