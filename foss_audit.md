@@ -48,3 +48,5 @@ The "Map Picker" feature, which is the only feature with network capability, is 
 ## Conclusion
 
 The MetaJammer project is **100% FOSS-compliant**. No proprietary SDKs (e.g., Google Play Services, Firebase, AdMob) or non-FOSS libraries are used in the project.
+
+For an in-depth analysis of the application's threat model, data protection architecture, and parser hardening, refer to the [Security & Privacy Audit](security_audit.md).

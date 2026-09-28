@@ -34,9 +34,11 @@ MetaJammer is built on the **Principle of Least Privilege**:
 - **No Cloud Leaks:** Android Auto-Backup is disabled to ensure unstripped metadata never leaves your device during processing.
 - **Automatic Cleanup:** All temporary processing residue and stale outgoing share caches are programmatically wiped.
 
-## FOSS & Transparency
+## Security, Privacy & Transparency
 
-MetaJammer is committed to transparency and user trust. A comprehensive [FOSS Compliance Audit](foss_audit.md) is available to verify that no proprietary or non-free components are used in the project.
+MetaJammer is committed to transparency, verifiable privacy, and user trust:
+- **[Security & Privacy Audit](security_audit.md):** In-depth assessment of the threat model, fail-closed architecture, parser hardening (XXE protection, path traversal, in-memory chunk parsing), and OWASP MASVS compliance.
+- **[FOSS Compliance Audit](foss_audit.md):** Complete audit verifying that 100% of dependencies, code, and assets are Free and Open Source Software.
 
 ## F-Droid
 
