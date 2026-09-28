@@ -40,8 +40,7 @@
             android:name=".QuickScrubActivity"
             android:exported="true"
             android:theme="@style/Theme.MetaJammer.Translucent"
-            android:windowSoftInputMode="adjustResize"
-            tools:ignore="Instantiatable">
+            android:windowSoftInputMode="adjustResize">
 
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -76,6 +75,18 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
+        </provider>
+
+        <!-- Disable default WorkManager startup initialization since MetaJammerApplication implements Configuration.Provider -->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
         </provider>
     </application>
 

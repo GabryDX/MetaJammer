@@ -1,7 +1,7 @@
 [versions]
-agp = "9.2.1"
-appcompat = "1.7.1"
-coreKtx = "1.19.0"
+agp = "9.4.1"
+appcompat = "1.8.0"
+coreKtx = "1.19.1"
 datastorePreferences = "1.2.1"
 documentfile = "1.1.0"
 exifinterface = "1.4.2"
@@ -10,15 +10,29 @@ junitVersion = "1.3.0"
 espressoCore = "3.7.0"
 lifecycleRuntimeKtx = "2.11.0"
 activityCompose = "1.13.0"
-kotlin = "2.4.0"
-composeBom = "2026.06.01"
-workRuntimeKtx = "2.11.2"
+kotlin = "2.4.20"
+composeBom = "2026.09.00"
+workRuntimeKtx = "2.12.0"
 kotlinxSerializationJson = "1.11.0"
 timber = "5.0.1"
 coil = "2.7.0"
 pdfbox-android = "2.0.27.0"
+room = "2.8.5"
+navigationCompose = "2.10.2"
+koin = "4.2.2"
+kotlinxCoroutines = "1.11.0"
+robolectric = "4.17"
 
 [libraries]
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
+robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
+koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
+koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
+koin-test = { group = "io.insert-koin", name = "koin-test", version.ref = "koin" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 androidx-compose-material-icons-core = { module = "androidx.compose.material:material-icons-core" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -51,4 +65,4 @@ pdfbox-android = { module = "com.tom-roush:pdfbox-android", version.ref = "pdfbo
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-
+ksp = { id = "com.google.devtools.ksp", version = "2.3.12" }

@@ -1,6 +1,8 @@
 package com.heronikostudios.metajammer.metadata
 
+import com.heronikostudios.metajammer.domain.model.LocationPreset
 import com.heronikostudios.metajammer.domain.model.MetadataReplacementPlan
+import com.heronikostudios.metajammer.domain.model.PoisoningProfile
 import java.time.LocalDateTime
 import kotlin.random.Random
 
@@ -273,37 +275,32 @@ object MetadataReplacementGenerator {
     fun generatePlan(
         mimeType: String? = null,
         existingLat: Double? = null,
-        existingLon: Double? = null
+        existingLon: Double? = null,
+        profile: PoisoningProfile = PoisoningProfile.RANDOM,
+        locationPreset: LocationPreset = LocationPreset.RANDOM
     ): MetadataReplacementPlan {
-        val make = randomMake()
-        val (latitude, longitude) = if (existingLat != null && existingLon != null) {
-            val latOffset = (Random.nextDouble(0.002, 0.01) * if (Random.nextBoolean()) 1 else -1)
-            val lonOffset = (Random.nextDouble(0.002, 0.01) * if (Random.nextBoolean()) 1 else -1)
-            (existingLat + latOffset) to (existingLon + lonOffset)
-        } else {
-            randomLatLong()
+        val (latitude, longitude) = when {
+            locationPreset != LocationPreset.RANDOM && locationPreset.latitude != null && locationPreset.longitude != null -> {
+                val latJitter = Random.nextDouble(-0.0008, 0.0008)
+                val lonJitter = Random.nextDouble(-0.0008, 0.0008)
+                (locationPreset.latitude + latJitter) to (locationPreset.longitude + lonJitter)
+            }
+            existingLat != null && existingLon != null -> {
+                val latOffset = (Random.nextDouble(0.002, 0.01) * if (Random.nextBoolean()) 1 else -1)
+                val lonOffset = (Random.nextDouble(0.002, 0.01) * if (Random.nextBoolean()) 1 else -1)
+                (existingLat + latOffset) to (existingLon + lonOffset)
+            }
+            else -> randomLatLong()
         }
 
-        val basePlan = MetadataReplacementPlan(
-            dateTime = randomRecentDateTime(),
-            make = make,
-            model = randomModel(make),
-            software = randomSoftware(make),
-            imageDescription = randomImageDescription(),
-            userComment = randomUserComment(),
-            photographicSensitivity = randomPhotographicSensitivity(),
-            exposureTime = randomExposureTime(),
-            fNumber = randomFNumber(),
-            focalLength = randomFocalLength(),
-            whiteBalance = randomWhiteBalance(),
-            flash = randomFlash(),
-            lensMake = randomLensMake(make),
-            lensModel = randomLensModel(make),
-            latitude = latitude,
-            longitude = longitude,
-            latitudeRef = if (latitude >= 0) "N" else "S",
-            longitudeRef = if (longitude >= 0) "E" else "W"
-        )
+        val basePlan = when (profile) {
+            PoisoningProfile.PRO_MIRRORLESS -> generateProMirrorlessPlan(latitude, longitude)
+            PoisoningProfile.MODERN_SMARTPHONE -> generateModernSmartphonePlan(latitude, longitude)
+            PoisoningProfile.VINTAGE_DIGITAL -> generateVintageDigitalPlan(latitude, longitude)
+            PoisoningProfile.ACTION_CAM -> generateActionCamPlan(latitude, longitude)
+            PoisoningProfile.ANONYMOUS_MINIMAL -> generateAnonymousMinimalPlan(latitude, longitude)
+            PoisoningProfile.RANDOM -> generateRandomPlan(latitude, longitude)
+        }
 
         return when {
             mimeType?.startsWith("audio/") == true -> {
@@ -338,5 +335,208 @@ object MetadataReplacementGenerator {
             }
             else -> basePlan
         }
+    }
+
+    private fun generateRandomPlan(latitude: Double, longitude: Double): MetadataReplacementPlan {
+        val make = randomMake()
+        return MetadataReplacementPlan(
+            dateTime = randomRecentDateTime(),
+            make = make,
+            model = randomModel(make),
+            software = randomSoftware(make),
+            imageDescription = randomImageDescription(),
+            userComment = randomUserComment(),
+            photographicSensitivity = randomPhotographicSensitivity(),
+            exposureTime = randomExposureTime(),
+            fNumber = randomFNumber(),
+            focalLength = randomFocalLength(),
+            whiteBalance = randomWhiteBalance(),
+            flash = randomFlash(),
+            lensMake = randomLensMake(make),
+            lensModel = randomLensModel(make),
+            latitude = latitude,
+            longitude = longitude,
+            latitudeRef = if (latitude >= 0) "N" else "S",
+            longitudeRef = if (longitude >= 0) "E" else "W"
+        )
+    }
+
+    private fun generateProMirrorlessPlan(latitude: Double, longitude: Double): MetadataReplacementPlan {
+        val make = listOf("Sony", "Canon", "Nikon", "Fujifilm").random()
+        val (model, software, lensModel) = when (make) {
+            "Sony" -> Triple(
+                listOf("ILCE-7M4", "ILCE-7RM5", "ILCE-1").random(),
+                listOf("ILCE-7M4 v2.00", "Creator's App 2.1").random(),
+                listOf("FE 24-70mm F2.8 GM II", "FE 50mm F1.2 GM", "FE 70-200mm F2.8 GM OSS II").random()
+            )
+            "Canon" -> Triple(
+                listOf("EOS R5", "EOS R6 Mark II", "EOS R3").random(),
+                listOf("Firmware 1.8.1", "Digital Photo Professional 4.18").random(),
+                listOf("RF 24-70mm F2.8 L IS USM", "RF 50mm F1.2 L USM", "RF 70-200mm F2.8 L IS USM").random()
+            )
+            "Nikon" -> Triple(
+                listOf("Z8", "Z9", "Z6 III").random(),
+                listOf("Ver.2.00", "NX Studio 1.6").random(),
+                listOf("NIKKOR Z 24-70mm f/2.8 S", "NIKKOR Z 50mm f/1.2 S").random()
+            )
+            else -> Triple(
+                listOf("X-T5", "GFX 100S II").random(),
+                "FUJIFILM X RAW STUDIO",
+                listOf("XF16-55mmF2.8 R LM WR", "XF56mmF1.2 R WR").random()
+            )
+        }
+
+        return MetadataReplacementPlan(
+            dateTime = randomRecentDateTime(),
+            make = make,
+            model = model,
+            software = software,
+            imageDescription = listOf("Fine art landscape", "Portrait session", "Golden hour studio capture", "City architecture study").random(),
+            userComment = "High-resolution RAW developed with natural tone curve",
+            photographicSensitivity = listOf("100", "160", "200", "400", "800", "1600").random(),
+            exposureTime = listOf("1/250", "1/500", "1/1000", "1/2000", "1/4000").random(),
+            fNumber = listOf("1.4", "1.8", "2.0", "2.8", "4.0").random(),
+            focalLength = listOf("24.0", "35.0", "50.0", "70.0", "85.0", "135.0").random(),
+            whiteBalance = "0",
+            flash = "16",
+            lensMake = make,
+            lensModel = lensModel,
+            latitude = latitude,
+            longitude = longitude,
+            latitudeRef = if (latitude >= 0) "N" else "S",
+            longitudeRef = if (longitude >= 0) "E" else "W"
+        )
+    }
+
+    private data class Five<A, B, C, D, E>(val first: A, val second: B, val third: C, val fourth: D, val fifth: E)
+
+    private fun generateModernSmartphonePlan(latitude: Double, longitude: Double): MetadataReplacementPlan {
+        val make = listOf("Apple", "Google", "Samsung").random()
+        val (model, software, lensModel, focalLength, fNumber) = when (make) {
+            "Apple" -> {
+                val isMax = Random.nextBoolean()
+                val m = if (isMax) "iPhone 15 Pro Max" else "iPhone 15 Pro"
+                val sw = listOf("17.5.1", "18.0", "18.1").random()
+                val lens = "$m back triple camera 6.86mm f/1.78"
+                Five(m, sw, lens, "6.86", "1.78")
+            }
+            "Google" -> {
+                val m = listOf("Pixel 8 Pro", "Pixel 9 Pro").random()
+                val sw = listOf("Android 14", "Android 15", "AP1A.240405.002").random()
+                val lens = "$m back camera 6.9mm f/1.68"
+                Five(m, sw, lens, "6.9", "1.68")
+            }
+            else -> {
+                val m = listOf("SM-S928B", "SM-S918B").random()
+                val sw = listOf("One UI 6.0", "One UI 6.1").random()
+                val lens = "Galaxy S24 Ultra back camera 6.3mm f/1.7"
+                Five(m, sw, lens, "6.3", "1.7")
+            }
+        }
+
+        return MetadataReplacementPlan(
+            dateTime = randomRecentDateTime(),
+            make = make,
+            model = model,
+            software = software,
+            imageDescription = randomImageDescription(),
+            userComment = randomUserComment(),
+            photographicSensitivity = listOf("50", "64", "100", "125", "250").random(),
+            exposureTime = listOf("1/40", "1/60", "1/120", "1/240", "1/500").random(),
+            fNumber = fNumber,
+            focalLength = focalLength,
+            whiteBalance = "0",
+            flash = "16",
+            lensMake = make,
+            lensModel = lensModel,
+            latitude = latitude,
+            longitude = longitude,
+            latitudeRef = if (latitude >= 0) "N" else "S",
+            longitudeRef = if (longitude >= 0) "E" else "W"
+        )
+    }
+
+    private fun generateVintageDigitalPlan(latitude: Double, longitude: Double): MetadataReplacementPlan {
+        val make = listOf("Olympus", "Canon", "Nikon", "Sony").random()
+        val model = when (make) {
+            "Olympus" -> listOf("C-2000Z", "C-3040Z", "CAMEDIA C-2500L").random()
+            "Canon" -> listOf("PowerShot G1", "PowerShot G2", "PowerShot Pro90 IS").random()
+            "Nikon" -> listOf("COOLPIX 990", "COOLPIX 995", "COOLPIX 5000").random()
+            else -> listOf("Cyber-shot DSC-F707", "Cyber-shot DSC-S75").random()
+        }
+
+        return MetadataReplacementPlan(
+            dateTime = randomRecentDateTime(),
+            make = make,
+            model = model,
+            software = "Ver 1.0",
+            imageDescription = "OLYMPUS DIGITAL CAMERA",
+            userComment = "",
+            photographicSensitivity = listOf("64", "100", "200").random(),
+            exposureTime = listOf("1/30", "1/60", "1/125", "1/250").random(),
+            fNumber = listOf("2.0", "2.5", "2.8", "4.0").random(),
+            focalLength = listOf("6.5", "7.0", "14.2", "19.5").random(),
+            whiteBalance = "0",
+            flash = listOf("0", "1").random(),
+            lensMake = make,
+            lensModel = "$make Optical Zoom Lens",
+            latitude = latitude,
+            longitude = longitude,
+            latitudeRef = if (latitude >= 0) "N" else "S",
+            longitudeRef = if (longitude >= 0) "E" else "W"
+        )
+    }
+
+    private fun generateActionCamPlan(latitude: Double, longitude: Double): MetadataReplacementPlan {
+        val make = listOf("GoPro", "DJI").random()
+        val (model, software, lensModel, focalLength, fNumber) = if (make == "GoPro") {
+            Five("HERO12 Black", "HD12.01.10.00", "GoPro Ultra Wide Lens 2.47mm f/2.5", "2.47", "2.5")
+        } else {
+            Five("Osmo Action 4", "Firmware 01.02.0000", "DJI Action Wide Lens 2.6mm f/2.8", "2.6", "2.8")
+        }
+
+        return MetadataReplacementPlan(
+            dateTime = randomRecentDateTime(),
+            make = make,
+            model = model,
+            software = software,
+            imageDescription = listOf("Action POV capture", "Extreme wide angle", "Mountain run", "Outdoor session").random(),
+            userComment = "Recorded with electronic image stabilization",
+            photographicSensitivity = listOf("100", "200", "400").random(),
+            exposureTime = listOf("1/120", "1/240", "1/480", "1/960").random(),
+            fNumber = fNumber,
+            focalLength = focalLength,
+            whiteBalance = "0",
+            flash = "0",
+            lensMake = make,
+            lensModel = lensModel,
+            latitude = latitude,
+            longitude = longitude,
+            latitudeRef = if (latitude >= 0) "N" else "S",
+            longitudeRef = if (longitude >= 0) "E" else "W"
+        )
+    }
+
+    private fun generateAnonymousMinimalPlan(latitude: Double, longitude: Double): MetadataReplacementPlan {
+        return MetadataReplacementPlan(
+            dateTime = randomRecentDateTime(),
+            make = "Digital Camera",
+            model = "Standard",
+            software = "1.0",
+            imageDescription = "",
+            userComment = "",
+            photographicSensitivity = "100",
+            exposureTime = "1/125",
+            fNumber = "2.8",
+            focalLength = "35.0",
+            whiteBalance = "0",
+            flash = "0",
+            lensMake = null,
+            lensModel = null,
+            latitude = latitude,
+            longitude = longitude,
+            latitudeRef = if (latitude >= 0) "N" else "S",
+            longitudeRef = if (longitude >= 0) "E" else "W"
+        )
     }
 }

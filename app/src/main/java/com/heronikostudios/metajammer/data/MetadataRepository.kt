@@ -9,6 +9,7 @@ import com.heronikostudios.metajammer.domain.model.ThumbnailHandling
 import com.heronikostudios.metajammer.metadata.ImageMetadataProcessor
 import com.heronikostudios.metajammer.metadata.MediaMetadataProcessor
 import com.heronikostudios.metajammer.metadata.PdfMetadataProcessor
+import com.heronikostudios.metajammer.metadata.SvgMetadataProcessor
 import timber.log.Timber
 import java.io.File
 
@@ -19,6 +20,7 @@ class MetadataRepository(
     private val imageProcessor = ImageMetadataProcessor(fileRepository)
     private val mediaProcessor = MediaMetadataProcessor(fileRepository)
     private val pdfProcessor = PdfMetadataProcessor(context, fileRepository)
+    private val svgProcessor = SvgMetadataProcessor(fileRepository)
 
     companion object {
         private val PREVIEW_TAGS = listOf(
@@ -60,7 +62,12 @@ class MetadataRepository(
         mode: ProcessingMode,
         keepOrientation: Boolean,
         thumbnailHandling: ThumbnailHandling = ThumbnailHandling.REMOVE,
-        replacementPlan: MetadataReplacementPlan? = null
+        replacementPlan: MetadataReplacementPlan? = null,
+        stripGps: Boolean = true,
+        stripDeviceModel: Boolean = true,
+        stripDateTime: Boolean = true,
+        stripCameraSettings: Boolean = true,
+        stripComments: Boolean = true
     ): File {
         val mime = selectedFile.mimeType ?: ""
         return when {
@@ -68,10 +75,31 @@ class MetadataRepository(
                 when (mode) {
                     ProcessingMode.POISON_METADATA -> {
                         val plan = requireNotNull(replacementPlan) { "Plan required for poison mode" }
-                        imageProcessor.poisonMetadata(selectedFile.uri, plan, keepOrientation, thumbnailHandling, mime)
+                        imageProcessor.poisonMetadata(
+                            inputUri = selectedFile.uri,
+                            plan = plan,
+                            keepOrientation = keepOrientation,
+                            thumbnailHandling = thumbnailHandling,
+                            mimeType = mime,
+                            stripGps = stripGps,
+                            stripDeviceModel = stripDeviceModel,
+                            stripDateTime = stripDateTime,
+                            stripCameraSettings = stripCameraSettings,
+                            stripComments = stripComments
+                        )
                     }
                     ProcessingMode.REMOVE_METADATA -> {
-                        imageProcessor.removeMetadata(selectedFile.uri, keepOrientation, thumbnailHandling, mime)
+                        imageProcessor.removeMetadata(
+                            inputUri = selectedFile.uri,
+                            keepOrientation = keepOrientation,
+                            thumbnailHandling = thumbnailHandling,
+                            mimeType = mime,
+                            stripGps = stripGps,
+                            stripDeviceModel = stripDeviceModel,
+                            stripDateTime = stripDateTime,
+                            stripCameraSettings = stripCameraSettings,
+                            stripComments = stripComments
+                        )
                     }
                 }
             }
@@ -87,17 +115,26 @@ class MetadataRepository(
             }
 
             mime == "application/pdf" -> {
-                val result = when (mode) {
+                when (mode) {
                     ProcessingMode.POISON_METADATA -> {
                         val plan = requireNotNull(replacementPlan) { "Plan required for poison mode" }
                         pdfProcessor.poisonMetadata(selectedFile.uri, plan)
                     }
                     ProcessingMode.REMOVE_METADATA -> pdfProcessor.removeMetadata(selectedFile.uri)
                 }
-                result ?: fileRepository.copyUriToCache(selectedFile.uri, prefix = "pdf_failed_", suffix = ".pdf")
             }
 
-            else -> fileRepository.copyUriToCache(selectedFile.uri, prefix = "generic_", suffix = null)
+            mime == "image/svg+xml" -> {
+                when (mode) {
+                    ProcessingMode.POISON_METADATA -> {
+                        val plan = requireNotNull(replacementPlan) { "Plan required for poison mode" }
+                        svgProcessor.poisonMetadata(selectedFile.uri, plan)
+                    }
+                    ProcessingMode.REMOVE_METADATA -> svgProcessor.removeMetadata(selectedFile.uri)
+                }
+            }
+
+            else -> throw IllegalArgumentException("Unsupported file format for metadata processing: ${mime.ifBlank { "unknown" }} (${selectedFile.displayName})")
         }
     }
 
@@ -107,6 +144,7 @@ class MetadataRepository(
             mime.startsWith("image/") -> readImageMetadata(selectedFile)
             mime.startsWith("video/") || mime.startsWith("audio/") -> readMediaMetadata(selectedFile)
             mime == "application/pdf" -> pdfProcessor.readMetadata(selectedFile.uri)
+            mime == "image/svg+xml" -> svgProcessor.readMetadata(selectedFile.uri)
             else -> listOf(MetadataEntry("Info", "Metadata preview not yet supported for $mime"))
         }
     }
@@ -135,7 +173,7 @@ class MetadataRepository(
                         entries.add(MetadataEntry("Date", it))
                     }
                     r.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_LOCATION)?.let {
-                        entries.add(MetadataEntry("Location (Raw)", it))
+                        entries.add(MetadataEntry("Location", it))
                     }
                     
                     // Video specific

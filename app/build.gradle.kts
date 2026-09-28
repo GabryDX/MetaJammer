@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -15,12 +16,19 @@ android {
 
     defaultConfig {
         applicationId = "com.heronikostudios.metajammer"
-        minSdk = 33
+        minSdk = 26
         targetSdk = 37
         versionCode = 1
-        versionName = "0.3.3"
+        versionName = "0.4.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    flavorDimensions += "distribution"
+    productFlavors {
+        create("floss") {
+            dimension = "distribution"
+        }
     }
 
     buildTypes {
@@ -57,6 +65,9 @@ android {
             excludes += "META-INF/notice.txt"
             excludes += "META-INF/ASL2.0"
             excludes += "META-INF/*.kotlin_module"
+            excludes += "org/bouncycastle/pqc/**"
+            excludes += "org/bouncycastle/x509/*.properties"
+            excludes += "okhttp3/internal/publicsuffix/**"
         }
     }
 
@@ -118,13 +129,24 @@ dependencies {
     implementation(libs.coil.video)
     implementation(libs.pdfbox.android)
 
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
+
     testImplementation(libs.junit)
+    testImplementation(libs.koin.test)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.robolectric)
 
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
 
+    debugImplementation(platform(libs.androidx.compose.bom))
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
 }

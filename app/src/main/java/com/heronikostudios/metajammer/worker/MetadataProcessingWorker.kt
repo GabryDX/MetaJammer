@@ -12,8 +12,10 @@ import androidx.work.workDataOf
 import com.heronikostudios.metajammer.R
 import com.heronikostudios.metajammer.data.FileRepository
 import com.heronikostudios.metajammer.data.MetadataRepository
+import com.heronikostudios.metajammer.data.SettingsRepository
 import com.heronikostudios.metajammer.domain.model.FolderStructure
 import com.heronikostudios.metajammer.domain.model.MetadataReplacementPlan
+import com.heronikostudios.metajammer.domain.model.ProcessedFileLog
 import com.heronikostudios.metajammer.domain.model.ProcessingMode
 import com.heronikostudios.metajammer.domain.model.ThumbnailHandling
 import com.heronikostudios.metajammer.util.SanitizationUtils
@@ -34,6 +36,7 @@ class MetadataProcessingWorker(
 ) : CoroutineWorker(context, parameters) {
 
     private val fileRepository = FileRepository(applicationContext)
+    private val settingsRepository = SettingsRepository(applicationContext)
     private val metadataRepository = MetadataRepository(fileRepository)
 
     companion object {
@@ -52,6 +55,11 @@ class MetadataProcessingWorker(
         const val KEY_DEFAULT_PREFIX = "default_prefix"
         const val KEY_DEFAULT_SUFFIX = "default_suffix"
         const val KEY_USE_RANDOM_NAMES = "use_random_names"
+        const val KEY_STRIP_GPS = "strip_gps"
+        const val KEY_STRIP_DEVICE_MODEL = "strip_device_model"
+        const val KEY_STRIP_DATE_TIME = "strip_date_time"
+        const val KEY_STRIP_CAMERA_SETTINGS = "strip_camera_settings"
+        const val KEY_STRIP_COMMENTS = "strip_comments"
 
         @Deprecated("Use specific saving paths", ReplaceWith("KEY_UNIFIED_SAVING_PATH"))
         const val KEY_SAVING_PATH = "saving_path"
@@ -80,6 +88,11 @@ class MetadataProcessingWorker(
         val defaultPrefix = inputData.getString(KEY_DEFAULT_PREFIX) ?: ""
         val defaultSuffix = inputData.getString(KEY_DEFAULT_SUFFIX) ?: "_processed"
         val useRandomNames = inputData.getBoolean(KEY_USE_RANDOM_NAMES, false)
+        val stripGps = inputData.getBoolean(KEY_STRIP_GPS, true)
+        val stripDeviceModel = inputData.getBoolean(KEY_STRIP_DEVICE_MODEL, true)
+        val stripDateTime = inputData.getBoolean(KEY_STRIP_DATE_TIME, true)
+        val stripCameraSettings = inputData.getBoolean(KEY_STRIP_CAMERA_SETTINGS, true)
+        val stripComments = inputData.getBoolean(KEY_STRIP_COMMENTS, true)
 
         val mode = ProcessingMode.valueOf(modeString)
         val thumbnailHandling = ThumbnailHandling.valueOf(thumbnailHandlingString)
@@ -124,7 +137,12 @@ class MetadataProcessingWorker(
                             mode = mode,
                             keepOrientation = keepOrientation,
                             thumbnailHandling = thumbnailHandling,
-                            replacementPlan = plan
+                            replacementPlan = plan,
+                            stripGps = stripGps,
+                            stripDeviceModel = stripDeviceModel,
+                            stripDateTime = stripDateTime,
+                            stripCameraSettings = stripCameraSettings,
+                            stripComments = stripComments
                         )
 
                         val displayName = SanitizationUtils.generateOutputName(
@@ -162,9 +180,20 @@ class MetadataProcessingWorker(
                             subPath = subPath
                         )
                         
-                        runCatching { processedFile.delete() }
+                        savedUri?.let { uri ->
+                            savedUris.add(uri.toString())
+                            settingsRepository.logProcessedFile(
+                                ProcessedFileLog(
+                                    uri = uri.toString(),
+                                    displayName = displayName,
+                                    mimeType = selectedFile.mimeType,
+                                    timestamp = System.currentTimeMillis(),
+                                    sizeBytes = processedFile.length()
+                                )
+                            )
+                        }
                         
-                        savedUri?.let { savedUris.add(it.toString()) }
+                        runCatching { processedFile.delete() }
                         val currentCount = processedCount.incrementAndGet()
                         
                         setProgress(workDataOf("progress" to currentCount * 100 / inputUriStrings.size))
@@ -175,12 +204,17 @@ class MetadataProcessingWorker(
             }
         }.awaitAll()
 
-        showCompletionNotification(processedCount.get())
+        val totalProcessed = processedCount.get()
+        showCompletionNotification(totalProcessed)
 
         // Cleanup plans file
         plansFilePath?.let { File(it).delete() }
 
-        Result.success(workDataOf("saved_uris" to savedUris.toTypedArray()))
+        if (totalProcessed == 0 && inputUriStrings.isNotEmpty()) {
+            Result.failure(workDataOf("error" to "Failed to process files"))
+        } else {
+            Result.success(workDataOf("saved_uris" to savedUris.toTypedArray()))
+        }
     }
 
     private fun createForegroundInfo(totalFiles: Int): ForegroundInfo {

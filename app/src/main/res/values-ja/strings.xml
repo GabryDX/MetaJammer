@@ -54,7 +54,32 @@
     <string name="selected_mode">選択済み：%1$s</string>
     <string name="regenerate_plans">すべてのランダムプランを再生成</string>
     <string name="preview_of_changes">変更のプレビュー</string>
+    <string name="hardware_profile_label">ハードウェアプロファイル:</string>
+    <string name="location_preset_label">位置情報プリセット:</string>
+    <string name="category_metadata_tags">メタデータカテゴリ</string>
+    <string name="tag_category_gps_title">GPS &amp; 位置情報</string>
+    <string name="tag_category_gps_sub">座標、高度、方位を削除または偽装</string>
+    <string name="tag_category_device_title">端末 &amp; ハードウェア</string>
+    <string name="tag_category_device_sub">カメラのメーカー、モデル、ソフトウェア、シリアル番号を削除または偽装</string>
+    <string name="tag_category_datetime_title">日時 &amp; タイムスタンプ</string>
+    <string name="tag_category_datetime_sub">作成日時および更新日時タイムスタンプを削除または偽装</string>
+    <string name="tag_category_camera_title">カメラ技術設定</string>
+    <string name="tag_category_camera_sub">ISO、絞り値、焦点距離、フラッシュ、シャッター速度を削除または偽装</string>
+    <string name="tag_category_comments_title">コメント &amp; 説明</string>
+    <string name="tag_category_comments_sub">ユーザーコメント、タイトル、画像の説明を削除または偽装</string>
     <string name="no_preview_available">プレビューを利用できません</string>
+    <string name="diff_filter_all">すべて (%1$d)</string>
+    <string name="diff_filter_removed">削除済み (%1$d)</string>
+    <string name="diff_filter_poisoned">ポイズン済み (%1$d)</string>
+    <string name="diff_filter_kept">保持済み (%1$d)</string>
+    <string name="diff_badge_removed">削除済み</string>
+    <string name="diff_badge_poisoned">ポイズン済み</string>
+    <string name="diff_badge_kept">保持</string>
+    <string name="diff_before">変更前: %1$s</string>
+    <string name="diff_after">変更後: %1$s</string>
+    <string name="diff_value_none">(なし)</string>
+    <string name="diff_value_stripped">(削除)</string>
+    <string name="diff_no_tags_for_filter">このフィルターに一致するタグはありません</string>
     <string name="change_location_map">地図上で位置を変更</string>
     <string name="process_and_continue">処理して続行</string>
     <string name="processing_complete">処理完了</string>
@@ -66,9 +91,9 @@
     <!-- HelpScreen -->
     <string name="help_title">ヘルプとチュートリアル</string>
     <string name="help_item_video_title">ビデオ処理</string>
-    <string name="help_item_video_body">サポートされている形式：MP4、MOV。\n\nこれらのコンテナの完全なリマックがサポートされています。このプロセスにより、プライバシーを保護するためにGPS、日付、およびデバイスアトムが削除されます。</string>
-    <string name="help_item_image_title">画像処理</string>
-    <string name="help_item_image_body">サポートされている形式：JPG, PNG, WebP, HEIF。\n\nMetaJammerはこれらの画像からEXIFメタデータを削除します。「ポイズン」モードでは、GPS座標などの機密タグを現実的なランダムデータに置き換えます。</string>
+    <string name="help_item_video_body">サポートされている形式：MP4、MOV、M4A、OGG。\n\nこれらのコンテナの完全なリマックがサポートされています。このプロセスにより、プライバシーを保護するためにGPS、日付、およびデバイスアトムが削除されます。</string>
+    <string name="help_item_image_title">画像とベクターの処理</string>
+    <string name="help_item_image_body">サポートされている形式：JPG, PNG, WebP, HEIF, SVG。\n\nMetaJammerはビットマップ画像からEXIFメタデータを削除し、SVGからXML/RDFメタデータをクリーンアップします。「ポイズン」モードでは、機密タグを現実的なランダムデータに置き換えます。</string>
     <string name="help_item_other_title">PDFおよびドキュメント処理</string>
     <string name="help_item_other_body">対応フォーマット：PDF。\n\nMetaJammerはPDFドキュメントに完全対応しました。タイトル、作成者、件名、キーワード、作成アプリ、プロデューサーなどのメタデータを読み取り、削除、および「ポイズニング（偽装）」することができます。また、隠しウォーターマークや注釈も除去し、共有前にドキュメントがクリーンであることを保証します。</string>
     <string name="help_report_issue_title">問題を報告する</string>
@@ -87,6 +112,7 @@
     <string name="choose_save_or_share">処理結果を保存するか共有するかを選択してください。</string>
     <string name="save_to_default_folder">デフォルトフォルダに保存</string>
     <string name="save_to_custom_folder">カスタムフォルダに保存</string>
+    <string name="back_to_home">ホームに戻る</string>
 
     <!-- SettingsScreen -->
     <string name="settings">設定</string>
@@ -148,6 +174,8 @@
     <string name="setting_language_title">言語</string>
     <string name="setting_oled_mode_title">OLEDモード</string>
     <string name="setting_oled_mode_sub">サポートされているダークテーマでより深い黒色を使用します</string>
+    <string name="setting_dynamic_color_title">Material You (ダイナミックカラー)</string>
+    <string name="setting_dynamic_color_sub">壁紙のダイナミックカラーをアプリのインターフェースに適用します</string>
 
     <!-- Enums -->
     <string name="night_mode_always">常に</string>
@@ -188,6 +216,10 @@
     <string name="output_action_shared_folder">専用フォルダに保存</string>
     <string name="output_action_reshare">クリーンアップしたファイルを再共有</string>
     <string name="quick_scrub_processing">ファイルを乾燥させています…</string>
+    <string name="quick_scrub_title">クイックスクラブ</string>
+    <string name="quick_scrub_status_stripping">%1$d個のファイルからメタデータを削除中…</string>
+    <string name="quick_scrub_status_poisoning">%1$d個のファイルのメタデータをポイズン中…</string>
+    <string name="quick_scrub_cancel">キャンセル</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">マップピッカーとインターネットアクセス</string>
@@ -197,4 +229,37 @@
 
     <string name="notification_permission_title">最新情報をチェック</string>
     <string name="notification_permission_message">MetaJammerは、大量のファイルがバックグラウンドで処理されている間、進行状況を通知で知らせることができます。\n\nこれは、MetaJammerが作業を終える間に別のアプリに切り替えたい場合に特に便利です。</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">MetaJammer へようこそ</string>
+    <string name="onboarding_welcome_desc">メタデータのプライバシーを守るためのパーソナルツールキット。世界に共有する前にファイルをクリーンアップしましょう。</string>
+    <string name="onboarding_poison_vs_remove_title">ポイズン（偽装） vs 削除</string>
+    <string name="onboarding_poison_vs_remove_desc"><b>削除：</b> すべてのメタデータを削除します。シンプルでクリーンです。\n\n<b>ポイズン：</b> 機密データを偽の現実的な値に置き換えます。これにより<i>「もっともらしい否認」</i>が可能になり、自動追跡を混乱させます。</string>
+    <string name="onboarding_permissions_title">準備を整える</string>
+    <string name="onboarding_permissions_desc">MetaJammer が最適に動作するためには、いくつかの権限が必要です。バックグラウンドタスクの通知や、マップピッカー用のインターネット接続を有効にできます。</string>
+    <string name="onboarding_finish_title">準備完了！</string>
+    <string name="onboarding_finish_desc">プライバシーの保護を開始する準備ができました。ファイルを選択するか、他のアプリから共有して開始してください。</string>
+    <string name="onboarding_get_started">使ってみる</string>
+    <string name="onboarding_next">次へ</string>
+    <string name="onboarding_skip">スキップ</string>
+
+    <!-- Processing History -->
+    <string name="category_privacy_history">プライバシーと履歴</string>
+    <string name="setting_enable_history_title">処理履歴を有効にする</string>
+    <string name="setting_enable_history_sub">最近処理されたファイルのログを保持します。このデータはローカルに保存され、デバイス外に出ることはありません。</string>
+    <string name="setting_history_retention_title">履歴の保持</string>
+    <string name="setting_history_shortcut_title">履歴のショートカットを表示</string>
+    <string name="setting_history_shortcut_sub">ホーム画面に履歴へのクイックアクセスアイコンを追加します</string>
+    <string name="setting_clear_history_now">今すぐ履歴を消去</string>
+    <string name="setting_history_cleared">処理履歴が消去されました。</string>
+    <string name="setting_history_title">処理履歴</string>
+
+    <string name="retention_policy_100_items">最近の100件を保持</string>
+    <string name="retention_policy_clear_on_exit">アプリ終了時に履歴を消去</string>
+    <string name="retention_policy_clear_after_24h">24時間後に履歴を消去</string>
+
+    <string name="history_title">処理履歴</string>
+    <string name="history_empty">まだファイルが記録されていません。</string>
+    <string name="history_clear_confirm_title">履歴を消去しますか？</string>
+    <string name="history_clear_confirm_message">これにより、処理されたすべてのファイルのログが完全に削除されます。実際のファイルは削除されません。</string>
 </resources>

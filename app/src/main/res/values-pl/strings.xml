@@ -54,7 +54,32 @@
     <string name="selected_mode">Wybrano: %1$s</string>
     <string name="regenerate_plans">Wygeneruj ponownie wszystkie losowe plany</string>
     <string name="preview_of_changes">Podgląd zmian</string>
+    <string name="hardware_profile_label">Profil sprzętowy:</string>
+    <string name="location_preset_label">Szablon lokalizacji:</string>
+    <string name="category_metadata_tags">Kategorie metadanych</string>
+    <string name="tag_category_gps_title">GPS i lokalizacja</string>
+    <string name="tag_category_gps_sub">Usuń lub sfałszuj współrzędne, wysokość i namiar</string>
+    <string name="tag_category_device_title">Urządzenie i sprzęt</string>
+    <string name="tag_category_device_sub">Usuń lub sfałszuj markę aparatu, model, oprogramowanie i numery seryjne</string>
+    <string name="tag_category_datetime_title">Data i znacznik czasu</string>
+    <string name="tag_category_datetime_sub">Usuń lub sfałszuj znaczniki czasu utworzenia i modyfikacji</string>
+    <string name="tag_category_camera_title">Parametry techniczne aparatu</string>
+    <string name="tag_category_camera_sub">Usuń lub sfałszuj ISO, przysłonę, ogniskową, lampę błyskową i czas naświetlania</string>
+    <string name="tag_category_comments_title">Komentarze i opisy</string>
+    <string name="tag_category_comments_sub">Usuń lub sfałszuj komentarze użytkownika, tytuły i opisy obrazów</string>
     <string name="no_preview_available">Podgląd niedostępny</string>
+    <string name="diff_filter_all">Wszystkie (%1$d)</string>
+    <string name="diff_filter_removed">Usunięte (%1$d)</string>
+    <string name="diff_filter_poisoned">Zatrute (%1$d)</string>
+    <string name="diff_filter_kept">Zachowane (%1$d)</string>
+    <string name="diff_badge_removed">USUNIĘTE</string>
+    <string name="diff_badge_poisoned">ZATRUTE</string>
+    <string name="diff_badge_kept">ZACHOWANE</string>
+    <string name="diff_before">Przed: %1$s</string>
+    <string name="diff_after">Po: %1$s</string>
+    <string name="diff_value_none">(Brak)</string>
+    <string name="diff_value_stripped">(Usunięto)</string>
+    <string name="diff_no_tags_for_filter">Brak tagów pasujących do tego filtra</string>
     <string name="change_location_map">Zmień lokalizację na mapie</string>
     <string name="process_and_continue">Przetwórz i kontynuuj</string>
     <string name="processing_complete">Przetwarzanie zakończone</string>
@@ -66,9 +91,9 @@
     <!-- HelpScreen -->
     <string name="help_title">Pomoc i poradniki</string>
     <string name="help_item_video_title">Przetwarzanie wideo</string>
-    <string name="help_item_video_body">Obsługiwane formaty: MP4, MOV.\n\nPełny remuxing jest obsługiwany dla tych kontenerów. Proces ten usuwa dane GPS, daty i atomy urządzenia, aby chronić Twoją prywatność.</string>
-    <string name="help_item_image_title">Przetwarzanie obrazów</string>
-    <string name="help_item_image_body">Obsługiwane formaty: JPG, PNG, WebP, HEIF.\n\nMetaJammer usuwa metadane EXIF z tych obrazów. W trybie „Zatruwanie” zastępuje wrażliwe tagi, takie jak współrzędne GPS, realistycznymi losowymi danymi.</string>
+    <string name="help_item_video_body">Obsługiwane formaty: MP4, MOV, M4A, OGG.\n\nPełny remuxing jest obsługiwany dla tych kontenerów. Proces ten usuwa dane GPS, daty i atomy urządzenia, aby chronić Twoją prywatność.</string>
+    <string name="help_item_image_title">Przetwarzanie obrazów i wektorów</string>
+    <string name="help_item_image_body">Obsługiwane formaty: JPG, PNG, WebP, HEIF, SVG.\n\nMetaJammer usuwa metadane EXIF z obrazów bitmapowych i czyści metadane XML/RDF z plików SVG. W trybie „Zatruwanie” zastępuje wrażliwe tagi realistycznymi losowymi danymi.</string>
     <string name="help_item_other_title">Przetwarzanie dokumentów i plików PDF</string>
     <string name="help_item_other_body">Obsługiwane formaty: PDF.\n\nMetaJammer w pełni obsługuje teraz dokumenty PDF. Możesz czytać, usuwać i „zatruwać” metadane, takie jak tytuł, autor, temat, słowa kluczowe, twórca i producent. Usuwa również ukryte znaki wodne i adnotacje, aby zapewnić, że dokumenty są czyste przed udostępnieniem.</string>
     <string name="help_report_issue_title">Zgłoś problem</string>
@@ -87,6 +112,7 @@
     <string name="choose_save_or_share">Wybierz, czy chcesz zapisać, czy udostępnić przetworzony wynik.</string>
     <string name="save_to_default_folder">Zapisz w domyślnym folderze</string>
     <string name="save_to_custom_folder">Zapisz w niestandardowym folderze</string>
+    <string name="back_to_home">Wróć do strony głównej</string>
 
     <!-- SettingsScreen -->
     <string name="settings">Ustawienia</string>
@@ -148,6 +174,8 @@
     <string name="setting_language_title">Język</string>
     <string name="setting_oled_mode_title">Tryb OLED</string>
     <string name="setting_oled_mode_sub">Używaj głębszych odcieni czerni dla wspieranych ciemnych motywów</string>
+    <string name="setting_dynamic_color_title">Material You (Dynamiczne kolory)</string>
+    <string name="setting_dynamic_color_sub">Zastosuj dynamiczne kolory ze swojej tapety do interfejsu aplikacji</string>
 
     <!-- Enums -->
     <string name="night_mode_always">Zawsze</string>
@@ -188,6 +216,10 @@
     <string name="output_action_shared_folder">Zapisz w dedykowanym folderze</string>
     <string name="output_action_reshare">Udostępnij ponownie wyczyszczone pliki</string>
     <string name="quick_scrub_processing">Suszenie Twoich plików…</string>
+    <string name="quick_scrub_title">Szybkie czyszczenie</string>
+    <string name="quick_scrub_status_stripping">Usuwanie metadanych z %1$d pliku(ów)…</string>
+    <string name="quick_scrub_status_poisoning">Zatruwanie metadanych dla %1$d pliku(ów)…</string>
+    <string name="quick_scrub_cancel">Anuluj</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">Wybór na mapie i dostęp do internetu</string>
@@ -197,4 +229,37 @@
 
     <string name="notification_permission_title">Bądź na bieżąco</string>
     <string name="notification_permission_message">MetaJammer może wyświetlać powiadomienia, aby informować Cię o postępie przetwarzania dużych partii plików w tle. \n\nJest to szczególnie przydatne, gdy chcesz przełączyć się do innej aplikacji, podczas gdy MetaJammer kończy swoją pracę.</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">Witaj w MetaJammer</string>
+    <string name="onboarding_welcome_desc">Twój osobisty zestaw narzędzi do ochrony prywatności metadanych. Wyczyść swoje pliki, zanim udostępnisz je światu.</string>
+    <string name="onboarding_poison_vs_remove_title">Zatruj vs Usuń</string>
+    <string name="onboarding_poison_vs_remove_desc"><b>Usuń:</b> Usuwa wszystkie metadane. Prosto i czysto.\n\n<b>Zatruj:</b> Zastępuje wrażliwe dane fałszywymi, realistycznymi wartościami. Zapewnia to <i>wiarygodne zaprzeczenie</i> i myli automatyczne trackery.</string>
+    <string name="onboarding_permissions_title">Przygotowania</string>
+    <string name="onboarding_permissions_desc">MetaJammer potrzebuje kilku uprawnień, aby działać najlepiej. Możesz włączyć powiadomienia dla zadań w tle oraz internet dla wyboru na mapie.</string>
+    <string name="onboarding_finish_title">Wszystko gotowe!</string>
+    <string name="onboarding_finish_desc">Jesteś gotowy, aby zacząć chronić swoją prywatność. Wybierz pliki lub udostępnij je z innych aplikacji, aby zacząć.</string>
+    <string name="onboarding_get_started">Zacznij teraz</string>
+    <string name="onboarding_next">Dalej</string>
+    <string name="onboarding_skip">Pomiń</string>
+
+    <!-- Processing History -->
+    <string name="category_privacy_history">Prywatność i historia</string>
+    <string name="setting_enable_history_title">Włącz historię przetwarzania</string>
+    <string name="setting_enable_history_sub">Zachowaj dziennik ostatnio przetworzonych plików. Dane te są przechowywane lokalnie i nigdy nie opuszczają Twojego urządzenia.</string>
+    <string name="setting_history_retention_title">Przechowywanie historii</string>
+    <string name="setting_history_shortcut_title">Pokaż skrót do historii</string>
+    <string name="setting_history_shortcut_sub">Dodaj ikonę szybkiego dostępu do historii na ekranie głównym</string>
+    <string name="setting_clear_history_now">Wyczyść historię teraz</string>
+    <string name="setting_history_cleared">Historia przetwarzania została wyczyszczona.</string>
+    <string name="setting_history_title">Historia przetwarzania</string>
+
+    <string name="retention_policy_100_items">Zachowaj 100 ostatnich elementów</string>
+    <string name="retention_policy_clear_on_exit">Wyczyść historię przy wyjściu z aplikacji</string>
+    <string name="retention_policy_clear_after_24h">Wyczyść historię po 24 godzinach</string>
+
+    <string name="history_title">Historia przetwarzania</string>
+    <string name="history_empty">Żadne pliki nie zostały jeszcze zarejestrowane.</string>
+    <string name="history_clear_confirm_title">Wyczyścić historię?</string>
+    <string name="history_clear_confirm_message">Spowoduje to trwałe usunięcie dziennika wszystkich przetworzonych plików. Rzeczywiste pliki nie zostaną usunięte.</string>
 </resources>

@@ -4,11 +4,13 @@ import java.io.File
 
 object SanitizationUtils {
 
-    // Pre-compile regex for better performance in batch operations
-    private val ILLEGAL_CHAR_REGEX = Regex("[^a-zA-Z0-9._-]")
+    // Filesystem-reserved characters across Linux, Android, and Windows: / \ : * ? " < > | and control characters
+    private val ILLEGAL_CHAR_REGEX = Regex("""[/\\:*?"<>|\u0000-\u001F]""")
+    private val collisionCounter = java.util.concurrent.atomic.AtomicLong(0)
 
     /**
-     * Sanitizes a filename to prevent path traversal and remove illegal characters.
+     * Sanitizes a filename to prevent path traversal and remove illegal filesystem characters,
+     * while preserving international Unicode alphabets, digits, and standard punctuation.
      */
     fun sanitizeFileName(fileName: String?): String {
         if (fileName.isNullOrBlank()) return "unknown_${System.currentTimeMillis()}"
@@ -19,9 +21,10 @@ object SanitizationUtils {
             .last()
             .split("\\")
             .last()
+            .trim()
 
-        // 2. Replace common illegal characters with underscores
-        val sanitized = nameOnly.replace(ILLEGAL_CHAR_REGEX, "_")
+        // 2. Replace illegal filesystem characters with underscores
+        val sanitized = nameOnly.replace(ILLEGAL_CHAR_REGEX, "_").trim()
 
         // 3. Ensure it's not empty and doesn't start with a dot (hidden file)
         return if (sanitized.isBlank() || sanitized.all { it == '.' }) {
@@ -54,8 +57,9 @@ object SanitizationUtils {
         val ext = if (dotIndex > 0) originalName.substring(dotIndex) else ""
 
         val finalBase = if (useRandomFileNames) {
-            val randomPart = (1000..9999).random()
-            "mj_${System.currentTimeMillis()}_$randomPart"
+            val randomPart = (100000..999999).random()
+            val seq = collisionCounter.incrementAndGet()
+            "mj_${System.currentTimeMillis()}_${seq}_$randomPart"
         } else {
             val sPrefix = sanitizeSimple(prefix)
             val sSuffix = sanitizeSimple(suffix)

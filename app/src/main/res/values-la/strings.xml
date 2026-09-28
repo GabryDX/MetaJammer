@@ -54,7 +54,32 @@
     <string name="selected_mode">Selectum: %1$s</string>
     <string name="regenerate_plans">Omnia Consilia Temere Regenerare</string>
     <string name="preview_of_changes">Praevisus Mutationum</string>
+    <string name="hardware_profile_label">Forma Instrumentorum:</string>
+    <string name="location_preset_label">Locus Praestitutus:</string>
+    <string name="category_metadata_tags">Categoriae Metadatorum</string>
+    <string name="tag_category_gps_title">GPS et Locus</string>
+    <string name="tag_category_gps_sub">Coordinatas, altitudinem et cursum tollere vel fingere</string>
+    <string name="tag_category_device_title">Instrumentum et Machina</string>
+    <string name="tag_category_device_sub">Fabricatorem photographicum, exemplar, programmata et numeros tollere vel fingere</string>
+    <string name="tag_category_datetime_title">Dies et Notatio Temporis</string>
+    <string name="tag_category_datetime_sub">Notationes temporis creationis et mutationis tollere vel fingere</string>
+    <string name="tag_category_camera_title">Parametra Technica Machinae</string>
+    <string name="tag_category_camera_sub">ISO, foramen, focum, fulgurationem et velocitatem tollere vel fingere</string>
+    <string name="tag_category_comments_title">Commentarii et Descriptiones</string>
+    <string name="tag_category_comments_sub">Commentarios usoris, titulos et descriptiones imaginis tollere vel fingere</string>
     <string name="no_preview_available">Praevisus non adest</string>
+    <string name="diff_filter_all">Omnia (%1$d)</string>
+    <string name="diff_filter_removed">Sublata (%1$d)</string>
+    <string name="diff_filter_poisoned">Venenata (%1$d)</string>
+    <string name="diff_filter_kept">Servata (%1$d)</string>
+    <string name="diff_badge_removed">SUBLATUM</string>
+    <string name="diff_badge_poisoned">VENENATUM</string>
+    <string name="diff_badge_kept">SERVATUM</string>
+    <string name="diff_before">Ante: %1$s</string>
+    <string name="diff_after">Post: %1$s</string>
+    <string name="diff_value_none">(Nullum)</string>
+    <string name="diff_value_stripped">(Sublatum)</string>
+    <string name="diff_no_tags_for_filter">Nullae notae cum hoc filtro congruunt</string>
     <string name="change_location_map">Locum in Tabula Mutare</string>
     <string name="process_and_continue">Elabora et perge</string>
     <string name="processing_complete">Elaboratio confecta</string>
@@ -66,9 +91,9 @@
     <!-- HelpScreen -->
     <string name="help_title">Auxilium &amp; Institutiones</string>
     <string name="help_item_video_title">Processus Videophoniae</string>
-    <string name="help_item_video_body">Formae sustentatae: MP4, MOV.\n\nHaec ratio GPS, dies, et instrumenti data tollit.</string>
-    <string name="help_item_image_title">Processus Imaginis</string>
-    <string name="help_item_image_body">Formae sustentatae: JPG, PNG, WebP, HEIF.\n\nMetaJammer metadata EXIF ex his imaginibus tollit.</string>
+    <string name="help_item_video_body">Formae sustentatae: MP4, MOV, M4A, OGG.\n\nPlena remuscendi ratio his vasis sustinetur. Haec ratio GPS, dies, et instrumenti atomos tollit ut tuam privatiam protegat.</string>
+    <string name="help_item_image_title">Processus Imaginis et Vectoris</string>
+    <string name="help_item_image_body">Formae sustentatae: JPG, PNG, WebP, HEIF, SVG.\n\nMetaJammer metadata EXIF ex imaginibus bitmap tollit et metadata XML/RDF ex SVG mundat. In modo \"Venenare\", notas sensitivas cum datis fortuitis verisimilibus mutat.</string>
     <string name="help_item_other_title">PDF et Documentorum Processio</string>
     <string name="help_item_other_body">Formata fulta: PDF.\n\nMetaJammer nunc documenta PDF plene sustinet. Legere, delere, et metadata \"venenare\" potes, sicut Titulum, Auctorem, Argumentum, Verba Clavem, Creatorem, et Produtorem. Etiam notae aquatiles occultas et annotationes delet ut documenta tua munda sint antequam communicentur.</string>
     <string name="help_report_issue_title">Rem Deferre</string>
@@ -87,6 +112,7 @@
     <string name="choose_save_or_share">Elige utrum servare an communicare vis.</string>
     <string name="save_to_default_folder">In Capsa Defalta Servare</string>
     <string name="save_to_custom_folder">In Capsa Propria Servare</string>
+    <string name="back_to_home">Reditus ad Initium</string>
 
     <!-- SettingsScreen -->
     <string name="settings">Optiones</string>
@@ -148,6 +174,8 @@
     <string name="setting_language_title">Lingua</string>
     <string name="setting_oled_mode_title">Modus OLED</string>
     <string name="setting_oled_mode_sub">Coloribus nigrioribus uti pro dark themes</string>
+    <string name="setting_dynamic_color_title">Material You (Colores Dynamici)</string>
+    <string name="setting_dynamic_color_sub">Colores dynamicos ex tuo pariete picturato ad faciem applicationis adhibere</string>
 
     <!-- Enums -->
     <string name="night_mode_always">Semper</string>
@@ -188,6 +216,10 @@
     <string name="output_action_shared_folder">In capsa propria servare</string>
     <string name="output_action_reshare">Fasciculos mundatos iterum communicare</string>
     <string name="quick_scrub_processing">Fasciculos tuos siccans…</string>
+    <string name="quick_scrub_title">Mundatio Celeris</string>
+    <string name="quick_scrub_status_stripping">Metadata e %1$d fasciculo/is tolluntur…</string>
+    <string name="quick_scrub_status_poisoning">Metadata pro %1$d fasciculo/is venenantur…</string>
+    <string name="quick_scrub_cancel">Abrogare</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">Tabula &amp; Interrete</string>
@@ -197,4 +229,37 @@
 
     <string name="notification_permission_title">Certior Fieri</string>
     <string name="notification_permission_message">MetaJammer notificationes ostendere potest...</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">Salve ad MetaJammer</string>
+    <string name="onboarding_welcome_desc">Tuus instrumentorum apparatus proprius pro privatia metadatorum. Fasciculos tuos munda antequam mundo communicas.</string>
+    <string name="onboarding_poison_vs_remove_title">Venenare vs Tollere</string>
+    <string name="onboarding_poison_vs_remove_desc"><b>Tollere:</b> Omnia metadata delet. Simplex et mundum.\n\n<b>Venenare:</b> Data sensitiva cum falsis verisimilibus mutat. Hoc <i>negationem probabilem</i> praebet et exploratores automatarios confundit.</string>
+    <string name="onboarding_permissions_title">Praeparatio</string>
+    <string name="onboarding_permissions_desc">MetaJammer paucis permissionibus eget ut optime operetur. Notificationes pro operibus in occulto et interrete pro tabula seligenda permittere potes.</string>
+    <string name="onboarding_finish_title">Omnia Parata!</string>
+    <string name="onboarding_finish_desc">Paratus es tuam privatiam protegere. Aliquos fasciculos selige vel ex aliis applicationibus communica ut incipias.</string>
+    <string name="onboarding_get_started">Incipere</string>
+    <string name="onboarding_next">Proximum</string>
+    <string name="onboarding_skip">Omittere</string>
+
+    <!-- Processing History -->
+    <string name="category_privacy_history">Privatia &amp; Historia</string>
+    <string name="setting_enable_history_title">Historiam processus permittere</string>
+    <string name="setting_enable_history_sub">Commentarium fasciculorum nuper processorum servare. Haec data localiter conduntur et numquam instrumentum tuum relinquunt.</string>
+    <string name="setting_history_retention_title">Retentio historiae</string>
+    <string name="setting_history_shortcut_title">Compendium historiae ostendere</string>
+    <string name="setting_history_shortcut_sub">Iconem aditus celeris pro historia in pagina principali addere</string>
+    <string name="setting_clear_history_now">Historiam nunc delere</string>
+    <string name="setting_history_cleared">Historia processus deleta est.</string>
+    <string name="setting_history_title">Historia Processus</string>
+
+    <string name="retention_policy_100_items">100 res recentissimas servare</string>
+    <string name="retention_policy_clear_on_exit">Historiam in exitu delere</string>
+    <string name="retention_policy_clear_after_24h">Historiam post 24 horas delere</string>
+
+    <string name="history_title">Historia Processus</string>
+    <string name="history_empty">Nulli fasciculi adhuc inscripti sunt.</string>
+    <string name="history_clear_confirm_title">Historiam delere?</string>
+    <string name="history_clear_confirm_message">Hoc commentarium omnium fasciculorum processorum in perpetuum delebit. Fasciculi ipsi non delebuntur.</string>
 </resources>

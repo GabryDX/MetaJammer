@@ -54,7 +54,32 @@
     <string name="selected_mode">Selectat: %1$s</string>
     <string name="regenerate_plans">Regenerare planuri aleatorii</string>
     <string name="preview_of_changes">Previzualizare modificări</string>
+    <string name="hardware_profile_label">Profil hardware:</string>
+    <string name="location_preset_label">Locație prestabilită:</string>
+    <string name="category_metadata_tags">Categorii de metadate</string>
+    <string name="tag_category_gps_title">GPS și locație</string>
+    <string name="tag_category_gps_sub">Elimină sau falsifică coordonatele, altitudinea și orientarea</string>
+    <string name="tag_category_device_title">Dispozitiv și hardware</string>
+    <string name="tag_category_device_sub">Elimină sau falsifică marca camerei, modelul, software-ul și seriile</string>
+    <string name="tag_category_datetime_title">Dată și marcaj temporal</string>
+    <string name="tag_category_datetime_sub">Elimină sau falsifică marcajele temporale de creare și modificare</string>
+    <string name="tag_category_camera_title">Setări tehnice cameră</string>
+    <string name="tag_category_camera_sub">Elimină sau falsifică ISO, diafragma, distanța focală, blițul și timpul de expunere</string>
+    <string name="tag_category_comments_title">Comentarii și descrieri</string>
+    <string name="tag_category_comments_sub">Elimină sau falsifică comentariile utilizatorului, titlurile și descrierile imaginii</string>
     <string name="no_preview_available">Nicio previzualizare disponibilă</string>
+    <string name="diff_filter_all">Toate (%1$d)</string>
+    <string name="diff_filter_removed">Eliminate (%1$d)</string>
+    <string name="diff_filter_poisoned">Alterate (%1$d)</string>
+    <string name="diff_filter_kept">Păstrate (%1$d)</string>
+    <string name="diff_badge_removed">ELIMINAT</string>
+    <string name="diff_badge_poisoned">ALTERAT</string>
+    <string name="diff_badge_kept">PĂSTRAT</string>
+    <string name="diff_before">Înainte: %1$s</string>
+    <string name="diff_after">După: %1$s</string>
+    <string name="diff_value_none">(Niciunul)</string>
+    <string name="diff_value_stripped">(Eliminat)</string>
+    <string name="diff_no_tags_for_filter">Nicio etichetă nu corespunde acestui filtru</string>
     <string name="change_location_map">Schimbă locația pe hartă</string>
     <string name="process_and_continue">Procesează și continuă</string>
     <string name="processing_complete">Procesare finalizată</string>
@@ -66,9 +91,9 @@
     <!-- HelpScreen -->
     <string name="help_title">Ajutor și tutoriale</string>
     <string name="help_item_video_title">Procesare video</string>
-    <string name="help_item_video_body">Formate suportate: MP4, MOV.\n\nRemuxarea completă este suportată pentru aceste containere. Acest proces elimină datele GPS, datele calendaristice și atomii de dispozitiv pentru a-ți proteja confidențialitatea.</string>
-    <string name="help_item_image_title">Procesare imagini</string>
-    <string name="help_item_image_body">Formate suportate: JPG, PNG, WebP, HEIF.\n\nMetaJammer elimină metadatele EXIF din aceste imagini. În modul \"Alterare\", acesta înlocuiește etichetele sensibile (cum ar fi coordonatele GPS) cu date aleatorii realiste.</string>
+    <string name="help_item_video_body">Formate suportate: MP4, MOV, M4A, OGG.\n\nRemuxarea completă este suportată pentru aceste containere. Acest proces elimină datele GPS, datele calendaristice și atomii de dispozitiv pentru a-ți proteja confidențialitatea.</string>
+    <string name="help_item_image_title">Procesare imagini și vectori</string>
+    <string name="help_item_image_body">Formate suportate: JPG, PNG, WebP, HEIF, SVG.\n\nMetaJammer elimină metadatele EXIF din imaginile bitmap și curăță metadatele XML/RDF din SVG-uri. În modul \"Alterare\", acesta înlocuiește etichetele sensibile cu date aleatorii realiste.</string>
     <string name="help_item_other_title">Procesare PDF și documente</string>
     <string name="help_item_other_body">Formate suportate: PDF.\n\nMetaJammer acceptă acum pe deplin documentele PDF. Puteți citi, elimina și „otrăvi” metadate precum Titlu, Autor, Subiect, Cuvinte cheie, Creator și Producător. De asemenea, elimină filigranele ascunse și adnotările pentru a vă asigura că documentele sunt curate înainte de a fi partajate.</string>
     <string name="help_report_issue_title">Raportează o problemă</string>
@@ -87,6 +112,7 @@
     <string name="choose_save_or_share">Alege dacă dorești să salvezi sau să partajezi rezultatul procesat.</string>
     <string name="save_to_default_folder">Salvare în dosarul implicit</string>
     <string name="save_to_custom_folder">Salvare în dosar personalizat</string>
+    <string name="back_to_home">Înapoi la pagina principală</string>
 
     <!-- SettingsScreen -->
     <string name="settings">Setări</string>
@@ -148,6 +174,8 @@
     <string name="setting_language_title">Limbă</string>
     <string name="setting_oled_mode_title">Mod OLED</string>
     <string name="setting_oled_mode_sub">Folosește tonuri de negru mai închise pentru temele întunecate suportate</string>
+    <string name="setting_dynamic_color_title">Material You (Culori dinamice)</string>
+    <string name="setting_dynamic_color_sub">Aplică culorile dinamice ale imaginii de fundal pe interfața aplicației</string>
 
     <!-- Enums -->
     <string name="night_mode_always">Întotdeauna</string>
@@ -155,7 +183,7 @@
     <string name="night_mode_low_battery">Doar la baterie descărcată</string>
     <string name="night_mode_never">Niciodată</string>
 
-    <string name="language_system">Limbă implicită sistem</string>
+    <string name="language_system">System Default (Limbă implicită sistem)</string>
     <string name="language_en">English (Engleză)</string>
     <string name="language_zh">中文 (简体) (Chineză)</string>
     <string name="language_es">Español (Spaniolă)</string>
@@ -188,6 +216,10 @@
     <string name="output_action_shared_folder">Salvare în dosarul dedicat</string>
     <string name="output_action_reshare">Repartajare fișiere igienizate</string>
     <string name="quick_scrub_processing">Se usucă fișierele…</string>
+    <string name="quick_scrub_title">Curățare rapidă</string>
+    <string name="quick_scrub_status_stripping">Se elimină metadatele din %1$d fișier(e)…</string>
+    <string name="quick_scrub_status_poisoning">Se alterează metadatele pentru %1$d fișier(e)…</string>
+    <string name="quick_scrub_cancel">Anulează</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">Selector de hartă și acces la internet</string>
@@ -197,4 +229,37 @@
 
     <string name="notification_permission_title">Rămâi informat</string>
     <string name="notification_permission_message">MetaJammer poate afișa notificări pentru a te ține la curent cu progresul loturilor mari de fișiere în timp ce acestea sunt procesate pe fundal. \n\nAcest lucru este util mai ales dacă dorești să comuți la o altă aplicație în timp ce MetaJammer își termină treaba.</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">Bine ați venit la MetaJammer</string>
+    <string name="onboarding_welcome_desc">Trusa dvs. personală pentru confidențialitatea metadatelor. Curățați-vă fișierele înainte de a le partaja cu lumea.</string>
+    <string name="onboarding_poison_vs_remove_title">Alterare vs Eliminare</string>
+    <string name="onboarding_poison_vs_remove_desc"><b>Eliminare:</b> Șterge toate metadatele. Simplu și curat.\n\n<b>Alterare:</b> Înlocuiește datele sensibile cu valori false, dar realiste. Acest lucru oferă <i>negare plauzibilă</i> și induce în eroare sistemele automate de urmărire.</string>
+    <string name="onboarding_permissions_title">Pregătirea</string>
+    <string name="onboarding_permissions_desc">MetaJammer are nevoie de câteva permisiuni pentru a funcționa optim. Puteți alege să activați notificările pentru sarcinile de fundal și internetul pentru selectorul de hartă.</string>
+    <string name="onboarding_finish_title">Totul este gata!</string>
+    <string name="onboarding_finish_desc">Sunteți gata să începeți să vă protejați confidențialitatea. Alegeți câteva fișiere sau partajați-le din alte aplicații pentru a începe.</string>
+    <string name="onboarding_get_started">Să începem</string>
+    <string name="onboarding_next">Următorul</string>
+    <string name="onboarding_skip">Sari peste</string>
+
+    <!-- Processing History -->
+    <string name="category_privacy_history">Confidențialitate și Istoric</string>
+    <string name="setting_enable_history_title">Activează istoricul de procesare</string>
+    <string name="setting_enable_history_sub">Păstrează un jurnal al fișierelor procesate recent. Aceste date sunt stocate local și nu părăsesc niciodată dispozitivul tău.</string>
+    <string name="setting_history_retention_title">Reținerea istoricului</string>
+    <string name="setting_history_shortcut_title">Arată scurtătura pentru istoric</string>
+    <string name="setting_history_shortcut_sub">Adaugă o pictogramă de acces rapid pentru istoric pe ecranul principal</string>
+    <string name="setting_clear_history_now">Șterge istoricul acum</string>
+    <string name="setting_history_cleared">Istoricul de procesare a fost șters.</string>
+    <string name="setting_history_title">Istoric de procesare</string>
+
+    <string name="retention_policy_100_items">Păstrează cele mai recente 100 de elemente</string>
+    <string name="retention_policy_clear_on_exit">Șterge istoricul la ieșirea din aplicație</string>
+    <string name="retention_policy_clear_after_24h">Șterge istoricul după 24 de ore</string>
+
+    <string name="history_title">Istoric de procesare</string>
+    <string name="history_empty">Nu a fost înregistrat încă niciun fișier.</string>
+    <string name="history_clear_confirm_title">Ștergi istoricul?</string>
+    <string name="history_clear_confirm_message">Această acțiune va șterge definitiv jurnalul tuturor fișierelor procesate. Fișierele reale nu vor fi șterse.</string>
 </resources>

@@ -54,7 +54,32 @@
     <string name="selected_mode">Đã chọn: %1$s</string>
     <string name="regenerate_plans">Tạo lại tất cả các kế hoạch ngẫu nhiên</string>
     <string name="preview_of_changes">Xem trước thay đổi</string>
+    <string name="hardware_profile_label">Hồ sơ phần cứng:</string>
+    <string name="location_preset_label">Vị trí đặt sẵn:</string>
+    <string name="category_metadata_tags">Danh mục siêu dữ liệu</string>
+    <string name="tag_category_gps_title">GPS &amp; Vị trí</string>
+    <string name="tag_category_gps_sub">Xóa hoặc giả mạo tọa độ, độ cao và hướng di chuyển</string>
+    <string name="tag_category_device_title">Thiết bị &amp; Phần cứng</string>
+    <string name="tag_category_device_sub">Xóa hoặc giả mạo hãng máy ảnh, kiểu máy, phần mềm và số sê-ri</string>
+    <string name="tag_category_datetime_title">Ngày &amp; Dấu thời gian</string>
+    <string name="tag_category_datetime_sub">Xóa hoặc giả mạo dấu thời gian tạo và chỉnh sửa</string>
+    <string name="tag_category_camera_title">Cài đặt kỹ thuật máy ảnh</string>
+    <string name="tag_category_camera_sub">Xóa hoặc giả mạo ISO, khẩu độ, tiêu cự, đèn flash và tốc độ màn trập</string>
+    <string name="tag_category_comments_title">Bình luận &amp; Mô tả</string>
+    <string name="tag_category_comments_sub">Xóa hoặc giả mạo bình luận người dùng, tiêu đề và mô tả hình ảnh</string>
     <string name="no_preview_available">Không có bản xem trước</string>
+    <string name="diff_filter_all">Tất cả (%1$d)</string>
+    <string name="diff_filter_removed">Đã xóa (%1$d)</string>
+    <string name="diff_filter_poisoned">Đã đầu độc (%1$d)</string>
+    <string name="diff_filter_kept">Đã giữ lại (%1$d)</string>
+    <string name="diff_badge_removed">ĐÃ XÓA</string>
+    <string name="diff_badge_poisoned">ĐÃ ĐẦU ĐỘC</string>
+    <string name="diff_badge_kept">ĐÃ GIỮ LẠI</string>
+    <string name="diff_before">Trước: %1$s</string>
+    <string name="diff_after">Sau: %1$s</string>
+    <string name="diff_value_none">(Không có)</string>
+    <string name="diff_value_stripped">(Đã xóa)</string>
+    <string name="diff_no_tags_for_filter">Không có thẻ nào khớp với bộ lọc này</string>
     <string name="change_location_map">Thay đổi vị trí trên bản đồ</string>
     <string name="process_and_continue">Xử lý và tiếp tục</string>
     <string name="processing_complete">Xử lý hoàn tất</string>
@@ -66,9 +91,9 @@
     <!-- HelpScreen -->
     <string name="help_title">Trợ giúp &amp; Hướng dẫn</string>
     <string name="help_item_video_title">Xử lý Video</string>
-    <string name="help_item_video_body">Định dạng hỗ trợ: MP4, MOV.\n\nHỗ trợ remuxing hoàn toàn cho các định dạng này. Quá trình này sẽ loại bỏ GPS, ngày tháng và các thông tin thiết bị để bảo vệ quyền riêng tư của bạn.</string>
-    <string name="help_item_image_title">Xử lý Hình ảnh</string>
-    <string name="help_item_image_body">Định dạng hỗ trợ: JPG, PNG, WebP, HEIF.\n\nMetaJammer loại bỏ siêu dữ liệu EXIF khỏi các hình ảnh này. Trong chế độ \"Đầu độc\", nó thay thế các thẻ nhạy cảm như tọa độ GPS bằng dữ liệu ngẫu nhiên thực tế.</string>
+    <string name="help_item_video_body">Định dạng hỗ trợ: MP4, MOV, M4A, OGG.\n\nHỗ trợ remuxing hoàn toàn cho các định dạng này. Quá trình này sẽ loại bỏ GPS, ngày tháng và các thông tin thiết bị để bảo vệ quyền riêng tư của bạn.</string>
+    <string name="help_item_image_title">Xử lý Hình ảnh &amp; Vector</string>
+    <string name="help_item_image_body">Định dạng hỗ trợ: JPG, PNG, WebP, HEIF, SVG.\n\nMetaJammer loại bỏ siêu dữ liệu EXIF khỏi các hình ảnh bitmap và làm sạch siêu dữ liệu XML/RDF khỏi các tệp SVG. Trong chế độ \"Đầu độc\", nó thay thế các thẻ nhạy cảm bằng dữ liệu ngẫu nhiên thực tế.</string>
     <string name="help_item_other_title">Xử lý PDF &amp; Tài liệu</string>
     <string name="help_item_other_body">Định dạng được hỗ trợ: PDF.\n\nMetaJammer hiện đã hỗ trợ đầy đủ các tài liệu PDF. Bạn có thể đọc, xóa và \"đầu độc\" siêu dữ liệu như Tiêu đề, Tác giả, Chủ đề, Từ khóa, Người tạo và Nhà sản xuất. Nó cũng loại bỏ các hình mờ và chú thích ẩn để đảm bảo tài liệu của bạn sạch sẽ trước khi chia sẻ.</string>
     <string name="help_report_issue_title">Báo lỗi</string>
@@ -87,6 +112,7 @@
     <string name="choose_save_or_share">Chọn lưu hoặc chia sẻ kết quả đã xử lý.</string>
     <string name="save_to_default_folder">Lưu vào thư mục mặc định</string>
     <string name="save_to_custom_folder">Lưu vào thư mục tùy chỉnh</string>
+    <string name="back_to_home">Quay lại Trang chủ</string>
 
     <!-- SettingsScreen -->
     <string name="settings">Cài đặt</string>
@@ -148,6 +174,8 @@
     <string name="setting_language_title">Ngôn ngữ</string>
     <string name="setting_oled_mode_title">Chế độ OLED</string>
     <string name="setting_oled_mode_sub">Sử dụng tông màu đen đậm hơn cho các chủ đề tối được hỗ trợ</string>
+    <string name="setting_dynamic_color_title">Material You (Màu sắc năng động)</string>
+    <string name="setting_dynamic_color_sub">Áp dụng màu sắc năng động từ hình nền của bạn vào giao diện ứng dụng</string>
 
     <!-- Enums -->
     <string name="night_mode_always">Luôn luôn</string>
@@ -188,6 +216,10 @@
     <string name="output_action_shared_folder">Lưu vào thư mục dành riêng</string>
     <string name="output_action_reshare">Chia sẻ lại các tệp đã dọn dẹp</string>
     <string name="quick_scrub_processing">Đang làm khô các tệp của bạn…</string>
+    <string name="quick_scrub_title">Dọn dẹp nhanh</string>
+    <string name="quick_scrub_status_stripping">Đang xóa siêu dữ liệu khỏi %1$d tệp…</string>
+    <string name="quick_scrub_status_poisoning">Đang đầu độc siêu dữ liệu cho %1$d tệp…</string>
+    <string name="quick_scrub_cancel">Hủy</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">Chọn bản đồ &amp; Truy cập Internet</string>
@@ -197,4 +229,37 @@
 
     <string name="notification_permission_title">Luôn cập nhật thông tin</string>
     <string name="notification_permission_message">MetaJammer có thể hiển thị thông báo để cập nhật cho bạn về tiến trình xử lý các lô tệp lớn khi chúng đang chạy nền.\n\nĐiều này đặc biệt hữu ích nếu bạn muốn chuyển sang ứng dụng khác trong khi MetaJammer hoàn tất công việc.</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">Chào mừng đến với MetaJammer</string>
+    <string name="onboarding_welcome_desc">Bộ công cụ cá nhân của bạn cho quyền riêng tư siêu dữ liệu. Dọn dẹp các tệp của bạn trước khi chia sẻ chúng với thế giới.</string>
+    <string name="onboarding_poison_vs_remove_title">Đầu độc vs Xóa</string>
+    <string name="onboarding_poison_vs_remove_desc"><b>Xóa:</b> Xóa tất cả siêu dữ liệu. Đơn giản và sạch sẽ.\n\n<b>Đầu độc:</b> Thay thế dữ liệu nhạy cảm bằng các giá trị giả thực tế. Điều này cung cấp <i>khả năng phủ nhận hợp lý</i> và làm rối loạn các trình theo dõi tự động.</string>
+    <string name="onboarding_permissions_title">Chuẩn bị sẵn sàng</string>
+    <string name="onboarding_permissions_desc">MetaJammer cần một số quyền để hoạt động tốt nhất. Bạn có thể chọn bật thông báo cho các tác vụ nền và internet cho trình chọn bản đồ.</string>
+    <string name="onboarding_finish_title">Tất cả đã xong!</string>
+    <string name="onboarding_finish_desc">Bạn đã sẵn sàng để bắt đầu bảo vệ quyền riêng tư của mình. Chọn một số tệp hoặc chia sẻ chúng từ các ứng dụng khác để bắt đầu.</string>
+    <string name="onboarding_get_started">Bắt đầu</string>
+    <string name="onboarding_next">Tiếp theo</string>
+    <string name="onboarding_skip">Bỏ qua</string>
+
+    <!-- Processing History -->
+    <string name="category_privacy_history">Quyền riêng tư &amp; Lịch sử</string>
+    <string name="setting_enable_history_title">Bật lịch sử xử lý</string>
+    <string name="setting_enable_history_sub">Giữ nhật ký các tệp được xử lý gần đây. Dữ liệu này được lưu trữ cục bộ và không bao giờ rời khỏi thiết bị của bạn.</string>
+    <string name="setting_history_retention_title">Lưu giữ lịch sử</string>
+    <string name="setting_history_shortcut_title">Hiển thị phím tắt lịch sử</string>
+    <string name="setting_history_shortcut_sub">Thêm biểu tượng truy cập nhanh cho lịch sử trên màn hình chính</string>
+    <string name="setting_clear_history_now">Xóa lịch sử ngay bây giờ</string>
+    <string name="setting_history_cleared">Lịch sử xử lý đã được xóa.</string>
+    <string name="setting_history_title">Lịch sử xử lý</string>
+
+    <string name="retention_policy_100_items">Giữ 100 mục gần nhất</string>
+    <string name="retention_policy_clear_on_exit">Xóa lịch sử khi thoát ứng dụng</string>
+    <string name="retention_policy_clear_after_24h">Xóa lịch sử sau 24 giờ</string>
+
+    <string name="history_title">Lịch sử xử lý</string>
+    <string name="history_empty">Chưa có tệp nào được ghi lại.</string>
+    <string name="history_clear_confirm_title">Xóa lịch sử?</string>
+    <string name="history_clear_confirm_message">Thao tác này sẽ xóa vĩnh viễn nhật ký của tất cả các tệp đã xử lý. Các tệp thực tế sẽ không bị xóa.</string>
 </resources>

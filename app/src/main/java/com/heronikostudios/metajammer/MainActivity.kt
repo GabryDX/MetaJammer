@@ -4,58 +4,51 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import androidx.core.net.toUri
+import android.os.Build
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.work.WorkInfo
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.IntentCompat
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.ui.res.painterResource
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
+import androidx.work.WorkInfo
 import com.heronikostudios.metajammer.domain.usecase.ShareFileUseCase
+import com.heronikostudios.metajammer.navigation.Screen
 import com.heronikostudios.metajammer.ui.MainViewModel
 import com.heronikostudios.metajammer.ui.components.MessageBanner
-import com.heronikostudios.metajammer.ui.screens.HelpScreen
-import com.heronikostudios.metajammer.ui.screens.HomeScreen
-import com.heronikostudios.metajammer.ui.screens.LocationPickerScreen
-import com.heronikostudios.metajammer.ui.screens.MetadataPreviewScreen
-import com.heronikostudios.metajammer.ui.screens.QuickScrubScreen
-import kotlinx.coroutines.launch
-import com.heronikostudios.metajammer.ui.screens.OutputOptionsScreen
-import com.heronikostudios.metajammer.ui.screens.ProcessingScreen
-import com.heronikostudios.metajammer.ui.screens.SettingsScreen
+import com.heronikostudios.metajammer.ui.screens.*
 import com.heronikostudios.metajammer.ui.theme.MetaJammerTheme
+import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 open class MainActivity : AppCompatActivity() {
 
@@ -65,19 +58,19 @@ open class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         // Security: Protect against tapjacking (overlay) attacks
-        // This ensures the app doesn't receive touches if it's being obscured by another window
         findViewById<android.view.View>(android.R.id.content)?.filterTouchesWhenObscured = true
 
         enableEdgeToEdge()
         sharedUris = extractSharedUris(intent)
 
         setContent {
-            val viewModel: MainViewModel = viewModel()
+            val viewModel: MainViewModel = koinViewModel()
             val appSettings by viewModel.appSettings.collectAsStateWithLifecycle()
 
             MetaJammerTheme(
                 nightModeSetting = appSettings.nightMode,
-                oledMode = appSettings.oledMode
+                oledMode = appSettings.oledMode,
+                dynamicColor = appSettings.useDynamicColor
             ) {
                 MetaJammerApp(
                     sharedUris = sharedUris,
@@ -95,53 +88,8 @@ open class MainActivity : AppCompatActivity() {
     }
 
     private fun extractSharedUris(intent: Intent?): List<Uri> {
-        if (intent == null) return emptyList()
-
-        val action = intent.action
-        if (action != Intent.ACTION_SEND && action != Intent.ACTION_SEND_MULTIPLE) {
-            return emptyList()
-        }
-
-        val uris = when (action) {
-            Intent.ACTION_SEND -> {
-                val uri = intent.getParcelableExtra(Intent.EXTRA_STREAM, Uri::class.java)
-                uri?.let(::listOf) ?: emptyList()
-            }
-
-            Intent.ACTION_SEND_MULTIPLE -> {
-                intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM, Uri::class.java) ?: emptyList()
-            }
-
-            else -> emptyList()
-        }
-
-        // Basic validation: ensure they are content URIs
-        return uris.filter { uri ->
-            uri.scheme == "content"
-        }
+        return com.heronikostudios.metajammer.util.IntentUtils.extractSharedUris(intent)
     }
-}
-
-private enum class AppStep {
-    HOME,
-    PREVIEW,
-    PROCESS,
-    LOCATION_PICKER,
-    OUTPUT,
-    SETTINGS,
-    HELP,
-    QUICK_SCRUB
-}
-
-private fun previousStep(step: AppStep): AppStep? = when (step) {
-    AppStep.HOME -> null
-    AppStep.PREVIEW -> AppStep.HOME
-    AppStep.PROCESS -> AppStep.PREVIEW
-    AppStep.LOCATION_PICKER -> AppStep.PROCESS
-    AppStep.OUTPUT -> AppStep.PROCESS
-    AppStep.SETTINGS -> null
-    AppStep.HELP -> AppStep.HOME
-    AppStep.QUICK_SCRUB -> null
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -161,61 +109,73 @@ fun MetaJammerApp(
     val metadataPreview by viewModel.metadataPreview.collectAsStateWithLifecycle()
     val changePreview by viewModel.changePreview.collectAsStateWithLifecycle()
     val selectedMode by viewModel.selectedMode.collectAsStateWithLifecycle()
+    val selectedProfile by viewModel.selectedProfile.collectAsStateWithLifecycle()
+    val selectedLocationPreset by viewModel.selectedLocationPreset.collectAsStateWithLifecycle()
     val processedFiles by viewModel.processedFiles.collectAsStateWithLifecycle()
     val processing by viewModel.processing.collectAsStateWithLifecycle()
     val message by viewModel.message.collectAsStateWithLifecycle()
     val appSettings by viewModel.appSettings.collectAsStateWithLifecycle()
     val settingsInitialized by viewModel.settingsInitialized.collectAsStateWithLifecycle()
     val replacementPlans by viewModel.replacementPlans.collectAsStateWithLifecycle()
+    val workInfo by viewModel.workInfo.collectAsStateWithLifecycle()
 
     val notificationPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
-    ) { _ ->
-        // Handle result if needed
-    }
+    ) { _ -> }
 
     var showNotificationPermissionExplanation by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        if (context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            showNotificationPermissionExplanation = true
-        }
-    }
-
-    var currentStep by rememberSaveable { mutableStateOf(AppStep.HOME) }
-    var previousNonSettingsStep by rememberSaveable { mutableStateOf(AppStep.HOME) }
-    var handledSharedSignature by rememberSaveable { mutableStateOf<String?>(null) }
-    var uriToEditLocation by remember { mutableStateOf<Uri?>(null) }
-    var showInternetPermissionExplanation by remember { mutableStateOf(false) }
-
-    fun navigateTo(step: AppStep) {
-        viewModel.clearMessage()
-        if (step != AppStep.SETTINGS && step != AppStep.HELP) {
-            previousNonSettingsStep = step
-        }
-        currentStep = step
-    }
-
-    fun navigateBack() {
-        when (currentStep) {
-            AppStep.SETTINGS -> currentStep = previousNonSettingsStep
-            else -> {
-                val previous = previousStep(currentStep)
-                if (previous != null) currentStep = previous else onExitApp()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                showNotificationPermissionExplanation = true
             }
         }
     }
 
-    BackHandler {
-        navigateBack()
+    val navController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
+
+    val isHome = currentDestination?.hasRoute(Screen.Home::class) == true
+    val isOnboarding = currentDestination?.hasRoute(Screen.Onboarding::class) == true
+    val isQuickScrub = currentDestination?.hasRoute(Screen.QuickScrub::class) == true
+    val isSettings = currentDestination?.hasRoute(Screen.Settings::class) == true
+    val isHelp = currentDestination?.hasRoute(Screen.Help::class) == true
+    val isHistory = currentDestination?.hasRoute(Screen.History::class) == true
+    val isPreview = currentDestination?.hasRoute(Screen.Preview::class) == true
+    val isProcess = currentDestination?.hasRoute(Screen.Process::class) == true
+    val isLocationPicker = currentDestination?.hasRoute(Screen.LocationPicker::class) == true
+    val isOutput = currentDestination?.hasRoute(Screen.Output::class) == true
+
+    var initialNavigationDone by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(settingsInitialized) {
+        if (settingsInitialized && !initialNavigationDone) {
+            if (!appSettings.isOnboardingCompleted) {
+                navController.navigate(Screen.Onboarding) {
+                    popUpTo(0) { inclusive = true }
+                }
+            }
+            initialNavigationDone = true
+        }
+    }
+
+    var handledSharedSignature by rememberSaveable { mutableStateOf<String?>(null) }
+    var uriToEditLocation by remember { mutableStateOf<Uri?>(null) }
+    var showInternetPermissionExplanation by remember { mutableStateOf(false) }
+
+    // Intercept back on Home to exit app
+    BackHandler(enabled = isHome) {
+        onExitApp()
+    }
+
+    BackHandler(enabled = isOutput) {
+        viewModel.clearMessage()
+        navController.popBackStack()
     }
 
     val sharedSignature = remember(sharedUris) {
-        if (sharedUris.isEmpty()) {
-            null
-        } else {
-            sharedUris.joinToString(separator = "|") { it.toString() }
-        }
+        if (sharedUris.isEmpty()) null else sharedUris.joinToString(separator = "|") { it.toString() }
     }
 
     LaunchedEffect(sharedSignature, settingsInitialized, appSettings.autoHandleSharedFiles) {
@@ -228,84 +188,112 @@ fun MetaJammerApp(
         viewModel.setIncomingUrisSuspend(sharedUris, loadMetadata = !appSettings.autoHandleSharedFiles)
 
         if (appSettings.autoHandleSharedFiles) {
-            navigateTo(AppStep.QUICK_SCRUB)
+            navController.navigate(Screen.QuickScrub)
             viewModel.autoHandleSharedInput { files, mimeType ->
                 shareFileUseCase.shareFiles(
                     context = context,
                     files = files,
                     mimeType = mimeType
                 )
-                // "Invisible" workflow: close MetaJammer after re-sharing
                 onExitApp()
             }
         } else {
-            navigateTo(AppStep.PREVIEW)
+            navController.navigate(Screen.Preview)
         }
     }
 
-    val workInfo by viewModel.workInfo.collectAsStateWithLifecycle()
     LaunchedEffect(workInfo) {
-        if (currentStep == AppStep.PROCESS && workInfo?.state == WorkInfo.State.SUCCEEDED) {
-            navigateTo(AppStep.OUTPUT)
+        if (isProcess && workInfo?.state == WorkInfo.State.SUCCEEDED) {
+            navController.navigate(Screen.Output) {
+                popUpTo<Screen.Process> { inclusive = true }
+            }
         }
     }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        containerColor = if (currentStep == AppStep.QUICK_SCRUB) Color.Transparent else MaterialTheme.colorScheme.background,
+        containerColor = if (isQuickScrub) Color.Transparent else MaterialTheme.colorScheme.background,
         topBar = {
-            if (currentStep != AppStep.QUICK_SCRUB) {
+            if (!isQuickScrub && !isOnboarding) {
                 CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        text = when (currentStep) {
-                            AppStep.HOME -> stringResource(R.string.app_name)
-                            AppStep.PREVIEW -> stringResource(R.string.metadata_preview)
-                            AppStep.PROCESS -> stringResource(R.string.process_files_title)
-                            AppStep.LOCATION_PICKER -> stringResource(R.string.pick_location)
-                            AppStep.OUTPUT -> stringResource(R.string.output_options)
-                            AppStep.SETTINGS -> stringResource(R.string.settings)
-                            AppStep.HELP -> stringResource(R.string.help_title)
-                            AppStep.QUICK_SCRUB -> ""
-                        },
-                        style = when (currentStep) {
-                            AppStep.HOME -> MaterialTheme.typography.headlineMedium
-                            else -> MaterialTheme.typography.titleLarge
+                    title = {
+                        Text(
+                            text = when {
+                                isHome -> stringResource(R.string.app_name)
+                                isPreview -> stringResource(R.string.metadata_preview)
+                                isProcess -> stringResource(R.string.process_files_title)
+                                isLocationPicker -> stringResource(R.string.pick_location)
+                                isOutput -> stringResource(R.string.output_options)
+                                isSettings -> stringResource(R.string.settings)
+                                isHelp -> stringResource(R.string.help_title)
+                                isHistory -> stringResource(R.string.history_title)
+                                else -> ""
+                            },
+                            style = if (isHome) MaterialTheme.typography.headlineMedium else MaterialTheme.typography.titleLarge
+                        )
+                    },
+                    navigationIcon = {
+                        if (isHome) {
+                            IconButton(onClick = { navController.navigate(Screen.Help) }) {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_help_outline),
+                                    contentDescription = stringResource(R.string.help)
+                                )
+                            }
+                        } else if (!isQuickScrub && !isOnboarding) {
+                            IconButton(onClick = {
+                                if (isOutput) {
+                                    viewModel.clearMessage()
+                                }
+                                if (!navController.popBackStack()) {
+                                    onExitApp()
+                                }
+                            }) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                    contentDescription = stringResource(R.string.back)
+                                )
+                            }
                         }
-                    )
-                },
-                navigationIcon = {
-                    if (currentStep == AppStep.HOME) {
-                        IconButton(onClick = { navigateTo(AppStep.HELP) }) {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_help_outline),
-                                contentDescription = stringResource(R.string.help)
-                            )
+                    },
+                    actions = {
+                        if (isOutput) {
+                            IconButton(onClick = {
+                                viewModel.navigateBackToHomeFromOutput {
+                                    navController.navigate(Screen.Home) {
+                                        popUpTo<Screen.Home> { inclusive = false }
+                                        launchSingleTop = true
+                                    }
+                                }
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Default.Home,
+                                    contentDescription = stringResource(R.string.back_to_home)
+                                )
+                            }
                         }
-                    } else if (currentStep != AppStep.HOME && currentStep != AppStep.QUICK_SCRUB) {
-                        IconButton(onClick = { navigateBack() }) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = stringResource(R.string.back)
-                            )
+                        if (isHome && appSettings.enableProcessingHistory && appSettings.showHistoryShortcut) {
+                            IconButton(onClick = { navController.navigate(Screen.History) }) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.List,
+                                    contentDescription = stringResource(R.string.history_title)
+                                )
+                            }
+                        }
+                        if (!isQuickScrub && !isOnboarding && !isSettings) {
+                            IconButton(onClick = { navController.navigate(Screen.Settings) }) {
+                                Icon(
+                                    imageVector = Icons.Filled.Settings,
+                                    contentDescription = stringResource(R.string.settings)
+                                )
+                            }
                         }
                     }
-                },
-                actions = {
-                    if (currentStep != AppStep.QUICK_SCRUB) {
-                        IconButton(onClick = { currentStep = AppStep.SETTINGS }) {
-                            Icon(
-                                imageVector = Icons.Filled.Settings,
-                                contentDescription = stringResource(R.string.settings)
-                            )
-                        }
-                    }
-                }
-            )
-          }
+                )
+            }
         },
         snackbarHost = {
-            if (currentStep != AppStep.QUICK_SCRUB) {
+            if (!isQuickScrub) {
                 SnackbarHost(snackbarHostState)
             }
         }
@@ -320,101 +308,124 @@ fun MetaJammerApp(
                 )
             }
 
-            when (currentStep) {
-                AppStep.HOME -> {
+            NavHost(
+                navController = navController,
+                startDestination = Screen.Home,
+                enterTransition = { fadeIn(tween(200)) + slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(200)) },
+                exitTransition = { fadeOut(tween(200)) + slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(200)) },
+                popEnterTransition = { fadeIn(tween(200)) + slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.End, tween(200)) },
+                popExitTransition = { fadeOut(tween(200)) + slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End, tween(200)) },
+                modifier = Modifier.fillMaxSize()
+            ) {
+                composable<Screen.Onboarding> {
+                    OnboardingScreen(
+                        onFinish = {
+                            viewModel.setOnboardingCompleted(true)
+                            navController.navigate(Screen.Home) {
+                                popUpTo<Screen.Onboarding> { inclusive = true }
+                            }
+                        },
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+
+                composable<Screen.Home> {
                     HomeScreen(
                         selectedFiles = selectedFiles,
                         onFilesPicked = {
                             viewModel.setIncomingUris(it)
-                            navigateTo(AppStep.PREVIEW)
+                            navController.navigate(Screen.Preview)
                         },
                         onFileRemoved = {
                             viewModel.removeFileFromSelection(it)
                         },
                         onContinue = {
-                            if (selectedFiles.isNotEmpty()) navigateTo(AppStep.PREVIEW)
+                            if (selectedFiles.isNotEmpty()) navController.navigate(Screen.Preview)
                         },
                         onClearSelection = {
                             viewModel.clearSelection()
                         },
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.fillMaxSize()
                     )
                 }
 
-                AppStep.HELP -> {
+                composable<Screen.Help> {
                     HelpScreen(
-                        onBack = { navigateBack() },
+                        onBack = { navController.popBackStack() },
                         onReportIssue = {
                             runCatching {
                                 val intent = Intent(Intent.ACTION_VIEW, "https://github.com/GabryDX/MetaJammer/issues".toUri())
                                 context.startActivity(intent)
                             }
                         },
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.fillMaxSize()
                     )
                 }
 
-                AppStep.PREVIEW -> {
+                composable<Screen.Preview> {
                     MetadataPreviewScreen(
                         selectedFiles = selectedFiles,
                         metadataPreview = metadataPreview,
-                        onContinue = { navigateTo(AppStep.PROCESS) },
-                        onBack = { navigateTo(AppStep.HOME) },
-                        modifier = Modifier.weight(1f)
+                        onContinue = { navController.navigate(Screen.Process) },
+                        onBack = { navController.popBackStack() },
+                        modifier = Modifier.fillMaxSize()
                     )
                 }
 
-                AppStep.PROCESS -> {
-                    val hasProcessedFiles = processedFiles.isNotEmpty() || viewModel.workInfo.collectAsStateWithLifecycle().value?.state == WorkInfo.State.SUCCEEDED
+                composable<Screen.Process> {
+                    val hasProcessedFiles = processedFiles.isNotEmpty() || workInfo?.state == WorkInfo.State.SUCCEEDED
 
                     ProcessingScreen(
                         selectedFiles = selectedFiles,
                         selectedMode = selectedMode,
                         changePreview = changePreview,
                         processing = processing,
-                        workInfo = viewModel.workInfo.collectAsStateWithLifecycle().value,
+                        workInfo = workInfo,
                         onModeSelected = viewModel::setProcessingMode,
                         onRegeneratePlans = viewModel::regeneratePoisonPlans,
                         onProcess = {
                             if (hasProcessedFiles) {
-                                navigateTo(AppStep.OUTPUT)
+                                navController.navigate(Screen.Output)
                             } else {
                                 viewModel.processFiles(onSuccess = {
-                                    navigateTo(AppStep.OUTPUT)
+                                    navController.navigate(Screen.Output)
                                 })
                             }
                         },
                         onEditLocation = { uri ->
                             uriToEditLocation = uri
                             if (appSettings.allowInternetForMap) {
-                                navigateTo(AppStep.LOCATION_PICKER)
+                                navController.navigate(Screen.LocationPicker(uri.toString()))
                             } else {
                                 showInternetPermissionExplanation = true
                             }
                         },
                         hasProcessedFiles = hasProcessedFiles,
-                        modifier = Modifier.weight(1f)
+                        selectedProfile = selectedProfile,
+                        onProfileSelected = viewModel::setProcessingPoisoningProfile,
+                        selectedLocationPreset = selectedLocationPreset,
+                        onLocationPresetSelected = viewModel::setProcessingLocationPreset,
+                        modifier = Modifier.fillMaxSize()
                     )
                 }
 
-                AppStep.LOCATION_PICKER -> {
-                    val uri = uriToEditLocation
-                    if (uri != null) {
-                        val plan = replacementPlans[uri]
-                        
-                        LocationPickerScreen(
-                            initialLat = plan?.latitude ?: 0.0,
-                            initialLon = plan?.longitude ?: 0.0,
-                            onLocationPicked = { lat, lon ->
-                                viewModel.updatePlanLocation(uri, lat, lon)
-                                navigateBack()
-                            },
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
+                composable<Screen.LocationPicker> { backStackEntry ->
+                    val route = backStackEntry.toRoute<Screen.LocationPicker>()
+                    val uri = route.uriString.toUri()
+                    val plan = replacementPlans[uri]
+
+                    LocationPickerScreen(
+                        initialLat = plan?.latitude ?: 0.0,
+                        initialLon = plan?.longitude ?: 0.0,
+                        onLocationPicked = { lat, lon ->
+                            viewModel.updatePlanLocation(uri, lat, lon)
+                            navController.popBackStack()
+                        },
+                        modifier = Modifier.fillMaxSize()
+                    )
                 }
 
-                AppStep.OUTPUT -> {
+                composable<Screen.Output> {
                     OutputOptionsScreen(
                         shareResultAsDefault = appSettings.shareResultAsDefault,
                         onSaveDefault = {
@@ -457,7 +468,7 @@ fun MetaJammerApp(
                                 if (filesToShare.isNotEmpty()) {
                                     val firstProcessedMime = processedFiles.firstOrNull()?.first?.mimeType
                                     val allSameMime = processedFiles.all { it.first.mimeType == firstProcessedMime }
-                                    
+
                                     shareFileUseCase.shareFiles(
                                         context = context,
                                         files = filesToShare,
@@ -466,11 +477,19 @@ fun MetaJammerApp(
                                 }
                             }
                         },
-                        modifier = Modifier.weight(1f)
+                        onBackToHome = {
+                            viewModel.navigateBackToHomeFromOutput {
+                                navController.navigate(Screen.Home) {
+                                    popUpTo<Screen.Home> { inclusive = false }
+                                    launchSingleTop = true
+                                }
+                            }
+                        },
+                        modifier = Modifier.fillMaxSize()
                     )
                 }
 
-                AppStep.SETTINGS -> {
+                composable<Screen.Settings> {
                     SettingsScreen(
                         settings = appSettings,
                         onUseRandomFileNamesChanged = viewModel::setUseRandomFileNames,
@@ -495,12 +514,39 @@ fun MetaJammerApp(
                         onAllowInternetForMapChanged = viewModel::setAllowInternetForMap,
                         onUseNearbyScrambleChanged = viewModel::setUseNearbyScramble,
                         onLanguageChanged = viewModel::setLanguage,
-                        modifier = Modifier.weight(1f)
+                        onUseDynamicColorChanged = viewModel::setUseDynamicColor,
+                        onEnableProcessingHistoryChanged = viewModel::setEnableProcessingHistory,
+                        onHistoryRetentionPolicyChanged = viewModel::setHistoryRetentionPolicy,
+                        onShowHistoryShortcutChanged = viewModel::setShowHistoryShortcut,
+                        onClearHistory = viewModel::clearProcessedFilesHistory,
+                        onViewHistory = { navController.navigate(Screen.History) },
+                        onPoisoningProfileChanged = viewModel::setPoisoningProfile,
+                        onLocationPresetChanged = viewModel::setLocationPreset,
+                        onStripGpsChanged = viewModel::setStripGps,
+                        onStripDeviceModelChanged = viewModel::setStripDeviceModel,
+                        onStripDateTimeChanged = viewModel::setStripDateTime,
+                        onStripCameraSettingsChanged = viewModel::setStripCameraSettings,
+                        onStripCommentsChanged = viewModel::setStripComments,
+                        modifier = Modifier.fillMaxSize()
                     )
                 }
 
-                AppStep.QUICK_SCRUB -> {
+                composable<Screen.History> {
+                    val history by viewModel.processedFilesHistory.collectAsStateWithLifecycle()
+                    HistoryScreen(
+                        history = history,
+                        onClearHistory = viewModel::clearProcessedFilesHistory,
+                        onShareFile = { log -> viewModel.shareHistoryFile(context, log) },
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+
+                composable<Screen.QuickScrub> {
                     QuickScrubScreen(
+                        fileCount = selectedFiles.size,
+                        processingMode = appSettings.sharedFilesProcessingMode,
+                        statusText = message,
+                        onCancel = onExitApp,
                         modifier = Modifier.fillMaxSize()
                     )
                 }
@@ -508,25 +554,28 @@ fun MetaJammerApp(
         }
 
         if (showInternetPermissionExplanation) {
-            androidx.compose.material3.AlertDialog(
+            AlertDialog(
                 onDismissRequest = { showInternetPermissionExplanation = false },
                 title = { Text(stringResource(R.string.map_permission_title)) },
                 text = {
                     Text(stringResource(R.string.map_permission_message))
                 },
                 confirmButton = {
-                    androidx.compose.material3.TextButton(
+                    TextButton(
                         onClick = {
                             viewModel.setAllowInternetForMap(true)
                             showInternetPermissionExplanation = false
-                            navigateTo(AppStep.LOCATION_PICKER)
+                            val uri = uriToEditLocation
+                            if (uri != null) {
+                                navController.navigate(Screen.LocationPicker(uri.toString()))
+                            }
                         }
                     ) {
                         Text(stringResource(R.string.allow_open_map))
                     }
                 },
                 dismissButton = {
-                    androidx.compose.material3.TextButton(
+                    TextButton(
                         onClick = {
                             showInternetPermissionExplanation = false
                         }
@@ -538,14 +587,14 @@ fun MetaJammerApp(
         }
 
         if (showNotificationPermissionExplanation) {
-            androidx.compose.material3.AlertDialog(
+            AlertDialog(
                 onDismissRequest = { showNotificationPermissionExplanation = false },
                 title = { Text(stringResource(R.string.notification_permission_title)) },
                 text = {
                     Text(stringResource(R.string.notification_permission_message))
                 },
                 confirmButton = {
-                    androidx.compose.material3.TextButton(
+                    TextButton(
                         onClick = {
                             showNotificationPermissionExplanation = false
                             notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
@@ -555,7 +604,7 @@ fun MetaJammerApp(
                     }
                 },
                 dismissButton = {
-                    androidx.compose.material3.TextButton(
+                    TextButton(
                         onClick = {
                             showNotificationPermissionExplanation = false
                         }

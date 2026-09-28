@@ -54,7 +54,32 @@
     <string name="selected_mode">נבחר: %1$s</string>
     <string name="regenerate_plans">צור מחדש את כל התוכניות האקראיות</string>
     <string name="preview_of_changes">תצוגה מקדימה של שינויים</string>
+    <string name="hardware_profile_label">פרופיל חומרה:</string>
+    <string name="location_preset_label">הגדרה מראש של מיקום:</string>
+    <string name="category_metadata_tags">קטגוריות מטא-דאטה</string>
+    <string name="tag_category_gps_title">GPS ומיקום</string>
+    <string name="tag_category_gps_sub">הסר או זייף קואורדינטות, גובה וכיוון</string>
+    <string name="tag_category_device_title">מכשיר וחומרה</string>
+    <string name="tag_category_device_sub">הסר או זייף יצרן מצלמה, דגם, תוכנה ומספרים סידוריים</string>
+    <string name="tag_category_datetime_title">תאריך וחותמת זמן</string>
+    <string name="tag_category_datetime_sub">הסר או זייף חותמות זמן של יצירה ושינוי</string>
+    <string name="tag_category_camera_title">הגדרות טכניות של המצלמה</string>
+    <string name="tag_category_camera_sub">הסר או זייף ISO, מפתח צמצם, אורך מוקד, מבזק ומהירות תריס</string>
+    <string name="tag_category_comments_title">הערות ותיאורים</string>
+    <string name="tag_category_comments_sub">הסר או זייף הערות משתמש, כותרות ותיאורי תמונה</string>
     <string name="no_preview_available">אין תצוגה מקדימה זמינה</string>
+    <string name="diff_filter_all">הכל (%1$d)</string>
+    <string name="diff_filter_removed">הוסרו (%1$d)</string>
+    <string name="diff_filter_poisoned">הורעלו (%1$d)</string>
+    <string name="diff_filter_kept">נשמרו (%1$d)</string>
+    <string name="diff_badge_removed">הוסר</string>
+    <string name="diff_badge_poisoned">הורעל</string>
+    <string name="diff_badge_kept">נשמר</string>
+    <string name="diff_before">לפני: %1$s</string>
+    <string name="diff_after">אחרי: %1$s</string>
+    <string name="diff_value_none">(ללא)</string>
+    <string name="diff_value_stripped">(הוסר)</string>
+    <string name="diff_no_tags_for_filter">אין תגיות התואמות למסנן זה</string>
     <string name="change_location_map">שנה מיקום במפה</string>
     <string name="process_and_continue">עיבוד והמשך</string>
     <string name="processing_complete">העיבוד הושלם</string>
@@ -66,9 +91,9 @@
     <!-- HelpScreen -->
     <string name="help_title">עזרה ומדריכים</string>
     <string name="help_item_video_title">עיבוד וידאו</string>
-    <string name="help_item_video_body">פורמטים נתמכים: MP4, MOV.\n\nתהליך זה מסיר GPS, תאריכים ונתוני מכשיר כדי להגן על פרטיותך.</string>
-    <string name="help_item_image_title">עיבוד תמונה</string>
-    <string name="help_item_image_body">פורמטים נתמכים: JPG, PNG, WebP, HEIF.\n\nMetaJammer מסיר מטא-דאטה EXIF מתמונות אלו. במצב \"הרעלה\", הוא מחליף תגיות רגישות בנתונים אקראיים מציאותיים.</string>
+    <string name="help_item_video_body">פורמטים נתמכים: MP4, MOV, M4A, OGG.\n\nתהליך זה מסיר GPS, תאריכים ונתוני מכשיר כדי להגן על פרטיותך.</string>
+    <string name="help_item_image_title">עיבוד תמונה וקטורים</string>
+    <string name="help_item_image_body">פורמטים נתמכים: JPG, PNG, WebP, HEIF, SVG.\n\nMetaJammer מסיר מטא-נתונים EXIF מתמונות ביטמפ ומנקה מטא-נתונים XML/RDF מקובצי SVG. במצב \"הרעלה\", הוא מחליף תגיות רגישות בנתונים אקראיים מציאותיים.</string>
     <string name="help_item_other_title">עיבוד PDF ומסמכים</string>
     <string name="help_item_other_body">פורמטים נתמכים: PDF.\n\n‏MetaJammer תומך כעת באופן מלא במסמכי PDF. ניתן לקרוא, להסיר ו\"להרעיל\" מטא-דאטה כמו כותרת, מחבר, נושא, מילות מפתח, יוצר ויצרן. הכלי גם מסיר סימני מים נסתרים והערות כדי להבטיח שהמסמכים שלכם נקיים לפני השיתוף.</string>
     <string name="help_report_issue_title">דווח על בעיה</string>
@@ -87,6 +112,7 @@
     <string name="choose_save_or_share">בחר אם לשמור או לשתף את התוצאה המעובדת.</string>
     <string name="save_to_default_folder">שמור לתיקיית ברירת המחדל</string>
     <string name="save_to_custom_folder">שמור לתיקייה מותאמת אישית</string>
+    <string name="back_to_home">חזרה לדף הבית</string>
 
     <!-- SettingsScreen -->
     <string name="settings">הגדרות</string>
@@ -148,6 +174,8 @@
     <string name="setting_language_title">שפה</string>
     <string name="setting_oled_mode_title">מצב OLED</string>
     <string name="setting_oled_mode_sub">השתמש בגווני שחור כהים יותר עבור ערכות נושא כהות נתמכות</string>
+    <string name="setting_dynamic_color_title">Material You (צבעים דינמיים)</string>
+    <string name="setting_dynamic_color_sub">החל צבעים דינמיים מהטפט שלך על ממשק האפליקציה</string>
 
     <!-- Enums -->
     <string name="night_mode_always">תמיד</string>
@@ -188,6 +216,10 @@
     <string name="output_action_shared_folder">שמור לתיקייה ייעודית</string>
     <string name="output_action_reshare">שתף מחדש קבצים נקיים</string>
     <string name="quick_scrub_processing">מייבש את הקבצים שלך…</string>
+    <string name="quick_scrub_title">ניקוי מהיר</string>
+    <string name="quick_scrub_status_stripping">מסיר מטא-דאטה מ-%1$d קבצים…</string>
+    <string name="quick_scrub_status_poisoning">מרעיל מטא-דאטה עבור %1$d קבצים…</string>
+    <string name="quick_scrub_cancel">ביטול</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">בחירת מפה וגישה לאינטרנט</string>
@@ -197,4 +229,37 @@
 
     <string name="notification_permission_title">הישאר מעודכן</string>
     <string name="notification_permission_message">MetaJammer יכולה להציג התראות כדי לעדכן אותך בהתקדמות...</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">ברוכים הבאים ל-MetaJammer</string>
+    <string name="onboarding_welcome_desc">ערכת הכלים האישית שלך לפרטיות מטא-דאטה. נקה את הקבצים שלך לפני שתשתף אותם עם העולם.</string>
+    <string name="onboarding_poison_vs_remove_title">הרעלה לעומת הסרה</string>
+    <string name="onboarding_poison_vs_remove_desc"><b>הסרה:</b> מוחק את כל המטא-דאטה. פשוט ונקי.\n\n<b>הרעלה:</b> מחליף נתונים רגישים בערכים מזויפים ומציאותיים. זה מספק <i>הכחשה סבירה</i> ומבלבל עוקבים אוטומטיים.</string>
+    <string name="onboarding_permissions_title">מתכוננים</string>
+    <string name="onboarding_permissions_desc">MetaJammer זקוקה לכמה הרשאות כדי לעבוד בצורה הטובה ביותר. תוכל לבחור להפעיל התראות למשימות רקע ואינטרנט עבור בחירת המפה.</string>
+    <string name="onboarding_finish_title">הכל מוכן!</string>
+    <string name="onboarding_finish_desc">אתה מוכן להתחיל להגן על הפרטיות שלך. בחר כמה קבצים או שתף אותם מאפליקציות אחרות כדי להתחיל.</string>
+    <string name="onboarding_get_started">מתחילים</string>
+    <string name="onboarding_next">הבא</string>
+    <string name="onboarding_skip">דילוג</string>
+
+    <!-- Processing History -->
+    <string name="category_privacy_history">פרטיות והיסטוריה</string>
+    <string name="setting_enable_history_title">אפשר היסטוריית עיבוד</string>
+    <string name="setting_enable_history_sub">שמור יומן של קבצים שעובדו לאחרונה. נתונים אלה נשמרים מקומית ולעולם לא עוזבים את המכשיר שלך.</string>
+    <string name="setting_history_retention_title">שמירת היסטוריה</string>
+    <string name="setting_history_shortcut_title">הצג קיצור דרך להיסטוריה</string>
+    <string name="setting_history_shortcut_sub">הוסף סמל גישה מהירה להיסטוריה במסך הבית</string>
+    <string name="setting_clear_history_now">נקה היסטוריה כעת</string>
+    <string name="setting_history_cleared">היסטוריית העיבוד נוקתה.</string>
+    <string name="setting_history_title">היסטוריית עיבוד</string>
+
+    <string name="retention_policy_100_items">שמור 100 פריטים אחרונים</string>
+    <string name="retention_policy_clear_on_exit">נקה היסטוריה ביציאה מהאפליקציה</string>
+    <string name="retention_policy_clear_after_24h">נקה היסטוריה לאחר 24 שעות</string>
+
+    <string name="history_title">היסטוריית עיבוד</string>
+    <string name="history_empty">טרם נרשמו קבצים.</string>
+    <string name="history_clear_confirm_title">לנקות היסטוריה?</string>
+    <string name="history_clear_confirm_message">פעולה זו תמחק לצמיתות את היומן של כל הקבצים שעובדו. הקבצים עצמם לא יימחקו.</string>
 </resources>

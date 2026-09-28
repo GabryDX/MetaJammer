@@ -14,14 +14,24 @@ class ProcessFileUseCase(
         processingMode: ProcessingMode,
         keepOrientation: Boolean,
         thumbnailHandling: com.heronikostudios.metajammer.domain.model.ThumbnailHandling = com.heronikostudios.metajammer.domain.model.ThumbnailHandling.REMOVE,
-        replacementPlan: MetadataReplacementPlan? = null
+        replacementPlan: MetadataReplacementPlan? = null,
+        stripGps: Boolean = true,
+        stripDeviceModel: Boolean = true,
+        stripDateTime: Boolean = true,
+        stripCameraSettings: Boolean = true,
+        stripComments: Boolean = true
     ): File {
         return metadataRepository.processFile(
             selectedFile = selectedFile,
             mode = processingMode,
             keepOrientation = keepOrientation,
             thumbnailHandling = thumbnailHandling,
-            replacementPlan = replacementPlan
+            replacementPlan = replacementPlan,
+            stripGps = stripGps,
+            stripDeviceModel = stripDeviceModel,
+            stripDateTime = stripDateTime,
+            stripCameraSettings = stripCameraSettings,
+            stripComments = stripComments
         )
     }
 }

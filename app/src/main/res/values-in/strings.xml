@@ -54,7 +54,32 @@
     <string name="selected_mode">Dipilih: %1$s</string>
     <string name="regenerate_plans">Regenerasi Semua Rencana Acak</string>
     <string name="preview_of_changes">Pratinjau Perubahan</string>
+    <string name="hardware_profile_label">Profil Perangkat Keras:</string>
+    <string name="location_preset_label">Preset Lokasi:</string>
+    <string name="category_metadata_tags">Kategori Metadata</string>
+    <string name="tag_category_gps_title">GPS &amp; Lokasi</string>
+    <string name="tag_category_gps_sub">Hapus atau palsukan koordinat, ketinggian, dan arah</string>
+    <string name="tag_category_device_title">Perangkat &amp; Perangkat Keras</string>
+    <string name="tag_category_device_sub">Hapus atau palsukan merek kamera, model, perangkat lunak, dan nomor seri</string>
+    <string name="tag_category_datetime_title">Tanggal &amp; Cap Waktu</string>
+    <string name="tag_category_datetime_sub">Hapus atau palsukan cap waktu pembuatan dan modifikasi</string>
+    <string name="tag_category_camera_title">Pengaturan Teknis Kamera</string>
+    <string name="tag_category_camera_sub">Hapus atau palsukan ISO, bukaan, panjang fokus, lampu kilat, dan kecepatan rana</string>
+    <string name="tag_category_comments_title">Komentar &amp; Deskripsi</string>
+    <string name="tag_category_comments_sub">Hapus atau palsukan komentar pengguna, judul, dan deskripsi gambar</string>
     <string name="no_preview_available">Pratinjau tidak tersedia</string>
+    <string name="diff_filter_all">Semua (%1$d)</string>
+    <string name="diff_filter_removed">Dihapus (%1$d)</string>
+    <string name="diff_filter_poisoned">Dipalsukan (%1$d)</string>
+    <string name="diff_filter_kept">Dipertahankan (%1$d)</string>
+    <string name="diff_badge_removed">DIHAPUS</string>
+    <string name="diff_badge_poisoned">DIPALSUKAN</string>
+    <string name="diff_badge_kept">DIPERTAHANKAN</string>
+    <string name="diff_before">Sebelum: %1$s</string>
+    <string name="diff_after">Sesudah: %1$s</string>
+    <string name="diff_value_none">(Tidak ada)</string>
+    <string name="diff_value_stripped">(Dihapus)</string>
+    <string name="diff_no_tags_for_filter">Tidak ada tag yang cocok dengan filter ini</string>
     <string name="change_location_map">Ubah Lokasi di Peta</string>
     <string name="process_and_continue">Proses dan lanjutkan</string>
     <string name="processing_complete">Pemrosesan selesai</string>
@@ -66,9 +91,9 @@
     <!-- HelpScreen -->
     <string name="help_title">Bantuan &amp; Tutorial</string>
     <string name="help_item_video_title">Pemrosesan Video</string>
-    <string name="help_item_video_body">Format yang didukung: MP4, MOV.\n\nRemuxing penuh didukung untuk kontainer ini. Proses ini menghapus GPS, tanggal, dan atom perangkat untuk melindungi privasi Anda.</string>
-    <string name="help_item_image_title">Pemrosesan Gambar</string>
-    <string name="help_item_image_body">Format yang didukung: JPG, PNG, WebP, HEIF.\n\nMetaJammer menghapus metadata EXIF dari gambar-gambar ini. Dalam mode \"Poison\", metadata sensitif seperti koordinat GPS diganti dengan data acak yang realistis.</string>
+    <string name="help_item_video_body">Format yang didukung: MP4, MOV, M4A, OGG.\n\nRemuxing penuh didukung untuk kontainer ini. Proses ini menghapus GPS, tanggal, dan atom perangkat untuk melindungi privasi Anda.</string>
+    <string name="help_item_image_title">Pemrosesan Gambar &amp; Vektor</string>
+    <string name="help_item_image_body">Format yang didukung: JPG, PNG, WebP, HEIF, SVG.\n\nMetaJammer menghapus metadata EXIF dari gambar bitmap dan membersihkan metadata XML/RDF dari SVG. Dalam mode \"Poison\", metadata sensitif diganti dengan data acak yang realistis.</string>
     <string name="help_item_other_title">Pemrosesan PDF &amp; Dokumen</string>
     <string name="help_item_other_body">Format yang didukung: PDF.\n\nMetaJammer kini sepenuhnya mendukung dokumen PDF. Anda dapat membaca, menghapus, dan \"meracuni\" metadata seperti Judul, Penulis, Subjek, Kata Kunci, Pembuat, dan Produser. Ini juga menghapus tanda air dan anotasi tersembunyi untuk memastikan dokumen Anda bersih sebelum dibagikan.</string>
     <string name="help_report_issue_title">Laporkan Masalah</string>
@@ -87,6 +112,7 @@
     <string name="choose_save_or_share">Pilih apakah ingin menyimpan atau membagikan hasil proses.</string>
     <string name="save_to_default_folder">Simpan ke Folder Default</string>
     <string name="save_to_custom_folder">Simpan ke Folder Kustom</string>
+    <string name="back_to_home">Kembali ke Beranda</string>
 
     <!-- SettingsScreen -->
     <string name="settings">Pengaturan</string>
@@ -148,6 +174,8 @@
     <string name="setting_language_title">Bahasa</string>
     <string name="setting_oled_mode_title">Mode OLED</string>
     <string name="setting_oled_mode_sub">Gunakan nada hitam yang lebih gelap untuk tema gelap yang didukung</string>
+    <string name="setting_dynamic_color_title">Material You (Warna Dinamis)</string>
+    <string name="setting_dynamic_color_sub">Terapkan warna dinamis dari wallpaper Anda ke antarmuka aplikasi</string>
 
     <!-- Enums -->
     <string name="night_mode_always">Selalu</string>
@@ -188,6 +216,10 @@
     <string name="output_action_shared_folder">Simpan ke folder khusus</string>
     <string name="output_action_reshare">Bagikan ulang file yang dibersihkan</string>
     <string name="quick_scrub_processing">Mengeringkan file Anda…</string>
+    <string name="quick_scrub_title">Pembersihan Cepat</string>
+    <string name="quick_scrub_status_stripping">Menghapus metadata dari %1$d berkas…</string>
+    <string name="quick_scrub_status_poisoning">Memalsukan metadata untuk %1$d berkas…</string>
+    <string name="quick_scrub_cancel">Batal</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">Pemilih Peta &amp; Akses Internet</string>
@@ -197,4 +229,37 @@
 
     <string name="notification_permission_title">Tetap Terinformasi</string>
     <string name="notification_permission_message">MetaJammer dapat menampilkan notifikasi untuk memberi tahu Anda tentang kemajuan batch file besar saat diproses di latar belakang. \n\nIni sangat berguna jika Anda ingin beralih ke aplikasi lain sementara MetaJammer menyelesaikan pekerjaannya.</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">Selamat Datang di MetaJammer</string>
+    <string name="onboarding_welcome_desc">Toolkit pribadi Anda untuk privasi metadata. Bersihkan file Anda sebelum membagikannya dengan dunia.</string>
+    <string name="onboarding_poison_vs_remove_title">Racuni vs Hapus</string>
+    <string name="onboarding_poison_vs_remove_desc"><b>Hapus:</b> Menghapus semua metadata. Sederhana dan bersih.\n\n<b>Racuni:</b> Mengganti data sensitif dengan nilai palsu yang realistis. Ini memberikan <i>penyangkalan yang masuk akal</i> dan membingungkan pelacak otomatis.</string>
+    <string name="onboarding_permissions_title">Bersiap-siap</string>
+    <string name="onboarding_permissions_desc">MetaJammer memerlukan beberapa izin untuk bekerja secara optimal. Anda dapat memilih untuk mengaktifkan notifikasi untuk tugas latar belakang dan internet untuk pemilih peta.</string>
+    <string name="onboarding_finish_title">Semua Siap!</string>
+    <string name="onboarding_finish_desc">Anda siap untuk mulai melindungi privasi Anda. Pilih beberapa file atau bagikan dari aplikasi lain untuk memulai.</string>
+    <string name="onboarding_get_started">Mulai</string>
+    <string name="onboarding_next">Berikutnya</string>
+    <string name="onboarding_skip">Lewati</string>
+
+    <!-- Processing History -->
+    <string name="category_privacy_history">Privasi &amp; Riwayat</string>
+    <string name="setting_enable_history_title">Aktifkan riwayat pemrosesan</string>
+    <string name="setting_enable_history_sub">Simpan log file yang baru saja diproses. Data ini disimpan secara lokal dan tidak pernah meninggalkan perangkat Anda.</string>
+    <string name="setting_history_retention_title">Retensi riwayat</string>
+    <string name="setting_history_shortcut_title">Tampilkan pintasan riwayat</string>
+    <string name="setting_history_shortcut_sub">Tambahkan ikon akses cepat untuk riwayat di layar utama</string>
+    <string name="setting_clear_history_now">Bersihkan Riwayat Sekarang</string>
+    <string name="setting_history_cleared">Riwayat pemrosesan telah dibersihkan.</string>
+    <string name="setting_history_title">Riwayat Pemrosesan</string>
+
+    <string name="retention_policy_100_items">Simpan 100 item terbaru</string>
+    <string name="retention_policy_clear_on_exit">Bersihkan riwayat saat aplikasi ditutup</string>
+    <string name="retention_policy_clear_after_24h">Bersihkan riwayat setelah 24 jam</string>
+
+    <string name="history_title">Riwayat Pemrosesan</string>
+    <string name="history_empty">Belum ada file yang dicatat.</string>
+    <string name="history_clear_confirm_title">Bersihkan riwayat?</string>
+    <string name="history_clear_confirm_message">Ini akan menghapus log semua file yang diproses secara permanen. File asli tidak akan dihapus.</string>
 </resources>

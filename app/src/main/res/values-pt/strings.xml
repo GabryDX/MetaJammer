@@ -54,7 +54,32 @@
     <string name="selected_mode">Selecionado: %1$s</string>
     <string name="regenerate_plans">Regenerar todos os planos aleatórios</string>
     <string name="preview_of_changes">Pré-visualização das alterações</string>
+    <string name="hardware_profile_label">Perfil de hardware:</string>
+    <string name="location_preset_label">Predefinição de localização:</string>
+    <string name="category_metadata_tags">Categorias de metadados</string>
+    <string name="tag_category_gps_title">GPS e localização</string>
+    <string name="tag_category_gps_sub">Remover ou falsificar coordenadas, altitude e orientação</string>
+    <string name="tag_category_device_title">Dispositivo e hardware</string>
+    <string name="tag_category_device_sub">Remover ou falsificar marca, modelo, software e números de série da câmara</string>
+    <string name="tag_category_datetime_title">Data e carimbo de data/hora</string>
+    <string name="tag_category_datetime_sub">Remover ou falsificar datas de criação e modificação</string>
+    <string name="tag_category_camera_title">Definições técnicas da câmara</string>
+    <string name="tag_category_camera_sub">Remover ou falsificar ISO, abertura, distância focal, flash e velocidade do obturador</string>
+    <string name="tag_category_comments_title">Comentários e descrições</string>
+    <string name="tag_category_comments_sub">Remover ou falsificar comentários do utilizador, títulos e descrições da imagem</string>
     <string name="no_preview_available">Nenhuma pré-visualização disponível</string>
+    <string name="diff_filter_all">Todos (%1$d)</string>
+    <string name="diff_filter_removed">Removidos (%1$d)</string>
+    <string name="diff_filter_poisoned">Envenenados (%1$d)</string>
+    <string name="diff_filter_kept">Mantidos (%1$d)</string>
+    <string name="diff_badge_removed">REMOVIDO</string>
+    <string name="diff_badge_poisoned">ENVENENADO</string>
+    <string name="diff_badge_kept">MANTIDO</string>
+    <string name="diff_before">Antes: %1$s</string>
+    <string name="diff_after">Depois: %1$s</string>
+    <string name="diff_value_none">(Nenhum)</string>
+    <string name="diff_value_stripped">(Removido)</string>
+    <string name="diff_no_tags_for_filter">Nenhuma etiqueta corresponde a este filtro</string>
     <string name="change_location_map">Alterar localização no mapa</string>
     <string name="process_and_continue">Processar e continuar</string>
     <string name="processing_complete">Processamento concluído</string>
@@ -66,9 +91,9 @@
     <!-- HelpScreen -->
     <string name="help_title">Ajuda e tutoriais</string>
     <string name="help_item_video_title">Processamento de vídeo</string>
-    <string name="help_item_video_body">Formatos suportados: MP4, MOV.\n\nO remuxing completo é suportado para estes contentores. Este processo remove GPS, datas e átomos do dispositivo para proteger a sua privacidade.</string>
-    <string name="help_item_image_title">Processamento de imagem</string>
-    <string name="help_item_image_body">Formatos suportados: JPG, PNG, WebP, HEIF.\n\nO MetaJammer remove os metadados EXIF destas imagens. No modo \"Envenenar\", substitui etiquetas sensíveis como coordenadas GPS por dados aleatórios realistas.</string>
+    <string name="help_item_video_body">Formatos suportados: MP4, MOV, M4A, OGG.\n\nO remuxing completo é suportado para estes contentores. Este processo remove GPS, datas e átomos do dispositivo para proteger a sua privacidade.</string>
+    <string name="help_item_image_title">Processamento de Imagem e Vetores</string>
+    <string name="help_item_image_body">Formatos suportados: JPG, PNG, WebP, HEIF, SVG.\n\nO MetaJammer remove os metadados EXIF das imagens bitmap e limpa os metadados XML/RDF dos SVGs. No modo \"Envenenar\", substitui etiquetas sensíveis por dados aleatórios realistas.</string>
     <string name="help_item_other_title">Processamento de PDF e Documentos</string>
     <string name="help_item_other_body">Formatos suportados: PDF.\n\nO MetaJammer agora suporta totalmente documentos PDF. Você pode ler, remover e \"envenenar\" metadados como Título, Autor, Assunto, Palavras-chave, Criador e Produtor. Ele também remove marcas d\'água ocultas e anotações para garantir que seus documentos estejam limpos antes de serem compartilhados.</string>
     <string name="help_report_issue_title">Comunicar um problema</string>
@@ -87,6 +112,7 @@
     <string name="choose_save_or_share">Escolha se pretende guardar ou partilhar o resultado processado.</string>
     <string name="save_to_default_folder">Guardar na pasta predefinida</string>
     <string name="save_to_custom_folder">Guardar numa pasta personalizada</string>
+    <string name="back_to_home">Voltar ao início</string>
 
     <!-- SettingsScreen -->
     <string name="settings">Definições</string>
@@ -148,6 +174,8 @@
     <string name="setting_language_title">Idioma</string>
     <string name="setting_oled_mode_title">Modo OLED</string>
     <string name="setting_oled_mode_sub">Utilizar tons pretos mais escuros para temas escuros suportados</string>
+    <string name="setting_dynamic_color_title">Material You (Cores Dinâmicas)</string>
+    <string name="setting_dynamic_color_sub">Aplicar as cores dinâmicas do seu papel de parede à interface da aplicação</string>
 
     <!-- Enums -->
     <string name="night_mode_always">Sempre</string>
@@ -188,6 +216,10 @@
     <string name="output_action_shared_folder">Guardar na pasta dedicada</string>
     <string name="output_action_reshare">Partilhar novamente ficheiros higienizados</string>
     <string name="quick_scrub_processing">Secando os seus ficheiros…</string>
+    <string name="quick_scrub_title">Limpeza rápida</string>
+    <string name="quick_scrub_status_stripping">A remover metadados de %1$d ficheiro(s)…</string>
+    <string name="quick_scrub_status_poisoning">A envenenar metadados de %1$d ficheiro(s)…</string>
+    <string name="quick_scrub_cancel">Cancelar</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">Seletor de mapa e acesso à Internet</string>
@@ -197,4 +229,37 @@
 
     <string name="notification_permission_title">Mantenha-se informado</string>
     <string name="notification_permission_message">O MetaJammer pode mostrar notificações para o manter atualizado sobre o progresso de grandes lotes de ficheiros enquanto são processados em segundo plano. \n\nIsto é especialmente útil se pretender mudar para outra aplicação enquanto o MetaJammer termina o seu trabalho.</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">Bem-vindo ao MetaJammer</string>
+    <string name="onboarding_welcome_desc">O seu conjunto de ferramentas pessoal para privacidade de metadados. Limpe os seus ficheiros antes de os partilhar com o mundo.</string>
+    <string name="onboarding_poison_vs_remove_title">Envenenar vs Remover</string>
+    <string name="onboarding_poison_vs_remove_desc"><b>Remover:</b> Apaga todos os metadados. Simples e limpo.\n\n<b>Envenenar:</b> Substitui dados sensíveis por valores falsos e realistas. Isto proporciona <i>negação plausível</i> e confunde os rastreadores automatizados.</string>
+    <string name="onboarding_permissions_title">Preparação</string>
+    <string name="onboarding_permissions_desc">O MetaJammer precisa de algumas permissões para funcionar da melhor forma. Pode optar por ativar notificações para tarefas em segundo plano e internet para o seletor de mapas.</string>
+    <string name="onboarding_finish_title">Tudo pronto!</string>
+    <string name="onboarding_finish_desc">Está pronto para começar a proteger a sua privacidade. Escolha alguns ficheiros ou partilhe-os de outras aplicações para começar.</string>
+    <string name="onboarding_get_started">Começar</string>
+    <string name="onboarding_next">Seguinte</string>
+    <string name="onboarding_skip">Saltar</string>
+
+    <!-- Processing History -->
+    <string name="category_privacy_history">Privacidade e Histórico</string>
+    <string name="setting_enable_history_title">Ativar histórico de processamento</string>
+    <string name="setting_enable_history_sub">Mantém um registo dos ficheiros processados recentemente. Estes dados são armazenados localmente e nunca saem do seu dispositivo.</string>
+    <string name="setting_history_retention_title">Retenção do histórico</string>
+    <string name="setting_history_shortcut_title">Mostrar atalho do histórico</string>
+    <string name="setting_history_shortcut_sub">Adiciona um ícone de acesso rápido ao histórico no ecrã inicial</string>
+    <string name="setting_clear_history_now">Limpar histórico agora</string>
+    <string name="setting_history_cleared">O histórico de processamento foi limpo.</string>
+    <string name="setting_history_title">Histórico de processamento</string>
+
+    <string name="retention_policy_100_items">Manter os 100 itens mais recentes</string>
+    <string name="retention_policy_clear_on_exit">Limpar histórico ao sair da aplicação</string>
+    <string name="retention_policy_clear_after_24h">Limpar histórico após 24 horas</string>
+
+    <string name="history_title">Histórico de processamento</string>
+    <string name="history_empty">Ainda não foram registados ficheiros.</string>
+    <string name="history_clear_confirm_title">Limpar histórico?</string>
+    <string name="history_clear_confirm_message">Isto irá apagar permanentemente o registo de todos os ficheiros processados. Os ficheiros reais não serão eliminados.</string>
 </resources>

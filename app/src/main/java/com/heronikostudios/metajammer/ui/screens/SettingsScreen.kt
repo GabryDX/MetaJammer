@@ -8,6 +8,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -43,6 +44,19 @@ fun SettingsScreen(
     onAllowInternetForMapChanged: (Boolean) -> Unit,
     onUseNearbyScrambleChanged: (Boolean) -> Unit,
     onLanguageChanged: (AppLanguage) -> Unit,
+    onUseDynamicColorChanged: (Boolean) -> Unit,
+    onEnableProcessingHistoryChanged: (Boolean) -> Unit,
+    onHistoryRetentionPolicyChanged: (HistoryRetentionPolicy) -> Unit,
+    onShowHistoryShortcutChanged: (Boolean) -> Unit,
+    onClearHistory: () -> Unit,
+    onViewHistory: () -> Unit,
+    onPoisoningProfileChanged: (PoisoningProfile) -> Unit = {},
+    onLocationPresetChanged: (LocationPreset) -> Unit = {},
+    onStripGpsChanged: (Boolean) -> Unit = {},
+    onStripDeviceModelChanged: (Boolean) -> Unit = {},
+    onStripDateTimeChanged: (Boolean) -> Unit = {},
+    onStripCameraSettingsChanged: (Boolean) -> Unit = {},
+    onStripCommentsChanged: (Boolean) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val unifiedFolderPicker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { 
@@ -171,6 +185,51 @@ fun SettingsScreen(
                 checked = settings.useNearbyScramble,
                 onCheckedChange = onUseNearbyScrambleChanged
             )
+
+            DialogSettingRow(
+                title = stringResource(R.string.hardware_profile_label),
+                value = settings.poisoningProfile.displayName,
+                onClick = { activeDialog = SettingsDialog.ProfileDialog(settings.poisoningProfile) }
+            )
+
+            DialogSettingRow(
+                title = stringResource(R.string.location_preset_label),
+                value = settings.locationPreset.displayName,
+                onClick = { activeDialog = SettingsDialog.LocationPresetDialog(settings.locationPreset) }
+            )
+        }
+
+        SettingsCategory(title = stringResource(R.string.category_metadata_tags)) {
+            SettingSwitchRow(
+                title = stringResource(R.string.tag_category_gps_title),
+                subtitle = stringResource(R.string.tag_category_gps_sub),
+                checked = settings.stripGps,
+                onCheckedChange = onStripGpsChanged
+            )
+            SettingSwitchRow(
+                title = stringResource(R.string.tag_category_device_title),
+                subtitle = stringResource(R.string.tag_category_device_sub),
+                checked = settings.stripDeviceModel,
+                onCheckedChange = onStripDeviceModelChanged
+            )
+            SettingSwitchRow(
+                title = stringResource(R.string.tag_category_datetime_title),
+                subtitle = stringResource(R.string.tag_category_datetime_sub),
+                checked = settings.stripDateTime,
+                onCheckedChange = onStripDateTimeChanged
+            )
+            SettingSwitchRow(
+                title = stringResource(R.string.tag_category_camera_title),
+                subtitle = stringResource(R.string.tag_category_camera_sub),
+                checked = settings.stripCameraSettings,
+                onCheckedChange = onStripCameraSettingsChanged
+            )
+            SettingSwitchRow(
+                title = stringResource(R.string.tag_category_comments_title),
+                subtitle = stringResource(R.string.tag_category_comments_sub),
+                checked = settings.stripComments,
+                onCheckedChange = onStripCommentsChanged
+            )
         }
 
         SettingsCategory(title = stringResource(R.string.category_shared_files)) {
@@ -223,6 +282,53 @@ fun SettingsScreen(
                 checked = settings.oledMode,
                 onCheckedChange = onOledModeChanged
             )
+
+            SettingSwitchRow(
+                title = stringResource(R.string.setting_dynamic_color_title),
+                subtitle = stringResource(R.string.setting_dynamic_color_sub),
+                checked = settings.useDynamicColor,
+                onCheckedChange = onUseDynamicColorChanged
+            )
+        }
+
+        SettingsCategory(title = stringResource(R.string.category_privacy_history)) {
+            SettingSwitchRow(
+                title = stringResource(R.string.setting_enable_history_title),
+                subtitle = stringResource(R.string.setting_enable_history_sub),
+                checked = settings.enableProcessingHistory,
+                onCheckedChange = onEnableProcessingHistoryChanged
+            )
+
+            if (settings.enableProcessingHistory) {
+                DialogSettingRow(
+                    title = stringResource(R.string.setting_history_title),
+                    value = stringResource(R.string.history_title),
+                    onClick = onViewHistory
+                )
+
+                DialogSettingRow(
+                    title = stringResource(R.string.setting_history_retention_title),
+                    value = settings.historyRetentionPolicy.toReadableLabel(),
+                    onClick = { activeDialog = SettingsDialog.HistoryRetention(settings.historyRetentionPolicy) }
+                )
+
+                SettingSwitchRow(
+                    title = stringResource(R.string.setting_history_shortcut_title),
+                    subtitle = stringResource(R.string.setting_history_shortcut_sub),
+                    checked = settings.showHistoryShortcut,
+                    onCheckedChange = onShowHistoryShortcutChanged
+                )
+
+                OutlinedButton(
+                    onClick = onClearHistory,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error)
+                ) {
+                    Icon(Icons.Default.Delete, contentDescription = null)
+                    Spacer(Modifier.width(8.dp))
+                    Text(stringResource(R.string.setting_clear_history_now))
+                }
+            }
         }
     }
 
@@ -247,7 +353,10 @@ fun SettingsScreen(
             onSuffixChanged = onDefaultSuffixChanged,
             onProcessingModeChanged = onSharedFilesProcessingModeChanged,
             onOutputActionChanged = onSharedFilesOutputActionChanged,
-            onLanguageChanged = onLanguageChanged
+            onLanguageChanged = onLanguageChanged,
+            onHistoryRetentionPolicyChanged = onHistoryRetentionPolicyChanged,
+            onPoisoningProfileChanged = onPoisoningProfileChanged,
+            onLocationPresetChanged = onLocationPresetChanged
         )
     }
 }
@@ -368,6 +477,9 @@ private sealed class SettingsDialog {
     data class SharedProcessingMode(val current: ProcessingMode) : SettingsDialog()
     data class SharedOutputAction(val current: SharedInputOutputAction) : SettingsDialog()
     data class Language(val current: AppLanguage) : SettingsDialog()
+    data class HistoryRetention(val current: HistoryRetentionPolicy) : SettingsDialog()
+    data class ProfileDialog(val current: PoisoningProfile) : SettingsDialog()
+    data class LocationPresetDialog(val current: LocationPreset) : SettingsDialog()
 }
 
 @Composable
@@ -389,9 +501,28 @@ private fun HandleSettingsDialog(
     onSuffixChanged: (String) -> Unit,
     onProcessingModeChanged: (ProcessingMode) -> Unit,
     onOutputActionChanged: (SharedInputOutputAction) -> Unit,
-    onLanguageChanged: (AppLanguage) -> Unit
+    onLanguageChanged: (AppLanguage) -> Unit,
+    onHistoryRetentionPolicyChanged: (HistoryRetentionPolicy) -> Unit,
+    onPoisoningProfileChanged: (PoisoningProfile) -> Unit = {},
+    onLocationPresetChanged: (LocationPreset) -> Unit = {}
 ) {
     when (dialog) {
+        is SettingsDialog.ProfileDialog -> SingleSelectDialog(
+            title = stringResource(R.string.hardware_profile_label),
+            options = PoisoningProfile.entries,
+            selected = dialog.current,
+            labelProvider = { it.displayName },
+            onConfirm = onPoisoningProfileChanged,
+            onDismiss = onDismiss
+        )
+        is SettingsDialog.LocationPresetDialog -> SingleSelectDialog(
+            title = stringResource(R.string.location_preset_label),
+            options = LocationPreset.entries,
+            selected = dialog.current,
+            labelProvider = { it.displayName },
+            onConfirm = onLocationPresetChanged,
+            onDismiss = onDismiss
+        )
         is SettingsDialog.FolderStructureDialog -> SingleSelectDialog(
             title = stringResource(R.string.setting_folder_structure_title),
             options = FolderStructure.entries,
@@ -483,6 +614,14 @@ private fun HandleSettingsDialog(
             selected = dialog.current,
             labelProvider = { it.toReadableLabel() },
             onConfirm = onLanguageChanged,
+            onDismiss = onDismiss
+        )
+        is SettingsDialog.HistoryRetention -> SingleSelectDialog(
+            title = stringResource(R.string.setting_history_retention_title),
+            options = HistoryRetentionPolicy.entries,
+            selected = dialog.current,
+            labelProvider = { it.toReadableLabel() },
+            onConfirm = onHistoryRetentionPolicyChanged,
             onDismiss = onDismiss
         )
     }
@@ -577,6 +716,13 @@ private fun SharedInputOutputAction.toReadableLabel() = when (this) {
     SharedInputOutputAction.SAVE_TO_DEFAULT_FOLDER -> stringResource(R.string.output_action_default_folder)
     SharedInputOutputAction.SAVE_TO_SHARED_FOLDER -> stringResource(R.string.output_action_shared_folder)
     SharedInputOutputAction.SHARE_TO_ANOTHER_APP -> stringResource(R.string.output_action_reshare)
+}
+
+@Composable
+private fun HistoryRetentionPolicy.toReadableLabel() = when (this) {
+    HistoryRetentionPolicy.KEEP_100_ITEMS -> stringResource(R.string.retention_policy_100_items)
+    HistoryRetentionPolicy.CLEAR_ON_EXIT -> stringResource(R.string.retention_policy_clear_on_exit)
+    HistoryRetentionPolicy.CLEAR_AFTER_24_HOURS -> stringResource(R.string.retention_policy_clear_after_24h)
 }
 
 @Composable
