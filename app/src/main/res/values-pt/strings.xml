@@ -54,7 +54,32 @@
     <string name="selected_mode">Selecionado: %1$s</string>
     <string name="regenerate_plans">Regenerar todos os planos aleatórios</string>
     <string name="preview_of_changes">Pré-visualização das alterações</string>
+    <string name="hardware_profile_label">Perfil de hardware:</string>
+    <string name="location_preset_label">Predefinição de localização:</string>
+    <string name="category_metadata_tags">Categorias de metadados</string>
+    <string name="tag_category_gps_title">GPS e localização</string>
+    <string name="tag_category_gps_sub">Remover ou falsificar coordenadas, altitude e orientação</string>
+    <string name="tag_category_device_title">Dispositivo e hardware</string>
+    <string name="tag_category_device_sub">Remover ou falsificar marca, modelo, software e números de série da câmara</string>
+    <string name="tag_category_datetime_title">Data e carimbo de data/hora</string>
+    <string name="tag_category_datetime_sub">Remover ou falsificar datas de criação e modificação</string>
+    <string name="tag_category_camera_title">Definições técnicas da câmara</string>
+    <string name="tag_category_camera_sub">Remover ou falsificar ISO, abertura, distância focal, flash e velocidade do obturador</string>
+    <string name="tag_category_comments_title">Comentários e descrições</string>
+    <string name="tag_category_comments_sub">Remover ou falsificar comentários do utilizador, títulos e descrições da imagem</string>
     <string name="no_preview_available">Nenhuma pré-visualização disponível</string>
+    <string name="diff_filter_all">Todos (%1$d)</string>
+    <string name="diff_filter_removed">Removidos (%1$d)</string>
+    <string name="diff_filter_poisoned">Envenenados (%1$d)</string>
+    <string name="diff_filter_kept">Mantidos (%1$d)</string>
+    <string name="diff_badge_removed">REMOVIDO</string>
+    <string name="diff_badge_poisoned">ENVENENADO</string>
+    <string name="diff_badge_kept">MANTIDO</string>
+    <string name="diff_before">Antes: %1$s</string>
+    <string name="diff_after">Depois: %1$s</string>
+    <string name="diff_value_none">(Nenhum)</string>
+    <string name="diff_value_stripped">(Removido)</string>
+    <string name="diff_no_tags_for_filter">Nenhuma etiqueta corresponde a este filtro</string>
     <string name="change_location_map">Alterar localização no mapa</string>
     <string name="process_and_continue">Processar e continuar</string>
     <string name="processing_complete">Processamento concluído</string>
@@ -190,6 +215,10 @@
     <string name="output_action_shared_folder">Guardar na pasta dedicada</string>
     <string name="output_action_reshare">Partilhar novamente ficheiros higienizados</string>
     <string name="quick_scrub_processing">Secando os seus ficheiros…</string>
+    <string name="quick_scrub_title">Limpeza rápida</string>
+    <string name="quick_scrub_status_stripping">A remover metadados de %1$d ficheiro(s)…</string>
+    <string name="quick_scrub_status_poisoning">A envenenar metadados de %1$d ficheiro(s)…</string>
+    <string name="quick_scrub_cancel">Cancelar</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">Seletor de mapa e acesso à Internet</string>

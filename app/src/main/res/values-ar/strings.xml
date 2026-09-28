@@ -54,7 +54,32 @@
     <string name="selected_mode">المحدد: %1$s</string>
     <string name="regenerate_plans">إعادة توليد جميع الخطط العشوائية</string>
     <string name="preview_of_changes">معاينة التغييرات</string>
+    <string name="hardware_profile_label">ملف تعريف الأجهزة:</string>
+    <string name="location_preset_label">الموقع المحدد مسبقًا:</string>
+    <string name="category_metadata_tags">فئات البيانات الوصفية</string>
+    <string name="tag_category_gps_title">نظام تحديد المواقع والموقع</string>
+    <string name="tag_category_gps_sub">تجريد أو تزييف الإحداثيات والارتفاع والاتجاه</string>
+    <string name="tag_category_device_title">الجهاز والعتاد</string>
+    <string name="tag_category_device_sub">تجريد أو تزييف الشركة المصنعة للكاميرا والطراز والبرنامج والأرقام التسلسلية</string>
+    <string name="tag_category_datetime_title">التاريخ والطابع الزمني</string>
+    <string name="tag_category_datetime_sub">تجريد أو تزييف طوابع وقت الإنشاء والتعديل</string>
+    <string name="tag_category_camera_title">الإعدادات الفنية للكاميرا</string>
+    <string name="tag_category_camera_sub">تجريد أو تزييف ISO وفتحة العدسة والبعد البؤري والفلاش وسرعة الغالق</string>
+    <string name="tag_category_comments_title">التعليقات والأوصاف</string>
+    <string name="tag_category_comments_sub">تجريد أو تزييف تعليقات المستخدم والعناوين وأوصاف الصور</string>
     <string name="no_preview_available">لا توجد معاينة متاحة</string>
+    <string name="diff_filter_all">الكل (%1$d)</string>
+    <string name="diff_filter_removed">تمت الإزالة (%1$d)</string>
+    <string name="diff_filter_poisoned">مسمم (%1$d)</string>
+    <string name="diff_filter_kept">محتفظ به (%1$d)</string>
+    <string name="diff_badge_removed">تمت الإزالة</string>
+    <string name="diff_badge_poisoned">مسمم</string>
+    <string name="diff_badge_kept">محتفظ به</string>
+    <string name="diff_before">قبل: %1$s</string>
+    <string name="diff_after">بعد: %1$s</string>
+    <string name="diff_value_none">(لا يوجد)</string>
+    <string name="diff_value_stripped">(مجرد)</string>
+    <string name="diff_no_tags_for_filter">لا توجد علامات تطابق هذا الفلتر</string>
     <string name="change_location_map">تغيير الموقع على الخريطة</string>
     <string name="process_and_continue">معالجة ومتابعة</string>
     <string name="processing_complete">اكتملت المعالجة</string>
@@ -190,6 +215,10 @@
     <string name="output_action_shared_folder">حفظ في المجلد المخصص</string>
     <string name="output_action_reshare">إعادة مشاركة الملفات المنظفة</string>
     <string name="quick_scrub_processing">جاري تجفيف ملفاتك…</string>
+    <string name="quick_scrub_title">تنظيف سريع</string>
+    <string name="quick_scrub_status_stripping">جارٍ تجريد البيانات الوصفية من %1$d ملف...</string>
+    <string name="quick_scrub_status_poisoning">جارٍ تسميم البيانات الوصفية لـ %1$d ملف...</string>
+    <string name="quick_scrub_cancel">إلغاء</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">منتقي الخريطة والوصول إلى الإنترنت</string>

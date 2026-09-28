@@ -54,7 +54,32 @@
     <string name="selected_mode">Geselecteerd: %1$s</string>
     <string name="regenerate_plans">Genereer alle willekeurige plannen opnieuw</string>
     <string name="preview_of_changes">Voorbeeld van wijzigingen</string>
+    <string name="hardware_profile_label">Hardwareprofiel:</string>
+    <string name="location_preset_label">Locatievoorinstelling:</string>
+    <string name="category_metadata_tags">Metadatasecties</string>
+    <string name="tag_category_gps_title">GPS &amp; Locatie</string>
+    <string name="tag_category_gps_sub">Coördinaten, hoogte en richting verwijderen of spoofen</string>
+    <string name="tag_category_device_title">Apparaat &amp; Hardware</string>
+    <string name="tag_category_device_sub">Cameramerk, model, software en serienummers verwijderen of spoofen</string>
+    <string name="tag_category_datetime_title">Datum &amp; Tijdstempel</string>
+    <string name="tag_category_datetime_sub">Aanmaak- en bewerkingstijdstempels verwijderen of spoofen</string>
+    <string name="tag_category_camera_title">Technische camera-instellingen</string>
+    <string name="tag_category_camera_sub">ISO, diafragma, brandpuntsafstand, flitser en sluitertijd verwijderen of spoofen</string>
+    <string name="tag_category_comments_title">Opmerkingen &amp; Beschrijvingen</string>
+    <string name="tag_category_comments_sub">Gebruikersopmerkingen, titels en afbeeldingsbeschrijvingen verwijderen of spoofen</string>
     <string name="no_preview_available">Geen voorbeeld beschikbaar</string>
+    <string name="diff_filter_all">Alles (%1$d)</string>
+    <string name="diff_filter_removed">Verwijderd (%1$d)</string>
+    <string name="diff_filter_poisoned">Vergiftigd (%1$d)</string>
+    <string name="diff_filter_kept">Behouden (%1$d)</string>
+    <string name="diff_badge_removed">VERWIJDERD</string>
+    <string name="diff_badge_poisoned">VERGIFTIGD</string>
+    <string name="diff_badge_kept">BEHOUDEN</string>
+    <string name="diff_before">Voor: %1$s</string>
+    <string name="diff_after">Na: %1$s</string>
+    <string name="diff_value_none">(Geen)</string>
+    <string name="diff_value_stripped">(Verwijderd)</string>
+    <string name="diff_no_tags_for_filter">Geen tags die aan dit filter voldoen</string>
     <string name="change_location_map">Locatie wijzigen op kaart</string>
     <string name="process_and_continue">Verwerken en doorgaan</string>
     <string name="processing_complete">Verwerking voltooid</string>
@@ -157,7 +182,7 @@
     <string name="night_mode_low_battery">Alleen bij lage batterij</string>
     <string name="night_mode_never">Nooit</string>
 
-    <string name="language_system">Systeemstandaard</string>
+    <string name="language_system">System Default (Systeemstandaard)</string>
     <string name="language_en">English (Engels)</string>
     <string name="language_zh">中文 (简体) (Chinees)</string>
     <string name="language_es">Español (Spaans)</string>
@@ -190,6 +215,10 @@
     <string name="output_action_shared_folder">Opslaan in speciale map</string>
     <string name="output_action_reshare">Opgeschoonde bestanden opnieuw delen</string>
     <string name="quick_scrub_processing">Bestanden drogen…</string>
+    <string name="quick_scrub_title">Snelle reiniging</string>
+    <string name="quick_scrub_status_stripping">Metagegevens verwijderen van %1$d bestand(en)…</string>
+    <string name="quick_scrub_status_poisoning">Metagegevens vergiftigen voor %1$d bestand(en)…</string>
+    <string name="quick_scrub_cancel">Annuleren</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">Kaartkiezer &amp; internettoegang</string>

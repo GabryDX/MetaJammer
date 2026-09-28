@@ -54,7 +54,32 @@
     <string name="selected_mode">選択済み：%1$s</string>
     <string name="regenerate_plans">すべてのランダムプランを再生成</string>
     <string name="preview_of_changes">変更のプレビュー</string>
+    <string name="hardware_profile_label">ハードウェアプロファイル:</string>
+    <string name="location_preset_label">位置情報プリセット:</string>
+    <string name="category_metadata_tags">メタデータカテゴリ</string>
+    <string name="tag_category_gps_title">GPS &amp; 位置情報</string>
+    <string name="tag_category_gps_sub">座標、高度、方位を削除または偽装</string>
+    <string name="tag_category_device_title">端末 &amp; ハードウェア</string>
+    <string name="tag_category_device_sub">カメラのメーカー、モデル、ソフトウェア、シリアル番号を削除または偽装</string>
+    <string name="tag_category_datetime_title">日時 &amp; タイムスタンプ</string>
+    <string name="tag_category_datetime_sub">作成日時および更新日時タイムスタンプを削除または偽装</string>
+    <string name="tag_category_camera_title">カメラ技術設定</string>
+    <string name="tag_category_camera_sub">ISO、絞り値、焦点距離、フラッシュ、シャッター速度を削除または偽装</string>
+    <string name="tag_category_comments_title">コメント &amp; 説明</string>
+    <string name="tag_category_comments_sub">ユーザーコメント、タイトル、画像の説明を削除または偽装</string>
     <string name="no_preview_available">プレビューを利用できません</string>
+    <string name="diff_filter_all">すべて (%1$d)</string>
+    <string name="diff_filter_removed">削除済み (%1$d)</string>
+    <string name="diff_filter_poisoned">ポイズン済み (%1$d)</string>
+    <string name="diff_filter_kept">保持済み (%1$d)</string>
+    <string name="diff_badge_removed">削除済み</string>
+    <string name="diff_badge_poisoned">ポイズン済み</string>
+    <string name="diff_badge_kept">保持</string>
+    <string name="diff_before">変更前: %1$s</string>
+    <string name="diff_after">変更後: %1$s</string>
+    <string name="diff_value_none">(なし)</string>
+    <string name="diff_value_stripped">(削除)</string>
+    <string name="diff_no_tags_for_filter">このフィルターに一致するタグはありません</string>
     <string name="change_location_map">地図上で位置を変更</string>
     <string name="process_and_continue">処理して続行</string>
     <string name="processing_complete">処理完了</string>
@@ -190,6 +215,10 @@
     <string name="output_action_shared_folder">専用フォルダに保存</string>
     <string name="output_action_reshare">クリーンアップしたファイルを再共有</string>
     <string name="quick_scrub_processing">ファイルを乾燥させています…</string>
+    <string name="quick_scrub_title">クイックスクラブ</string>
+    <string name="quick_scrub_status_stripping">%1$d個のファイルからメタデータを削除中…</string>
+    <string name="quick_scrub_status_poisoning">%1$d個のファイルのメタデータをポイズン中…</string>
+    <string name="quick_scrub_cancel">キャンセル</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">マップピッカーとインターネットアクセス</string>

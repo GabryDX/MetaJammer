@@ -54,7 +54,32 @@
     <string name="selected_mode">Dipilih: %1$s</string>
     <string name="regenerate_plans">Regenerasi Semua Rencana Acak</string>
     <string name="preview_of_changes">Pratinjau Perubahan</string>
+    <string name="hardware_profile_label">Profil Perangkat Keras:</string>
+    <string name="location_preset_label">Preset Lokasi:</string>
+    <string name="category_metadata_tags">Kategori Metadata</string>
+    <string name="tag_category_gps_title">GPS &amp; Lokasi</string>
+    <string name="tag_category_gps_sub">Hapus atau palsukan koordinat, ketinggian, dan arah</string>
+    <string name="tag_category_device_title">Perangkat &amp; Perangkat Keras</string>
+    <string name="tag_category_device_sub">Hapus atau palsukan merek kamera, model, perangkat lunak, dan nomor seri</string>
+    <string name="tag_category_datetime_title">Tanggal &amp; Cap Waktu</string>
+    <string name="tag_category_datetime_sub">Hapus atau palsukan cap waktu pembuatan dan modifikasi</string>
+    <string name="tag_category_camera_title">Pengaturan Teknis Kamera</string>
+    <string name="tag_category_camera_sub">Hapus atau palsukan ISO, bukaan, panjang fokus, lampu kilat, dan kecepatan rana</string>
+    <string name="tag_category_comments_title">Komentar &amp; Deskripsi</string>
+    <string name="tag_category_comments_sub">Hapus atau palsukan komentar pengguna, judul, dan deskripsi gambar</string>
     <string name="no_preview_available">Pratinjau tidak tersedia</string>
+    <string name="diff_filter_all">Semua (%1$d)</string>
+    <string name="diff_filter_removed">Dihapus (%1$d)</string>
+    <string name="diff_filter_poisoned">Dipalsukan (%1$d)</string>
+    <string name="diff_filter_kept">Dipertahankan (%1$d)</string>
+    <string name="diff_badge_removed">DIHAPUS</string>
+    <string name="diff_badge_poisoned">DIPALSUKAN</string>
+    <string name="diff_badge_kept">DIPERTAHANKAN</string>
+    <string name="diff_before">Sebelum: %1$s</string>
+    <string name="diff_after">Sesudah: %1$s</string>
+    <string name="diff_value_none">(Tidak ada)</string>
+    <string name="diff_value_stripped">(Dihapus)</string>
+    <string name="diff_no_tags_for_filter">Tidak ada tag yang cocok dengan filter ini</string>
     <string name="change_location_map">Ubah Lokasi di Peta</string>
     <string name="process_and_continue">Proses dan lanjutkan</string>
     <string name="processing_complete">Pemrosesan selesai</string>
@@ -190,6 +215,10 @@
     <string name="output_action_shared_folder">Simpan ke folder khusus</string>
     <string name="output_action_reshare">Bagikan ulang file yang dibersihkan</string>
     <string name="quick_scrub_processing">Mengeringkan file Anda…</string>
+    <string name="quick_scrub_title">Pembersihan Cepat</string>
+    <string name="quick_scrub_status_stripping">Menghapus metadata dari %1$d berkas…</string>
+    <string name="quick_scrub_status_poisoning">Memalsukan metadata untuk %1$d berkas…</string>
+    <string name="quick_scrub_cancel">Batal</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">Pemilih Peta &amp; Akses Internet</string>

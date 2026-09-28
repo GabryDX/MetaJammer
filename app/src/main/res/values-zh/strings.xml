@@ -54,7 +54,32 @@
     <string name="selected_mode">已选择：%1$s</string>
     <string name="regenerate_plans">重新生成所有随机方案</string>
     <string name="preview_of_changes">更改预览</string>
+    <string name="hardware_profile_label">硬件配置文件：</string>
+    <string name="location_preset_label">位置预设：</string>
+    <string name="category_metadata_tags">元数据类别</string>
+    <string name="tag_category_gps_title">GPS 与位置</string>
+    <string name="tag_category_gps_sub">清除或伪造坐标、海拔及方位</string>
+    <string name="tag_category_device_title">设备与硬件</string>
+    <string name="tag_category_device_sub">清除或伪造相机制造商、型号、软件及序列号</string>
+    <string name="tag_category_datetime_title">日期与时间戳</string>
+    <string name="tag_category_datetime_sub">清除或伪造创建和修改时间戳</string>
+    <string name="tag_category_camera_title">相机技术参数</string>
+    <string name="tag_category_camera_sub">清除或伪造 ISO、光圈、焦距、闪光灯及快门速度</string>
+    <string name="tag_category_comments_title">备注与描述</string>
+    <string name="tag_category_comments_sub">清除或伪造用户备注、标题及图片描述</string>
     <string name="no_preview_available">无预览可用</string>
+    <string name="diff_filter_all">全部 (%1$d)</string>
+    <string name="diff_filter_removed">已清除 (%1$d)</string>
+    <string name="diff_filter_poisoned">已投毒 (%1$d)</string>
+    <string name="diff_filter_kept">已保留 (%1$d)</string>
+    <string name="diff_badge_removed">已清除</string>
+    <string name="diff_badge_poisoned">已投毒</string>
+    <string name="diff_badge_kept">已保留</string>
+    <string name="diff_before">处理前：%1$s</string>
+    <string name="diff_after">处理后：%1$s</string>
+    <string name="diff_value_none">(无)</string>
+    <string name="diff_value_stripped">(已清除)</string>
+    <string name="diff_no_tags_for_filter">没有符合此筛选条件的标签</string>
     <string name="change_location_map">在地图上更改位置</string>
     <string name="process_and_continue">处理并继续</string>
     <string name="processing_complete">处理完成</string>
@@ -190,6 +215,10 @@
     <string name="output_action_shared_folder">保存到专用文件夹</string>
     <string name="output_action_reshare">重新分享已清理的文件</string>
     <string name="quick_scrub_processing">正在干燥您的文件…</string>
+    <string name="quick_scrub_title">快速清理</string>
+    <string name="quick_scrub_status_stripping">正在清除 %1$d 个文件的元数据…</string>
+    <string name="quick_scrub_status_poisoning">正在投毒 %1$d 个文件的元数据…</string>
+    <string name="quick_scrub_cancel">取消</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">地图选择器和互联网访问</string>

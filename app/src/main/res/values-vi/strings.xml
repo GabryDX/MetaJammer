@@ -54,7 +54,32 @@
     <string name="selected_mode">Đã chọn: %1$s</string>
     <string name="regenerate_plans">Tạo lại tất cả các kế hoạch ngẫu nhiên</string>
     <string name="preview_of_changes">Xem trước thay đổi</string>
+    <string name="hardware_profile_label">Hồ sơ phần cứng:</string>
+    <string name="location_preset_label">Vị trí đặt sẵn:</string>
+    <string name="category_metadata_tags">Danh mục siêu dữ liệu</string>
+    <string name="tag_category_gps_title">GPS &amp; Vị trí</string>
+    <string name="tag_category_gps_sub">Xóa hoặc giả mạo tọa độ, độ cao và hướng di chuyển</string>
+    <string name="tag_category_device_title">Thiết bị &amp; Phần cứng</string>
+    <string name="tag_category_device_sub">Xóa hoặc giả mạo hãng máy ảnh, kiểu máy, phần mềm và số sê-ri</string>
+    <string name="tag_category_datetime_title">Ngày &amp; Dấu thời gian</string>
+    <string name="tag_category_datetime_sub">Xóa hoặc giả mạo dấu thời gian tạo và chỉnh sửa</string>
+    <string name="tag_category_camera_title">Cài đặt kỹ thuật máy ảnh</string>
+    <string name="tag_category_camera_sub">Xóa hoặc giả mạo ISO, khẩu độ, tiêu cự, đèn flash và tốc độ màn trập</string>
+    <string name="tag_category_comments_title">Bình luận &amp; Mô tả</string>
+    <string name="tag_category_comments_sub">Xóa hoặc giả mạo bình luận người dùng, tiêu đề và mô tả hình ảnh</string>
     <string name="no_preview_available">Không có bản xem trước</string>
+    <string name="diff_filter_all">Tất cả (%1$d)</string>
+    <string name="diff_filter_removed">Đã xóa (%1$d)</string>
+    <string name="diff_filter_poisoned">Đã đầu độc (%1$d)</string>
+    <string name="diff_filter_kept">Đã giữ lại (%1$d)</string>
+    <string name="diff_badge_removed">ĐÃ XÓA</string>
+    <string name="diff_badge_poisoned">ĐÃ ĐẦU ĐỘC</string>
+    <string name="diff_badge_kept">ĐÃ GIỮ LẠI</string>
+    <string name="diff_before">Trước: %1$s</string>
+    <string name="diff_after">Sau: %1$s</string>
+    <string name="diff_value_none">(Không có)</string>
+    <string name="diff_value_stripped">(Đã xóa)</string>
+    <string name="diff_no_tags_for_filter">Không có thẻ nào khớp với bộ lọc này</string>
     <string name="change_location_map">Thay đổi vị trí trên bản đồ</string>
     <string name="process_and_continue">Xử lý và tiếp tục</string>
     <string name="processing_complete">Xử lý hoàn tất</string>
@@ -190,6 +215,10 @@
     <string name="output_action_shared_folder">Lưu vào thư mục dành riêng</string>
     <string name="output_action_reshare">Chia sẻ lại các tệp đã dọn dẹp</string>
     <string name="quick_scrub_processing">Đang làm khô các tệp của bạn…</string>
+    <string name="quick_scrub_title">Dọn dẹp nhanh</string>
+    <string name="quick_scrub_status_stripping">Đang xóa siêu dữ liệu khỏi %1$d tệp…</string>
+    <string name="quick_scrub_status_poisoning">Đang đầu độc siêu dữ liệu cho %1$d tệp…</string>
+    <string name="quick_scrub_cancel">Hủy</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">Chọn bản đồ &amp; Truy cập Internet</string>

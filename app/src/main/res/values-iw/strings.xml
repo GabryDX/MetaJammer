@@ -54,7 +54,32 @@
     <string name="selected_mode">נבחר: %1$s</string>
     <string name="regenerate_plans">צור מחדש את כל התוכניות האקראיות</string>
     <string name="preview_of_changes">תצוגה מקדימה של שינויים</string>
+    <string name="hardware_profile_label">פרופיל חומרה:</string>
+    <string name="location_preset_label">הגדרה מראש של מיקום:</string>
+    <string name="category_metadata_tags">קטגוריות מטא-דאטה</string>
+    <string name="tag_category_gps_title">GPS ומיקום</string>
+    <string name="tag_category_gps_sub">הסר או זייף קואורדינטות, גובה וכיוון</string>
+    <string name="tag_category_device_title">מכשיר וחומרה</string>
+    <string name="tag_category_device_sub">הסר או זייף יצרן מצלמה, דגם, תוכנה ומספרים סידוריים</string>
+    <string name="tag_category_datetime_title">תאריך וחותמת זמן</string>
+    <string name="tag_category_datetime_sub">הסר או זייף חותמות זמן של יצירה ושינוי</string>
+    <string name="tag_category_camera_title">הגדרות טכניות של המצלמה</string>
+    <string name="tag_category_camera_sub">הסר או זייף ISO, מפתח צמצם, אורך מוקד, מבזק ומהירות תריס</string>
+    <string name="tag_category_comments_title">הערות ותיאורים</string>
+    <string name="tag_category_comments_sub">הסר או זייף הערות משתמש, כותרות ותיאורי תמונה</string>
     <string name="no_preview_available">אין תצוגה מקדימה זמינה</string>
+    <string name="diff_filter_all">הכל (%1$d)</string>
+    <string name="diff_filter_removed">הוסרו (%1$d)</string>
+    <string name="diff_filter_poisoned">הורעלו (%1$d)</string>
+    <string name="diff_filter_kept">נשמרו (%1$d)</string>
+    <string name="diff_badge_removed">הוסר</string>
+    <string name="diff_badge_poisoned">הורעל</string>
+    <string name="diff_badge_kept">נשמר</string>
+    <string name="diff_before">לפני: %1$s</string>
+    <string name="diff_after">אחרי: %1$s</string>
+    <string name="diff_value_none">(ללא)</string>
+    <string name="diff_value_stripped">(הוסר)</string>
+    <string name="diff_no_tags_for_filter">אין תגיות התואמות למסנן זה</string>
     <string name="change_location_map">שנה מיקום במפה</string>
     <string name="process_and_continue">עיבוד והמשך</string>
     <string name="processing_complete">העיבוד הושלם</string>
@@ -190,6 +215,10 @@
     <string name="output_action_shared_folder">שמור לתיקייה ייעודית</string>
     <string name="output_action_reshare">שתף מחדש קבצים נקיים</string>
     <string name="quick_scrub_processing">מייבש את הקבצים שלך…</string>
+    <string name="quick_scrub_title">ניקוי מהיר</string>
+    <string name="quick_scrub_status_stripping">מסיר מטא-דאטה מ-%1$d קבצים…</string>
+    <string name="quick_scrub_status_poisoning">מרעיל מטא-דאטה עבור %1$d קבצים…</string>
+    <string name="quick_scrub_cancel">ביטול</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">בחירת מפה וגישה לאינטרנט</string>

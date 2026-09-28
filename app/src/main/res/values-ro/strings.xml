@@ -54,7 +54,32 @@
     <string name="selected_mode">Selectat: %1$s</string>
     <string name="regenerate_plans">Regenerare planuri aleatorii</string>
     <string name="preview_of_changes">Previzualizare modificări</string>
+    <string name="hardware_profile_label">Profil hardware:</string>
+    <string name="location_preset_label">Locație prestabilită:</string>
+    <string name="category_metadata_tags">Categorii de metadate</string>
+    <string name="tag_category_gps_title">GPS și locație</string>
+    <string name="tag_category_gps_sub">Elimină sau falsifică coordonatele, altitudinea și orientarea</string>
+    <string name="tag_category_device_title">Dispozitiv și hardware</string>
+    <string name="tag_category_device_sub">Elimină sau falsifică marca camerei, modelul, software-ul și seriile</string>
+    <string name="tag_category_datetime_title">Dată și marcaj temporal</string>
+    <string name="tag_category_datetime_sub">Elimină sau falsifică marcajele temporale de creare și modificare</string>
+    <string name="tag_category_camera_title">Setări tehnice cameră</string>
+    <string name="tag_category_camera_sub">Elimină sau falsifică ISO, diafragma, distanța focală, blițul și timpul de expunere</string>
+    <string name="tag_category_comments_title">Comentarii și descrieri</string>
+    <string name="tag_category_comments_sub">Elimină sau falsifică comentariile utilizatorului, titlurile și descrierile imaginii</string>
     <string name="no_preview_available">Nicio previzualizare disponibilă</string>
+    <string name="diff_filter_all">Toate (%1$d)</string>
+    <string name="diff_filter_removed">Eliminate (%1$d)</string>
+    <string name="diff_filter_poisoned">Alterate (%1$d)</string>
+    <string name="diff_filter_kept">Păstrate (%1$d)</string>
+    <string name="diff_badge_removed">ELIMINAT</string>
+    <string name="diff_badge_poisoned">ALTERAT</string>
+    <string name="diff_badge_kept">PĂSTRAT</string>
+    <string name="diff_before">Înainte: %1$s</string>
+    <string name="diff_after">După: %1$s</string>
+    <string name="diff_value_none">(Niciunul)</string>
+    <string name="diff_value_stripped">(Eliminat)</string>
+    <string name="diff_no_tags_for_filter">Nicio etichetă nu corespunde acestui filtru</string>
     <string name="change_location_map">Schimbă locația pe hartă</string>
     <string name="process_and_continue">Procesează și continuă</string>
     <string name="processing_complete">Procesare finalizată</string>
@@ -157,7 +182,7 @@
     <string name="night_mode_low_battery">Doar la baterie descărcată</string>
     <string name="night_mode_never">Niciodată</string>
 
-    <string name="language_system">Limbă implicită sistem</string>
+    <string name="language_system">System Default (Limbă implicită sistem)</string>
     <string name="language_en">English (Engleză)</string>
     <string name="language_zh">中文 (简体) (Chineză)</string>
     <string name="language_es">Español (Spaniolă)</string>
@@ -190,6 +215,10 @@
     <string name="output_action_shared_folder">Salvare în dosarul dedicat</string>
     <string name="output_action_reshare">Repartajare fișiere igienizate</string>
     <string name="quick_scrub_processing">Se usucă fișierele…</string>
+    <string name="quick_scrub_title">Curățare rapidă</string>
+    <string name="quick_scrub_status_stripping">Se elimină metadatele din %1$d fișier(e)…</string>
+    <string name="quick_scrub_status_poisoning">Se alterează metadatele pentru %1$d fișier(e)…</string>
+    <string name="quick_scrub_cancel">Anulează</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">Selector de hartă și acces la internet</string>

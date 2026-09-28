@@ -54,7 +54,32 @@
     <string name="selected_mode">Вибрано: %1$s</string>
     <string name="regenerate_plans">Перегенерувати всі випадкові плани</string>
     <string name="preview_of_changes">Попередній перегляд змін</string>
+    <string name="hardware_profile_label">Профіль обладнання:</string>
+    <string name="location_preset_label">Шаблон локації:</string>
+    <string name="category_metadata_tags">Категорії метаданих</string>
+    <string name="tag_category_gps_title">GPS та розташування</string>
+    <string name="tag_category_gps_sub">Видалити або підробити координати, висоту та напрямок</string>
+    <string name="tag_category_device_title">Пристрій та апаратне забезпечення</string>
+    <string name="tag_category_device_sub">Видалити або підробити марку, модель камери, ПЗ та серійні номери</string>
+    <string name="tag_category_datetime_title">Дата та часова позначка</string>
+    <string name="tag_category_datetime_sub">Видалити або підробити часові позначки створення та модифікації</string>
+    <string name="tag_category_camera_title">Технічні налаштування камери</string>
+    <string name="tag_category_camera_sub">Видалити або підробити ISO, діафрагму, фокусну відстань, спалах та витримку</string>
+    <string name="tag_category_comments_title">Коментарі та описи</string>
+    <string name="tag_category_comments_sub">Видалити або підробити коментарі користувача, заголовки та описи зображень</string>
     <string name="no_preview_available">Попередній перегляд недоступний</string>
+    <string name="diff_filter_all">Усі (%1$d)</string>
+    <string name="diff_filter_removed">Видалені (%1$d)</string>
+    <string name="diff_filter_poisoned">Отруєні (%1$d)</string>
+    <string name="diff_filter_kept">Збережені (%1$d)</string>
+    <string name="diff_badge_removed">ВИДАЛЕНО</string>
+    <string name="diff_badge_poisoned">ОТРУЄНО</string>
+    <string name="diff_badge_kept">ЗБЕРЕЖЕНО</string>
+    <string name="diff_before">До: %1$s</string>
+    <string name="diff_after">Після: %1$s</string>
+    <string name="diff_value_none">(Немає)</string>
+    <string name="diff_value_stripped">(Видалено)</string>
+    <string name="diff_no_tags_for_filter">Немає тегів, які відповідають цьому фільтру</string>
     <string name="change_location_map">Змінити місцезнаходження на карті</string>
     <string name="process_and_continue">Обробити та продовжити</string>
     <string name="processing_complete">Обробка завершена</string>
@@ -190,6 +215,10 @@
     <string name="output_action_shared_folder">Зберегти в спеціальну папку</string>
     <string name="output_action_reshare">Повторно надіслати очищені файли</string>
     <string name="quick_scrub_processing">Сушіння файлів…</string>
+    <string name="quick_scrub_title">Швидке очищення</string>
+    <string name="quick_scrub_status_stripping">Видалення метаданих з %1$d файл.(ів)…</string>
+    <string name="quick_scrub_status_poisoning">Отруєння метаданих для %1$d файл.(ів)…</string>
+    <string name="quick_scrub_cancel">Скасувати</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">Вибір карти та доступ до Інтернету</string>

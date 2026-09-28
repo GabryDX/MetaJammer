@@ -54,7 +54,32 @@
     <string name="selected_mode">선택됨: %1$s</string>
     <string name="regenerate_plans">모든 무작위 플랜 재생성</string>
     <string name="preview_of_changes">변경 사항 미리보기</string>
+    <string name="hardware_profile_label">하드웨어 프로필:</string>
+    <string name="location_preset_label">위치 프리셋:</string>
+    <string name="category_metadata_tags">메타데이터 카테고리</string>
+    <string name="tag_category_gps_title">GPS 및 위치</string>
+    <string name="tag_category_gps_sub">좌표, 고도 및 방향 제거 또는 위조</string>
+    <string name="tag_category_device_title">기기 및 하드웨어</string>
+    <string name="tag_category_device_sub">카메라 제조사, 모델, 소프트웨어 및 일련번호 제거 또는 위조</string>
+    <string name="tag_category_datetime_title">날짜 및 타임스탬프</string>
+    <string name="tag_category_datetime_sub">생성 및 수정 타임스탬프 제거 또는 위조</string>
+    <string name="tag_category_camera_title">카메라 기술 설정</string>
+    <string name="tag_category_camera_sub">ISO, 조리개, 초점 거리, 플래시 및 셔터 속도 제거 또는 위조</string>
+    <string name="tag_category_comments_title">설명 및 코멘트</string>
+    <string name="tag_category_comments_sub">사용자 코멘트, 제목 및 이미지 설명 제거 또는 위조</string>
     <string name="no_preview_available">미리보기 불가</string>
+    <string name="diff_filter_all">전체 (%1$d)</string>
+    <string name="diff_filter_removed">제거됨 (%1$d)</string>
+    <string name="diff_filter_poisoned">포이즌됨 (%1$d)</string>
+    <string name="diff_filter_kept">유지됨 (%1$d)</string>
+    <string name="diff_badge_removed">제거됨</string>
+    <string name="diff_badge_poisoned">포이즌됨</string>
+    <string name="diff_badge_kept">유지됨</string>
+    <string name="diff_before">변경 전: %1$s</string>
+    <string name="diff_after">변경 후: %1$s</string>
+    <string name="diff_value_none">(없음)</string>
+    <string name="diff_value_stripped">(제거됨)</string>
+    <string name="diff_no_tags_for_filter">이 필터와 일치하는 태그가 없습니다</string>
     <string name="change_location_map">지도에서 위치 변경</string>
     <string name="process_and_continue">처리 및 계속</string>
     <string name="processing_complete">처리 완료</string>
@@ -157,7 +182,7 @@
     <string name="night_mode_low_battery">배터리 부족 시에만</string>
     <string name="night_mode_never">안 함</string>
 
-    <string name="language_system">시스템 기본값</string>
+    <string name="language_system">System Default (시스템 기본값)</string>
     <string name="language_en">English (영어)</string>
     <string name="language_zh">中文 (简体) (중국어)</string>
     <string name="language_es">Español (스페인어)</string>
@@ -190,6 +215,10 @@
     <string name="output_action_shared_folder">전용 폴더에 저장</string>
     <string name="output_action_reshare">정리된 파일 다시 공유</string>
     <string name="quick_scrub_processing">파일을 건조하는 중…</string>
+    <string name="quick_scrub_title">빠른 정리</string>
+    <string name="quick_scrub_status_stripping">%1$d개 파일의 메타데이터 제거 중…</string>
+    <string name="quick_scrub_status_poisoning">%1$d개 파일의 메타데이터 포이즌 중…</string>
+    <string name="quick_scrub_cancel">취소</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">지도 선택기 및 인터넷 액세스</string>

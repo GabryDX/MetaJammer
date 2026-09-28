@@ -54,7 +54,32 @@
     <string name="selected_mode">Selectum: %1$s</string>
     <string name="regenerate_plans">Omnia Consilia Temere Regenerare</string>
     <string name="preview_of_changes">Praevisus Mutationum</string>
+    <string name="hardware_profile_label">Forma Instrumentorum:</string>
+    <string name="location_preset_label">Locus Praestitutus:</string>
+    <string name="category_metadata_tags">Categoriae Metadatorum</string>
+    <string name="tag_category_gps_title">GPS et Locus</string>
+    <string name="tag_category_gps_sub">Coordinatas, altitudinem et cursum tollere vel fingere</string>
+    <string name="tag_category_device_title">Instrumentum et Machina</string>
+    <string name="tag_category_device_sub">Fabricatorem photographicum, exemplar, programmata et numeros tollere vel fingere</string>
+    <string name="tag_category_datetime_title">Dies et Notatio Temporis</string>
+    <string name="tag_category_datetime_sub">Notationes temporis creationis et mutationis tollere vel fingere</string>
+    <string name="tag_category_camera_title">Parametra Technica Machinae</string>
+    <string name="tag_category_camera_sub">ISO, foramen, focum, fulgurationem et velocitatem tollere vel fingere</string>
+    <string name="tag_category_comments_title">Commentarii et Descriptiones</string>
+    <string name="tag_category_comments_sub">Commentarios usoris, titulos et descriptiones imaginis tollere vel fingere</string>
     <string name="no_preview_available">Praevisus non adest</string>
+    <string name="diff_filter_all">Omnia (%1$d)</string>
+    <string name="diff_filter_removed">Sublata (%1$d)</string>
+    <string name="diff_filter_poisoned">Venenata (%1$d)</string>
+    <string name="diff_filter_kept">Servata (%1$d)</string>
+    <string name="diff_badge_removed">SUBLATUM</string>
+    <string name="diff_badge_poisoned">VENENATUM</string>
+    <string name="diff_badge_kept">SERVATUM</string>
+    <string name="diff_before">Ante: %1$s</string>
+    <string name="diff_after">Post: %1$s</string>
+    <string name="diff_value_none">(Nullum)</string>
+    <string name="diff_value_stripped">(Sublatum)</string>
+    <string name="diff_no_tags_for_filter">Nullae notae cum hoc filtro congruunt</string>
     <string name="change_location_map">Locum in Tabula Mutare</string>
     <string name="process_and_continue">Elabora et perge</string>
     <string name="processing_complete">Elaboratio confecta</string>
@@ -190,6 +215,10 @@
     <string name="output_action_shared_folder">In capsa propria servare</string>
     <string name="output_action_reshare">Fasciculos mundatos iterum communicare</string>
     <string name="quick_scrub_processing">Fasciculos tuos siccans…</string>
+    <string name="quick_scrub_title">Mundatio Celeris</string>
+    <string name="quick_scrub_status_stripping">Metadata e %1$d fasciculo/is tolluntur…</string>
+    <string name="quick_scrub_status_poisoning">Metadata pro %1$d fasciculo/is venenantur…</string>
+    <string name="quick_scrub_cancel">Abrogare</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">Tabula &amp; Interrete</string>

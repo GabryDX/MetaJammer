@@ -54,7 +54,32 @@
     <string name="selected_mode">Ausgewählt: %1$s</string>
     <string name="regenerate_plans">Alle Zufallspläne neu generieren</string>
     <string name="preview_of_changes">Vorschau der Änderungen</string>
+    <string name="hardware_profile_label">Hardware-Profil:</string>
+    <string name="location_preset_label">Standort-Voreinstellung:</string>
+    <string name="category_metadata_tags">Metadaten-Kategorien</string>
+    <string name="tag_category_gps_title">GPS &amp; Standort</string>
+    <string name="tag_category_gps_sub">Koordinaten, Höhe und Richtung entfernen oder fälschen</string>
+    <string name="tag_category_device_title">Gerät &amp; Hardware</string>
+    <string name="tag_category_device_sub">Kameramarke, Modell, Software und Seriennummern entfernen oder fälschen</string>
+    <string name="tag_category_datetime_title">Datum &amp; Zeitstempel</string>
+    <string name="tag_category_datetime_sub">Erstellungs- und Änderungszeitstempel entfernen oder fälschen</string>
+    <string name="tag_category_camera_title">Technische Kameraeinstellungen</string>
+    <string name="tag_category_camera_sub">ISO, Blende, Brennweite, Blitz und Belichtungszeit entfernen oder fälschen</string>
+    <string name="tag_category_comments_title">Kommentare &amp; Beschreibungen</string>
+    <string name="tag_category_comments_sub">Benutzerkommentare, Titel und Bildbeschreibungen entfernen oder fälschen</string>
     <string name="no_preview_available">Keine Vorschau verfügbar</string>
+    <string name="diff_filter_all">Alle (%1$d)</string>
+    <string name="diff_filter_removed">Entfernt (%1$d)</string>
+    <string name="diff_filter_poisoned">Vergiftet (%1$d)</string>
+    <string name="diff_filter_kept">Behalten (%1$d)</string>
+    <string name="diff_badge_removed">ENTFERNT</string>
+    <string name="diff_badge_poisoned">VERGIFTET</string>
+    <string name="diff_badge_kept">BEHALTEN</string>
+    <string name="diff_before">Vorher: %1$s</string>
+    <string name="diff_after">Nachher: %1$s</string>
+    <string name="diff_value_none">(Keine)</string>
+    <string name="diff_value_stripped">(Entfernt)</string>
+    <string name="diff_no_tags_for_filter">Keine Tags für diesen Filter gefunden</string>
     <string name="change_location_map">Standort auf der Karte ändern</string>
     <string name="process_and_continue">Verarbeiten und fortfahren</string>
     <string name="processing_complete">Verarbeitung abgeschlossen</string>
@@ -190,6 +215,10 @@
     <string name="output_action_shared_folder">In speziellem Ordner speichern</string>
     <string name="output_action_reshare">Bereinigte Dateien erneut teilen</string>
     <string name="quick_scrub_processing">Dateien werden getrocknet…</string>
+    <string name="quick_scrub_title">Schnellbereinigung</string>
+    <string name="quick_scrub_status_stripping">Entferne Metadaten von %1$d Datei(en)…</string>
+    <string name="quick_scrub_status_poisoning">Vergifte Metadaten für %1$d Datei(en)…</string>
+    <string name="quick_scrub_cancel">Abbrechen</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">Karten-Picker &amp; Internetzugang</string>

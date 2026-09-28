@@ -54,7 +54,32 @@
     <string name="selected_mode">เลือกแล้ว: %1$s</string>
     <string name="regenerate_plans">สร้างแผนสุ่มใหม่ทั้งหมด</string>
     <string name="preview_of_changes">ตัวอย่างการเปลี่ยนแปลง</string>
+    <string name="hardware_profile_label">โปรไฟล์ฮาร์ดแวร์:</string>
+    <string name="location_preset_label">พรีเซ็ตตำแหน่ง:</string>
+    <string name="category_metadata_tags">หมวดหมู่ข้อมูลเมตา</string>
+    <string name="tag_category_gps_title">GPS และตำแหน่ง</string>
+    <string name="tag_category_gps_sub">ลบหรือสวมรอยพิกัด ระดับความสูง และทิศทาง</string>
+    <string name="tag_category_device_title">อุปกรณ์และฮาร์ดแวร์</string>
+    <string name="tag_category_device_sub">ลบหรือสวมรอยยี่ห้อกล้อง รุ่น ซอฟต์แวร์ และหมายเลขซีเรียล</string>
+    <string name="tag_category_datetime_title">วันที่และเวลา</string>
+    <string name="tag_category_datetime_sub">ลบหรือสวมรอยเวลาที่สร้างและแก้ไข</string>
+    <string name="tag_category_camera_title">การตั้งค่าทางเทคนิคของกล้อง</string>
+    <string name="tag_category_camera_sub">ลบหรือสวมรอย ISO รูรับแสง ความยาวโฟกัส แฟลช และความเร็วชัตเตอร์</string>
+    <string name="tag_category_comments_title">ความคิดเห็นและคำอธิบาย</string>
+    <string name="tag_category_comments_sub">ลบหรือสวมรอยความคิดเห็นของผู้ใช้ ชื่อเรื่อง และคำอธิบายรูปภาพ</string>
     <string name="no_preview_available">ไม่มีตัวอย่าง</string>
+    <string name="diff_filter_all">ทั้งหมด (%1$d)</string>
+    <string name="diff_filter_removed">ลบแล้ว (%1$d)</string>
+    <string name="diff_filter_poisoned">วางยาแล้ว (%1$d)</string>
+    <string name="diff_filter_kept">เก็บไว้ (%1$d)</string>
+    <string name="diff_badge_removed">ลบแล้ว</string>
+    <string name="diff_badge_poisoned">วางยาแล้ว</string>
+    <string name="diff_badge_kept">เก็บไว้</string>
+    <string name="diff_before">ก่อน: %1$s</string>
+    <string name="diff_after">หลัง: %1$s</string>
+    <string name="diff_value_none">(ไม่มี)</string>
+    <string name="diff_value_stripped">(ลบออกแล้ว)</string>
+    <string name="diff_no_tags_for_filter">ไม่มีแท็กที่ตรงกับตัวกรองนี้</string>
     <string name="change_location_map">เปลี่ยนตำแหน่งบนแผนที่</string>
     <string name="process_and_continue">ประมวลผลและดำเนินการต่อ</string>
     <string name="processing_complete">การประมวลผลเสร็จสิ้น</string>
@@ -190,6 +215,10 @@
     <string name="output_action_shared_folder">บันทึกลงในโฟลเดอร์เฉพาะ</string>
     <string name="output_action_reshare">แชร์ไฟล์ที่ล้างข้อมูลแล้วอีกครั้ง</string>
     <string name="quick_scrub_processing">กำลังทำให้ไฟล์ของคุณแห้ง…</string>
+    <string name="quick_scrub_title">ทำความสะอาดด่วน</string>
+    <string name="quick_scrub_status_stripping">กำลังลบข้อมูลเมตาจาก %1$d ไฟล์…</string>
+    <string name="quick_scrub_status_poisoning">กำลังวางยาข้อมูลเมตาสำหรับ %1$d ไฟล์…</string>
+    <string name="quick_scrub_cancel">ยกเลิก</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">ตัวเลือกแผนที่และการเข้าถึงอินเทอร์เน็ต</string>

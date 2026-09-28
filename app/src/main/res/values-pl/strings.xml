@@ -54,7 +54,32 @@
     <string name="selected_mode">Wybrano: %1$s</string>
     <string name="regenerate_plans">Wygeneruj ponownie wszystkie losowe plany</string>
     <string name="preview_of_changes">Podgląd zmian</string>
+    <string name="hardware_profile_label">Profil sprzętowy:</string>
+    <string name="location_preset_label">Szablon lokalizacji:</string>
+    <string name="category_metadata_tags">Kategorie metadanych</string>
+    <string name="tag_category_gps_title">GPS i lokalizacja</string>
+    <string name="tag_category_gps_sub">Usuń lub sfałszuj współrzędne, wysokość i namiar</string>
+    <string name="tag_category_device_title">Urządzenie i sprzęt</string>
+    <string name="tag_category_device_sub">Usuń lub sfałszuj markę aparatu, model, oprogramowanie i numery seryjne</string>
+    <string name="tag_category_datetime_title">Data i znacznik czasu</string>
+    <string name="tag_category_datetime_sub">Usuń lub sfałszuj znaczniki czasu utworzenia i modyfikacji</string>
+    <string name="tag_category_camera_title">Parametry techniczne aparatu</string>
+    <string name="tag_category_camera_sub">Usuń lub sfałszuj ISO, przysłonę, ogniskową, lampę błyskową i czas naświetlania</string>
+    <string name="tag_category_comments_title">Komentarze i opisy</string>
+    <string name="tag_category_comments_sub">Usuń lub sfałszuj komentarze użytkownika, tytuły i opisy obrazów</string>
     <string name="no_preview_available">Podgląd niedostępny</string>
+    <string name="diff_filter_all">Wszystkie (%1$d)</string>
+    <string name="diff_filter_removed">Usunięte (%1$d)</string>
+    <string name="diff_filter_poisoned">Zatrute (%1$d)</string>
+    <string name="diff_filter_kept">Zachowane (%1$d)</string>
+    <string name="diff_badge_removed">USUNIĘTE</string>
+    <string name="diff_badge_poisoned">ZATRUTE</string>
+    <string name="diff_badge_kept">ZACHOWANE</string>
+    <string name="diff_before">Przed: %1$s</string>
+    <string name="diff_after">Po: %1$s</string>
+    <string name="diff_value_none">(Brak)</string>
+    <string name="diff_value_stripped">(Usunięto)</string>
+    <string name="diff_no_tags_for_filter">Brak tagów pasujących do tego filtra</string>
     <string name="change_location_map">Zmień lokalizację na mapie</string>
     <string name="process_and_continue">Przetwórz i kontynuuj</string>
     <string name="processing_complete">Przetwarzanie zakończone</string>
@@ -190,6 +215,10 @@
     <string name="output_action_shared_folder">Zapisz w dedykowanym folderze</string>
     <string name="output_action_reshare">Udostępnij ponownie wyczyszczone pliki</string>
     <string name="quick_scrub_processing">Suszenie Twoich plików…</string>
+    <string name="quick_scrub_title">Szybkie czyszczenie</string>
+    <string name="quick_scrub_status_stripping">Usuwanie metadanych z %1$d pliku(ów)…</string>
+    <string name="quick_scrub_status_poisoning">Zatruwanie metadanych dla %1$d pliku(ów)…</string>
+    <string name="quick_scrub_cancel">Anuluj</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">Wybór na mapie i dostęp do internetu</string>

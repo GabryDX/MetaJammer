@@ -54,7 +54,32 @@
     <string name="selected_mode">Seçilen: %1$s</string>
     <string name="regenerate_plans">Tüm Rastgele Planları Yeniden Oluştur</string>
     <string name="preview_of_changes">Değişikliklerin Önizlemesi</string>
+    <string name="hardware_profile_label">Donanım Profili:</string>
+    <string name="location_preset_label">Konum Önayarı:</string>
+    <string name="category_metadata_tags">Metadata Kategorileri</string>
+    <string name="tag_category_gps_title">GPS ve Konum</string>
+    <string name="tag_category_gps_sub">Koordinatları, irtifayı ve yönü kaldırın veya sahtesini oluşturun</string>
+    <string name="tag_category_device_title">Cihaz ve Donanım</string>
+    <string name="tag_category_device_sub">Kamera markası, modeli, yazılımı ve seri numaralarını kaldırın veya sahtesini oluşturun</string>
+    <string name="tag_category_datetime_title">Tarih ve Zaman Damgası</string>
+    <string name="tag_category_datetime_sub">Oluşturma ve değiştirme zaman damgalarını kaldırın veya sahtesini oluşturun</string>
+    <string name="tag_category_camera_title">Kamera Teknik Ayarları</string>
+    <string name="tag_category_camera_sub">ISO, diyafram, odak uzaklığı, flaş ve enstantane hızını kaldırın veya sahtesini oluşturun</string>
+    <string name="tag_category_comments_title">Yorumlar ve Açıklamalar</string>
+    <string name="tag_category_comments_sub">Kullanıcı yorumlarını, başlıkları ve resim açıklamalarını kaldırın veya sahtesini oluşturun</string>
     <string name="no_preview_available">Önizleme mevcut değil</string>
+    <string name="diff_filter_all">Tümü (%1$d)</string>
+    <string name="diff_filter_removed">Kaldırılanlar (%1$d)</string>
+    <string name="diff_filter_poisoned">Zehirlenenler (%1$d)</string>
+    <string name="diff_filter_kept">Korunanlar (%1$d)</string>
+    <string name="diff_badge_removed">KALDIRILDI</string>
+    <string name="diff_badge_poisoned">ZEHİRLENDİ</string>
+    <string name="diff_badge_kept">KORUNDU</string>
+    <string name="diff_before">Önce: %1$s</string>
+    <string name="diff_after">Sonra: %1$s</string>
+    <string name="diff_value_none">(Yok)</string>
+    <string name="diff_value_stripped">(Kaldırıldı)</string>
+    <string name="diff_no_tags_for_filter">Bu filtreyle eşleşen etiket yok</string>
     <string name="change_location_map">Haritada Konumu Değiştir</string>
     <string name="process_and_continue">İşle ve devam et</string>
     <string name="processing_complete">İşlem tamamlandı</string>
@@ -190,6 +215,10 @@
     <string name="output_action_shared_folder">Özel klasöre kaydet</string>
     <string name="output_action_reshare">Temizlenen dosyaları yeniden paylaş</string>
     <string name="quick_scrub_processing">Dosyalarınız kurutuluyor…</string>
+    <string name="quick_scrub_title">Hızlı Temizleme</string>
+    <string name="quick_scrub_status_stripping">%1$d dosyanın metadataları kaldırılıyor…</string>
+    <string name="quick_scrub_status_poisoning">%1$d dosyanın metadataları zehirleniyor…</string>
+    <string name="quick_scrub_cancel">İptal</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">Harita Seçici ve İnternet Erişimi</string>

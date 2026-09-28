@@ -54,7 +54,32 @@
     <string name="selected_mode">انتخاب شده: %1$s</string>
     <string name="regenerate_plans">بازسازی تمام طرح‌های تصادفی</string>
     <string name="preview_of_changes">پیش‌نمایش تغییرات</string>
+    <string name="hardware_profile_label">نمایه سخت‌افزار:</string>
+    <string name="location_preset_label">پیش‌تنظیم مکان:</string>
+    <string name="category_metadata_tags">دسته‌بندی‌های متاداده</string>
+    <string name="tag_category_gps_title">GPS و مکان</string>
+    <string name="tag_category_gps_sub">حذف یا جعل مختصات، ارتفاع و جهت</string>
+    <string name="tag_category_device_title">دستگاه و سخت‌افزار</string>
+    <string name="tag_category_device_sub">حذف یا جعل سازنده دوربین، مدل، نرم‌افزار و شماره‌های سریال</string>
+    <string name="tag_category_datetime_title">تاریخ و برچسب زمان</string>
+    <string name="tag_category_datetime_sub">حذف یا جعل برچسب‌های زمانی ایجاد و ویرایش</string>
+    <string name="tag_category_camera_title">تنظیمات فنی دوربین</string>
+    <string name="tag_category_camera_sub">حذف یا جعل ISO، دیافراگم، فاصله کانونی، فلاش و سرعت شاتر</string>
+    <string name="tag_category_comments_title">نظرات و توضیحات</string>
+    <string name="tag_category_comments_sub">حذف یا جعل نظرات کاربر، عناوین و توضیحات تصویر</string>
     <string name="no_preview_available">پیش‌نمایشی در دسترس نیست</string>
+    <string name="diff_filter_all">همه (%1$d)</string>
+    <string name="diff_filter_removed">حذف‌شده (%1$d)</string>
+    <string name="diff_filter_poisoned">مسموم‌شده (%1$d)</string>
+    <string name="diff_filter_kept">نگه‌داشته‌شده (%1$d)</string>
+    <string name="diff_badge_removed">حذف‌شده</string>
+    <string name="diff_badge_poisoned">مسموم‌شده</string>
+    <string name="diff_badge_kept">نگه‌داشته‌شده</string>
+    <string name="diff_before">قبل: %1$s</string>
+    <string name="diff_after">بعد: %1$s</string>
+    <string name="diff_value_none">(هیچ)</string>
+    <string name="diff_value_stripped">(حذف‌شده)</string>
+    <string name="diff_no_tags_for_filter">هیچ برچسبی با این فیلتر مطابقت ندارد</string>
     <string name="change_location_map">تغییر مکان روی نقشه</string>
     <string name="process_and_continue">پردازش و ادامه</string>
     <string name="processing_complete">پردازش تکمیل شد</string>
@@ -190,6 +215,10 @@
     <string name="output_action_shared_folder">ذخیره در پوشه اختصاصی</string>
     <string name="output_action_reshare">اشتراک‌گذاری مجدد فایل‌های پاکسازی شده</string>
     <string name="quick_scrub_processing">در حال خشک کردن فایل‌های شما…</string>
+    <string name="quick_scrub_title">پاک‌سازی سریع</string>
+    <string name="quick_scrub_status_stripping">در حال حذف متاداده از %1$d پرونده…</string>
+    <string name="quick_scrub_status_poisoning">در حال مسموم‌سازی متاداده برای %1$d پرونده…</string>
+    <string name="quick_scrub_cancel">لغو</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">انتخابگر نقشه و دسترسی به اینترنت</string>

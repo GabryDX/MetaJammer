@@ -54,7 +54,32 @@
     <string name="selected_mode">Επιλέχθηκε: %1$s</string>
     <string name="regenerate_plans">Αναγέννηση όλων των τυχαίων σχεδίων</string>
     <string name="preview_of_changes">Προεπισκόπηση αλλαγών</string>
+    <string name="hardware_profile_label">Προφίλ υλικού:</string>
+    <string name="location_preset_label">Προκαθορισμένη τοποθεσία:</string>
+    <string name="category_metadata_tags">Κατηγορίες μεταδεδομένων</string>
+    <string name="tag_category_gps_title">GPS &amp; Τοποθεσία</string>
+    <string name="tag_category_gps_sub">Αφαίρεση ή παραποίηση συντεταγμένων, υψομέτρου και πορείας</string>
+    <string name="tag_category_device_title">Συσκευή &amp; Υλικό</string>
+    <string name="tag_category_device_sub">Αφαίρεση ή παραποίηση κατασκευαστή κάμερας, μοντέλου, λογισμικού και σειριακών αριθμών</string>
+    <string name="tag_category_datetime_title">Ημερομηνία &amp; Χρονική σήμανση</string>
+    <string name="tag_category_datetime_sub">Αφαίρεση ή παραποίηση χρονικών σημάνσεων δημιουργίας και τροποποίησης</string>
+    <string name="tag_category_camera_title">Τεχνικές ρυθμίσεις κάμερας</string>
+    <string name="tag_category_camera_sub">Αφαίρεση ή παραποίηση ISO, διαφράγματος, εστιακής απόστασης, φλας και ταχύτητας κλείστρου</string>
+    <string name="tag_category_comments_title">Σχόλια &amp; Περιγραφές</string>
+    <string name="tag_category_comments_sub">Αφαίρεση ή παραποίηση σχολίων χρήστη, τίτλων και περιγραφών εικόνας</string>
     <string name="no_preview_available">Μη διαθέσιμη προεπισκόπηση</string>
+    <string name="diff_filter_all">Όλα (%1$d)</string>
+    <string name="diff_filter_removed">Αφαιρέθηκαν (%1$d)</string>
+    <string name="diff_filter_poisoned">Δηλητηριάστηκαν (%1$d)</string>
+    <string name="diff_filter_kept">Διατηρήθηκαν (%1$d)</string>
+    <string name="diff_badge_removed">ΑΦΑΙΡΕΘΗΚΕ</string>
+    <string name="diff_badge_poisoned">ΔΗΛΗΤΗΡΙΑΣΤΗΚΕ</string>
+    <string name="diff_badge_kept">ΔΙΑΤΗΡΗΘΗΚΕ</string>
+    <string name="diff_before">Πριν: %1$s</string>
+    <string name="diff_after">Μετά: %1$s</string>
+    <string name="diff_value_none">(Κανένα)</string>
+    <string name="diff_value_stripped">(Αφαιρέθηκε)</string>
+    <string name="diff_no_tags_for_filter">Δεν υπάρχουν ετικέτες που να ταιριάζουν με αυτό το φίλτρο</string>
     <string name="change_location_map">Αλλαγή τοποθεσίας στον χάρτη</string>
     <string name="process_and_continue">Επεξεργασία και συνέχεια</string>
     <string name="processing_complete">Η επεξεργασία ολοκληρώθηκε</string>
@@ -190,6 +215,10 @@
     <string name="output_action_shared_folder">Αποθήκευση στον αποκλειστικό φάκελο</string>
     <string name="output_action_reshare">Εκ νέου κοινοποίηση καθαρισμένων αρχείων</string>
     <string name="quick_scrub_processing">Στέγνωμα των αρχείων σας…</string>
+    <string name="quick_scrub_title">Γρήγορος καθαρισμός</string>
+    <string name="quick_scrub_status_stripping">Αφαίρεση μεταδεδομένων από %1$d αρχείο(-α)…</string>
+    <string name="quick_scrub_status_poisoning">Δηλητηρίαση μεταδεδομένων για %1$d αρχείο(-α)…</string>
+    <string name="quick_scrub_cancel">Ακύρωση</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">Επιλογέας χάρτη &amp; Πρόσβαση στο διαδίκτυο</string>
