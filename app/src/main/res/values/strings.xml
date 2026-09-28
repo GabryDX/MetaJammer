@@ -112,6 +112,7 @@
     <string name="choose_save_or_share">Choose whether to save or share the processed result.</string>
     <string name="save_to_default_folder">Save to Default Folder</string>
     <string name="save_to_custom_folder">Save to Custom Folder</string>
+    <string name="back_to_home">Back to Home</string>
 
     <!-- SettingsScreen -->
     <string name="settings">Settings</string>

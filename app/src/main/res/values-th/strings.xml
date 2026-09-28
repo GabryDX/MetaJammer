@@ -112,6 +112,7 @@
     <string name="choose_save_or_share">เลือกว่าจะบันทึกหรือแชร์ผลลัพธ์</string>
     <string name="save_to_default_folder">บันทึกลงในโฟลเดอร์เริ่มต้น</string>
     <string name="save_to_custom_folder">บันทึกลงในโฟลเดอร์ที่กำหนดเอง</string>
+    <string name="back_to_home">กลับไปหน้าหลัก</string>
 
     <!-- SettingsScreen -->
     <string name="settings">การตั้งค่า</string>

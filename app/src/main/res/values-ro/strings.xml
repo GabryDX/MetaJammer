@@ -112,6 +112,7 @@
     <string name="choose_save_or_share">Alege dacă dorești să salvezi sau să partajezi rezultatul procesat.</string>
     <string name="save_to_default_folder">Salvare în dosarul implicit</string>
     <string name="save_to_custom_folder">Salvare în dosar personalizat</string>
+    <string name="back_to_home">Înapoi la pagina principală</string>
 
     <!-- SettingsScreen -->
     <string name="settings">Setări</string>

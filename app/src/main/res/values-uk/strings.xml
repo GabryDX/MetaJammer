@@ -112,6 +112,7 @@
     <string name="choose_save_or_share">Виберіть, зберегти чи надіслати оброблений результат.</string>
     <string name="save_to_default_folder">Зберегти в папку за замовчуванням</string>
     <string name="save_to_custom_folder">Зберегти в спеціальну папку</string>
+    <string name="back_to_home">Повернутися на головну</string>
 
     <!-- SettingsScreen -->
     <string name="settings">Налаштування</string>

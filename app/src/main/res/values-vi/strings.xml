@@ -112,6 +112,7 @@
     <string name="choose_save_or_share">Chọn lưu hoặc chia sẻ kết quả đã xử lý.</string>
     <string name="save_to_default_folder">Lưu vào thư mục mặc định</string>
     <string name="save_to_custom_folder">Lưu vào thư mục tùy chỉnh</string>
+    <string name="back_to_home">Quay lại Trang chủ</string>
 
     <!-- SettingsScreen -->
     <string name="settings">Cài đặt</string>

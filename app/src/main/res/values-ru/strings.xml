@@ -112,6 +112,7 @@
     <string name="choose_save_or_share">Выберите, сохранить или отправить обработанный результат.</string>
     <string name="save_to_default_folder">Сохранить в папку по умолчанию</string>
     <string name="save_to_custom_folder">Сохранить в пользовательскую папку</string>
+    <string name="back_to_home">Вернуться на главную</string>
 
     <!-- SettingsScreen -->
     <string name="settings">Настройки</string>

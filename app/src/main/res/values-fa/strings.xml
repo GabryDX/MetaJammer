@@ -112,6 +112,7 @@
     <string name="choose_save_or_share">انتخاب کنید که می‌خواهید نتیجه پردازش شده را ذخیره کنید یا به اشتراک بگذارید.</string>
     <string name="save_to_default_folder">ذخیره در پوشه پیش‌فرض</string>
     <string name="save_to_custom_folder">ذخیره در پوشه سفارشی</string>
+    <string name="back_to_home">بازگشت به خانه</string>
 
     <!-- SettingsScreen -->
     <string name="settings">تنظیمات</string>

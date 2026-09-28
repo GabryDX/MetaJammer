@@ -112,6 +112,7 @@
     <string name="choose_save_or_share">Scegli se salvare o condividere il risultato elaborato.</string>
     <string name="save_to_default_folder">Salva nella cartella predefinita</string>
     <string name="save_to_custom_folder">Salva in una cartella personalizzata</string>
+    <string name="back_to_home">Torna alla home</string>
 
     <!-- SettingsScreen -->
     <string name="settings">Impostazioni</string>

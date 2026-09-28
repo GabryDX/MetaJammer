@@ -112,6 +112,7 @@
     <string name="choose_save_or_share">اختر ما إذا كنت تريد الحفظ أو مشاركة النتيجة المعالجة.</string>
     <string name="save_to_default_folder">حفظ في المجلد الافتراضي</string>
     <string name="save_to_custom_folder">حفظ في مجلد مخصص</string>
+    <string name="back_to_home">العودة إلى الرئيسية</string>
 
     <!-- SettingsScreen -->
     <string name="settings">الإعدادات</string>

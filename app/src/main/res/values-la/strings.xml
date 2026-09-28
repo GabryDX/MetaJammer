@@ -112,6 +112,7 @@
     <string name="choose_save_or_share">Elige utrum servare an communicare vis.</string>
     <string name="save_to_default_folder">In Capsa Defalta Servare</string>
     <string name="save_to_custom_folder">In Capsa Propria Servare</string>
+    <string name="back_to_home">Reditus ad Initium</string>
 
     <!-- SettingsScreen -->
     <string name="settings">Optiones</string>

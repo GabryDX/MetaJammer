@@ -112,6 +112,7 @@
     <string name="choose_save_or_share">चुनें कि प्रोसेस किए गए परिणाम को सहेजना है या साझा करना है।</string>
     <string name="save_to_default_folder">डिफ़ॉल्ट फ़ोल्डर में सहेजें</string>
     <string name="save_to_custom_folder">कस्टम फ़ोल्डर में सहेजें</string>
+    <string name="back_to_home">होम पर वापस जाएं</string>
 
     <!-- SettingsScreen -->
     <string name="settings">सेटिंग्स</string>

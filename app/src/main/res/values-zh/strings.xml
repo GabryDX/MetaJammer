@@ -112,6 +112,7 @@
     <string name="choose_save_or_share">选择是保存还是分享处理结果。</string>
     <string name="save_to_default_folder">保存到默认文件夹</string>
     <string name="save_to_custom_folder">保存到自定义文件夹</string>
+    <string name="back_to_home">返回首页</string>
 
     <!-- SettingsScreen -->
     <string name="settings">设置</string>

@@ -112,6 +112,7 @@
     <string name="choose_save_or_share">Pilih apakah ingin menyimpan atau membagikan hasil proses.</string>
     <string name="save_to_default_folder">Simpan ke Folder Default</string>
     <string name="save_to_custom_folder">Simpan ke Folder Kustom</string>
+    <string name="back_to_home">Kembali ke Beranda</string>
 
     <!-- SettingsScreen -->
     <string name="settings">Pengaturan</string>

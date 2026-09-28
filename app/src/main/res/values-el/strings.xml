@@ -112,6 +112,7 @@
     <string name="choose_save_or_share">Επιλέξτε εάν θέλετε να αποθηκεύσετε ή να μοιραστείτε το επεξεργασμένο αποτέλεσμα.</string>
     <string name="save_to_default_folder">Αποθήκευση στον προεπιλεγμένο φάκελο</string>
     <string name="save_to_custom_folder">Αποθήκευση σε προσαρμοσμένο φάκελο</string>
+    <string name="back_to_home">Επιστροφή στην αρχική</string>
 
     <!-- SettingsScreen -->
     <string name="settings">Ρυθμίσεις</string>

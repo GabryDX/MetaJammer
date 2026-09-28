@@ -112,6 +112,7 @@
     <string name="choose_save_or_share">Wybierz, czy chcesz zapisać, czy udostępnić przetworzony wynik.</string>
     <string name="save_to_default_folder">Zapisz w domyślnym folderze</string>
     <string name="save_to_custom_folder">Zapisz w niestandardowym folderze</string>
+    <string name="back_to_home">Wróć do strony głównej</string>
 
     <!-- SettingsScreen -->
     <string name="settings">Ustawienia</string>

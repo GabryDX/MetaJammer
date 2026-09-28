@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -248,6 +249,20 @@ fun MetaJammerApp(
                         }
                     },
                     actions = {
+                        if (isOutput) {
+                            IconButton(onClick = {
+                                viewModel.clearSelection()
+                                navController.navigate(Screen.Home) {
+                                    popUpTo<Screen.Home> { inclusive = false }
+                                    launchSingleTop = true
+                                }
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Default.Home,
+                                    contentDescription = stringResource(R.string.back_to_home)
+                                )
+                            }
+                        }
                         if (isHome && appSettings.enableProcessingHistory && appSettings.showHistoryShortcut) {
                             IconButton(onClick = { navController.navigate(Screen.History) }) {
                                 Icon(
@@ -451,6 +466,13 @@ fun MetaJammerApp(
                                         mimeType = if (allSameMime) firstProcessedMime else "*/*"
                                     )
                                 }
+                            }
+                        },
+                        onBackToHome = {
+                            viewModel.clearSelection()
+                            navController.navigate(Screen.Home) {
+                                popUpTo<Screen.Home> { inclusive = false }
+                                launchSingleTop = true
                             }
                         },
                         modifier = Modifier.fillMaxSize()

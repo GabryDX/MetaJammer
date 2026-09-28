@@ -112,6 +112,7 @@
     <string name="choose_save_or_share">処理結果を保存するか共有するかを選択してください。</string>
     <string name="save_to_default_folder">デフォルトフォルダに保存</string>
     <string name="save_to_custom_folder">カスタムフォルダに保存</string>
+    <string name="back_to_home">ホームに戻る</string>
 
     <!-- SettingsScreen -->
     <string name="settings">設定</string>

@@ -112,6 +112,7 @@
     <string name="choose_save_or_share">Wähle, ob das verarbeitete Ergebnis gespeichert oder geteilt werden soll.</string>
     <string name="save_to_default_folder">In Standardordner speichern</string>
     <string name="save_to_custom_folder">In benutzerdefiniertem Ordner speichern</string>
+    <string name="back_to_home">Zurück zur Startseite</string>
 
     <!-- SettingsScreen -->
     <string name="settings">Einstellungen</string>

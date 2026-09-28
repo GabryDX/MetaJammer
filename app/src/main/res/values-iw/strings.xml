@@ -112,6 +112,7 @@
     <string name="choose_save_or_share">בחר אם לשמור או לשתף את התוצאה המעובדת.</string>
     <string name="save_to_default_folder">שמור לתיקיית ברירת המחדל</string>
     <string name="save_to_custom_folder">שמור לתיקייה מותאמת אישית</string>
+    <string name="back_to_home">חזרה לדף הבית</string>
 
     <!-- SettingsScreen -->
     <string name="settings">הגדרות</string>

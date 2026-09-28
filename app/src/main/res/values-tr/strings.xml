@@ -112,6 +112,7 @@
     <string name="choose_save_or_share">İşlenen sonucun kaydedilmesini mi yoksa paylaşılmasını mı istediğinizi seçin.</string>
     <string name="save_to_default_folder">Varsayılan Klasöre Kaydet</string>
     <string name="save_to_custom_folder">Özel Klasöre Kaydet</string>
+    <string name="back_to_home">Ana Sayfaya Dön</string>
 
     <!-- SettingsScreen -->
     <string name="settings">Ayarlar</string>
