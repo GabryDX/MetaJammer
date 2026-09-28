@@ -110,13 +110,41 @@ class QuickScrubHandlerTest {
             onStatusMessage = { statusMessage = it }
         )
 
-        assertNotNull("Prepared share files should not be null", readyFiles)
-        assertEquals(1, readyFiles?.size)
+        val files = readyFiles
+        assertNotNull("Prepared share files should not be null", files)
+        assertEquals(1, files!!.size)
         assertEquals("image/jpeg", readyMime)
-        assertTrue(readyFiles!![0].exists())
+        assertTrue(files[0].exists())
 
         // Verify EXIF metadata was stripped
-        val cleanedExif = ExifInterface(readyFiles!![0].absolutePath)
+        val cleanedExif = ExifInterface(files[0].absolutePath)
         assertNull("Camera Make should be stripped in quick scrub", cleanedExif.getAttribute(ExifInterface.TAG_MAKE))
+    }
+
+    @Test
+    fun testExecuteQuickScrubCleansUpStaleOutgoingDirectories() = runTest {
+        // Pre-create a stale outgoing folder with a leftover file
+        val sharedDir = File(context.cacheDir, "shared")
+        val staleDir = File(sharedDir, "outgoing_stale_12345")
+        staleDir.mkdirs()
+        val staleFile = File(staleDir, "leftover.jpg")
+        staleFile.writeBytes(byteArrayOf(1, 2, 3))
+        assertTrue("Stale directory must exist prior to quick scrub", staleDir.exists())
+
+        val file = createTestImage()
+        val selectedFile = SelectedFile(uri = file.toUri(), displayName = file.name, mimeType = "image/jpeg")
+        val settings = AppSettings(
+            sharedFilesProcessingMode = ProcessingMode.REMOVE_METADATA,
+            sharedFilesOutputAction = SharedInputOutputAction.SHARE_TO_ANOTHER_APP
+        )
+
+        handler.executeQuickScrub(
+            files = listOf(selectedFile),
+            appSettings = settings,
+            onShareFilesReady = { _, _ -> },
+            onStatusMessage = { }
+        )
+
+        assertFalse("Stale outgoing directory must be cleaned up during preparation", staleDir.exists())
     }
 }
