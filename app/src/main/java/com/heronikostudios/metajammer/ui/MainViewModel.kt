@@ -82,7 +82,7 @@ class MainViewModel(
 
     // Processing state
     val metadataPreview: StateFlow<Map<Uri, List<MetadataEntry>>> = processingViewModel.metadataPreview
-    val changePreview: StateFlow<Map<Uri, List<MetadataEntry>>> = processingViewModel.changePreview
+    val changePreview: StateFlow<Map<Uri, List<MetadataDiffEntry>>> = processingViewModel.changePreview
     val replacementPlans: StateFlow<Map<Uri, MetadataReplacementPlan>> = processingViewModel.replacementPlans
     val selectedMode: StateFlow<ProcessingMode?> = processingViewModel.selectedMode
     val selectedProfile: StateFlow<PoisoningProfile> = processingViewModel.selectedProfile

@@ -53,8 +53,8 @@ class ProcessingViewModel(
     private val _metadataPreview = MutableStateFlow<Map<Uri, List<MetadataEntry>>>(emptyMap())
     val metadataPreview: StateFlow<Map<Uri, List<MetadataEntry>>> = _metadataPreview.asStateFlow()
 
-    private val _changePreview = MutableStateFlow<Map<Uri, List<MetadataEntry>>>(emptyMap())
-    val changePreview: StateFlow<Map<Uri, List<MetadataEntry>>> = _changePreview.asStateFlow()
+    private val _changePreview = MutableStateFlow<Map<Uri, List<MetadataDiffEntry>>>(emptyMap())
+    val changePreview: StateFlow<Map<Uri, List<MetadataDiffEntry>>> = _changePreview.asStateFlow()
 
     private val _replacementPlans = MutableStateFlow<Map<Uri, MetadataReplacementPlan>>(emptyMap())
     val replacementPlans: StateFlow<Map<Uri, MetadataReplacementPlan>> = _replacementPlans.asStateFlow()
@@ -219,25 +219,31 @@ class ProcessingViewModel(
                 val currentMetadata = _metadataPreview.value[file.uri].orEmpty()
                 val currentMap = currentMetadata.associate { it.key to it.value }
 
-                val entries = when (mode) {
+                val entries: List<MetadataDiffEntry> = when (mode) {
                     ProcessingMode.REMOVE_METADATA -> {
-                        if (currentMetadata.isEmpty()) {
-                            listOf(MetadataEntry("Info", "No metadata would be removed"))
-                        } else {
-                            currentMetadata.map { entry ->
-                                val willStrip = com.heronikostudios.metajammer.metadata.ImageMetadataProcessor.shouldStripTag(
-                                    entry.key,
-                                    appSettings.stripGps,
-                                    appSettings.stripDeviceModel,
-                                    appSettings.stripDateTime,
-                                    appSettings.stripCameraSettings,
-                                    appSettings.stripComments
+                        currentMetadata.map { entry ->
+                            val willStrip = com.heronikostudios.metajammer.metadata.ImageMetadataProcessor.shouldStripTag(
+                                entry.key,
+                                appSettings.stripGps,
+                                appSettings.stripDeviceModel,
+                                appSettings.stripDateTime,
+                                appSettings.stripCameraSettings,
+                                appSettings.stripComments
+                            )
+                            if (willStrip) {
+                                MetadataDiffEntry(
+                                    key = entry.key,
+                                    originalValue = entry.value,
+                                    newValue = null,
+                                    status = MetadataDiffStatus.REMOVED
                                 )
-                                if (willStrip) {
-                                    MetadataEntry(entry.key, "${entry.value}  →  [REMOVED]")
-                                } else {
-                                    MetadataEntry(entry.key, "${entry.value}  (KEPT)")
-                                }
+                            } else {
+                                MetadataDiffEntry(
+                                    key = entry.key,
+                                    originalValue = entry.value,
+                                    newValue = entry.value,
+                                    status = MetadataDiffStatus.KEPT
+                                )
                             }
                         }
                     }
@@ -245,7 +251,7 @@ class ProcessingViewModel(
                     ProcessingMode.POISON_METADATA -> {
                         val plan = _replacementPlans.value[file.uri]
                         if (plan == null) {
-                            listOf(MetadataEntry("Info", "No replacement plan available"))
+                            emptyList()
                         } else {
                             val targetMap = linkedMapOf<String, String>()
                             val mime = file.mimeType ?: ""
@@ -316,13 +322,24 @@ class ProcessingViewModel(
                                     }
                                 }
                                 mime.startsWith("video/") || mime.startsWith("audio/") -> {
-                                    targetMap["Location"] = "${plan.latitude}, ${plan.longitude}"
+                                    if (appSettings.stripGps) {
+                                        targetMap["Location"] = "${plan.latitude}, ${plan.longitude}"
+                                    } else {
+                                        currentMap["Location"]?.let { targetMap["Location"] = it }
+                                    }
                                 }
                                 mime == "application/pdf" -> {
-                                    plan.pdfTitle?.let { targetMap["Title"] = it }
-                                    plan.author?.let { targetMap["Author"] = it }
-                                    plan.creator?.let { targetMap["Creator"] = it }
-                                    plan.producer?.let { targetMap["Producer"] = it }
+                                    if (appSettings.stripComments) {
+                                        plan.pdfTitle?.let { targetMap["Title"] = it }
+                                        plan.author?.let { targetMap["Author"] = it }
+                                        plan.creator?.let { targetMap["Creator"] = it }
+                                        plan.producer?.let { targetMap["Producer"] = it }
+                                    } else {
+                                        currentMap["Title"]?.let { targetMap["Title"] = it }
+                                        currentMap["Author"]?.let { targetMap["Author"] = it }
+                                        currentMap["Creator"]?.let { targetMap["Creator"] = it }
+                                        currentMap["Producer"]?.let { targetMap["Producer"] = it }
+                                    }
                                 }
                             }
 
@@ -336,13 +353,17 @@ class ProcessingViewModel(
                             }.map { key ->
                                 val oldValue = currentMap[key]
                                 val newValue = targetMap[key]
-                                val value = when {
-                                    oldValue == null && newValue != null -> "[ADDED] $newValue"
-                                    oldValue != null && newValue == null -> "[REMOVED] $oldValue"
-                                    oldValue == newValue -> "[UNCHANGED] ${oldValue ?: ""}"
-                                    else -> "[CHANGED] $oldValue  →  $newValue"
+                                val status = when {
+                                    oldValue != null && newValue == null -> MetadataDiffStatus.REMOVED
+                                    oldValue != null && newValue != null && oldValue == newValue -> MetadataDiffStatus.KEPT
+                                    else -> MetadataDiffStatus.POISONED
                                 }
-                                MetadataEntry(key, value)
+                                MetadataDiffEntry(
+                                    key = key,
+                                    originalValue = oldValue,
+                                    newValue = newValue,
+                                    status = status
+                                )
                             }
                         }
                     }
