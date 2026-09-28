@@ -22,11 +22,12 @@ Description: |-
     - Interactive Map Picker: Visually choose a "fake" location on an OpenStreetMap interface.
     - Quick Scrub & Share: Share a file to MetaJammer, let it auto-process, and immediately re-open the share sheet.
     - Background Batch Processing: Reliable processing for 50+ high-resolution files at once.
-    - Multi-Format Support: JPEG, WebP, HEIF/HEIC, MP4, MOV, and PDF.
+    - Multi-Format Support: JPEG, PNG, WebP, HEIF/HEIC, SVG, MP4, MOV, and PDF.
 
     Privacy & Security:
     - Zero Broad Permissions: The app requires NO storage permissions. It uses modern Scoped Storage and SAF.
     - 100% FOSS: Built entirely with Free and Open Source Software. No proprietary SDKs or trackers.
+    - Fail-Closed Processing: Processing failures abort immediately to prevent accidental leaks.
     - Opt-in Internet: Internet access is strictly restricted to the optional Map Picker.
 
 RepoType: git
