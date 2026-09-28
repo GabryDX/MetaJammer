@@ -24,7 +24,9 @@ class PdfMetadataProcessor(
 ) {
 
     private fun ensureInitialized() {
-        PDFBoxResourceLoader.init(context)
+        if (!PDFBoxResourceLoader.isReady()) {
+            PDFBoxResourceLoader.init(context)
+        }
     }
 
     suspend fun readMetadata(uri: Uri): List<MetadataEntry> = withContext(Dispatchers.IO) {
@@ -33,7 +35,7 @@ class PdfMetadataProcessor(
 
         runCatching {
             context.contentResolver.openInputStream(uri)?.use { inputStream ->
-                PDDocument.load(inputStream, MemoryUsageSetting.setupTempFileOnly()).use { document ->
+                PDDocument.load(inputStream, MemoryUsageSetting.setupMixed(10L * 1024 * 1024)).use { document ->
                     entries.add(MetadataEntry("Page Count", document.numberOfPages.toString()))
                     
                     val info = document.documentInformation
@@ -57,7 +59,7 @@ class PdfMetadataProcessor(
         val outputFile = fileRepository.createCacheFile(prefix = "pdf_poisoned_", suffix = ".pdf")
         try {
             context.contentResolver.openInputStream(inputUri)?.use { inputStream ->
-                PDDocument.load(inputStream, MemoryUsageSetting.setupTempFileOnly()).use { document ->
+                PDDocument.load(inputStream, MemoryUsageSetting.setupMixed(10L * 1024 * 1024)).use { document ->
                     // Replace with fake data
                     val info = PDDocumentInformation().apply {
                         title = plan.pdfTitle
@@ -87,7 +89,7 @@ class PdfMetadataProcessor(
         val outputFile = fileRepository.createCacheFile(prefix = "pdf_clean_", suffix = ".pdf")
         try {
             context.contentResolver.openInputStream(inputUri)?.use { inputStream ->
-                PDDocument.load(inputStream, MemoryUsageSetting.setupTempFileOnly()).use { document ->
+                PDDocument.load(inputStream, MemoryUsageSetting.setupMixed(10L * 1024 * 1024)).use { document ->
                     // Overwrite metadata with a blank information dictionary
                     document.documentInformation = PDDocumentInformation()
                     document.documentCatalog.metadata = null

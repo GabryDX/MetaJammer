@@ -302,11 +302,35 @@ class ImageMetadataProcessor(
         stripCameraSettings: Boolean = true,
         stripComments: Boolean = true
     ): File {
+        val extension = if (mimeType != null) {
+            fileRepository.getExtensionFromMime(mimeType)
+        } else {
+            fileRepository.getExtension(inputUri)
+        }
+
+        // Fast-path for PNG images: strip chunks directly in memory without ExifInterface roundtrips
+        if (mimeType == "image/png" || extension.equals(".png", ignoreCase = true)) {
+            val stripped = runCatching {
+                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.use { it.readBytes() }?.let { stripPngChunks(it) }
+            }.getOrNull()
+
+            if (stripped != null) {
+                val outputFile = fileRepository.createSharedTempFile("img_clean_", ".png")
+                outputFile.writeBytes(stripped)
+                return outputFile
+            }
+        }
+
+        val allCategories = stripGps && stripDeviceModel && stripDateTime && stripCameraSettings && stripComments
+        val tagsToStrip = if (allCategories) {
+            ALL_SUPPORTED_TAGS
+        } else {
+            ALL_SUPPORTED_TAGS.filter { shouldStripTag(it, stripGps, stripDeviceModel, stripDateTime, stripCameraSettings, stripComments) }
+        }
+
         return processImage(inputUri, "img_clean_", keepOrientation, thumbnailHandling, mimeType) { exif ->
-            ALL_SUPPORTED_TAGS.forEach { tag ->
-                if (shouldStripTag(tag, stripGps, stripDeviceModel, stripDateTime, stripCameraSettings, stripComments)) {
-                    exif.setAttribute(tag, null)
-                }
+            tagsToStrip.forEach { tag ->
+                exif.setAttribute(tag, null)
             }
         }
     }
@@ -326,12 +350,17 @@ class ImageMetadataProcessor(
         stripCameraSettings: Boolean = true,
         stripComments: Boolean = true
     ): File {
+        val allCategories = stripGps && stripDeviceModel && stripDateTime && stripCameraSettings && stripComments
+        val tagsToStrip = if (allCategories) {
+            ALL_SUPPORTED_TAGS
+        } else {
+            ALL_SUPPORTED_TAGS.filter { shouldStripTag(it, stripGps, stripDeviceModel, stripDateTime, stripCameraSettings, stripComments) }
+        }
+
         return processImage(inputUri, "img_poisoned_", keepOrientation, thumbnailHandling, mimeType) { exif ->
             // Clear only categories marked for stripping or poisoning
-            ALL_SUPPORTED_TAGS.forEach { tag ->
-                if (shouldStripTag(tag, stripGps, stripDeviceModel, stripDateTime, stripCameraSettings, stripComments)) {
-                    exif.setAttribute(tag, null)
-                }
+            tagsToStrip.forEach { tag ->
+                exif.setAttribute(tag, null)
             }
 
             // Set fake values only for categories marked for poisoning

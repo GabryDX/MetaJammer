@@ -66,6 +66,8 @@ android {
             excludes += "META-INF/ASL2.0"
             excludes += "META-INF/*.kotlin_module"
             excludes += "org/bouncycastle/pqc/**"
+            excludes += "org/bouncycastle/x509/*.properties"
+            excludes += "okhttp3/internal/publicsuffix/**"
         }
     }
 

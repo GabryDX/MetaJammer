@@ -590,7 +590,14 @@ class ProcessingViewModel(
                 async {
                     val selectedFile = selectedFiles[index]
                     val niceName = buildOutputName(selectedFile.displayName, appSettings)
-                    val sharedFile = File(sharedDir, niceName)
+                    val baseName = if (niceName.contains(".")) niceName.substringBeforeLast(".") else niceName
+                    val ext = if (niceName.contains(".")) ".${niceName.substringAfterLast(".")}" else ""
+                    val uniqueName = if (index > 0 && selectedFiles.take(index).any { buildOutputName(it.displayName, appSettings) == niceName }) {
+                        "${baseName}_$index$ext"
+                    } else {
+                        niceName
+                    }
+                    val sharedFile = File(sharedDir, uniqueName)
 
                     val success = runCatching {
                         if (!file.renameTo(sharedFile)) {
