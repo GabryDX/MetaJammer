@@ -162,4 +162,27 @@ class ProcessingViewModelTest {
         assertTrue(viewModel.replacementPlans.value.isEmpty())
         assertNull(viewModel.selectedMode.value)
     }
+
+    @Test
+    fun testHasSavedOrSharedLifecycle() {
+        assertFalse("Initial hasSavedOrShared should be false", viewModel.hasSavedOrShared.value)
+
+        viewModel.setHasSavedOrShared(true)
+        assertTrue("hasSavedOrShared should be true after setting to true", viewModel.hasSavedOrShared.value)
+
+        viewModel.clearProcessedFiles()
+        assertFalse("hasSavedOrShared should reset to false after clearProcessedFiles", viewModel.hasSavedOrShared.value)
+
+        viewModel.setHasSavedOrShared(true)
+        assertTrue(viewModel.hasSavedOrShared.value)
+
+        viewModel.clearAllMetadataAndPlans()
+        assertFalse("hasSavedOrShared should reset to false after clearAllMetadataAndPlans", viewModel.hasSavedOrShared.value)
+    }
+
+    @Test
+    fun testClearMessageResetsMessage() {
+        viewModel.clearMessage()
+        assertNull(viewModel.message.value)
+    }
 }

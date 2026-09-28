@@ -80,6 +80,9 @@ class ProcessingViewModel(
     private val _message = MutableStateFlow<String?>(null)
     val message: StateFlow<String?> = _message.asStateFlow()
 
+    private val _hasSavedOrShared = MutableStateFlow(false)
+    val hasSavedOrShared: StateFlow<Boolean> = _hasSavedOrShared.asStateFlow()
+
     fun loadMetadataPreview(files: List<SelectedFile>) {
         viewModelScope.launch {
             runCatching {
@@ -398,6 +401,7 @@ class ProcessingViewModel(
 
         viewModelScope.launch {
             _processing.value = true
+            _hasSavedOrShared.value = false
             runCatching {
                 withContext(Dispatchers.IO) {
                     coroutineScope {
@@ -422,6 +426,7 @@ class ProcessingViewModel(
                 }
             }.onSuccess {
                 _processedFiles.value = it
+                _hasSavedOrShared.value = false
                 _message.value = "Processing complete"
                 onSuccess?.invoke()
             }.onFailure {
@@ -513,6 +518,7 @@ class ProcessingViewModel(
             }.awaitAll().filterNotNull()
         }
         if (results.isNotEmpty()) {
+            _hasSavedOrShared.value = true
             _message.value = "Saved ${results.size} file(s)"
         } else if (_processedFiles.value.isNotEmpty()) {
             _message.value = "Failed to save files"
@@ -547,6 +553,7 @@ class ProcessingViewModel(
             }.awaitAll().filterNotNull()
         }
         if (results.isNotEmpty()) {
+            _hasSavedOrShared.value = true
             _message.value = "Saved ${results.size} file(s) to custom folder"
         } else if (_processedFiles.value.isNotEmpty()) {
             _message.value = "Failed to save files"
@@ -561,7 +568,11 @@ class ProcessingViewModel(
         val processedFilesList = pairs.map { it.second }
         val selectedFilesList = pairs.map { it.first }
 
-        prepareFilesForSharing(processedFilesList, selectedFilesList, appSettings)
+        val prepared = prepareFilesForSharing(processedFilesList, selectedFilesList, appSettings)
+        if (prepared.isNotEmpty()) {
+            _hasSavedOrShared.value = true
+        }
+        prepared
     }
 
     suspend fun prepareFilesForSharing(
@@ -642,6 +653,7 @@ class ProcessingViewModel(
         val files = _processedFiles.value
         _processedFiles.value = emptyList()
         _workInfo.value = null
+        _hasSavedOrShared.value = false
 
         viewModelScope.launch(Dispatchers.IO) {
             files.forEach { (_, file) -> runCatching { file.delete() } }
@@ -667,6 +679,11 @@ class ProcessingViewModel(
         _changePreview.value = emptyMap()
         _replacementPlans.value = emptyMap()
         _selectedMode.value = null
+        _hasSavedOrShared.value = false
+    }
+
+    fun setHasSavedOrShared(value: Boolean) {
+        _hasSavedOrShared.value = value
     }
 
     fun clearMessage() {

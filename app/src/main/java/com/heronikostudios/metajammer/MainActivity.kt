@@ -169,6 +169,11 @@ fun MetaJammerApp(
         onExitApp()
     }
 
+    BackHandler(enabled = isOutput) {
+        viewModel.clearMessage()
+        navController.popBackStack()
+    }
+
     val sharedSignature = remember(sharedUris) {
         if (sharedUris.isEmpty()) null else sharedUris.joinToString(separator = "|") { it.toString() }
     }
@@ -237,6 +242,9 @@ fun MetaJammerApp(
                             }
                         } else if (!isQuickScrub && !isOnboarding) {
                             IconButton(onClick = {
+                                if (isOutput) {
+                                    viewModel.clearMessage()
+                                }
                                 if (!navController.popBackStack()) {
                                     onExitApp()
                                 }
@@ -251,10 +259,11 @@ fun MetaJammerApp(
                     actions = {
                         if (isOutput) {
                             IconButton(onClick = {
-                                viewModel.clearSelection()
-                                navController.navigate(Screen.Home) {
-                                    popUpTo<Screen.Home> { inclusive = false }
-                                    launchSingleTop = true
+                                viewModel.navigateBackToHomeFromOutput {
+                                    navController.navigate(Screen.Home) {
+                                        popUpTo<Screen.Home> { inclusive = false }
+                                        launchSingleTop = true
+                                    }
                                 }
                             }) {
                                 Icon(
@@ -469,10 +478,11 @@ fun MetaJammerApp(
                             }
                         },
                         onBackToHome = {
-                            viewModel.clearSelection()
-                            navController.navigate(Screen.Home) {
-                                popUpTo<Screen.Home> { inclusive = false }
-                                launchSingleTop = true
+                            viewModel.navigateBackToHomeFromOutput {
+                                navController.navigate(Screen.Home) {
+                                    popUpTo<Screen.Home> { inclusive = false }
+                                    launchSingleTop = true
+                                }
                             }
                         },
                         modifier = Modifier.fillMaxSize()

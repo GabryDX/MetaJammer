@@ -15,12 +15,14 @@ import com.heronikostudios.metajammer.data.SettingsRepository
 import com.heronikostudios.metajammer.domain.model.*
 import com.heronikostudios.metajammer.domain.usecase.ProcessFileUseCase
 import com.heronikostudios.metajammer.domain.usecase.SaveFileUseCase
+import androidx.core.app.NotificationManagerCompat
 import com.heronikostudios.metajammer.ui.history.HistoryViewModel
 import com.heronikostudios.metajammer.ui.home.HomeViewModel
 import com.heronikostudios.metajammer.ui.processing.ProcessingViewModel
 import com.heronikostudios.metajammer.ui.quickscrub.QuickScrubHandler
 import com.heronikostudios.metajammer.ui.settings.SettingsViewModel
 import com.heronikostudios.metajammer.worker.CleanupWorker
+import com.heronikostudios.metajammer.worker.MetadataProcessingWorker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -90,6 +92,7 @@ class MainViewModel(
     val processedFiles: StateFlow<List<Pair<SelectedFile, File>>> = processingViewModel.processedFiles
     val processing: StateFlow<Boolean> = processingViewModel.processing
     val workInfo: StateFlow<WorkInfo?> = processingViewModel.workInfo
+    val hasSavedOrShared: StateFlow<Boolean> = processingViewModel.hasSavedOrShared
 
     // Settings state
     val appSettings: StateFlow<AppSettings> = settingsViewModel.appSettings
@@ -277,6 +280,19 @@ class MainViewModel(
         processingViewModel.clearMessage()
         settingsViewModel.clearMessage()
         historyViewModel.clearMessage()
+        runCatching {
+            NotificationManagerCompat.from(appContext).cancel(MetadataProcessingWorker.NOTIFICATION_ID + 1)
+        }
+    }
+
+    fun navigateBackToHomeFromOutput(onNavigate: () -> Unit) {
+        clearMessage()
+        if (processingViewModel.hasSavedOrShared.value) {
+            clearSelection()
+        } else {
+            processingViewModel.clearProcessedFiles()
+        }
+        onNavigate()
     }
 
     fun clearTempFiles() {
