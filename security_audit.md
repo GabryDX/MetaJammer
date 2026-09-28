@@ -63,6 +63,7 @@ android:fullBackupContent="@xml/backup_rules"
 ### 3.4 Isolated Cache & Automatic Lifecycle Purging
 * Processing occurs within isolated application sandbox directories (`context.cacheDir`).
 * Temporary working files and outgoing share packages (`shared/`, `outgoing_shares/`) are cleaned up automatically upon session completion and purged during startup.
+* Navigating away or returning to Home from the Output screen without saving or sharing automatically purges temporary processed files from disk, preventing stale or abandoned media from lingering in flash memory.
 
 ### 3.5 History Retention & Audit Log Privacy
 * History records are maintained in a local Room database (`MetaJammerDatabase`).
@@ -100,10 +101,11 @@ To defend against XML External Entity (XXE), Billion Laughs entity expansion, an
 ### 4.4 Deep Image Stripping & In-Memory Chunk Parsing ([`ImageMetadataProcessor.kt`](app/src/main/java/com/heronikostudios/metajammer/metadata/ImageMetadataProcessor.kt))
 * **ExifInterface Reflection:** Targets all standard `TAG_` constants dynamically via reflection plus vendor-specific tags (`ImageResources`, `OwnerName`, `PrintIM`, `SensitivityType`, etc.) to clear all metadata fields regardless of library version.
 * **JPEG Marker Stripping:** Drops APPn metadata markers (APP1 EXIF/XMP, APP2 ICC/FlashPix, APP13 IPTC, COM) directly from the byte stream without recompressing raster scan data.
-* **PNG Ancillary Chunk Stripping:** In-memory byte scanner strips `tEXt`, `zTXt`, `iTXt`, `pHYs`, and `eXIf` chunks, preserving only critical image rendering chunks (`IHDR`, `PLTE`, `IDAT`, `IEND`) without creating temporary disk files.
+* **PNG Ancillary Chunk Stripping:** In-memory byte scanner strips `tEXt`, `zTXt`, `iTXt`, `pHYs`, and `eXIf` chunks, preserving only critical image rendering chunks (`IHDR`, `PLTE`, `IDAT`, `IEND`). Direct stream-to-file fast-path bypasses `ExifInterface` rewrites and eliminates intermediate disk copies entirely.
 * **Thumbnail Elimination:** Strips embedded EXIF preview thumbnails to prevent visual data leakage of cropped or removed sections.
 
 ### 4.5 PDF Document Sanitization ([`PdfMetadataProcessor.kt`](app/src/main/java/com/heronikostudios/metajammer/metadata/PdfMetadataProcessor.kt))
+* **In-Memory Scrubbing:** Configured with `MemoryUsageSetting.setupMixed(10MB)`—all standard PDF documents under 10MB are parsed and scrubbed strictly in RAM with zero disk scratch files created, preventing unscrubbed document fragments from touching physical flash storage.
 * **Document Information Dictionary:** Replaces `PDDocumentInformation` with an empty structure (wipes Title, Author, Subject, Keywords, Creator, Producer, CreationDate, ModDate).
 * **Catalog XMP Metadata:** Nullifies `documentCatalog.metadata`.
 * **Watermark & Annotation Purging:** Iterates over all document pages to strip `Watermark` and `Stamp` annotations.
@@ -148,7 +150,7 @@ To defend against XML External Entity (XXE), Billion Laughs entity expansion, an
 
 ### 6.1 Dependency Auditing
 * **100% FOSS:** Every dependency is audited for open-source compliance (Apache 2.0, MIT, BSD-2-Clause, EPL 2.0).
-* **Attack Surface Reduction:** Stripped unused BouncyCastle post-quantum crypto tables (`org/bouncycastle/pqc/**`) from release APK packaging, reducing binary size by ~44% (8.9MB to 5.0MB) and eliminating unused cryptographic parsing code.
+* **Attack Surface Reduction:** Stripped unused BouncyCastle post-quantum crypto tables (`org/bouncycastle/pqc/**`), residual properties (`org/bouncycastle/x509/*.properties`), and unused OkHttp public suffix assets (`okhttp3/internal/publicsuffix/**`) from release APK packaging, reducing binary size by ~44% (8.9MB to 5.0MB) and eliminating unused cryptographic and network parsing code.
 
 ### 6.2 Code Shrinking & Obfuscation
 * Release builds employ **R8** minification to shrink dead code, optimize byte-code, and remove unused classes.

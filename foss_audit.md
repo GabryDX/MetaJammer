@@ -43,6 +43,7 @@ The "Map Picker" feature, which is the only feature with network capability, is 
 
 - **Icons**: Uses Material Icons (Apache 2.0).
 - **Fonts**: No custom fonts are bundled; it uses system fonts.
+- **Packaging Hygiene**: Unused third-party auxiliary files (BouncyCastle PQC tables and properties, OkHttp publicsuffix lists) are strictly stripped during packaging, maintaining minimal attack surface and clean FOSS binaries.
 - **License**: The project itself is licensed under the **ISC License** ([LICENSE.txt](LICENSE.txt)).
 
 ## Conclusion
