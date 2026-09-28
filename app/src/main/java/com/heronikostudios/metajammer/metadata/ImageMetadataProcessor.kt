@@ -384,14 +384,14 @@ class ImageMetadataProcessor(
         }
         val outputFile = fileRepository.copyUriToCache(inputUri, prefix = prefix, suffix = extension)
 
-        // For PNG images: strip ancillary metadata chunks (tEXt, zTXt, iTXt, eXIf)
+        // For PNG images: strip ancillary metadata chunks (tEXt, zTXt, iTXt, eXIf) in-memory
         if (mimeType == "image/png" || extension.equals(".png", ignoreCase = true)) {
             runCatching {
-                val tempCleanPng = fileRepository.createCacheFile(prefix = "png_chunk_clean_", suffix = ".png")
-                if (stripPngChunks(outputFile, tempCleanPng)) {
-                    tempCleanPng.copyTo(outputFile, overwrite = true)
+                val bytes = outputFile.readBytes()
+                val stripped = stripPngChunks(bytes)
+                if (stripped != null) {
+                    outputFile.writeBytes(stripped)
                 }
-                tempCleanPng.delete()
             }.onFailure {
                 Timber.w(it, "Failed to strip PNG chunks, proceeding with ExifInterface")
             }

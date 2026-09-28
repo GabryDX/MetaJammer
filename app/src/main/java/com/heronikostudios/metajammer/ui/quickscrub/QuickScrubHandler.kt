@@ -63,43 +63,45 @@ class QuickScrubHandler(
         val keepOrientation = appSettings.keepImageOrientation
 
         val replacementPlans = if (mode == ProcessingMode.POISON_METADATA) {
-            val newPlans = mutableMapOf<Uri, MetadataReplacementPlan>()
+            val useScramble = appSettings.useNearbyScramble
+            val preset = appSettings.locationPreset
+            val profile = appSettings.poisoningProfile
             withContext(Dispatchers.IO) {
-                val useScramble = appSettings.useNearbyScramble
-                for (selectedFile in files) {
-                    val preset = appSettings.locationPreset
-                    val profile = appSettings.poisoningProfile
-                    val plan = if (useScramble && preset == com.heronikostudios.metajammer.domain.model.LocationPreset.RANDOM) {
-                        val metadata = metadataRepository.readMetadata(selectedFile)
-                        val lat = metadata.find { it.key == "GPSLatitude" }?.value?.toDoubleOrNull()
-                        val lon = metadata.find { it.key == "GPSLongitude" }?.value?.toDoubleOrNull()
+                coroutineScope {
+                    files.map { selectedFile ->
+                        async {
+                            val plan = if (useScramble && preset == com.heronikostudios.metajammer.domain.model.LocationPreset.RANDOM) {
+                                val metadata = metadataRepository.readMetadata(selectedFile)
+                                val lat = metadata.find { it.key == "GPSLatitude" }?.value?.toDoubleOrNull()
+                                val lon = metadata.find { it.key == "GPSLongitude" }?.value?.toDoubleOrNull()
 
-                        if (lat != null && lon != null) {
-                            MetadataReplacementGenerator.generatePlan(
-                                mimeType = selectedFile.mimeType,
-                                existingLat = lat,
-                                existingLon = lon,
-                                profile = profile,
-                                locationPreset = preset
-                            )
-                        } else {
-                            MetadataReplacementGenerator.generatePlan(
-                                mimeType = selectedFile.mimeType,
-                                profile = profile,
-                                locationPreset = preset
-                            )
+                                if (lat != null && lon != null) {
+                                    MetadataReplacementGenerator.generatePlan(
+                                        mimeType = selectedFile.mimeType,
+                                        existingLat = lat,
+                                        existingLon = lon,
+                                        profile = profile,
+                                        locationPreset = preset
+                                    )
+                                } else {
+                                    MetadataReplacementGenerator.generatePlan(
+                                        mimeType = selectedFile.mimeType,
+                                        profile = profile,
+                                        locationPreset = preset
+                                    )
+                                }
+                            } else {
+                                MetadataReplacementGenerator.generatePlan(
+                                    mimeType = selectedFile.mimeType,
+                                    profile = profile,
+                                    locationPreset = preset
+                                )
+                            }
+                            selectedFile.uri to plan
                         }
-                    } else {
-                        MetadataReplacementGenerator.generatePlan(
-                            mimeType = selectedFile.mimeType,
-                            profile = profile,
-                            locationPreset = preset
-                        )
-                    }
-                    newPlans[selectedFile.uri] = plan
+                    }.awaitAll().toMap()
                 }
             }
-            newPlans
         } else {
             emptyMap()
         }
@@ -244,6 +246,13 @@ class QuickScrubHandler(
         selectedFiles: List<SelectedFile>,
         appSettings: AppSettings
     ): List<File> = withContext(Dispatchers.IO) {
+        val baseShared = File(cacheDir, "shared")
+        if (baseShared.exists()) {
+            baseShared.listFiles()?.filter { it.isDirectory && it.name.startsWith("outgoing_") }?.forEach {
+                runCatching { it.deleteRecursively() }
+            }
+        }
+
         val sharedDir = File(cacheDir, "shared/outgoing_${System.currentTimeMillis()}")
         if (!sharedDir.exists()) sharedDir.mkdirs()
 

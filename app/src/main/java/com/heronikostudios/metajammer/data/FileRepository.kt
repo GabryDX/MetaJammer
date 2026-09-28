@@ -61,7 +61,7 @@ open class FileRepository(private val context: Context) {
         val tempFile = createSharedTempFile(prefix, resolvedSuffix)
         context.contentResolver.openInputStream(uri)?.use { input ->
             tempFile.outputStream().use { output ->
-                input.copyTo(output)
+                input.copyTo(output, bufferSize = 64 * 1024)
             }
         }
         return tempFile
