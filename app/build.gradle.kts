@@ -65,6 +65,7 @@ android {
             excludes += "META-INF/notice.txt"
             excludes += "META-INF/ASL2.0"
             excludes += "META-INF/*.kotlin_module"
+            excludes += "org/bouncycastle/pqc/**"
         }
     }
 
