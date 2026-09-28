@@ -12,6 +12,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.background
 import androidx.core.content.IntentCompat
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
@@ -164,14 +165,23 @@ fun MetaJammerApp(
     var uriToEditLocation by remember { mutableStateOf<Uri?>(null) }
     var showInternetPermissionExplanation by remember { mutableStateOf(false) }
 
-    // Intercept back on Home to exit app
-    BackHandler(enabled = isHome) {
-        onExitApp()
+    val handleBackNavigation: () -> Unit = {
+        if (isOutput) {
+            viewModel.clearMessage()
+        }
+        if (!navController.popBackStack()) {
+            onExitApp()
+        }
     }
 
-    BackHandler(enabled = isOutput) {
-        viewModel.clearMessage()
-        navController.popBackStack()
+    // Unified back handling: ensures Android back button and system edge-swipe
+    // behave identically to the in-app top bar back arrow.
+    BackHandler(enabled = !isHome && !isQuickScrub && !isOnboarding) {
+        handleBackNavigation()
+    }
+
+    BackHandler(enabled = isHome) {
+        onExitApp()
     }
 
     val sharedSignature = remember(sharedUris) {
@@ -241,14 +251,7 @@ fun MetaJammerApp(
                                 )
                             }
                         } else if (!isQuickScrub && !isOnboarding) {
-                            IconButton(onClick = {
-                                if (isOutput) {
-                                    viewModel.clearMessage()
-                                }
-                                if (!navController.popBackStack()) {
-                                    onExitApp()
-                                }
-                            }) {
+                            IconButton(onClick = handleBackNavigation) {
                                 Icon(
                                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                     contentDescription = stringResource(R.string.back)
@@ -308,13 +311,17 @@ fun MetaJammerApp(
                 )
             }
 
+            val screenModifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+
             NavHost(
                 navController = navController,
                 startDestination = Screen.Home,
-                enterTransition = { fadeIn(tween(200)) + slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(200)) },
-                exitTransition = { fadeOut(tween(200)) + slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(200)) },
-                popEnterTransition = { fadeIn(tween(200)) + slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.End, tween(200)) },
-                popExitTransition = { fadeOut(tween(200)) + slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End, tween(200)) },
+                enterTransition = { fadeIn(tween(300)) + slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(300)) },
+                exitTransition = { fadeOut(tween(300)) + slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(300), targetOffset = { -it / 4 }) },
+                popEnterTransition = { fadeIn(tween(300)) + slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.End, tween(300), initialOffset = { -it / 4 }) },
+                popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End, tween(300)) },
                 modifier = Modifier.fillMaxSize()
             ) {
                 composable<Screen.Onboarding> {
@@ -325,7 +332,7 @@ fun MetaJammerApp(
                                 popUpTo<Screen.Onboarding> { inclusive = true }
                             }
                         },
-                        modifier = Modifier.fillMaxSize()
+                        modifier = screenModifier
                     )
                 }
 
@@ -345,7 +352,7 @@ fun MetaJammerApp(
                         onClearSelection = {
                             viewModel.clearSelection()
                         },
-                        modifier = Modifier.fillMaxSize()
+                        modifier = screenModifier
                     )
                 }
 
@@ -358,7 +365,7 @@ fun MetaJammerApp(
                                 context.startActivity(intent)
                             }
                         },
-                        modifier = Modifier.fillMaxSize()
+                        modifier = screenModifier
                     )
                 }
 
@@ -368,7 +375,7 @@ fun MetaJammerApp(
                         metadataPreview = metadataPreview,
                         onContinue = { navController.navigate(Screen.Process) },
                         onBack = { navController.popBackStack() },
-                        modifier = Modifier.fillMaxSize()
+                        modifier = screenModifier
                     )
                 }
 
@@ -405,7 +412,7 @@ fun MetaJammerApp(
                         onProfileSelected = viewModel::setProcessingPoisoningProfile,
                         selectedLocationPreset = selectedLocationPreset,
                         onLocationPresetSelected = viewModel::setProcessingLocationPreset,
-                        modifier = Modifier.fillMaxSize()
+                        modifier = screenModifier
                     )
                 }
 
@@ -421,11 +428,17 @@ fun MetaJammerApp(
                             viewModel.updatePlanLocation(uri, lat, lon)
                             navController.popBackStack()
                         },
-                        modifier = Modifier.fillMaxSize()
+                        modifier = screenModifier
                     )
                 }
 
                 composable<Screen.Output> {
+                    DisposableEffect(Unit) {
+                        onDispose {
+                            viewModel.clearMessage()
+                        }
+                    }
+
                     OutputOptionsScreen(
                         shareResultAsDefault = appSettings.shareResultAsDefault,
                         onSaveDefault = {
@@ -485,7 +498,7 @@ fun MetaJammerApp(
                                 }
                             }
                         },
-                        modifier = Modifier.fillMaxSize()
+                        modifier = screenModifier
                     )
                 }
 
@@ -527,7 +540,7 @@ fun MetaJammerApp(
                         onStripDateTimeChanged = viewModel::setStripDateTime,
                         onStripCameraSettingsChanged = viewModel::setStripCameraSettings,
                         onStripCommentsChanged = viewModel::setStripComments,
-                        modifier = Modifier.fillMaxSize()
+                        modifier = screenModifier
                     )
                 }
 
@@ -537,7 +550,7 @@ fun MetaJammerApp(
                         history = history,
                         onClearHistory = viewModel::clearProcessedFilesHistory,
                         onShareFile = { log -> viewModel.shareHistoryFile(context, log) },
-                        modifier = Modifier.fillMaxSize()
+                        modifier = screenModifier
                     )
                 }
 
