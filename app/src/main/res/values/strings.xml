@@ -215,6 +215,10 @@
     <string name="output_action_shared_folder">Save to dedicated folder</string>
     <string name="output_action_reshare">Re-share sanitized files</string>
     <string name="quick_scrub_processing">Drying your files…</string>
+    <string name="quick_scrub_title">Quick Scrub</string>
+    <string name="quick_scrub_status_stripping">Stripping metadata from %1$d file(s)…</string>
+    <string name="quick_scrub_status_poisoning">Poisoning metadata for %1$d file(s)…</string>
+    <string name="quick_scrub_cancel">Cancel</string>
 
     <!-- Dialogs/Permissions -->
     <string name="map_permission_title">Map Picker &amp; Internet Access</string>

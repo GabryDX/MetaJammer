@@ -533,6 +533,10 @@ fun MetaJammerApp(
 
                 composable<Screen.QuickScrub> {
                     QuickScrubScreen(
+                        fileCount = selectedFiles.size,
+                        processingMode = appSettings.sharedFilesProcessingMode,
+                        statusText = message,
+                        onCancel = onExitApp,
                         modifier = Modifier.fillMaxSize()
                     )
                 }
