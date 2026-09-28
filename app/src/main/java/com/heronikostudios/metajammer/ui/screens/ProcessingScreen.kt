@@ -2,6 +2,7 @@ package com.heronikostudios.metajammer.ui.screens
 
 import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
@@ -12,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -25,6 +27,7 @@ import androidx.work.WorkInfo
 import com.heronikostudios.metajammer.R
 import com.heronikostudios.metajammer.domain.model.*
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ProcessingScreen(
     selectedFiles: List<SelectedFile>,
@@ -45,6 +48,7 @@ fun ProcessingScreen(
 ) {
     var activeDiffFilter by remember { mutableStateOf<MetadataDiffStatus?>(null) }
     var expandedUris by remember(selectedFiles) { mutableStateOf(selectedFiles.map { it.uri }.toSet()) }
+    var poisoningSettingsExpanded by remember { mutableStateOf(false) }
 
     val allDiffEntries = remember(changePreview) { changePreview.values.flatten() }
     val totalCount = allDiffEntries.size
@@ -53,141 +57,222 @@ fun ProcessingScreen(
     val keptCount = remember(allDiffEntries) { allDiffEntries.count { it.status == MetadataDiffStatus.KEPT } }
 
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        modifier = modifier.fillMaxSize()
     ) {
-        Card(modifier = Modifier.fillMaxWidth()) {
-            Column(
-                modifier = Modifier.padding(12.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Text(
-                    text = stringResource(R.string.pick_one_option),
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.primary
-                )
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    val poisonSelected = selectedMode == ProcessingMode.POISON_METADATA
-                    val removeSelected = selectedMode == ProcessingMode.REMOVE_METADATA
-
-                    Button(
-                        onClick = { onModeSelected(ProcessingMode.POISON_METADATA) },
-                        modifier = Modifier.weight(1f),
-                        colors = if (poisonSelected) ButtonDefaults.buttonColors() else ButtonDefaults.filledTonalButtonColors()
+        LazyColumn(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth(),
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            // Mode Selection & Collapsible Poisoning Settings
+            item(key = "mode_config_card") {
+                Card(modifier = Modifier.fillMaxWidth()) {
+                    Column(
+                        modifier = Modifier.padding(12.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Text(stringResource(R.string.poison_metadata))
-                    }
-
-                    Button(
-                        onClick = { onModeSelected(ProcessingMode.REMOVE_METADATA) },
-                        modifier = Modifier.weight(1f),
-                        colors = if (removeSelected) ButtonDefaults.buttonColors() else ButtonDefaults.filledTonalButtonColors()
-                    ) {
-                        Text(stringResource(R.string.remove_metadata))
-                    }
-                }
-
-                if (selectedMode == ProcessingMode.POISON_METADATA) {
-                    Text(
-                        text = stringResource(R.string.hardware_profile_label),
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.secondary
-                    )
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .horizontalScroll(rememberScrollState()),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        PoisoningProfile.entries.forEach { profile ->
-                            FilterChip(
-                                selected = profile == selectedProfile,
-                                onClick = { onProfileSelected(profile) },
-                                label = { Text(profile.displayName) }
-                            )
-                        }
-                    }
-
-                    Text(
-                        text = stringResource(R.string.location_preset_label),
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.secondary
-                    )
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .horizontalScroll(rememberScrollState()),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        LocationPreset.entries.forEach { preset ->
-                            FilterChip(
-                                selected = preset == selectedLocationPreset,
-                                onClick = { onLocationPresetSelected(preset) },
-                                label = { Text(preset.displayName) }
-                            )
-                        }
-                    }
-
-                    Button(
-                        onClick = onRegeneratePlans,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(stringResource(R.string.regenerate_plans))
-                    }
-                }
-            }
-        }
-
-        if (selectedMode != null) {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(
-                    text = stringResource(R.string.preview_of_changes),
-                    style = MaterialTheme.typography.titleMedium
-                )
-
-                // Interactive filter chips for diff statuses
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .horizontalScroll(rememberScrollState()),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    FilterChip(
-                        selected = activeDiffFilter == null,
-                        onClick = { activeDiffFilter = null },
-                        label = { Text(stringResource(R.string.diff_filter_all, totalCount)) }
-                    )
-                    FilterChip(
-                        selected = activeDiffFilter == MetadataDiffStatus.REMOVED,
-                        onClick = { activeDiffFilter = MetadataDiffStatus.REMOVED },
-                        label = { Text(stringResource(R.string.diff_filter_removed, removedCount)) }
-                    )
-                    if (selectedMode == ProcessingMode.POISON_METADATA) {
-                        FilterChip(
-                            selected = activeDiffFilter == MetadataDiffStatus.POISONED,
-                            onClick = { activeDiffFilter = MetadataDiffStatus.POISONED },
-                            label = { Text(stringResource(R.string.diff_filter_poisoned, poisonedCount)) }
+                        Text(
+                            text = stringResource(R.string.pick_one_option),
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MaterialTheme.colorScheme.primary
                         )
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            val poisonSelected = selectedMode == ProcessingMode.POISON_METADATA
+                            val removeSelected = selectedMode == ProcessingMode.REMOVE_METADATA
+
+                            Button(
+                                onClick = { onModeSelected(ProcessingMode.POISON_METADATA) },
+                                modifier = Modifier.weight(1f),
+                                colors = if (poisonSelected) ButtonDefaults.buttonColors() else ButtonDefaults.filledTonalButtonColors()
+                            ) {
+                                Text(stringResource(R.string.poison_metadata))
+                            }
+
+                            Button(
+                                onClick = { onModeSelected(ProcessingMode.REMOVE_METADATA) },
+                                modifier = Modifier.weight(1f),
+                                colors = if (removeSelected) ButtonDefaults.buttonColors() else ButtonDefaults.filledTonalButtonColors()
+                            ) {
+                                Text(stringResource(R.string.remove_metadata))
+                            }
+                        }
+
+                        if (selectedMode == ProcessingMode.POISON_METADATA) {
+                            HorizontalDivider(modifier = Modifier.padding(top = 4.dp))
+
+                            // Compact collapsible row summarizing current profile & preset
+                            Surface(
+                                onClick = { poisoningSettingsExpanded = !poisoningSettingsExpanded },
+                                shape = RoundedCornerShape(8.dp),
+                                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 12.dp, vertical = 8.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Row(
+                                        modifier = Modifier.weight(1f),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.Settings,
+                                            contentDescription = null,
+                                            tint = MaterialTheme.colorScheme.primary,
+                                            modifier = Modifier.size(18.dp)
+                                        )
+                                        Column {
+                                            Text(
+                                                text = stringResource(R.string.feature_poisoning_title),
+                                                style = MaterialTheme.typography.labelMedium,
+                                                fontWeight = FontWeight.SemiBold,
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                            )
+                                            Text(
+                                                text = "${selectedProfile.displayName} • ${selectedLocationPreset.displayName}",
+                                                style = MaterialTheme.typography.bodySmall,
+                                                color = MaterialTheme.colorScheme.primary
+                                            )
+                                        }
+                                    }
+
+                                    IconButton(
+                                        onClick = { poisoningSettingsExpanded = !poisoningSettingsExpanded },
+                                        modifier = Modifier.size(32.dp)
+                                    ) {
+                                        Icon(
+                                            imageVector = if (poisoningSettingsExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                                            contentDescription = null,
+                                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
+                                }
+                            }
+
+                            AnimatedVisibility(visible = poisoningSettingsExpanded) {
+                                Column(
+                                    modifier = Modifier.padding(top = 4.dp),
+                                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.hardware_profile_label),
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = MaterialTheme.colorScheme.secondary
+                                    )
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .horizontalScroll(rememberScrollState()),
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                    ) {
+                                        PoisoningProfile.entries.forEach { profile ->
+                                            FilterChip(
+                                                selected = profile == selectedProfile,
+                                                onClick = { onProfileSelected(profile) },
+                                                label = { Text(profile.displayName) }
+                                            )
+                                        }
+                                    }
+
+                                    Text(
+                                        text = stringResource(R.string.location_preset_label),
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = MaterialTheme.colorScheme.secondary
+                                    )
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .horizontalScroll(rememberScrollState()),
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                    ) {
+                                        LocationPreset.entries.forEach { preset ->
+                                            FilterChip(
+                                                selected = preset == selectedLocationPreset,
+                                                onClick = { onLocationPresetSelected(preset) },
+                                                label = { Text(preset.displayName) }
+                                            )
+                                        }
+                                    }
+
+                                    Button(
+                                        onClick = onRegeneratePlans,
+                                        modifier = Modifier.fillMaxWidth()
+                                    ) {
+                                        Text(stringResource(R.string.regenerate_plans))
+                                    }
+                                }
+                            }
+                        }
                     }
-                    FilterChip(
-                        selected = activeDiffFilter == MetadataDiffStatus.KEPT,
-                        onClick = { activeDiffFilter = MetadataDiffStatus.KEPT },
-                        label = { Text(stringResource(R.string.diff_filter_kept, keptCount)) }
-                    )
                 }
             }
 
-            LazyColumn(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                items(selectedFiles) { file ->
+            // Sticky Diff Filter Bar & Changes Header
+            if (selectedMode != null) {
+                stickyHeader(key = "diff_sticky_header") {
+                    Surface(
+                        modifier = Modifier.fillMaxWidth(),
+                        color = MaterialTheme.colorScheme.background,
+                        tonalElevation = 1.dp
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp),
+                            verticalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            Text(
+                                text = stringResource(R.string.preview_of_changes),
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold
+                            )
+
+                            // Interactive filter chips for diff statuses
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .horizontalScroll(rememberScrollState()),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                FilterChip(
+                                    selected = activeDiffFilter == null,
+                                    onClick = { activeDiffFilter = null },
+                                    label = { Text(stringResource(R.string.diff_filter_all, totalCount)) }
+                                )
+                                FilterChip(
+                                    selected = activeDiffFilter == MetadataDiffStatus.REMOVED,
+                                    onClick = { activeDiffFilter = MetadataDiffStatus.REMOVED },
+                                    label = { Text(stringResource(R.string.diff_filter_removed, removedCount)) }
+                                )
+                                if (selectedMode == ProcessingMode.POISON_METADATA) {
+                                    FilterChip(
+                                        selected = activeDiffFilter == MetadataDiffStatus.POISONED,
+                                        onClick = { activeDiffFilter = MetadataDiffStatus.POISONED },
+                                        label = { Text(stringResource(R.string.diff_filter_poisoned, poisonedCount)) }
+                                    )
+                                }
+                                FilterChip(
+                                    selected = activeDiffFilter == MetadataDiffStatus.KEPT,
+                                    onClick = { activeDiffFilter = MetadataDiffStatus.KEPT },
+                                    label = { Text(stringResource(R.string.diff_filter_kept, keptCount)) }
+                                )
+                            }
+                        }
+                    }
+                }
+
+                // File Cards List
+                items(selectedFiles, key = { it.uri.toString() }) { file ->
                     val isExpanded = file.uri in expandedUris
                     val fileEntries = changePreview[file.uri].orEmpty()
                     val filteredEntries = fileEntries.filter { activeDiffFilter == null || it.status == activeDiffFilter }
@@ -307,42 +392,63 @@ fun ProcessingScreen(
             }
         }
 
-        Button(
-            onClick = onProcess,
-            enabled = !processing && selectedMode != null,
-            modifier = Modifier.fillMaxWidth()
+        // Pinned Bottom Surface with Action Button and Progress
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            tonalElevation = 3.dp,
+            shadowElevation = 8.dp,
+            color = MaterialTheme.colorScheme.surface
         ) {
-            Text(if (hasProcessedFiles) stringResource(R.string.continue_label) else stringResource(R.string.process_and_continue))
-        }
-
-        if (processing) {
             Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                CircularProgressIndicator()
-                Text(stringResource(R.string.processing_foreground), style = MaterialTheme.typography.bodySmall)
-            }
-        }
+                if (processing) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        CircularProgressIndicator(modifier = Modifier.size(18.dp), strokeWidth = 2.dp)
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(stringResource(R.string.processing_foreground), style = MaterialTheme.typography.bodySmall)
+                    }
+                }
 
-        workInfo?.let { info ->
-            if (info.state == WorkInfo.State.RUNNING || info.state == WorkInfo.State.ENQUEUED) {
-                val progress = info.progress.getInt("progress", 0)
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                workInfo?.let { info ->
+                    if (info.state == WorkInfo.State.RUNNING || info.state == WorkInfo.State.ENQUEUED) {
+                        val progress = info.progress.getInt("progress", 0)
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            androidx.compose.material3.LinearProgressIndicator(
+                                progress = { progress / 100f },
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                            Text(
+                                stringResource(R.string.background_progress, progress),
+                                style = MaterialTheme.typography.bodySmall,
+                                modifier = Modifier.align(Alignment.CenterHorizontally)
+                            )
+                        }
+                    }
+                }
+
+                Button(
+                    onClick = onProcess,
+                    enabled = !processing && selectedMode != null,
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    androidx.compose.material3.LinearProgressIndicator(
-                        progress = { progress / 100f },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    Text(stringResource(R.string.background_progress, progress), style = MaterialTheme.typography.bodySmall)
+                    Text(if (hasProcessedFiles) stringResource(R.string.continue_label) else stringResource(R.string.process_and_continue))
                 }
             }
         }
     }
 }
+
 
 @Composable
 private fun DiffSummaryPill(
