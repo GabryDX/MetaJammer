@@ -22,8 +22,7 @@ Builds:
     gradle:
       - floss
     output: build/outputs/apk/floss/release/MetaJammer-v$$VERSION$$.apk
-    prebuild:
-      - sed -i -e '/val releaseSigning/,/}/d' build.gradle.kts
+    prebuild: sed -i -e '/val releaseSigning/,/}/d' build.gradle.kts
     scanignore:
       - settings.gradle.kts
 
