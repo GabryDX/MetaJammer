@@ -26,9 +26,17 @@ Builds:
     scanignore:
       - settings.gradle.kts
 
+  - versionName: 0.4.3
+    versionCode: 4
+    commit: 36f615a4c6f476ea07b78931d458cadc7410960e
+    subdir: app
+    gradle:
+      - floss
+    output: build/outputs/apk/floss/release/MetaJammer-v$$VERSION$$.apk
+
 AllowedAPKSigningKeys: 36d69bd78c8a4490c2bc3f53296abd68887e2a50ad9b9da1c36cccd64e96af01
 
 AutoUpdateMode: Version
 UpdateCheckMode: Tags
-CurrentVersion: 0.4.2
-CurrentVersionCode: 3
+CurrentVersion: 0.4.3
+CurrentVersionCode: 4
