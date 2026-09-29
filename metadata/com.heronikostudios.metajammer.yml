@@ -22,6 +22,8 @@ Builds:
     gradle:
       - floss
     output: app/build/outputs/apk/floss/release/MetaJammer-v$$VERSION$$.apk
+    scanignore:
+      - settings.gradle.kts
 
 AllowedAPKSigningKeys: 36d69bd78c8a4490c2bc3f53296abd68887e2a50ad9b9da1c36cccd64e96af01
 
