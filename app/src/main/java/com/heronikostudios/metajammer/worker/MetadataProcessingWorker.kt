@@ -71,7 +71,7 @@ class MetadataProcessingWorker(
     }
 
     override suspend fun doWork(): Result = coroutineScope {
-        val inputUriStrings = inputData.getStringArray(KEY_INPUT_URIS) ?: return@coroutineScope Result.failure()
+        val inputUriStrings = inputData.getNullableStringArray(KEY_INPUT_URIS)?.filterNotNull()?.toTypedArray() ?: return@coroutineScope Result.failure()
         val modeString = inputData.getString(KEY_MODE) ?: return@coroutineScope Result.failure()
         val keepOrientation = inputData.getBoolean(KEY_KEEP_ORIENTATION, true)
         val thumbnailHandlingString = inputData.getString(KEY_THUMBNAIL_HANDLING) ?: ThumbnailHandling.REMOVE.name
