@@ -610,7 +610,9 @@ fun MetaJammerApp(
                     TextButton(
                         onClick = {
                             showNotificationPermissionExplanation = false
-                            notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                            }
                         }
                     ) {
                         Text(stringResource(R.string.continue_label))

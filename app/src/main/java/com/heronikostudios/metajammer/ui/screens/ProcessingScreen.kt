@@ -40,11 +40,11 @@ fun ProcessingScreen(
     onProcess: () -> Unit,
     onEditLocation: (Uri) -> Unit,
     hasProcessedFiles: Boolean,
+    modifier: Modifier = Modifier,
     selectedProfile: PoisoningProfile = PoisoningProfile.RANDOM,
     onProfileSelected: (PoisoningProfile) -> Unit = {},
     selectedLocationPreset: LocationPreset = LocationPreset.RANDOM,
-    onLocationPresetSelected: (LocationPreset) -> Unit = {},
-    modifier: Modifier = Modifier
+    onLocationPresetSelected: (LocationPreset) -> Unit = {}
 ) {
     var activeDiffFilter by remember { mutableStateOf<MetadataDiffStatus?>(null) }
     var expandedUris by remember(selectedFiles) { mutableStateOf(selectedFiles.map { it.uri }.toSet()) }

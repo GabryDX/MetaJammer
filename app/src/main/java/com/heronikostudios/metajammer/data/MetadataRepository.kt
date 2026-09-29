@@ -10,6 +10,7 @@ import com.heronikostudios.metajammer.metadata.ImageMetadataProcessor
 import com.heronikostudios.metajammer.metadata.MediaMetadataProcessor
 import com.heronikostudios.metajammer.metadata.PdfMetadataProcessor
 import com.heronikostudios.metajammer.metadata.SvgMetadataProcessor
+import com.heronikostudios.metajammer.util.useCompat
 import timber.log.Timber
 import java.io.File
 
@@ -155,7 +156,7 @@ class MetadataRepository(
         
         runCatching {
             val retriever = android.media.MediaMetadataRetriever()
-            retriever.use { r ->
+            retriever.useCompat { r ->
                 resolver.openFileDescriptor(selectedFile.uri, "r")?.use { fd ->
                     r.setDataSource(fd.fileDescriptor)
                     

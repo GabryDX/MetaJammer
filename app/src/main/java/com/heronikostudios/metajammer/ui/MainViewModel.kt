@@ -303,7 +303,6 @@ class MainViewModel(
     }
 
     override fun onCleared() {
-        super.onCleared()
         if (isQuickScrubActive) {
             val cleanupRequest = OneTimeWorkRequestBuilder<CleanupWorker>()
                 .setInitialDelay(5, TimeUnit.MINUTES)

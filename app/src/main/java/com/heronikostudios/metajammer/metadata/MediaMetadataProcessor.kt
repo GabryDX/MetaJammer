@@ -5,8 +5,10 @@ import android.media.MediaExtractor
 import android.media.MediaFormat
 import android.media.MediaMuxer
 import android.net.Uri
+import android.os.Build
 import com.heronikostudios.metajammer.data.FileRepository
 import com.heronikostudios.metajammer.domain.model.MetadataReplacementPlan
+import com.heronikostudios.metajammer.util.useCompat
 import timber.log.Timber
 import java.io.File
 import java.nio.ByteBuffer
@@ -75,7 +77,13 @@ class MediaMetadataProcessor(
 
                 val outputFormat = when (mimeType) {
                     "video/webm", "audio/webm" -> MediaMuxer.OutputFormat.MUXER_OUTPUT_WEBM
-                    "audio/ogg" -> MediaMuxer.OutputFormat.MUXER_OUTPUT_OGG
+                    "audio/ogg" -> {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                            MediaMuxer.OutputFormat.MUXER_OUTPUT_OGG
+                        } else {
+                            throw UnsupportedOperationException("OGG remuxing requires Android 10 (API 29) or higher")
+                        }
+                    }
                     else -> MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4
                 }
 
@@ -118,7 +126,7 @@ class MediaMetadataProcessor(
                 if (videoRotation == null || videoRotation == 0) {
                     runCatching {
                         val retriever = android.media.MediaMetadataRetriever()
-                        retriever.use { r ->
+                        retriever.useCompat { r ->
                             r.setDataSource(pfd.fileDescriptor)
                             r.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION)?.toIntOrNull()
                         }
