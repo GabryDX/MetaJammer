@@ -1,0 +1,5 @@
+- Hardened Android 8.0-9.0 (API 26-28) compatibility for media metadata retrieval and audio muxing.
+- Resolved Room and WorkManager deprecation warnings.
+- Polished F-Droid build pipeline integration and signing configuration.
+- Aligned Compose UI screen parameter guidelines.
+- Shortened Fastlane summary to comply with F-Droid standards.
