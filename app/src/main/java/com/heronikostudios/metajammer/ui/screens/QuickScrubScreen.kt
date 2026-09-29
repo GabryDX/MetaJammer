@@ -19,11 +19,11 @@ import com.heronikostudios.metajammer.domain.model.ProcessingMode
 
 @Composable
 fun QuickScrubScreen(
+    modifier: Modifier = Modifier,
     fileCount: Int = 1,
     processingMode: ProcessingMode = ProcessingMode.REMOVE_METADATA,
     statusText: String? = null,
-    onCancel: () -> Unit = {},
-    modifier: Modifier = Modifier
+    onCancel: () -> Unit = {}
 ) {
     Box(
         modifier = modifier

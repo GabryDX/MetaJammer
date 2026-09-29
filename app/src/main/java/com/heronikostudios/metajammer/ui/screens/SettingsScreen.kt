@@ -50,14 +50,14 @@ fun SettingsScreen(
     onShowHistoryShortcutChanged: (Boolean) -> Unit,
     onClearHistory: () -> Unit,
     onViewHistory: () -> Unit,
+    modifier: Modifier = Modifier,
     onPoisoningProfileChanged: (PoisoningProfile) -> Unit = {},
     onLocationPresetChanged: (LocationPreset) -> Unit = {},
     onStripGpsChanged: (Boolean) -> Unit = {},
     onStripDeviceModelChanged: (Boolean) -> Unit = {},
     onStripDateTimeChanged: (Boolean) -> Unit = {},
     onStripCameraSettingsChanged: (Boolean) -> Unit = {},
-    onStripCommentsChanged: (Boolean) -> Unit = {},
-    modifier: Modifier = Modifier
+    onStripCommentsChanged: (Boolean) -> Unit = {}
 ) {
     val unifiedFolderPicker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { 
         onUnifiedSavingPathSelected(it) 
