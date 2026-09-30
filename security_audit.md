@@ -42,12 +42,12 @@ The primary security objective of MetaJammer is **guaranteed non-leakage**: ensu
 ## 3. Data Protection & Privacy Architecture
 
 ### 3.1 Principle of Least Privilege (Permissions)
-* **Zero Storage Permissions:** MetaJammer does not declare or request `READ_EXTERNAL_STORAGE` or `WRITE_EXTERNAL_STORAGE` on any Android version (API 26–36).
+* **Zero Storage Permissions:** MetaJammer does not declare or request `READ_EXTERNAL_STORAGE` or `WRITE_EXTERNAL_STORAGE` on any Android version (API 26–37).
 * **Storage Access Framework (SAF) & MediaStore:** User file selections and exports occur through system-mediated pickers (`ActivityResultContracts.OpenMultipleDocuments`, `OpenDocumentTree`, and `MediaStore`), guaranteeing that the application only accesses files explicitly chosen by the user.
 * **Scoped Notification Permission:** `POST_NOTIFICATIONS` is guarded by runtime API-level checks (`Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU`) and only used for background batch progress updates.
 
 ### 3.2 Network Isolation & Air-Gapped Architecture
-* **Zero Network Permissions:** `android.permission.INTERNET` is completely absent from `AndroidManifest.xml`. MetaJammer is an air-gapped application that cannot make network connections.
+* **Zero Network Permissions:** `android.permission.INTERNET` is completely absent from `AndroidManifest.xml`. In addition, transitive permissions such as `android.permission.ACCESS_NETWORK_STATE` (injected by default by AndroidX WorkManager) are explicitly stripped using `tools:node="remove"`. The resulting binary contains zero network permissions of any kind, making socket opening and network state inspection impossible at the OS permission level.
 * **100% Offline Vector Map:** The Location Picker uses a native Jetpack Compose Canvas rendering engine with a pre-compiled 20 KB binary land polygon dataset from Natural Earth (Public Domain). No WebViews, no JavaScript, and no external tile servers.
 * **F-Droid Anti-Feature Elimination:** Fully compliant with F-Droid inclusion policies without requiring the `TetheredNet` anti-feature flag.
 * **Offline Landmark & Custom Location Presets:** Pre-defined landmark coordinates (e.g., Tokyo, London, Paris, New York) and user-defined custom location presets function 100% offline. Custom presets are serialized via Kotlinx Serialization and persisted in application-private AndroidX DataStore preferences with zero network lookups, zero reverse-geocoding, and zero cloud synchronization.
@@ -173,8 +173,8 @@ Users can verify official release builds using [AppVerifier](https://github.com/
 | **MASVS-STORAGE** | No sensitive data written to application logs | **PASS** | Timber logging suppresses verbose file contents; logs only contain metadata keys and debug status. |
 | **MASVS-STORAGE** | Auto-backup disabled | **PASS** | `android:allowBackup="false"` and explicit `dataExtractionRules`. |
 | **MASVS-CRYPTO** | Industry-standard cryptographic algorithms | **PASS** | Standard platform hashing and PRNGs used; no proprietary or weak home-grown cryptography. |
-| **MASVS-NETWORK** | Network attack surface minimized | **PASS** | Complete network isolation: zero network permissions (`INTERNET` absent), air-gapped architecture. |
-| **MASVS-PLATFORM** | Permissions minimized | **PASS** | Zero broad storage permissions (`READ/WRITE_EXTERNAL_STORAGE` absent). Zero network permissions (`INTERNET` absent). Only `POST_NOTIFICATIONS` (API 33+) for background batch status. |
+| **MASVS-NETWORK** | Network attack surface minimized | **PASS** | Complete network isolation: zero network permissions (`INTERNET` and `ACCESS_NETWORK_STATE` absent), air-gapped architecture. |
+| **MASVS-PLATFORM** | Permissions minimized | **PASS** | Zero broad storage permissions (`READ/WRITE_EXTERNAL_STORAGE` absent). Zero network permissions (`INTERNET` and `ACCESS_NETWORK_STATE` stripped). Only `POST_NOTIFICATIONS` (API 33+) for background batch status. |
 | **MASVS-PLATFORM** | IPC components properly protected | **PASS** | `FileProvider` unexported with narrow path whitelist; incoming URIs sanitized. |
 | **MASVS-CODE** | Input validation & parser hardening | **PASS** | Safe XML parsing (XXE protected), regex-based filename sanitization, fail-closed processor exception handling. |
 
