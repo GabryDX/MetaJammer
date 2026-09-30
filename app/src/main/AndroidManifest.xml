@@ -4,6 +4,7 @@
 
     <!-- MetaJammer is 100% offline and air-gapped: zero network permissions. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" tools:node="remove" />
 
     <!-- MetaJammer follows the Principle of Least Privilege:
          - No broad storage permissions required (uses SAF and MediaStore).
