@@ -1,0 +1,3 @@
+- Replaced binary map asset with transparent JSON format for F-Droid SUSS scanner compliance.
+- Explicitly stripped ACCESS_NETWORK_STATE permission for airtight zero-network security.
+- Restored 100% localization parity across all 24 supported languages.

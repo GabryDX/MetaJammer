@@ -90,16 +90,16 @@ class MapProjectionTest {
     }
 
     @Test
-    fun `world land binary geometry asset loads into valid Compose Path`() {
-        val binFile = sequenceOf(
-            File("src/main/assets/map/world_land.bin"),
-            File("app/src/main/assets/map/world_land.bin")
-        ).firstOrNull { it.exists() } ?: File("src/main/assets/map/world_land.bin")
+    fun `world land geometry JSON asset loads into valid Compose Path`() {
+        val jsonFile = sequenceOf(
+            File("src/main/assets/map/world_land.json"),
+            File("app/src/main/assets/map/world_land.json")
+        ).firstOrNull { it.exists() } ?: File("src/main/assets/map/world_land.json")
 
-        assertTrue("Asset file must exist at ${binFile.absolutePath}", binFile.exists())
-        assertTrue("Asset file size must be > 10KB", binFile.length() > 10_000)
+        assertTrue("Asset file must exist at ${jsonFile.absolutePath}", jsonFile.exists())
+        assertTrue("Asset file size must be > 10KB", jsonFile.length() > 10_000)
 
-        binFile.inputStream().use { stream ->
+        jsonFile.inputStream().use { stream ->
             val path = WorldMapGeometry.loadFromStream(stream)
             assertNotNull(path)
         }
