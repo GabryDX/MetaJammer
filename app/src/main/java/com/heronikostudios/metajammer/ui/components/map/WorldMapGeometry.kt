@@ -2,14 +2,14 @@ package com.heronikostudios.metajammer.ui.components.map
 
 import android.content.Context
 import androidx.compose.ui.graphics.Path
-import java.io.BufferedInputStream
-import java.io.DataInputStream
+import kotlinx.serialization.json.Json
 import java.io.InputStream
 
 /**
  * Loads and caches the Natural Earth 110m land polygons dataset into an Android Compose [Path].
  *
- * The geometry is stored in a compact binary format (20 KB) in assets/map/world_land.bin.
+ * The geometry is stored in a clean, human-readable JSON format (65 KB uncompressed, ~25 KB packaged)
+ * in assets/map/world_land.json.
  * Coordinates are pre-projected into the virtual space [0..360, 0..180].
  */
 object WorldMapGeometry {
@@ -24,7 +24,7 @@ object WorldMapGeometry {
         cachedPath?.let { return it }
         return synchronized(this) {
             cachedPath ?: run {
-                val path = loadFromStream(context.assets.open("map/world_land.bin"))
+                val path = loadFromStream(context.assets.open("map/world_land.json"))
                 cachedPath = path
                 path
             }
@@ -32,26 +32,23 @@ object WorldMapGeometry {
     }
 
     /**
-     * Parses the binary map representation from an input stream into a Compose [Path].
+     * Parses the JSON array-of-rings representation from an input stream into a Compose [Path].
      */
     fun loadFromStream(inputStream: InputStream): Path {
+        val jsonText = inputStream.bufferedReader().use { it.readText() }
+        val rings: List<List<Float>> = Json.decodeFromString(jsonText)
         val path = Path()
-        DataInputStream(BufferedInputStream(inputStream)).use { data ->
-            val ringCount = data.readUnsignedShort()
-            for (r in 0 until ringCount) {
-                val ptCount = data.readUnsignedShort()
-                if (ptCount == 0) continue
-                val x0 = data.readUnsignedShort() / 100f
-                val y0 = data.readUnsignedShort() / 100f
-                path.moveTo(x0, y0)
-                for (p in 1 until ptCount) {
-                    val x = data.readUnsignedShort() / 100f
-                    val y = data.readUnsignedShort() / 100f
-                    path.lineTo(x, y)
-                }
-                path.close()
+        for (ring in rings) {
+            if (ring.size < 2) continue
+            path.moveTo(ring[0], ring[1])
+            var i = 2
+            while (i < ring.size) {
+                path.lineTo(ring[i], ring[i + 1])
+                i += 2
             }
+            path.close()
         }
         return path
     }
 }
+

@@ -48,7 +48,7 @@ The primary security objective of MetaJammer is **guaranteed non-leakage**: ensu
 
 ### 3.2 Network Isolation & Air-Gapped Architecture
 * **Zero Network Permissions:** `android.permission.INTERNET` is completely absent from `AndroidManifest.xml`. In addition, transitive permissions such as `android.permission.ACCESS_NETWORK_STATE` (injected by default by AndroidX WorkManager) are explicitly stripped using `tools:node="remove"`. The resulting binary contains zero network permissions of any kind, making socket opening and network state inspection impossible at the OS permission level.
-* **100% Offline Vector Map:** The Location Picker uses a native Jetpack Compose Canvas rendering engine with a pre-compiled 20 KB binary land polygon dataset from Natural Earth (Public Domain). No WebViews, no JavaScript, and no external tile servers.
+* **100% Offline Vector Map:** The Location Picker uses a native Jetpack Compose Canvas rendering engine with a human-readable JSON land polygon dataset from Natural Earth (Public Domain). No WebViews, no JavaScript, no opaque binary blobs, and no external tile servers.
 * **F-Droid Anti-Feature Elimination:** Fully compliant with F-Droid inclusion policies without requiring the `TetheredNet` anti-feature flag.
 * **Offline Landmark & Custom Location Presets:** Pre-defined landmark coordinates (e.g., Tokyo, London, Paris, New York) and user-defined custom location presets function 100% offline. Custom presets are serialized via Kotlinx Serialization and persisted in application-private AndroidX DataStore preferences with zero network lookups, zero reverse-geocoding, and zero cloud synchronization.
 
