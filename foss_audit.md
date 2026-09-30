@@ -33,10 +33,11 @@ This document summarizes the audit performed to ensure that MetaJammer only uses
 
 ## Map Implementation Audit
 
-The Location Picker feature is 100% offline and air-gapped, requiring **zero network permissions**:
+The Location Picker and Custom Location Preset features are 100% offline and air-gapped, requiring **zero network permissions**:
 
 - **Native Compose Vector Map**: Renders an interactive equirectangular world map directly via hardware-accelerated Jetpack Compose Canvas, completely eliminating WebViews and JavaScript engines.
 - **Natural Earth Data**: Landmass boundaries are sourced from Natural Earth 110m physical land polygons (Public Domain / CC0), pre-compiled into a compact 20 KB binary asset (`app/src/main/assets/map/world_land.bin`).
+- **Offline & Custom Location Presets**: Users can select built-in landmarks or define custom location presets visually on the vector map or via decimal coordinates. Custom presets are serialized using FOSS `kotlinx-serialization-json` and stored locally in AndroidX DataStore preferences without network lookups or external geocoding.
 - **Zero Network Activity**: No tiles, APIs, or network requests are ever dispatched. MetaJammer requires no `INTERNET` permission and carries zero F-Droid Anti-Features (`TetheredNet` completely eliminated).
 
 ## Project Assets and Licensing Audit

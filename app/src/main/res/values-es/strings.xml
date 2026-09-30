@@ -262,4 +262,15 @@
     <string name="history_empty">Aún no se ha registrado ningún archivo.</string>
     <string name="history_clear_confirm_title">¿Borrar historial?</string>
     <string name="history_clear_confirm_message">Esto eliminará permanentemente el registro de todos los archivos procesados. Los archivos reales no se eliminarán.</string>
+
+    <!-- Custom Location Presets -->
+    <string name="custom_locations_title">Ubicaciones personalizadas</string>
+    <string name="add_custom_location">Añadir ubicación personalizada</string>
+    <string name="custom_location_name">Nombre de la ubicación</string>
+    <string name="latitude_hint">Latitud (-90 a 90)</string>
+    <string name="longitude_hint">Longitud (-180 a 180)</string>
+    <string name="pick_on_map">Elegir en el mapa</string>
+    <string name="delete_location">Eliminar ubicación</string>
+    <string name="built_in_presets">Ajustes predeterminados integrados</string>
+    <string name="no_custom_locations">Aún no se han añadido ubicaciones personalizadas.</string>
 </resources>

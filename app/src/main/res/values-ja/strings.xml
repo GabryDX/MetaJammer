@@ -262,4 +262,15 @@
     <string name="history_empty">まだファイルが記録されていません。</string>
     <string name="history_clear_confirm_title">履歴を消去しますか？</string>
     <string name="history_clear_confirm_message">これにより、処理されたすべてのファイルのログが完全に削除されます。実際のファイルは削除されません。</string>
+
+    <!-- Custom Location Presets -->
+    <string name="custom_locations_title">カスタム位置</string>
+    <string name="add_custom_location">カスタム位置を追加</string>
+    <string name="custom_location_name">位置名</string>
+    <string name="latitude_hint">緯度 (-90 〜 90)</string>
+    <string name="longitude_hint">経度 (-180 〜 180)</string>
+    <string name="pick_on_map">地図で選択</string>
+    <string name="delete_location">位置を削除</string>
+    <string name="built_in_presets">組み込みプリセット</string>
+    <string name="no_custom_locations">カスタム位置はまだ追加されていません。</string>
 </resources>

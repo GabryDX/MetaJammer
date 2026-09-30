@@ -262,4 +262,15 @@
     <string name="history_empty">Δεν έχουν καταγραφεί αρχεία ακόμα.</string>
     <string name="history_clear_confirm_title">Εκκαθάριση ιστορικού;</string>
     <string name="history_clear_confirm_message">Αυτό θα διαγράψει μόνιμα το αρχείο καταγραφής όλων των αρχείων που έχουν υποστεί επεξεργασία. Τα πραγματικά αρχεία δεν θα διαγραφούν.</string>
+
+    <!-- Custom Location Presets -->
+    <string name="custom_locations_title">Προσαρμοσμένες τοποθεσίες</string>
+    <string name="add_custom_location">Προσθήκη τοποθεσίας</string>
+    <string name="custom_location_name">Όνομα τοποθεσίας</string>
+    <string name="latitude_hint">Γεωγραφικό πλάτος (-90 έως 90)</string>
+    <string name="longitude_hint">Γεωγραφικό μήκος (-180 έως 180)</string>
+    <string name="pick_on_map">Επιλογή στον χάρτη</string>
+    <string name="delete_location">Διαγραφή τοποθεσίας</string>
+    <string name="built_in_presets">Ενσωματωμένες προεπιλογές</string>
+    <string name="no_custom_locations">Δεν έχουν προστεθεί προσαρμοσμένες τοποθεσίες ακόμα.</string>
 </resources>

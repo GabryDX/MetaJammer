@@ -262,4 +262,15 @@
     <string name="history_empty">Nessun file è stato ancora registrato.</string>
     <string name="history_clear_confirm_title">Cancellare la cronologia?</string>
     <string name="history_clear_confirm_message">Questo cancellerà permanentemente il registro di tutti i file elaborati. I file effettivi non verranno eliminati.</string>
+
+    <!-- Custom Location Presets -->
+    <string name="custom_locations_title">Posizioni personalizzate</string>
+    <string name="add_custom_location">Aggiungi posizione personalizzata</string>
+    <string name="custom_location_name">Nome posizione</string>
+    <string name="latitude_hint">Latitudine (-90 a 90)</string>
+    <string name="longitude_hint">Longitudine (-180 a 180)</string>
+    <string name="pick_on_map">Scegli sulla mappa</string>
+    <string name="delete_location">Elimina posizione</string>
+    <string name="built_in_presets">Predefiniti integrati</string>
+    <string name="no_custom_locations">Nessuna posizione personalizzata ancora aggiunta.</string>
 </resources>

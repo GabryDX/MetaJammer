@@ -262,4 +262,15 @@
     <string name="history_empty">아직 기록된 파일이 없습니다.</string>
     <string name="history_clear_confirm_title">기록을 지우시겠습니까?</string>
     <string name="history_clear_confirm_message">이 작업은 처리된 모든 파일의 로그를 영구적으로 삭제합니다. 실제 파일은 삭제되지 않습니다.</string>
+
+    <!-- Custom Location Presets -->
+    <string name="custom_locations_title">사용자 지정 위치</string>
+    <string name="add_custom_location">사용자 지정 위치 추가</string>
+    <string name="custom_location_name">위치 이름</string>
+    <string name="latitude_hint">위도 (-90 ~ 90)</string>
+    <string name="longitude_hint">경도 (-180 ~ 180)</string>
+    <string name="pick_on_map">지도에서 선택</string>
+    <string name="delete_location">위치 삭제</string>
+    <string name="built_in_presets">내장 프리셋</string>
+    <string name="no_custom_locations">아직 추가된 사용자 지정 위치가 없습니다.</string>
 </resources>

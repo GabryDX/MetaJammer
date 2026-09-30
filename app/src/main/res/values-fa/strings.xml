@@ -262,4 +262,15 @@
     <string name="history_empty">هنوز هیچ فایلی ثبت نشده است.</string>
     <string name="history_clear_confirm_title">پاکسازی تاریخچه؟</string>
     <string name="history_clear_confirm_message">این کار گزارش تمام فایل‌های پردازش شده را برای همیشه حذف می‌کند. فایل‌های اصلی حذف نخواهند شد.</string>
+
+    <!-- Custom Location Presets -->
+    <string name="custom_locations_title">مکان‌های سفارشی</string>
+    <string name="add_custom_location">افزودن مکان سفارشی</string>
+    <string name="custom_location_name">نام مکان</string>
+    <string name="latitude_hint">عرض جغرافیایی (-90 تا 90)</string>
+    <string name="longitude_hint">طول جغرافیایی (-180 تا 180)</string>
+    <string name="pick_on_map">انتخاب روی نقشه</string>
+    <string name="delete_location">حذف مکان</string>
+    <string name="built_in_presets">پیش‌فرض‌های داخلی</string>
+    <string name="no_custom_locations">هنوز هیچ مکان سفارشی اضافه نشده است.</string>
 </resources>

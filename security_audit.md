@@ -50,7 +50,7 @@ The primary security objective of MetaJammer is **guaranteed non-leakage**: ensu
 * **Zero Network Permissions:** `android.permission.INTERNET` is completely absent from `AndroidManifest.xml`. MetaJammer is an air-gapped application that cannot make network connections.
 * **100% Offline Vector Map:** The Location Picker uses a native Jetpack Compose Canvas rendering engine with a pre-compiled 20 KB binary land polygon dataset from Natural Earth (Public Domain). No WebViews, no JavaScript, and no external tile servers.
 * **F-Droid Anti-Feature Elimination:** Fully compliant with F-Droid inclusion policies without requiring the `TetheredNet` anti-feature flag.
-* **Offline Location Presets:** Pre-defined geographic coordinates (e.g., Tokyo, London, Paris, New York) and interactive tap-to-pick coordinates function entirely offline.
+* **Offline Landmark & Custom Location Presets:** Pre-defined landmark coordinates (e.g., Tokyo, London, Paris, New York) and user-defined custom location presets function 100% offline. Custom presets are serialized via Kotlinx Serialization and persisted in application-private AndroidX DataStore preferences with zero network lookups, zero reverse-geocoding, and zero cloud synchronization.
 
 ### 3.3 Cloud Backup Elimination
 Android Auto-Backup is strictly disabled in [`AndroidManifest.xml`](app/src/main/AndroidManifest.xml) to prevent sensitive or unscrubbed files from leaking to cloud storage:
@@ -169,7 +169,7 @@ Users can verify official release builds using [AppVerifier](https://github.com/
 
 | Category | Requirement | Compliance | Evidence / Implementation |
 | :--- | :--- | :---: | :--- |
-| **MASVS-STORAGE** | System credential store & sensitive data at rest | **PASS** | No sensitive credentials stored. Processed history uses Room with automated pruning; raw media is never stored permanently. |
+| **MASVS-STORAGE** | System credential store & sensitive data at rest | **PASS** | No sensitive credentials stored. Processed history uses Room with automated pruning; custom location presets are kept in application-private DataStore; raw media is never stored permanently. |
 | **MASVS-STORAGE** | No sensitive data written to application logs | **PASS** | Timber logging suppresses verbose file contents; logs only contain metadata keys and debug status. |
 | **MASVS-STORAGE** | Auto-backup disabled | **PASS** | `android:allowBackup="false"` and explicit `dataExtractionRules`. |
 | **MASVS-CRYPTO** | Industry-standard cryptographic algorithms | **PASS** | Standard platform hashing and PRNGs used; no proprietary or weak home-grown cryptography. |

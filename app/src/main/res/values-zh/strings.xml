@@ -262,4 +262,15 @@
     <string name="history_empty">尚无文件记录。</string>
     <string name="history_clear_confirm_title">清除历史记录？</string>
     <string name="history_clear_confirm_message">这将永久删除所有已处理文件的日志。原始文件不会被删除。</string>
+
+    <!-- Custom Location Presets -->
+    <string name="custom_locations_title">自定义位置</string>
+    <string name="add_custom_location">添加自定义位置</string>
+    <string name="custom_location_name">位置名称</string>
+    <string name="latitude_hint">纬度 (-90 至 90)</string>
+    <string name="longitude_hint">经度 (-180 至 180)</string>
+    <string name="pick_on_map">在地图上选取</string>
+    <string name="delete_location">删除位置</string>
+    <string name="built_in_presets">内置预设</string>
+    <string name="no_custom_locations">尚未添加自定义位置。</string>
 </resources>

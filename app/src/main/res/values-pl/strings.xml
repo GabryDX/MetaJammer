@@ -262,4 +262,15 @@
     <string name="history_empty">Żadne pliki nie zostały jeszcze zarejestrowane.</string>
     <string name="history_clear_confirm_title">Wyczyścić historię?</string>
     <string name="history_clear_confirm_message">Spowoduje to trwałe usunięcie dziennika wszystkich przetworzonych plików. Rzeczywiste pliki nie zostaną usunięte.</string>
+
+    <!-- Custom Location Presets -->
+    <string name="custom_locations_title">Własne lokalizacje</string>
+    <string name="add_custom_location">Dodaj własną lokalizację</string>
+    <string name="custom_location_name">Nazwa lokalizacji</string>
+    <string name="latitude_hint">Szerokość (-90 do 90)</string>
+    <string name="longitude_hint">Długość (-180 do 180)</string>
+    <string name="pick_on_map">Wybierz na mapie</string>
+    <string name="delete_location">Usuń lokalizację</string>
+    <string name="built_in_presets">Wbudowane szablony</string>
+    <string name="no_custom_locations">Nie dodano jeszcze własnych lokalizacji.</string>
 </resources>

@@ -262,4 +262,15 @@
     <string name="history_empty">Nulli fasciculi adhuc inscripti sunt.</string>
     <string name="history_clear_confirm_title">Historiam delere?</string>
     <string name="history_clear_confirm_message">Hoc commentarium omnium fasciculorum processorum in perpetuum delebit. Fasciculi ipsi non delebuntur.</string>
+
+    <!-- Custom Location Presets -->
+    <string name="custom_locations_title">Loci consueti</string>
+    <string name="add_custom_location">Adde locum consuetum</string>
+    <string name="custom_location_name">Nomen loci</string>
+    <string name="latitude_hint">Latitudo (-90 ad 90)</string>
+    <string name="longitude_hint">Longitudo (-180 ad 180)</string>
+    <string name="pick_on_map">Elige in charta</string>
+    <string name="delete_location">Dele locum</string>
+    <string name="built_in_presets">Praedefinita insita</string>
+    <string name="no_custom_locations">Nulli loci consueti adhuc additi.</string>
 </resources>
