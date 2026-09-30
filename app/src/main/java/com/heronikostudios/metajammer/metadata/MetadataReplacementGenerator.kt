@@ -277,13 +277,13 @@ object MetadataReplacementGenerator {
         existingLat: Double? = null,
         existingLon: Double? = null,
         profile: PoisoningProfile = PoisoningProfile.RANDOM,
-        locationPreset: LocationPreset = LocationPreset.RANDOM
+        locationPreset: com.heronikostudios.metajammer.domain.model.LocationPresetTarget = LocationPreset.RANDOM
     ): MetadataReplacementPlan {
         val (latitude, longitude) = when {
-            locationPreset != LocationPreset.RANDOM && locationPreset.latitude != null && locationPreset.longitude != null -> {
+            locationPreset.latitude != null && locationPreset.longitude != null -> {
                 val latJitter = Random.nextDouble(-0.0008, 0.0008)
                 val lonJitter = Random.nextDouble(-0.0008, 0.0008)
-                (locationPreset.latitude + latJitter) to (locationPreset.longitude + lonJitter)
+                (locationPreset.latitude!! + latJitter) to (locationPreset.longitude!! + lonJitter)
             }
             existingLat != null && existingLon != null -> {
                 val latOffset = (Random.nextDouble(0.002, 0.01) * if (Random.nextBoolean()) 1 else -1)

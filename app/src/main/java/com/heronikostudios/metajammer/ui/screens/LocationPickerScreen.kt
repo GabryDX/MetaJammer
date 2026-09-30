@@ -63,7 +63,8 @@ fun LocationPickerScreen(
     initialLat: Double,
     initialLon: Double,
     onLocationPicked: (Double, Double) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    customPresets: List<com.heronikostudios.metajammer.domain.model.CustomLocationPreset> = emptyList()
 ) {
     var selectedLat by remember { mutableDoubleStateOf(initialLat) }
     var selectedLon by remember { mutableDoubleStateOf(initialLon) }
@@ -92,8 +93,8 @@ fun LocationPickerScreen(
                 .horizontalScroll(rememberScrollState()),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            val presets = remember {
-                LocationPreset.entries.filter { it.latitude != null && it.longitude != null }
+            val presets = remember(customPresets) {
+                LocationPreset.entries.filter { it.latitude != null && it.longitude != null } + customPresets
             }
 
             presets.forEach { preset ->

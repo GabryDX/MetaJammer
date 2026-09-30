@@ -3,3 +3,4 @@
 - Eliminated F-Droid TetheredNet Anti-Feature.
 - Bundled ultra-compact Natural Earth vector landmass dataset (20 KB).
 - Enhanced Location Picker with landmark preset chips, manual coordinate fine-tuning, and randomize controls.
+- Added custom location presets with interactive offline map picker in Settings.

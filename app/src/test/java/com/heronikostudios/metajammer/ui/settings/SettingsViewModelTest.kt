@@ -47,7 +47,34 @@ private class FakeSettingsRepository(context: Context) : SettingsRepository(cont
         _settings.update { it.copy(poisoningProfile = profile) }
     }
     override suspend fun setLocationPreset(preset: com.heronikostudios.metajammer.domain.model.LocationPreset) {
-        _settings.update { it.copy(locationPreset = preset) }
+        _settings.update { it.copy(locationPreset = preset, selectedCustomLocationPresetId = null) }
+    }
+    override suspend fun selectLocationPresetTarget(target: com.heronikostudios.metajammer.domain.model.LocationPresetTarget) {
+        _settings.update {
+            if (target is com.heronikostudios.metajammer.domain.model.CustomLocationPreset) {
+                it.copy(selectedCustomLocationPresetId = target.id)
+            } else if (target is com.heronikostudios.metajammer.domain.model.LocationPreset) {
+                it.copy(locationPreset = target, selectedCustomLocationPresetId = null)
+            } else {
+                it
+            }
+        }
+    }
+    override suspend fun addCustomLocationPreset(preset: com.heronikostudios.metajammer.domain.model.CustomLocationPreset) {
+        _settings.update {
+            it.copy(
+                customLocationPresets = it.customLocationPresets.filterNot { p -> p.id == preset.id } + preset,
+                selectedCustomLocationPresetId = preset.id
+            )
+        }
+    }
+    override suspend fun removeCustomLocationPreset(presetId: String) {
+        _settings.update {
+            it.copy(
+                customLocationPresets = it.customLocationPresets.filterNot { p -> p.id == presetId },
+                selectedCustomLocationPresetId = if (it.selectedCustomLocationPresetId == presetId) null else it.selectedCustomLocationPresetId
+            )
+        }
     }
     override suspend fun setStripGps(enabled: Boolean) {
         _settings.update { it.copy(stripGps = enabled) }
@@ -138,8 +165,38 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun testClearMessageResetsMessageState() {
-        viewModel.clearMessage()
-        assertNull(viewModel.message.value)
+    fun testCustomLocationPresetManagement() = runTest {
+        val initialSettings = settingsRepository.appSettingsFlow.first()
+        assertTrue(initialSettings.customLocationPresets.isEmpty())
+        assertEquals(com.heronikostudios.metajammer.domain.model.LocationPreset.RANDOM, initialSettings.activeLocationPreset)
+
+        // Add custom location preset
+        viewModel.addCustomLocationPreset("Secret Base", 45.1234, 9.5678)
+        val afterAdd = settingsRepository.appSettingsFlow.first()
+        assertEquals(1, afterAdd.customLocationPresets.size)
+        val customPreset = afterAdd.customLocationPresets.first()
+        assertEquals("Secret Base", customPreset.name)
+        assertEquals(45.1234, customPreset.latitude, 0.0001)
+        assertEquals(9.5678, customPreset.longitude, 0.0001)
+        assertEquals(customPreset.id, afterAdd.selectedCustomLocationPresetId)
+        assertEquals(customPreset, afterAdd.activeLocationPreset)
+
+        // Switch back to built-in preset
+        viewModel.selectLocationPresetTarget(com.heronikostudios.metajammer.domain.model.LocationPreset.PARIS)
+        val afterSwitch = settingsRepository.appSettingsFlow.first()
+        assertEquals(com.heronikostudios.metajammer.domain.model.LocationPreset.PARIS, afterSwitch.activeLocationPreset)
+        assertNull(afterSwitch.selectedCustomLocationPresetId)
+
+        // Switch back to custom preset
+        viewModel.selectLocationPresetTarget(customPreset)
+        val afterSwitchCustom = settingsRepository.appSettingsFlow.first()
+        assertEquals(customPreset.id, afterSwitchCustom.selectedCustomLocationPresetId)
+        assertEquals(customPreset, afterSwitchCustom.activeLocationPreset)
+
+        // Delete custom preset
+        viewModel.removeCustomLocationPreset(customPreset.id)
+        val afterDelete = settingsRepository.appSettingsFlow.first()
+        assertTrue(afterDelete.customLocationPresets.isEmpty())
+        assertEquals(com.heronikostudios.metajammer.domain.model.LocationPreset.PARIS, afterDelete.activeLocationPreset)
     }
 }

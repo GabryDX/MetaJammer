@@ -277,6 +277,19 @@ class SettingsViewModel(
         settingsRepository.setLocationPreset(preset)
     }
 
+    fun selectLocationPresetTarget(target: LocationPresetTarget) = launchSettingUpdate {
+        settingsRepository.selectLocationPresetTarget(target)
+    }
+
+    fun addCustomLocationPreset(name: String, latitude: Double, longitude: Double) = launchSettingUpdate {
+        val preset = CustomLocationPreset(name = name.trim(), latitude = latitude, longitude = longitude)
+        settingsRepository.addCustomLocationPreset(preset)
+    }
+
+    fun removeCustomLocationPreset(presetId: String) = launchSettingUpdate {
+        settingsRepository.removeCustomLocationPreset(presetId)
+    }
+
     fun setStripGps(enabled: Boolean) = launchSettingUpdate {
         settingsRepository.setStripGps(enabled)
     }

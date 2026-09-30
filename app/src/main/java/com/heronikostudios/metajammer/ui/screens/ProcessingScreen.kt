@@ -43,8 +43,9 @@ fun ProcessingScreen(
     modifier: Modifier = Modifier,
     selectedProfile: PoisoningProfile = PoisoningProfile.RANDOM,
     onProfileSelected: (PoisoningProfile) -> Unit = {},
-    selectedLocationPreset: LocationPreset = LocationPreset.RANDOM,
-    onLocationPresetSelected: (LocationPreset) -> Unit = {}
+    selectedLocationPreset: LocationPresetTarget = LocationPreset.RANDOM,
+    onLocationPresetSelected: (LocationPresetTarget) -> Unit = {},
+    customLocationPresets: List<CustomLocationPreset> = emptyList()
 ) {
     var activeDiffFilter by remember { mutableStateOf<MetadataDiffStatus?>(null) }
     var expandedUris by remember(selectedFiles) { mutableStateOf(selectedFiles.map { it.uri }.toSet()) }
@@ -195,13 +196,16 @@ fun ProcessingScreen(
                                             .horizontalScroll(rememberScrollState()),
                                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                                     ) {
-                                        LocationPreset.entries.forEach { preset ->
-                                            FilterChip(
-                                                selected = preset == selectedLocationPreset,
-                                                onClick = { onLocationPresetSelected(preset) },
-                                                label = { Text(preset.displayName) }
-                                            )
-                                        }
+                                    val allPresets = remember(customLocationPresets) {
+                                        LocationPreset.entries + customLocationPresets
+                                    }
+                                    allPresets.forEach { preset ->
+                                        FilterChip(
+                                            selected = preset.id == selectedLocationPreset.id,
+                                            onClick = { onLocationPresetSelected(preset) },
+                                            label = { Text(preset.displayName) }
+                                        )
+                                    }
                                     }
 
                                     Button(

@@ -405,6 +405,7 @@ fun MetaJammerApp(
                         onProfileSelected = viewModel::setProcessingPoisoningProfile,
                         selectedLocationPreset = selectedLocationPreset,
                         onLocationPresetSelected = viewModel::setProcessingLocationPreset,
+                        customLocationPresets = appSettings.customLocationPresets,
                         modifier = screenModifier
                     )
                 }
@@ -421,6 +422,7 @@ fun MetaJammerApp(
                             viewModel.updatePlanLocation(uri, lat, lon)
                             navController.popBackStack()
                         },
+                        customPresets = appSettings.customLocationPresets,
                         modifier = screenModifier
                     )
                 }
@@ -526,7 +528,9 @@ fun MetaJammerApp(
                         onClearHistory = viewModel::clearProcessedFilesHistory,
                         onViewHistory = { navController.navigate(Screen.History) },
                         onPoisoningProfileChanged = viewModel::setPoisoningProfile,
-                        onLocationPresetChanged = viewModel::setLocationPreset,
+                        onLocationPresetChanged = viewModel::selectLocationPresetTarget,
+                        onAddCustomLocationPreset = viewModel::addCustomLocationPreset,
+                        onRemoveCustomLocationPreset = viewModel::removeCustomLocationPreset,
                         onStripGpsChanged = viewModel::setStripGps,
                         onStripDeviceModelChanged = viewModel::setStripDeviceModel,
                         onStripDateTimeChanged = viewModel::setStripDateTime,

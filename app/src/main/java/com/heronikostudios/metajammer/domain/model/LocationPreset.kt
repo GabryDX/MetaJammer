@@ -1,10 +1,10 @@
 package com.heronikostudios.metajammer.domain.model
 
 enum class LocationPreset(
-    val displayName: String,
-    val latitude: Double?,
-    val longitude: Double?
-) {
+    override val displayName: String,
+    override val latitude: Double?,
+    override val longitude: Double?
+) : LocationPresetTarget {
     RANDOM("Random / Scramble", null, null),
     TOKYO("Tokyo, Japan", 35.6762, 139.6503),
     PARIS("Paris, France", 48.8566, 2.3522),
@@ -15,5 +15,6 @@ enum class LocationPreset(
     REYKJAVIK("Reykjavik, Iceland", 64.1466, -21.9426),
     CAIRO("Cairo, Egypt", 30.0444, 31.2357);
 
+    override val id: String get() = name
     fun toReadableLabel(): String = displayName
 }
