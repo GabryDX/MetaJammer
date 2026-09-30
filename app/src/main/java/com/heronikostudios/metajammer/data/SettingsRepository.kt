@@ -36,7 +36,6 @@ open class SettingsRepository(private val context: Context) {
         private val SHARED_FILES_OUTPUT_ACTION = stringPreferencesKey("shared_files_output_action")
         private val SHARED_FILES_CUSTOM_PATH = stringPreferencesKey("shared_files_custom_path")
         private val THUMBNAIL_HANDLING = stringPreferencesKey("thumbnail_handling")
-        private val ALLOW_INTERNET_FOR_MAP = booleanPreferencesKey("allow_internet_for_map")
         private val USE_NEARBY_SCRAMBLE = booleanPreferencesKey("use_nearby_scramble")
         private val LANGUAGE = stringPreferencesKey("language")
         private val USE_DYNAMIC_COLOR = booleanPreferencesKey("use_dynamic_color")
@@ -150,10 +149,6 @@ open class SettingsRepository(private val context: Context) {
         context.dataStore.edit { it[THUMBNAIL_HANDLING] = handling.name }
     }
 
-    suspend fun setAllowInternetForMap(allowed: Boolean) {
-        context.dataStore.edit { it[ALLOW_INTERNET_FOR_MAP] = allowed }
-    }
-
     suspend fun setUseNearbyScramble(enabled: Boolean) {
         context.dataStore.edit { it[USE_NEARBY_SCRAMBLE] = enabled }
     }
@@ -248,7 +243,6 @@ open class SettingsRepository(private val context: Context) {
             sharedFilesOutputAction = preferences[SHARED_FILES_OUTPUT_ACTION]?.let { runCatching { SharedInputOutputAction.valueOf(it) }.getOrNull() } ?: SharedInputOutputAction.SHARE_TO_ANOTHER_APP,
             sharedFilesCustomPath = preferences[SHARED_FILES_CUSTOM_PATH],
             thumbnailHandling = preferences[THUMBNAIL_HANDLING]?.let { runCatching { ThumbnailHandling.valueOf(it) }.getOrNull() } ?: ThumbnailHandling.REMOVE,
-            allowInternetForMap = preferences[ALLOW_INTERNET_FOR_MAP] ?: false,
             useNearbyScramble = preferences[USE_NEARBY_SCRAMBLE] ?: false,
             language = preferences[LANGUAGE]?.let { runCatching { AppLanguage.valueOf(it) }.getOrNull() } ?: AppLanguage.SYSTEM,
             useDynamicColor = preferences[USE_DYNAMIC_COLOR] ?: true,

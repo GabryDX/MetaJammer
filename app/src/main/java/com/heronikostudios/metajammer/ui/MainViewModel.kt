@@ -243,7 +243,6 @@ class MainViewModel(
     fun setDefaultPrefix(value: String) = settingsViewModel.setDefaultPrefix(value)
     fun setDefaultSuffix(value: String) = settingsViewModel.setDefaultSuffix(value)
     fun setShareResultAsDefault(enabled: Boolean) = settingsViewModel.setShareResultAsDefault(enabled)
-    fun setAllowInternetForMap(allowed: Boolean) = settingsViewModel.setAllowInternetForMap(allowed)
     fun setOnboardingCompleted(completed: Boolean) = settingsViewModel.setOnboardingCompleted(completed)
     fun setEnableProcessingHistory(enabled: Boolean) = settingsViewModel.setEnableProcessingHistory(enabled)
     fun setHistoryRetentionPolicy(policy: HistoryRetentionPolicy) = settingsViewModel.setHistoryRetentionPolicy(policy)

@@ -41,7 +41,6 @@ fun SettingsScreen(
     onSharedFilesOutputActionChanged: (SharedInputOutputAction) -> Unit,
     onSharedFilesCustomPathSelected: (Uri?) -> Unit,
     onThumbnailHandlingChanged: (ThumbnailHandling) -> Unit,
-    onAllowInternetForMapChanged: (Boolean) -> Unit,
     onUseNearbyScrambleChanged: (Boolean) -> Unit,
     onLanguageChanged: (AppLanguage) -> Unit,
     onUseDynamicColorChanged: (Boolean) -> Unit,
@@ -172,12 +171,6 @@ fun SettingsScreen(
                 )
             }
 
-            SettingSwitchRow(
-                title = stringResource(R.string.setting_enable_map_title),
-                subtitle = stringResource(R.string.setting_enable_map_sub),
-                checked = settings.allowInternetForMap,
-                onCheckedChange = onAllowInternetForMapChanged
-            )
 
             SettingSwitchRow(
                 title = stringResource(R.string.setting_nearby_scramble_title),

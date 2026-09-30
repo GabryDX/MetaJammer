@@ -162,8 +162,6 @@ fun MetaJammerApp(
     }
 
     var handledSharedSignature by rememberSaveable { mutableStateOf<String?>(null) }
-    var uriToEditLocation by remember { mutableStateOf<Uri?>(null) }
-    var showInternetPermissionExplanation by remember { mutableStateOf(false) }
 
     val handleBackNavigation: () -> Unit = {
         if (isOutput) {
@@ -400,12 +398,7 @@ fun MetaJammerApp(
                             }
                         },
                         onEditLocation = { uri ->
-                            uriToEditLocation = uri
-                            if (appSettings.allowInternetForMap) {
-                                navController.navigate(Screen.LocationPicker(uri.toString()))
-                            } else {
-                                showInternetPermissionExplanation = true
-                            }
+                            navController.navigate(Screen.LocationPicker(uri.toString()))
                         },
                         hasProcessedFiles = hasProcessedFiles,
                         selectedProfile = selectedProfile,
@@ -524,7 +517,6 @@ fun MetaJammerApp(
                         onSharedFilesOutputActionChanged = viewModel::setSharedFilesOutputAction,
                         onSharedFilesCustomPathSelected = viewModel::persistAndSetSharedFilesCustomPath,
                         onThumbnailHandlingChanged = viewModel::setThumbnailHandling,
-                        onAllowInternetForMapChanged = viewModel::setAllowInternetForMap,
                         onUseNearbyScrambleChanged = viewModel::setUseNearbyScramble,
                         onLanguageChanged = viewModel::setLanguage,
                         onUseDynamicColorChanged = viewModel::setUseDynamicColor,
@@ -566,38 +558,6 @@ fun MetaJammerApp(
             }
         }
 
-        if (showInternetPermissionExplanation) {
-            AlertDialog(
-                onDismissRequest = { showInternetPermissionExplanation = false },
-                title = { Text(stringResource(R.string.map_permission_title)) },
-                text = {
-                    Text(stringResource(R.string.map_permission_message))
-                },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            viewModel.setAllowInternetForMap(true)
-                            showInternetPermissionExplanation = false
-                            val uri = uriToEditLocation
-                            if (uri != null) {
-                                navController.navigate(Screen.LocationPicker(uri.toString()))
-                            }
-                        }
-                    ) {
-                        Text(stringResource(R.string.allow_open_map))
-                    }
-                },
-                dismissButton = {
-                    TextButton(
-                        onClick = {
-                            showInternetPermissionExplanation = false
-                        }
-                    ) {
-                        Text(stringResource(R.string.not_now))
-                    }
-                }
-            )
-        }
 
         if (showNotificationPermissionExplanation) {
             AlertDialog(

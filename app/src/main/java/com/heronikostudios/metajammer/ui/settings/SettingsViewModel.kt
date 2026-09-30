@@ -241,10 +241,6 @@ class SettingsViewModel(
         settingsRepository.setThumbnailHandling(handling)
     }
 
-    fun setAllowInternetForMap(allowed: Boolean) = launchSettingUpdate {
-        settingsRepository.setAllowInternetForMap(allowed)
-    }
-
     fun setUseNearbyScramble(enabled: Boolean) = launchSettingUpdate {
         settingsRepository.setUseNearbyScramble(enabled)
     }
