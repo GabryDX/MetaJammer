@@ -6,15 +6,15 @@ Key Features:
 - Granular Tag Controls: Selectively strip or preserve individual categories (GPS, Device, Date/Time, Camera Settings, Author/Comments).
 - Before / After Visual Diff: Inspect original vs. modified metadata side-by-side with color-coded status badges and tag filtering.
 - Metadata Preview: Inspect the existing metadata of your files before processing them to see exactly what information is being exposed.
-- Interactive Map Picker & Offline Presets: Visually choose a "fake" location on an OpenStreetMap interface or pick from instant offline presets.
+- Interactive Map Picker & Custom Presets: Visually choose a "fake" location on a 100% offline Compose vector world map with landmark presets and user-defined custom location presets.
 - Quick Scrub & Share: Standalone HUD activity to scrub and re-share files directly with zero overhead.
 - Background Batch Processing: Reliable processing for 50+ high-resolution files at once using Android WorkManager.
 - Multi-Format Support: Full compatibility with modern image formats (JPEG, PNG, WebP, HEIF/HEIC, SVG), video containers (MP4, MOV), and PDF documents (metadata stripping/poisoning and hidden annotation removal).
 
 Privacy & Security:
-- Zero Broad Permissions: The app requires NO storage permissions. It uses modern Scoped Storage and SAF.
+- Zero Broad Permissions & Zero Network: The app requires NO storage or network permissions. It uses modern Scoped Storage, SAF, and an air-gapped local architecture.
 - 100% FOSS: Built entirely with Free and Open Source Software. No proprietary SDKs, trackers, or "phone-home" analytics.
 - Fail-Closed Processing: Processing failures abort immediately; unscrubbed files are never accidentally exported.
-- Local Map Assets & Opt-in Internet: Leaflet assets are bundled locally; network access is strictly restricted to optional OpenStreetMap tiles with explicit consent.
+- 100% Air-Gapped Privacy: The app requests NO internet permission (INTERNET completely removed). Map rendering and processing are 100% local, eliminating data exfiltration risks.
 - No Cloud Leaks: Android Auto-Backup is disabled to ensure unstripped metadata never leaves your device during processing.
 - Automatic Cleanup: All temporary processing residue and stale outgoing share caches are wiped automatically.

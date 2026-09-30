@@ -20,7 +20,6 @@ data class AppSettings(
     val sharedFilesOutputAction: SharedInputOutputAction = SharedInputOutputAction.SHARE_TO_ANOTHER_APP,
     val sharedFilesCustomPath: String? = null,
     val thumbnailHandling: ThumbnailHandling = ThumbnailHandling.REMOVE,
-    val allowInternetForMap: Boolean = false,
     val useNearbyScramble: Boolean = false,
     val language: AppLanguage = AppLanguage.SYSTEM,
     val useDynamicColor: Boolean = true,
@@ -30,9 +29,14 @@ data class AppSettings(
     val showHistoryShortcut: Boolean = false,
     val poisoningProfile: PoisoningProfile = PoisoningProfile.RANDOM,
     val locationPreset: LocationPreset = LocationPreset.RANDOM,
+    val customLocationPresets: List<CustomLocationPreset> = emptyList(),
+    val selectedCustomLocationPresetId: String? = null,
     val stripGps: Boolean = true,
     val stripDeviceModel: Boolean = true,
     val stripDateTime: Boolean = true,
     val stripCameraSettings: Boolean = true,
     val stripComments: Boolean = true
-)
+) {
+    val activeLocationPreset: LocationPresetTarget
+        get() = customLocationPresets.find { it.id == selectedCustomLocationPresetId } ?: locationPreset
+}

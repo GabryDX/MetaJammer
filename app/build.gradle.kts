@@ -21,8 +21,8 @@ android {
         applicationId = "com.heronikostudios.metajammer"
         minSdk = 26
         targetSdk = 37
-        versionCode = 4
-        versionName = "0.4.3"
+        versionCode = 5
+        versionName = "0.5.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

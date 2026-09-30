@@ -13,7 +13,7 @@
 - **🎛️ Granular Tag Controls:** Selectively strip or preserve individual metadata categories: GPS & Location, Device & Hardware, Date & Time, Camera Settings, and Author & Comments.
 - **📊 Before / After Visual Diff & Unified Scrolling:** Inspect original vs. modified metadata side-by-side with color-coded status badges (`REMOVED`, `POISONED`, `KEPT`), a sticky filter header (`All`, `Removed`, `Poisoned`, `Kept`), and collapsible poisoning settings for a smooth, single-scroll experience.
 - **🔍 Metadata Preview:** Inspect the existing metadata of your files before processing them to see exactly what information is being exposed.
-- **🗺️ Interactive Map Picker & Offline Presets:** Visually choose a "fake" location on an OpenStreetMap interface (powered by local bundled Leaflet assets) or pick from instant offline location presets.
+- **🗺️ Air-Gapped Vector Map Picker & Custom Presets:** Visually choose a "fake" location on a 100% offline, hardware-accelerated Compose vector world map (powered by a compact 20 KB bundled Natural Earth dataset) with pinch-to-zoom, inertial panning, crosshair targeting, landmark presets, manual coordinate fine-tuning, and user-defined custom location presets.
 - **⚡ Quick Scrub & Share:** Ultra-fast, standalone HUD activity with direct single-pass PNG chunk stripping and in-memory processing. Share files to MetaJammer from any app, process instantly with zero navigation overhead, and immediately re-open the share sheet with the clean version.
 - **📦 Background Batch Processing:** Reliable processing for 50+ high-resolution files at once using Android WorkManager, complete with system notifications.
 - **📜 History & Retention Control:** Keep an audit log of processed files with configurable privacy retention (clear after 24 hours, keep 100 items, clear on exit, or disable history) powered by an isolated Room database.
@@ -26,10 +26,10 @@
 
 MetaJammer is built on the **Principle of Least Privilege**:
 
-- **Zero Broad Permissions:** The app requires NO `READ_EXTERNAL_STORAGE` or `WRITE_EXTERNAL_STORAGE` permissions. It uses modern Scoped Storage and SAF.
+- **Zero Broad Permissions & Zero Network:** The app requires NO `READ_EXTERNAL_STORAGE`, `WRITE_EXTERNAL_STORAGE`, or `INTERNET` permissions. It uses modern Scoped Storage, SAF, and an air-gapped local architecture.
 - **100% FOSS:** Built entirely with Free and Open Source Software. No proprietary SDKs, trackers, or "phone-home" analytics.
 - **Fail-Closed Processing:** If processing fails or encounters unexpected corruption, MetaJammer strictly fails closed—unscrubbed raw files are never inadvertently returned, shared, or exported.
-- **Local Map Assets & Opt-in Internet:** Leaflet JS and CSS are bundled locally in the app assets, eliminating external CDN dependencies. Network access is strictly restricted to optional OpenStreetMap tile loading and is only active after explicit user consent.
+- **100% Air-Gapped Privacy:** The app declares NO `android.permission.INTERNET` permission. All processing, vector map rendering, and preset generation function entirely offline with zero network capability, making data exfiltration technically impossible at the OS permission level.
 - **Hardened I/O & Memory:** Unicode-safe filename sanitization, 64KB buffered stream copying, direct single-pass PNG chunk manipulation, in-memory PDF processing up to 10MB, isolated subdirectories, and automatic purging of temporary processing residue.
 - **No Cloud Leaks:** Android Auto-Backup is disabled to ensure unstripped metadata never leaves your device during processing.
 - **Automatic Cleanup:** All temporary processing residue and stale outgoing share caches are programmatically wiped.
@@ -47,7 +47,7 @@ MetaJammer is designed for F-Droid. You can build the F-Droid version using the 
 ./gradlew assembleFlossRelease
 ```
 
-The app is 100% FOSS and follows F-Droid's inclusion policy. Metadata for F-Droid is located in the `fastlane` and `metadata` directories.
+The app is 100% FOSS, carries zero Anti-Features (`TetheredNet` completely eliminated), and follows F-Droid's inclusion policy. Metadata for F-Droid is located in the `fastlane` and `metadata` directories.
 
 ## Getting Started
 

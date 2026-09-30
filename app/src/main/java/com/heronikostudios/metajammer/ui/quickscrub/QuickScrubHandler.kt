@@ -64,13 +64,13 @@ class QuickScrubHandler(
 
         val replacementPlans = if (mode == ProcessingMode.POISON_METADATA) {
             val useScramble = appSettings.useNearbyScramble
-            val preset = appSettings.locationPreset
+            val preset = appSettings.activeLocationPreset
             val profile = appSettings.poisoningProfile
             withContext(Dispatchers.IO) {
                 coroutineScope {
                     files.map { selectedFile ->
                         async {
-                            val plan = if (useScramble && preset == com.heronikostudios.metajammer.domain.model.LocationPreset.RANDOM) {
+                            val plan = if (useScramble && preset.id == com.heronikostudios.metajammer.domain.model.LocationPreset.RANDOM.id) {
                                 val metadata = metadataRepository.readMetadata(selectedFile)
                                 val lat = metadata.find { it.key == "GPSLatitude" }?.value?.toDoubleOrNull()
                                 val lon = metadata.find { it.key == "GPSLongitude" }?.value?.toDoubleOrNull()

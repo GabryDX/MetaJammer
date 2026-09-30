@@ -262,4 +262,15 @@
     <string name="history_empty">טרם נרשמו קבצים.</string>
     <string name="history_clear_confirm_title">לנקות היסטוריה?</string>
     <string name="history_clear_confirm_message">פעולה זו תמחק לצמיתות את היומן של כל הקבצים שעובדו. הקבצים עצמם לא יימחקו.</string>
+
+    <!-- Custom Location Presets -->
+    <string name="custom_locations_title">מיקומים מותאמים אישית</string>
+    <string name="add_custom_location">הוספת מיקום מותאם אישית</string>
+    <string name="custom_location_name">שם המיקום</string>
+    <string name="latitude_hint">קו רוחב (-90 עד 90)</string>
+    <string name="longitude_hint">קו אורך (-180 עד 180)</string>
+    <string name="pick_on_map">בחירה במפה</string>
+    <string name="delete_location">מחיקת מיקום</string>
+    <string name="built_in_presets">הגדרות קבועות מובנות</string>
+    <string name="no_custom_locations">עדיין לא נוספו מיקומים מותאמים אישית.</string>
 </resources>

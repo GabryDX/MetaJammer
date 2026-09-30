@@ -262,4 +262,15 @@
     <string name="history_empty">Файлы еще не записаны в журнал.</string>
     <string name="history_clear_confirm_title">Очистить историю?</string>
     <string name="history_clear_confirm_message">Это безвозвратно удалит журнал всех обработанных файлов. Сами файлы удалены не будут.</string>
+
+    <!-- Custom Location Presets -->
+    <string name="custom_locations_title">Пользовательские локации</string>
+    <string name="add_custom_location">Добавить локацию</string>
+    <string name="custom_location_name">Название локации</string>
+    <string name="latitude_hint">Широта (от -90 до 90)</string>
+    <string name="longitude_hint">Долгота (от -180 до 180)</string>
+    <string name="pick_on_map">Выбрать на карте</string>
+    <string name="delete_location">Удалить локацию</string>
+    <string name="built_in_presets">Встроенные пресеты</string>
+    <string name="no_custom_locations">Пользовательские локации еще не добавлены.</string>
 </resources>

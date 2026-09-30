@@ -262,4 +262,15 @@
     <string name="history_empty">لم يتم تسجيل أي ملفات بعد.</string>
     <string name="history_clear_confirm_title">مسح السجل؟</string>
     <string name="history_clear_confirm_message">سيؤدي هذا إلى حذف سجل جميع الملفات المعالجة نهائياً. لن يتم حذف الملفات الفعلية.</string>
+
+    <!-- Custom Location Presets -->
+    <string name="custom_locations_title">مواقع مخصصة</string>
+    <string name="add_custom_location">إضافة موقع مخصص</string>
+    <string name="custom_location_name">اسم الموقع</string>
+    <string name="latitude_hint">خط العرض (-90 إلى 90)</string>
+    <string name="longitude_hint">خط الطول (-180 إلى 180)</string>
+    <string name="pick_on_map">تحديد على الخريطة</string>
+    <string name="delete_location">حذف الموقع</string>
+    <string name="built_in_presets">إعدادات مسبقة مدمجة</string>
+    <string name="no_custom_locations">لم تتم إضافة أي مواقع مخصصة بعد.</string>
 </resources>

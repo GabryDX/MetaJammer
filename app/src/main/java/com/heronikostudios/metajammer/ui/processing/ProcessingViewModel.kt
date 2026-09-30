@@ -65,8 +65,8 @@ class ProcessingViewModel(
     private val _selectedProfile = MutableStateFlow(PoisoningProfile.RANDOM)
     val selectedProfile: StateFlow<PoisoningProfile> = _selectedProfile.asStateFlow()
 
-    private val _selectedLocationPreset = MutableStateFlow(LocationPreset.RANDOM)
-    val selectedLocationPreset: StateFlow<LocationPreset> = _selectedLocationPreset.asStateFlow()
+    private val _selectedLocationPreset = MutableStateFlow<LocationPresetTarget>(LocationPreset.RANDOM)
+    val selectedLocationPreset: StateFlow<LocationPresetTarget> = _selectedLocationPreset.asStateFlow()
 
     private val _processedFiles = MutableStateFlow<List<Pair<SelectedFile, File>>>(emptyList())
     val processedFiles: StateFlow<List<Pair<SelectedFile, File>>> = _processedFiles.asStateFlow()
@@ -115,7 +115,7 @@ class ProcessingViewModel(
         _selectedMode.value = mode
         if (mode == ProcessingMode.POISON_METADATA && _replacementPlans.value.isEmpty()) {
             _selectedProfile.value = appSettings.poisoningProfile
-            _selectedLocationPreset.value = appSettings.locationPreset
+            _selectedLocationPreset.value = appSettings.activeLocationPreset
             regeneratePoisonPlansInternal(selectedFiles, appSettings)
         } else if (mode != ProcessingMode.POISON_METADATA) {
             _replacementPlans.value = emptyMap()
@@ -169,7 +169,7 @@ class ProcessingViewModel(
             val lat = metadata.find { it.key == "GPSLatitude" }?.value?.toDoubleOrNull()
             val lon = metadata.find { it.key == "GPSLongitude" }?.value?.toDoubleOrNull()
 
-            selectedFile.uri to if (useScramble && lat != null && lon != null && currentPreset == LocationPreset.RANDOM) {
+            selectedFile.uri to if (useScramble && lat != null && lon != null && currentPreset.id == LocationPreset.RANDOM.id) {
                 MetadataReplacementGenerator.generatePlan(
                     mimeType = selectedFile.mimeType,
                     existingLat = lat,
@@ -199,7 +199,7 @@ class ProcessingViewModel(
     }
 
     fun setLocationPreset(
-        preset: LocationPreset,
+        preset: LocationPresetTarget,
         selectedFiles: List<SelectedFile>,
         appSettings: AppSettings
     ) {

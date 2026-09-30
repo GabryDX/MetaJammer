@@ -262,4 +262,15 @@
     <string name="history_empty">Er zijn nog geen bestanden gelogd.</string>
     <string name="history_clear_confirm_title">Geschiedenis wissen?</string>
     <string name="history_clear_confirm_message">Dit zal het logboek van alle verwerkte bestanden permanent verwijderen. De werkelijke bestanden worden niet verwijderd.</string>
+
+    <!-- Custom Location Presets -->
+    <string name="custom_locations_title">Aangepaste locaties</string>
+    <string name="add_custom_location">Aangepaste locatie toevoegen</string>
+    <string name="custom_location_name">Locatienaam</string>
+    <string name="latitude_hint">Breedtegraad (-90 tot 90)</string>
+    <string name="longitude_hint">Lengtegraad (-180 tot 180)</string>
+    <string name="pick_on_map">Kiezen op kaart</string>
+    <string name="delete_location">Locatie verwijderen</string>
+    <string name="built_in_presets">Ingebouwde voorinstellingen</string>
+    <string name="no_custom_locations">Nog geen aangepaste locaties toegevoegd.</string>
 </resources>

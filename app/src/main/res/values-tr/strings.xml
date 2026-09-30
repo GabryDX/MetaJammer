@@ -262,4 +262,15 @@
     <string name="history_empty">Henüz hiçbir dosya kaydedilmedi.</string>
     <string name="history_clear_confirm_title">Geçmiş temizlensin mi?</string>
     <string name="history_clear_confirm_message">Bu, işlenen tüm dosyaların günlüğünü kalıcı olarak silecektir. Gerçek dosyalar silinmeyecektir.</string>
+
+    <!-- Custom Location Presets -->
+    <string name="custom_locations_title">Özel Konumlar</string>
+    <string name="add_custom_location">Özel Konum Ekle</string>
+    <string name="custom_location_name">Konum Adı</string>
+    <string name="latitude_hint">Enlem (-90 ila 90)</string>
+    <string name="longitude_hint">Boylam (-180 ila 180)</string>
+    <string name="pick_on_map">Haritada Seç</string>
+    <string name="delete_location">Konumu sil</string>
+    <string name="built_in_presets">Yerleşik Önayarlar</string>
+    <string name="no_custom_locations">Henüz özel konum eklenmedi.</string>
 </resources>

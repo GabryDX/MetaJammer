@@ -88,7 +88,7 @@ class MainViewModel(
     val replacementPlans: StateFlow<Map<Uri, MetadataReplacementPlan>> = processingViewModel.replacementPlans
     val selectedMode: StateFlow<ProcessingMode?> = processingViewModel.selectedMode
     val selectedProfile: StateFlow<PoisoningProfile> = processingViewModel.selectedProfile
-    val selectedLocationPreset: StateFlow<LocationPreset> = processingViewModel.selectedLocationPreset
+    val selectedLocationPreset: StateFlow<LocationPresetTarget> = processingViewModel.selectedLocationPreset
     val processedFiles: StateFlow<List<Pair<SelectedFile, File>>> = processingViewModel.processedFiles
     val processing: StateFlow<Boolean> = processingViewModel.processing
     val workInfo: StateFlow<WorkInfo?> = processingViewModel.workInfo
@@ -193,7 +193,7 @@ class MainViewModel(
         processingViewModel.setPoisoningProfile(profile, homeViewModel.selectedFiles.value, settingsViewModel.appSettings.value)
     }
 
-    fun setProcessingLocationPreset(preset: LocationPreset) {
+    fun setProcessingLocationPreset(preset: LocationPresetTarget) {
         processingViewModel.setLocationPreset(preset, homeViewModel.selectedFiles.value, settingsViewModel.appSettings.value)
     }
 
@@ -243,13 +243,15 @@ class MainViewModel(
     fun setDefaultPrefix(value: String) = settingsViewModel.setDefaultPrefix(value)
     fun setDefaultSuffix(value: String) = settingsViewModel.setDefaultSuffix(value)
     fun setShareResultAsDefault(enabled: Boolean) = settingsViewModel.setShareResultAsDefault(enabled)
-    fun setAllowInternetForMap(allowed: Boolean) = settingsViewModel.setAllowInternetForMap(allowed)
     fun setOnboardingCompleted(completed: Boolean) = settingsViewModel.setOnboardingCompleted(completed)
     fun setEnableProcessingHistory(enabled: Boolean) = settingsViewModel.setEnableProcessingHistory(enabled)
     fun setHistoryRetentionPolicy(policy: HistoryRetentionPolicy) = settingsViewModel.setHistoryRetentionPolicy(policy)
     fun setShowHistoryShortcut(show: Boolean) = settingsViewModel.setShowHistoryShortcut(show)
     fun setPoisoningProfile(profile: PoisoningProfile) = settingsViewModel.setPoisoningProfile(profile)
     fun setLocationPreset(preset: LocationPreset) = settingsViewModel.setLocationPreset(preset)
+    fun selectLocationPresetTarget(target: LocationPresetTarget) = settingsViewModel.selectLocationPresetTarget(target)
+    fun addCustomLocationPreset(name: String, latitude: Double, longitude: Double) = settingsViewModel.addCustomLocationPreset(name, latitude, longitude)
+    fun removeCustomLocationPreset(presetId: String) = settingsViewModel.removeCustomLocationPreset(presetId)
     fun setStripGps(enabled: Boolean) = settingsViewModel.setStripGps(enabled)
     fun setStripDeviceModel(enabled: Boolean) = settingsViewModel.setStripDeviceModel(enabled)
     fun setStripDateTime(enabled: Boolean) = settingsViewModel.setStripDateTime(enabled)

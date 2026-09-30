@@ -262,4 +262,15 @@
     <string name="history_empty">ยังไม่มีการบันทึกไฟล์</string>
     <string name="history_clear_confirm_title">ล้างประวัติหรือไม่?</string>
     <string name="history_clear_confirm_message">การดำเนินการนี้จะลบประวัติของไฟล์ที่ประมวลผลทั้งหมดอย่างถาวร ไฟล์จริงจะไม่ถูกลบ</string>
+
+    <!-- Custom Location Presets -->
+    <string name="custom_locations_title">ตำแหน่งที่กำหนดเอง</string>
+    <string name="add_custom_location">เพิ่มตำแหน่งที่กำหนดเอง</string>
+    <string name="custom_location_name">ชื่อตำแหน่ง</string>
+    <string name="latitude_hint">ละติจูด (-90 ถึง 90)</string>
+    <string name="longitude_hint">ลองจิจูด (-180 ถึง 180)</string>
+    <string name="pick_on_map">เลือกบนแผนที่</string>
+    <string name="delete_location">ลบตำแหน่ง</string>
+    <string name="built_in_presets">ค่าที่ตั้งไว้ล่วงหน้าในตัว</string>
+    <string name="no_custom_locations">ยังไม่ได้เพิ่มตำแหน่งที่กำหนดเอง</string>
 </resources>

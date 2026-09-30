@@ -262,4 +262,15 @@
     <string name="history_empty">Bisher wurden keine Dateien protokolliert.</string>
     <string name="history_clear_confirm_title">Verlauf löschen?</string>
     <string name="history_clear_confirm_message">Dies wird das Protokoll aller verarbeiteten Dateien dauerhaft löschen. Die eigentlichen Dateien werden nicht gelöscht.</string>
+
+    <!-- Custom Location Presets -->
+    <string name="custom_locations_title">Eigene Standorte</string>
+    <string name="add_custom_location">Eigenen Standort hinzufügen</string>
+    <string name="custom_location_name">Standortname</string>
+    <string name="latitude_hint">Breitengrad (-90 bis 90)</string>
+    <string name="longitude_hint">Längengrad (-180 bis 180)</string>
+    <string name="pick_on_map">Auf Karte auswählen</string>
+    <string name="delete_location">Standort löschen</string>
+    <string name="built_in_presets">Integrierte Voreinstellungen</string>
+    <string name="no_custom_locations">Noch keine eigenen Standorte hinzugefügt.</string>
 </resources>

@@ -241,10 +241,6 @@ class SettingsViewModel(
         settingsRepository.setThumbnailHandling(handling)
     }
 
-    fun setAllowInternetForMap(allowed: Boolean) = launchSettingUpdate {
-        settingsRepository.setAllowInternetForMap(allowed)
-    }
-
     fun setUseNearbyScramble(enabled: Boolean) = launchSettingUpdate {
         settingsRepository.setUseNearbyScramble(enabled)
     }
@@ -279,6 +275,19 @@ class SettingsViewModel(
 
     fun setLocationPreset(preset: LocationPreset) = launchSettingUpdate {
         settingsRepository.setLocationPreset(preset)
+    }
+
+    fun selectLocationPresetTarget(target: LocationPresetTarget) = launchSettingUpdate {
+        settingsRepository.selectLocationPresetTarget(target)
+    }
+
+    fun addCustomLocationPreset(name: String, latitude: Double, longitude: Double) = launchSettingUpdate {
+        val preset = CustomLocationPreset(name = name.trim(), latitude = latitude, longitude = longitude)
+        settingsRepository.addCustomLocationPreset(preset)
+    }
+
+    fun removeCustomLocationPreset(presetId: String) = launchSettingUpdate {
+        settingsRepository.removeCustomLocationPreset(presetId)
     }
 
     fun setStripGps(enabled: Boolean) = launchSettingUpdate {

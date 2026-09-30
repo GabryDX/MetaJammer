@@ -262,4 +262,15 @@
     <string name="history_empty">Chưa có tệp nào được ghi lại.</string>
     <string name="history_clear_confirm_title">Xóa lịch sử?</string>
     <string name="history_clear_confirm_message">Thao tác này sẽ xóa vĩnh viễn nhật ký của tất cả các tệp đã xử lý. Các tệp thực tế sẽ không bị xóa.</string>
+
+    <!-- Custom Location Presets -->
+    <string name="custom_locations_title">Vị trí tùy chỉnh</string>
+    <string name="add_custom_location">Thêm vị trí tùy chỉnh</string>
+    <string name="custom_location_name">Tên vị trí</string>
+    <string name="latitude_hint">Vĩ độ (-90 đến 90)</string>
+    <string name="longitude_hint">Kinh độ (-180 đến 180)</string>
+    <string name="pick_on_map">Chọn trên bản đồ</string>
+    <string name="delete_location">Xóa vị trí</string>
+    <string name="built_in_presets">Cài đặt sẵn tích hợp</string>
+    <string name="no_custom_locations">Chưa có vị trí tùy chỉnh nào được thêm.</string>
 </resources>

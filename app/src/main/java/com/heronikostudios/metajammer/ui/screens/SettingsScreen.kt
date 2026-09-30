@@ -6,18 +6,29 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.heronikostudios.metajammer.R
 import com.heronikostudios.metajammer.domain.model.*
+import com.heronikostudios.metajammer.ui.components.map.MapProjection
+import com.heronikostudios.metajammer.ui.components.map.VectorWorldMap
+import java.util.Locale
 
 @Composable
 fun SettingsScreen(
@@ -41,7 +52,6 @@ fun SettingsScreen(
     onSharedFilesOutputActionChanged: (SharedInputOutputAction) -> Unit,
     onSharedFilesCustomPathSelected: (Uri?) -> Unit,
     onThumbnailHandlingChanged: (ThumbnailHandling) -> Unit,
-    onAllowInternetForMapChanged: (Boolean) -> Unit,
     onUseNearbyScrambleChanged: (Boolean) -> Unit,
     onLanguageChanged: (AppLanguage) -> Unit,
     onUseDynamicColorChanged: (Boolean) -> Unit,
@@ -52,7 +62,9 @@ fun SettingsScreen(
     onViewHistory: () -> Unit,
     modifier: Modifier = Modifier,
     onPoisoningProfileChanged: (PoisoningProfile) -> Unit = {},
-    onLocationPresetChanged: (LocationPreset) -> Unit = {},
+    onLocationPresetChanged: (LocationPresetTarget) -> Unit = {},
+    onAddCustomLocationPreset: (String, Double, Double) -> Unit = { _, _, _ -> },
+    onRemoveCustomLocationPreset: (String) -> Unit = {},
     onStripGpsChanged: (Boolean) -> Unit = {},
     onStripDeviceModelChanged: (Boolean) -> Unit = {},
     onStripDateTimeChanged: (Boolean) -> Unit = {},
@@ -172,12 +184,6 @@ fun SettingsScreen(
                 )
             }
 
-            SettingSwitchRow(
-                title = stringResource(R.string.setting_enable_map_title),
-                subtitle = stringResource(R.string.setting_enable_map_sub),
-                checked = settings.allowInternetForMap,
-                onCheckedChange = onAllowInternetForMapChanged
-            )
 
             SettingSwitchRow(
                 title = stringResource(R.string.setting_nearby_scramble_title),
@@ -194,8 +200,8 @@ fun SettingsScreen(
 
             DialogSettingRow(
                 title = stringResource(R.string.location_preset_label),
-                value = settings.locationPreset.displayName,
-                onClick = { activeDialog = SettingsDialog.LocationPresetDialog(settings.locationPreset) }
+                value = settings.activeLocationPreset.displayName,
+                onClick = { activeDialog = SettingsDialog.LocationPresetDialog }
             )
         }
 
@@ -356,7 +362,9 @@ fun SettingsScreen(
             onLanguageChanged = onLanguageChanged,
             onHistoryRetentionPolicyChanged = onHistoryRetentionPolicyChanged,
             onPoisoningProfileChanged = onPoisoningProfileChanged,
-            onLocationPresetChanged = onLocationPresetChanged
+            onLocationPresetChanged = onLocationPresetChanged,
+            onAddCustomLocationPreset = onAddCustomLocationPreset,
+            onRemoveCustomLocationPreset = onRemoveCustomLocationPreset
         )
     }
 }
@@ -479,7 +487,7 @@ private sealed class SettingsDialog {
     data class Language(val current: AppLanguage) : SettingsDialog()
     data class HistoryRetention(val current: HistoryRetentionPolicy) : SettingsDialog()
     data class ProfileDialog(val current: PoisoningProfile) : SettingsDialog()
-    data class LocationPresetDialog(val current: LocationPreset) : SettingsDialog()
+    object LocationPresetDialog : SettingsDialog()
 }
 
 @Composable
@@ -504,7 +512,9 @@ private fun HandleSettingsDialog(
     onLanguageChanged: (AppLanguage) -> Unit,
     onHistoryRetentionPolicyChanged: (HistoryRetentionPolicy) -> Unit,
     onPoisoningProfileChanged: (PoisoningProfile) -> Unit = {},
-    onLocationPresetChanged: (LocationPreset) -> Unit = {}
+    onLocationPresetChanged: (LocationPresetTarget) -> Unit = {},
+    onAddCustomLocationPreset: (String, Double, Double) -> Unit = { _, _, _ -> },
+    onRemoveCustomLocationPreset: (String) -> Unit = {}
 ) {
     when (dialog) {
         is SettingsDialog.ProfileDialog -> SingleSelectDialog(
@@ -515,12 +525,15 @@ private fun HandleSettingsDialog(
             onConfirm = onPoisoningProfileChanged,
             onDismiss = onDismiss
         )
-        is SettingsDialog.LocationPresetDialog -> SingleSelectDialog(
-            title = stringResource(R.string.location_preset_label),
-            options = LocationPreset.entries,
-            selected = dialog.current,
-            labelProvider = { it.displayName },
-            onConfirm = onLocationPresetChanged,
+        is SettingsDialog.LocationPresetDialog -> LocationPresetSelectionDialog(
+            activePreset = settings.activeLocationPreset,
+            customPresets = settings.customLocationPresets,
+            onSelectPreset = { preset ->
+                onLocationPresetChanged(preset)
+                onDismiss()
+            },
+            onAddCustomPreset = onAddCustomLocationPreset,
+            onRemoveCustomPreset = onRemoveCustomLocationPreset,
             onDismiss = onDismiss
         )
         is SettingsDialog.FolderStructureDialog -> SingleSelectDialog(
@@ -752,4 +765,319 @@ private fun AppLanguage.toReadableLabel() = when (this) {
     AppLanguage.GREEK -> stringResource(R.string.language_el)
     AppLanguage.HEBREW -> stringResource(R.string.language_iw)
     AppLanguage.LATIN -> stringResource(R.string.language_la)
+}
+
+@Composable
+private fun LocationPresetSelectionDialog(
+    activePreset: LocationPresetTarget,
+    customPresets: List<CustomLocationPreset>,
+    onSelectPreset: (LocationPresetTarget) -> Unit,
+    onAddCustomPreset: (String, Double, Double) -> Unit,
+    onRemoveCustomPreset: (String) -> Unit,
+    onDismiss: () -> Unit
+) {
+    var showAddDialog by remember { mutableStateOf(false) }
+
+    if (showAddDialog) {
+        AddCustomLocationDialog(
+            onAdd = { name, lat, lon ->
+                onAddCustomPreset(name, lat, lon)
+                showAddDialog = false
+            },
+            onDismiss = { showAddDialog = false }
+        )
+    }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.location_preset_label)) },
+        text = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                // Add Custom Location Action Button
+                FilledTonalButton(
+                    onClick = { showAddDialog = true },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp)
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Text(stringResource(R.string.add_custom_location))
+                }
+
+                // Custom Locations Section (if any)
+                if (customPresets.isNotEmpty()) {
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        text = stringResource(R.string.custom_locations_title),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    customPresets.forEach { preset ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .selectable(
+                                    selected = activePreset.id == preset.id,
+                                    onClick = { onSelectPreset(preset) }
+                                )
+                                .padding(vertical = 4.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(
+                                selected = activePreset.id == preset.id,
+                                onClick = { onSelectPreset(preset) }
+                            )
+                            Column(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(start = 8.dp)
+                            ) {
+                                Text(
+                                    text = preset.name,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                                Text(
+                                    text = MapProjection.formatCoordinates(preset.latitude, preset.longitude),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            IconButton(
+                                onClick = { onRemoveCustomPreset(preset.id) },
+                                modifier = Modifier.size(36.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = stringResource(R.string.delete_location),
+                                    tint = MaterialTheme.colorScheme.error,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                            }
+                        }
+                    }
+                }
+
+                // Built-in Presets Section
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text = stringResource(R.string.built_in_presets),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Bold
+                )
+
+                LocationPreset.entries.forEach { preset ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .selectable(
+                                selected = activePreset.id == preset.id,
+                                onClick = { onSelectPreset(preset) }
+                            )
+                            .padding(vertical = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(
+                            selected = activePreset.id == preset.id,
+                            onClick = { onSelectPreset(preset) }
+                        )
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(start = 8.dp)
+                        ) {
+                            Text(
+                                text = preset.displayName,
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                            if (preset.latitude != null && preset.longitude != null) {
+                                Text(
+                                    text = MapProjection.formatCoordinates(preset.latitude, preset.longitude),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = {},
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(R.string.cancel))
+            }
+        }
+    )
+}
+
+@Composable
+private fun AddCustomLocationDialog(
+    onAdd: (name: String, lat: Double, lon: Double) -> Unit,
+    onDismiss: () -> Unit
+) {
+    var nameText by remember { mutableStateOf("") }
+    var latText by remember { mutableStateOf("") }
+    var lonText by remember { mutableStateOf("") }
+    var showMapPicker by remember { mutableStateOf(false) }
+
+    val latDouble = latText.toDoubleOrNull()
+    val lonDouble = lonText.toDoubleOrNull()
+    val isValid = nameText.isNotBlank() &&
+            latDouble != null && latDouble in -90.0..90.0 &&
+            lonDouble != null && lonDouble in -180.0..180.0
+
+    if (showMapPicker) {
+        var tempLat by remember { mutableDoubleStateOf(latDouble ?: 0.0) }
+        var tempLon by remember { mutableDoubleStateOf(lonDouble ?: 0.0) }
+
+        Dialog(
+            onDismissRequest = { showMapPicker = false },
+            properties = DialogProperties(usePlatformDefaultWidth = false)
+        ) {
+            Surface(modifier = Modifier.fillMaxSize()) {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    VectorWorldMap(
+                        selectedLat = tempLat,
+                        selectedLon = tempLon,
+                        onLocationChanged = { lat, lon ->
+                            tempLat = lat
+                            tempLon = lon
+                        },
+                        modifier = Modifier.fillMaxSize()
+                    )
+
+                    Surface(
+                        modifier = Modifier
+                            .align(Alignment.TopCenter)
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f),
+                        tonalElevation = 6.dp
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Column {
+                                Text(
+                                    text = stringResource(R.string.pick_on_map),
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                                Text(
+                                    text = MapProjection.formatCoordinates(tempLat, tempLon),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                TextButton(onClick = { showMapPicker = false }) {
+                                    Text(stringResource(R.string.cancel))
+                                }
+                                Button(
+                                    onClick = {
+                                        latText = String.format(Locale.US, "%.4f", tempLat)
+                                        lonText = String.format(Locale.US, "%.4f", tempLon)
+                                        showMapPicker = false
+                                    }
+                                ) {
+                                    Text(stringResource(R.string.ok))
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.add_custom_location)) },
+        text = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                OutlinedTextField(
+                    value = nameText,
+                    onValueChange = { nameText = it },
+                    label = { Text(stringResource(R.string.custom_location_name)) },
+                    placeholder = { Text("e.g. My Cabin, Area 51") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                OutlinedTextField(
+                    value = latText,
+                    onValueChange = { latText = it },
+                    label = { Text(stringResource(R.string.latitude_hint)) },
+                    placeholder = { Text("e.g. 45.1234") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                OutlinedTextField(
+                    value = lonText,
+                    onValueChange = { lonText = it },
+                    label = { Text(stringResource(R.string.longitude_hint)) },
+                    placeholder = { Text("e.g. 9.5678") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                OutlinedButton(
+                    onClick = { showMapPicker = true },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Place,
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp)
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Text(stringResource(R.string.pick_on_map))
+                }
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = {
+                    val lat = latDouble
+                    val lon = lonDouble
+                    if (nameText.isNotBlank() && lat != null && lat in -90.0..90.0 && lon != null && lon in -180.0..180.0) {
+                        onAdd(nameText.trim(), lat, lon)
+                    }
+                },
+                enabled = isValid
+            ) {
+                Text(stringResource(R.string.save))
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(R.string.cancel))
+            }
+        }
+    )
 }

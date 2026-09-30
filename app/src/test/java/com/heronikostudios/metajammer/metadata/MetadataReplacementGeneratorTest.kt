@@ -226,4 +226,20 @@ class MetadataReplacementGeneratorTest {
         assertEquals("S", sydneyPlan.latitudeRef)
         assertEquals("E", sydneyPlan.longitudeRef)
     }
+
+    @Test
+    fun `generatePlan with CustomLocationPreset places coordinates near custom location`() {
+        val customPreset = com.heronikostudios.metajammer.domain.model.CustomLocationPreset(
+            name = "Area 51",
+            latitude = 37.2431,
+            longitude = -115.7930
+        )
+        val customPlan = MetadataReplacementGenerator.generatePlan(
+            locationPreset = customPreset
+        )
+        org.junit.Assert.assertEquals(37.2431, customPlan.latitude, 0.01)
+        org.junit.Assert.assertEquals(-115.7930, customPlan.longitude, 0.01)
+        assertEquals("N", customPlan.latitudeRef)
+        assertEquals("W", customPlan.longitudeRef)
+    }
 }

@@ -262,4 +262,15 @@
     <string name="history_empty">Belum ada file yang dicatat.</string>
     <string name="history_clear_confirm_title">Bersihkan riwayat?</string>
     <string name="history_clear_confirm_message">Ini akan menghapus log semua file yang diproses secara permanen. File asli tidak akan dihapus.</string>
+
+    <!-- Custom Location Presets -->
+    <string name="custom_locations_title">Lokasi Kustom</string>
+    <string name="add_custom_location">Tambah Lokasi Kustom</string>
+    <string name="custom_location_name">Nama Lokasi</string>
+    <string name="latitude_hint">Lintang (-90 hingga 90)</string>
+    <string name="longitude_hint">Bujur (-180 hingga 180)</string>
+    <string name="pick_on_map">Pilih di Peta</string>
+    <string name="delete_location">Hapus lokasi</string>
+    <string name="built_in_presets">Preset Bawaan</string>
+    <string name="no_custom_locations">Belum ada lokasi kustom yang ditambahkan.</string>
 </resources>

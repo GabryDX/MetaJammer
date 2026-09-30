@@ -262,4 +262,15 @@
     <string name="history_empty">No files have been logged yet.</string>
     <string name="history_clear_confirm_title">Clear history?</string>
     <string name="history_clear_confirm_message">This will permanently delete the log of all processed files. The actual files will not be deleted.</string>
+
+    <!-- Custom Location Presets -->
+    <string name="custom_locations_title">Custom Locations</string>
+    <string name="add_custom_location">Add Custom Location</string>
+    <string name="custom_location_name">Location Name</string>
+    <string name="latitude_hint">Latitude (-90 to 90)</string>
+    <string name="longitude_hint">Longitude (-180 to 180)</string>
+    <string name="pick_on_map">Pick on Map</string>
+    <string name="delete_location">Delete location</string>
+    <string name="built_in_presets">Built-in Presets</string>
+    <string name="no_custom_locations">No custom locations added yet.</string>
 </resources>

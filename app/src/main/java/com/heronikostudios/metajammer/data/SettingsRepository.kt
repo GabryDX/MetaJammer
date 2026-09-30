@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.encodeToString
 
 internal val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
@@ -36,7 +37,6 @@ open class SettingsRepository(private val context: Context) {
         private val SHARED_FILES_OUTPUT_ACTION = stringPreferencesKey("shared_files_output_action")
         private val SHARED_FILES_CUSTOM_PATH = stringPreferencesKey("shared_files_custom_path")
         private val THUMBNAIL_HANDLING = stringPreferencesKey("thumbnail_handling")
-        private val ALLOW_INTERNET_FOR_MAP = booleanPreferencesKey("allow_internet_for_map")
         private val USE_NEARBY_SCRAMBLE = booleanPreferencesKey("use_nearby_scramble")
         private val LANGUAGE = stringPreferencesKey("language")
         private val USE_DYNAMIC_COLOR = booleanPreferencesKey("use_dynamic_color")
@@ -46,12 +46,16 @@ open class SettingsRepository(private val context: Context) {
         private val SHOW_HISTORY_SHORTCUT = booleanPreferencesKey("show_history_shortcut")
         private val POISONING_PROFILE = stringPreferencesKey("poisoning_profile")
         private val LOCATION_PRESET = stringPreferencesKey("location_preset")
+        private val CUSTOM_LOCATION_PRESETS = stringPreferencesKey("custom_location_presets")
+        private val SELECTED_CUSTOM_LOCATION_PRESET_ID = stringPreferencesKey("selected_custom_location_preset_id")
         private val STRIP_GPS = booleanPreferencesKey("strip_gps")
         private val STRIP_DEVICE_MODEL = booleanPreferencesKey("strip_device_model")
         private val STRIP_DATE_TIME = booleanPreferencesKey("strip_date_time")
         private val STRIP_CAMERA_SETTINGS = booleanPreferencesKey("strip_camera_settings")
         private val STRIP_COMMENTS = booleanPreferencesKey("strip_comments")
     }
+
+    private val json = Json { ignoreUnknownKeys = true }
 
     open suspend fun setUseRandomFileNames(enabled: Boolean) {
         context.dataStore.edit { it[USE_RANDOM_FILE_NAMES] = enabled }
@@ -150,10 +154,6 @@ open class SettingsRepository(private val context: Context) {
         context.dataStore.edit { it[THUMBNAIL_HANDLING] = handling.name }
     }
 
-    suspend fun setAllowInternetForMap(allowed: Boolean) {
-        context.dataStore.edit { it[ALLOW_INTERNET_FOR_MAP] = allowed }
-    }
-
     suspend fun setUseNearbyScramble(enabled: Boolean) {
         context.dataStore.edit { it[USE_NEARBY_SCRAMBLE] = enabled }
     }
@@ -187,7 +187,45 @@ open class SettingsRepository(private val context: Context) {
     }
 
     open suspend fun setLocationPreset(preset: LocationPreset) {
-        context.dataStore.edit { it[LOCATION_PRESET] = preset.name }
+        context.dataStore.edit {
+            it[LOCATION_PRESET] = preset.name
+            it.remove(SELECTED_CUSTOM_LOCATION_PRESET_ID)
+        }
+    }
+
+    open suspend fun selectLocationPresetTarget(target: LocationPresetTarget) {
+        context.dataStore.edit { preferences ->
+            if (target is CustomLocationPreset) {
+                preferences[SELECTED_CUSTOM_LOCATION_PRESET_ID] = target.id
+            } else if (target is LocationPreset) {
+                preferences[LOCATION_PRESET] = target.name
+                preferences.remove(SELECTED_CUSTOM_LOCATION_PRESET_ID)
+            }
+        }
+    }
+
+    open suspend fun addCustomLocationPreset(preset: CustomLocationPreset) {
+        context.dataStore.edit { preferences ->
+            val existing = preferences[CUSTOM_LOCATION_PRESETS]?.let { raw ->
+                runCatching { json.decodeFromString<List<CustomLocationPreset>>(raw) }.getOrNull()
+            } ?: emptyList()
+            val updated = existing.filterNot { it.id == preset.id } + preset
+            preferences[CUSTOM_LOCATION_PRESETS] = json.encodeToString(updated)
+            preferences[SELECTED_CUSTOM_LOCATION_PRESET_ID] = preset.id
+        }
+    }
+
+    open suspend fun removeCustomLocationPreset(presetId: String) {
+        context.dataStore.edit { preferences ->
+            val existing = preferences[CUSTOM_LOCATION_PRESETS]?.let { raw ->
+                runCatching { json.decodeFromString<List<CustomLocationPreset>>(raw) }.getOrNull()
+            } ?: emptyList()
+            val updated = existing.filterNot { it.id == presetId }
+            preferences[CUSTOM_LOCATION_PRESETS] = json.encodeToString(updated)
+            if (preferences[SELECTED_CUSTOM_LOCATION_PRESET_ID] == presetId) {
+                preferences.remove(SELECTED_CUSTOM_LOCATION_PRESET_ID)
+            }
+        }
     }
 
     open suspend fun setStripGps(enabled: Boolean) {
@@ -248,7 +286,6 @@ open class SettingsRepository(private val context: Context) {
             sharedFilesOutputAction = preferences[SHARED_FILES_OUTPUT_ACTION]?.let { runCatching { SharedInputOutputAction.valueOf(it) }.getOrNull() } ?: SharedInputOutputAction.SHARE_TO_ANOTHER_APP,
             sharedFilesCustomPath = preferences[SHARED_FILES_CUSTOM_PATH],
             thumbnailHandling = preferences[THUMBNAIL_HANDLING]?.let { runCatching { ThumbnailHandling.valueOf(it) }.getOrNull() } ?: ThumbnailHandling.REMOVE,
-            allowInternetForMap = preferences[ALLOW_INTERNET_FOR_MAP] ?: false,
             useNearbyScramble = preferences[USE_NEARBY_SCRAMBLE] ?: false,
             language = preferences[LANGUAGE]?.let { runCatching { AppLanguage.valueOf(it) }.getOrNull() } ?: AppLanguage.SYSTEM,
             useDynamicColor = preferences[USE_DYNAMIC_COLOR] ?: true,
@@ -258,6 +295,10 @@ open class SettingsRepository(private val context: Context) {
             showHistoryShortcut = preferences[SHOW_HISTORY_SHORTCUT] ?: false,
             poisoningProfile = preferences[POISONING_PROFILE]?.let { runCatching { PoisoningProfile.valueOf(it) }.getOrNull() } ?: PoisoningProfile.RANDOM,
             locationPreset = preferences[LOCATION_PRESET]?.let { runCatching { LocationPreset.valueOf(it) }.getOrNull() } ?: LocationPreset.RANDOM,
+            customLocationPresets = preferences[CUSTOM_LOCATION_PRESETS]?.let { raw ->
+                runCatching { json.decodeFromString<List<CustomLocationPreset>>(raw) }.getOrNull()
+            } ?: emptyList(),
+            selectedCustomLocationPresetId = preferences[SELECTED_CUSTOM_LOCATION_PRESET_ID],
             stripGps = preferences[STRIP_GPS] ?: true,
             stripDeviceModel = preferences[STRIP_DEVICE_MODEL] ?: true,
             stripDateTime = preferences[STRIP_DATE_TIME] ?: true,

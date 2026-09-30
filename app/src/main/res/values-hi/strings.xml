@@ -262,4 +262,15 @@
     <string name="history_empty">अभी तक कोई फ़ाइल लॉग नहीं की गई है।</string>
     <string name="history_clear_confirm_title">इतिहास साफ़ करें?</string>
     <string name="history_clear_confirm_message">यह सभी संसाधित फ़ाइलों के लॉग को स्थायी रूप से हटा देगा। वास्तविक फ़ाइलें नहीं हटाई जाएंगी।</string>
+
+    <!-- Custom Location Presets -->
+    <string name="custom_locations_title">कस्टम स्थान</string>
+    <string name="add_custom_location">कस्टम स्थान जोड़ें</string>
+    <string name="custom_location_name">स्थान का नाम</string>
+    <string name="latitude_hint">अक्षांश (-90 से 90)</string>
+    <string name="longitude_hint">देशांतर (-180 से 180)</string>
+    <string name="pick_on_map">मानचित्र पर चुनें</string>
+    <string name="delete_location">स्थान हटाएं</string>
+    <string name="built_in_presets">इन-बिल्ट प्रीसेट</string>
+    <string name="no_custom_locations">अभी तक कोई कस्टम स्थान नहीं जोड़ा गया है।</string>
 </resources>

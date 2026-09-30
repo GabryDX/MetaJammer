@@ -262,4 +262,15 @@
     <string name="history_empty">Nu a fost înregistrat încă niciun fișier.</string>
     <string name="history_clear_confirm_title">Ștergi istoricul?</string>
     <string name="history_clear_confirm_message">Această acțiune va șterge definitiv jurnalul tuturor fișierelor procesate. Fișierele reale nu vor fi șterse.</string>
+
+    <!-- Custom Location Presets -->
+    <string name="custom_locations_title">Locații personalizate</string>
+    <string name="add_custom_location">Adăugare locație personalizată</string>
+    <string name="custom_location_name">Nume locație</string>
+    <string name="latitude_hint">Latitudine (-90 până la 90)</string>
+    <string name="longitude_hint">Longitudine (-180 până la 180)</string>
+    <string name="pick_on_map">Alegeți pe hartă</string>
+    <string name="delete_location">Ștergeți locația</string>
+    <string name="built_in_presets">Presetări integrate</string>
+    <string name="no_custom_locations">Nu a fost adăugată nicio locație personalizată încă.</string>
 </resources>

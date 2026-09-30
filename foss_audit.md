@@ -33,11 +33,12 @@ This document summarizes the audit performed to ensure that MetaJammer only uses
 
 ## Map Implementation Audit
 
-The "Map Picker" feature, which is the only feature with network capability, is implemented using FOSS components:
+The Location Picker and Custom Location Preset features are 100% offline and air-gapped, requiring **zero network permissions**:
 
-- **Leaflet**: Licensed under BSD-2-Clause (FOSS). Bundled locally in `app/src/main/assets/leaflet/` to eliminate external CDN dependencies and ensure zero network activity on map initialization.
-- **OpenStreetMap Tiles**: Map data is licensed under the Open Data Commons Open Database License (ODbL) (FOSS). Tile loading is strictly opt-in and requires explicit user consent.
-- **WebView**: Uses the system Android WebView, completely avoiding proprietary map SDKs like Google Maps.
+- **Native Compose Vector Map**: Renders an interactive equirectangular world map directly via hardware-accelerated Jetpack Compose Canvas, completely eliminating WebViews and JavaScript engines.
+- **Natural Earth Data**: Landmass boundaries are sourced from Natural Earth 110m physical land polygons (Public Domain / CC0), pre-compiled into a compact 20 KB binary asset (`app/src/main/assets/map/world_land.bin`).
+- **Offline & Custom Location Presets**: Users can select built-in landmarks or define custom location presets visually on the vector map or via decimal coordinates. Custom presets are serialized using FOSS `kotlinx-serialization-json` and stored locally in AndroidX DataStore preferences without network lookups or external geocoding.
+- **Zero Network Activity**: No tiles, APIs, or network requests are ever dispatched. MetaJammer requires no `INTERNET` permission and carries zero F-Droid Anti-Features (`TetheredNet` completely eliminated).
 
 ## Project Assets and Licensing Audit
 

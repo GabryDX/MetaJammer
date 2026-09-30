@@ -16,7 +16,7 @@ The primary security objective of MetaJammer is **guaranteed non-leakage**: ensu
 | :--- | :--- | :--- |
 | **Permissions** | **Least Privilege** | Zero broad storage permissions (`READ_EXTERNAL_STORAGE` / `WRITE_EXTERNAL_STORAGE` not requested). Uses Storage Access Framework (SAF) and Scoped Storage. |
 | **Telemetry / Tracking** | **Zero Exposure** | 100% Free and Open Source Software (FOSS). Zero analytics, zero ad SDKs, zero crash-reporting daemons, and zero "phone-home" beacons. |
-| **Network Surface** | **Opt-in Only** | Single `INTERNET` permission strictly confined to OpenStreetMap tile fetching in the Map Picker. Leaflet JS/CSS is bundled locally in `assets/`. Offline presets require 0 network connections. |
+| **Network Surface** | **Zero Network (Air-Gapped)** | Zero network permissions (`android.permission.INTERNET` removed). 100% offline Compose vector map with bundled Natural Earth dataset. |
 | **Data Leak Prevention** | **Fail-Closed** | Processing failures abort immediately; unscrubbed original media is never inadvertently exported or shared. Android Auto-Backup is explicitly disabled. |
 | **Inter-Process Security** | **Hardened** | `FileProvider` is unexported and scoped to strict subdirectories. Incoming URIs are validated through single-pass extraction. |
 
@@ -42,15 +42,15 @@ The primary security objective of MetaJammer is **guaranteed non-leakage**: ensu
 ## 3. Data Protection & Privacy Architecture
 
 ### 3.1 Principle of Least Privilege (Permissions)
-* **Zero Storage Permissions:** MetaJammer does not declare or request `READ_EXTERNAL_STORAGE` or `WRITE_EXTERNAL_STORAGE` on any Android version (API 26–36).
+* **Zero Storage Permissions:** MetaJammer does not declare or request `READ_EXTERNAL_STORAGE` or `WRITE_EXTERNAL_STORAGE` on any Android version (API 26–37).
 * **Storage Access Framework (SAF) & MediaStore:** User file selections and exports occur through system-mediated pickers (`ActivityResultContracts.OpenMultipleDocuments`, `OpenDocumentTree`, and `MediaStore`), guaranteeing that the application only accesses files explicitly chosen by the user.
 * **Scoped Notification Permission:** `POST_NOTIFICATIONS` is guarded by runtime API-level checks (`Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU`) and only used for background batch progress updates.
 
-### 3.2 Network Isolation & Opt-in Connectivity
-* **Offline Operation:** Core scrubbing, poisoning, diff generation, and batch workflows operate entirely offline with zero network connectivity.
-* **Local Map Assets:** Leaflet JavaScript (`leaflet.js`) and stylesheets (`leaflet.css`) are bundled locally in `app/src/main/assets/leaflet/`. No external Content Delivery Networks (CDNs) are queried.
-* **Strict Opt-in Map Tiles:** Network tile fetching from OpenStreetMap (`tile.openstreetmap.org`) is disabled by default and requires explicit user consent before any HTTP request is dispatched.
-* **Offline Location Presets:** Pre-defined geographic coordinates (e.g., Tokyo, London, Paris, New York) allow complete location poisoning without enabling network access.
+### 3.2 Network Isolation & Air-Gapped Architecture
+* **Zero Network Permissions:** `android.permission.INTERNET` is completely absent from `AndroidManifest.xml`. In addition, transitive permissions such as `android.permission.ACCESS_NETWORK_STATE` (injected by default by AndroidX WorkManager) are explicitly stripped using `tools:node="remove"`. The resulting binary contains zero network permissions of any kind, making socket opening and network state inspection impossible at the OS permission level.
+* **100% Offline Vector Map:** The Location Picker uses a native Jetpack Compose Canvas rendering engine with a pre-compiled 20 KB binary land polygon dataset from Natural Earth (Public Domain). No WebViews, no JavaScript, and no external tile servers.
+* **F-Droid Anti-Feature Elimination:** Fully compliant with F-Droid inclusion policies without requiring the `TetheredNet` anti-feature flag.
+* **Offline Landmark & Custom Location Presets:** Pre-defined landmark coordinates (e.g., Tokyo, London, Paris, New York) and user-defined custom location presets function 100% offline. Custom presets are serialized via Kotlinx Serialization and persisted in application-private AndroidX DataStore preferences with zero network lookups, zero reverse-geocoding, and zero cloud synchronization.
 
 ### 3.3 Cloud Backup Elimination
 Android Auto-Backup is strictly disabled in [`AndroidManifest.xml`](app/src/main/AndroidManifest.xml) to prevent sensitive or unscrubbed files from leaking to cloud storage:
@@ -169,12 +169,12 @@ Users can verify official release builds using [AppVerifier](https://github.com/
 
 | Category | Requirement | Compliance | Evidence / Implementation |
 | :--- | :--- | :---: | :--- |
-| **MASVS-STORAGE** | System credential store & sensitive data at rest | **PASS** | No sensitive credentials stored. Processed history uses Room with automated pruning; raw media is never stored permanently. |
+| **MASVS-STORAGE** | System credential store & sensitive data at rest | **PASS** | No sensitive credentials stored. Processed history uses Room with automated pruning; custom location presets are kept in application-private DataStore; raw media is never stored permanently. |
 | **MASVS-STORAGE** | No sensitive data written to application logs | **PASS** | Timber logging suppresses verbose file contents; logs only contain metadata keys and debug status. |
 | **MASVS-STORAGE** | Auto-backup disabled | **PASS** | `android:allowBackup="false"` and explicit `dataExtractionRules`. |
 | **MASVS-CRYPTO** | Industry-standard cryptographic algorithms | **PASS** | Standard platform hashing and PRNGs used; no proprietary or weak home-grown cryptography. |
-| **MASVS-NETWORK** | Network communication encrypted | **PASS** | Strict HTTPS used for optional OpenStreetMap tile fetching. Zero unencrypted cleartext traffic permitted. |
-| **MASVS-PLATFORM** | Permissions minimized | **PASS** | Zero broad storage permissions (`READ/WRITE_EXTERNAL_STORAGE` absent). Only `INTERNET` (opt-in) and `POST_NOTIFICATIONS` (API 33+). |
+| **MASVS-NETWORK** | Network attack surface minimized | **PASS** | Complete network isolation: zero network permissions (`INTERNET` and `ACCESS_NETWORK_STATE` absent), air-gapped architecture. |
+| **MASVS-PLATFORM** | Permissions minimized | **PASS** | Zero broad storage permissions (`READ/WRITE_EXTERNAL_STORAGE` absent). Zero network permissions (`INTERNET` and `ACCESS_NETWORK_STATE` stripped). Only `POST_NOTIFICATIONS` (API 33+) for background batch status. |
 | **MASVS-PLATFORM** | IPC components properly protected | **PASS** | `FileProvider` unexported with narrow path whitelist; incoming URIs sanitized. |
 | **MASVS-CODE** | Input validation & parser hardening | **PASS** | Safe XML parsing (XXE protected), regex-based filename sanitization, fail-closed processor exception handling. |
 
