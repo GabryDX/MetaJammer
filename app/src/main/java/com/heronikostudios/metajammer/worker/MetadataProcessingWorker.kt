@@ -3,6 +3,8 @@ package com.heronikostudios.metajammer.worker
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.pm.ServiceInfo
+import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.CoroutineWorker
@@ -118,7 +120,11 @@ class MetadataProcessingWorker(
             emptyMap()
         }
 
-        setForeground(createForegroundInfo(inputUriStrings.size))
+        runCatching {
+            setForeground(createForegroundInfo(inputUriStrings.size))
+        }.onFailure {
+            Timber.w(it, "Failed to promote worker to foreground service; continuing in background")
+        }
 
         val processedCount = AtomicInteger(0)
         val savedUris = java.util.Collections.synchronizedList(mutableListOf<String>())
@@ -231,7 +237,15 @@ class MetadataProcessingWorker(
             .setProgress(100, 0, false)
             .build()
 
-        return ForegroundInfo(NOTIFICATION_ID, notification)
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ForegroundInfo(
+                NOTIFICATION_ID,
+                notification,
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
+            )
+        } else {
+            ForegroundInfo(NOTIFICATION_ID, notification)
+        }
     }
 
     private fun showCompletionNotification(count: Int) {
