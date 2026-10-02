@@ -61,7 +61,8 @@ class PdfMetadataProcessorTest {
         assertTrue(entries.any { it.key == "Title" && it.value == "Original Confidential Title" })
         assertTrue(entries.any { it.key == "Author" && it.value == "Real Author Name" })
         assertTrue(entries.any { it.key == "Subject" && it.value == "Internal Company Memo" })
-        assertTrue(entries.any { it.key == "Page Count" && it.value == "1" })
+        assertTrue(entries.any { it.key == "Creator" && it.value == "Adobe InDesign 2023" })
+        assertFalse(entries.any { it.key == "Page Count" })
     }
 
     @Test
@@ -81,6 +82,7 @@ class PdfMetadataProcessorTest {
             assertNull("Keywords should be wiped", info.keywords)
             assertNull("Producer should be wiped or default", info.producer)
             assertNull("Catalog XMP metadata should be null", doc.documentCatalog.metadata)
+            assertNull("PageLabels should be null", doc.documentCatalog.pageLabels)
         }
     }
 

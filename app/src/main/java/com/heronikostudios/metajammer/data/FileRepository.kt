@@ -140,22 +140,45 @@ open class FileRepository(private val context: Context) {
         mimeType: String?,
         relativePath: String
     ): Uri? {
-        val resolver = context.contentResolver
+        return runCatching {
+            val resolver = context.contentResolver
 
-        val collection = when {
-            mimeType?.startsWith("image/") == true -> MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-            mimeType?.startsWith("video/") == true -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> MediaStore.Downloads.EXTERNAL_CONTENT_URI
-            else -> MediaStore.Files.getContentUri("external")
-        }
-
-        val values = ContentValues().apply {
-            put(MediaStore.MediaColumns.DISPLAY_NAME, displayName)
-            put(MediaStore.MediaColumns.MIME_TYPE, mimeType ?: "application/octet-stream")
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                put(MediaStore.MediaColumns.RELATIVE_PATH, relativePath)
-                put(MediaStore.MediaColumns.IS_PENDING, 1)
+                val collection = when {
+                    mimeType?.startsWith("image/") == true -> MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                    mimeType?.startsWith("video/") == true -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+                    else -> MediaStore.Downloads.EXTERNAL_CONTENT_URI
+                }
+
+                val values = ContentValues().apply {
+                    put(MediaStore.MediaColumns.DISPLAY_NAME, displayName)
+                    put(MediaStore.MediaColumns.MIME_TYPE, mimeType ?: "application/octet-stream")
+                    put(MediaStore.MediaColumns.RELATIVE_PATH, relativePath)
+                    put(MediaStore.MediaColumns.IS_PENDING, 1)
+                }
+
+                val uri = resolver.insert(collection, values) ?: run {
+                    Timber.e("Failed to insert media into MediaStore")
+                    return null
+                }
+
+                resolver.openOutputStream(uri)?.use { output ->
+                    sourceFile.inputStream().use { input ->
+                        input.copyTo(output, bufferSize = 64 * 1024)
+                    }
+                } ?: run {
+                    Timber.e("Failed to open output stream for MediaStore URI: %s", uri)
+                    return null
+                }
+
+                val completedValues = ContentValues().apply {
+                    put(MediaStore.MediaColumns.IS_PENDING, 0)
+                }
+                resolver.update(uri, completedValues, null, null)
+
+                uri
             } else {
+                // Pre-Android 10 (Android 8 & 9, API 26-28): Direct file write to external storage + MediaScanner
                 @Suppress("DEPRECATION")
                 val targetDir = when {
                     mimeType?.startsWith("image/") == true ->
@@ -165,35 +188,35 @@ open class FileRepository(private val context: Context) {
                     else ->
                         Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
                 }
-                val destFile = File(File(targetDir, "MetaJammer"), displayName)
-                destFile.parentFile?.mkdirs()
-                @Suppress("DEPRECATION")
-                put(MediaStore.MediaColumns.DATA, destFile.absolutePath)
+                val destDir = File(targetDir, "MetaJammer")
+                if (!destDir.exists()) {
+                    destDir.mkdirs()
+                }
+                val destFile = File(destDir, displayName)
+                sourceFile.inputStream().use { input ->
+                    destFile.outputStream().use { output ->
+                        input.copyTo(output, bufferSize = 64 * 1024)
+                    }
+                }
+
+                // Index in MediaStore via MediaScannerConnection to obtain content URI
+                var scannedUri: Uri? = null
+                val latch = java.util.concurrent.CountDownLatch(1)
+                android.media.MediaScannerConnection.scanFile(
+                    context,
+                    arrayOf(destFile.absolutePath),
+                    arrayOf(mimeType ?: "application/octet-stream")
+                ) { _, uri ->
+                    scannedUri = uri
+                    latch.countDown()
+                }
+                latch.await(2, java.util.concurrent.TimeUnit.SECONDS)
+
+                scannedUri ?: Uri.fromFile(destFile)
             }
-        }
-
-        val uri = resolver.insert(collection, values) ?: run {
-            Timber.e("Failed to insert media into MediaStore")
-            return null
-        }
-
-        resolver.openOutputStream(uri)?.use { output ->
-            sourceFile.inputStream().use { input ->
-                input.copyTo(output, bufferSize = 64 * 1024)
-            }
-        } ?: run {
-            Timber.e("Failed to open output stream for MediaStore URI: %s", uri)
-            return null
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val completedValues = ContentValues().apply {
-                put(MediaStore.MediaColumns.IS_PENDING, 0)
-            }
-            resolver.update(uri, completedValues, null, null)
-        }
-
-        return uri
+        }.onFailure { e ->
+            Timber.e(e, "Failed to save to MediaStore path for %s", displayName)
+        }.getOrNull()
     }
 
     suspend fun saveToCustomFolder(
@@ -203,40 +226,44 @@ open class FileRepository(private val context: Context) {
         mimeType: String?,
         subPath: String? = null
     ): Uri? = withContext(Dispatchers.IO) {
-        val rootFolder = DocumentFile.fromTreeUri(context, treeUri) ?: run {
-            Timber.e("Failed to get DocumentFile from tree URI: %s", treeUri)
-            return@withContext null
-        }
+        runCatching {
+            val rootFolder = DocumentFile.fromTreeUri(context, treeUri) ?: run {
+                Timber.e("Failed to get DocumentFile from tree URI: %s", treeUri)
+                return@runCatching null
+            }
 
-        val targetFolder = if (subPath != null) {
-            val parts = subPath.split("/").filter { it.isNotEmpty() }
-            var currentFolder = rootFolder
-            parts.forEach { part ->
-                currentFolder = currentFolder.findFile(part) ?: currentFolder.createDirectory(part) ?: run {
-                    Timber.e("Failed to find or create subdirectory: %s", part)
-                    return@withContext null
+            val targetFolder = if (subPath != null) {
+                val parts = subPath.split("/").filter { it.isNotEmpty() }
+                var currentFolder = rootFolder
+                parts.forEach { part ->
+                    currentFolder = currentFolder.findFile(part) ?: currentFolder.createDirectory(part) ?: run {
+                        Timber.e("Failed to find or create subdirectory: %s", part)
+                        return@runCatching null
+                    }
                 }
+                currentFolder
+            } else {
+                rootFolder
             }
-            currentFolder
-        } else {
-            rootFolder
-        }
 
-        val outFile = targetFolder.createFile(mimeType ?: "application/octet-stream", displayName) ?: run {
-            Timber.e("Failed to create file in custom folder")
-            return@withContext null
-        }
-
-        context.contentResolver.openOutputStream(outFile.uri)?.use { output ->
-            sourceFile.inputStream().use { input ->
-                input.copyTo(output, bufferSize = 64 * 1024)
+            val outFile = targetFolder.createFile(mimeType ?: "application/octet-stream", displayName) ?: run {
+                Timber.e("Failed to create file in custom folder")
+                return@runCatching null
             }
-        } ?: run {
-            Timber.e("Failed to open output stream for custom folder file: %s", outFile.uri)
-            return@withContext null
-        }
 
-        outFile.uri
+            context.contentResolver.openOutputStream(outFile.uri)?.use { output ->
+                sourceFile.inputStream().use { input ->
+                    input.copyTo(output, bufferSize = 64 * 1024)
+                }
+            } ?: run {
+                Timber.e("Failed to open output stream for custom folder file: %s", outFile.uri)
+                return@runCatching null
+            }
+
+            outFile.uri
+        }.onFailure { e ->
+            Timber.e(e, "Failed to save to custom folder: %s", displayName)
+        }.getOrNull()
     }
 
     /**

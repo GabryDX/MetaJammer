@@ -113,6 +113,7 @@
     <string name="save_to_default_folder">Save to Default Folder</string>
     <string name="save_to_custom_folder">Save to Custom Folder</string>
     <string name="back_to_home">Back to Home</string>
+    <string name="storage_permission_required">Storage permission is required on Android 9 and older to save to default folders. Alternatively, use \'Save to Custom Folder\'.</string>
 
     <!-- SettingsScreen -->
     <string name="settings">Settings</string>

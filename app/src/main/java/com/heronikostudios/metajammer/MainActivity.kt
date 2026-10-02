@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import timber.log.Timber
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
@@ -123,6 +124,35 @@ fun MetaJammerApp(
     val notificationPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
     ) { _ -> }
+
+    val storagePermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            coroutineScope.launch {
+                runCatching {
+                    val firstProcessed = processedFiles.firstOrNull()
+                    val savedUris = viewModel.saveProcessedFilesToDefault()
+
+                    if (appSettings.shareResultAsDefault) {
+                        val firstSavedUri = savedUris.firstOrNull()
+                        if (firstSavedUri != null && firstProcessed != null) {
+                            shareFileUseCase.shareUri(
+                                context = context,
+                                uri = firstSavedUri,
+                                mimeType = firstProcessed.first.mimeType
+                            )
+                        }
+                    }
+                }.onFailure { e ->
+                    Timber.e(e, "Failed to save files to default folder after permission grant")
+                    viewModel.showMessage("Failed to save: ${e.message}")
+                }
+            }
+        } else {
+            viewModel.showMessage(context.getString(R.string.storage_permission_required))
+        }
+    }
 
     var showNotificationPermissionExplanation by remember { mutableStateOf(false) }
 
@@ -437,51 +467,72 @@ fun MetaJammerApp(
                     OutputOptionsScreen(
                         shareResultAsDefault = appSettings.shareResultAsDefault,
                         onSaveDefault = {
-                            coroutineScope.launch {
-                                val firstProcessed = processedFiles.firstOrNull()
-                                val savedUris = viewModel.saveProcessedFilesToDefault()
+                            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P &&
+                                context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                            ) {
+                                storagePermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            } else {
+                                coroutineScope.launch {
+                                    runCatching {
+                                        val firstProcessed = processedFiles.firstOrNull()
+                                        val savedUris = viewModel.saveProcessedFilesToDefault()
 
-                                if (appSettings.shareResultAsDefault) {
-                                    val firstSavedUri = savedUris.firstOrNull()
-                                    if (firstSavedUri != null && firstProcessed != null) {
-                                        shareFileUseCase.shareUri(
-                                            context = context,
-                                            uri = firstSavedUri,
-                                            mimeType = firstProcessed.first.mimeType
-                                        )
+                                        if (appSettings.shareResultAsDefault) {
+                                            val firstSavedUri = savedUris.firstOrNull()
+                                            if (firstSavedUri != null && firstProcessed != null) {
+                                                shareFileUseCase.shareUri(
+                                                    context = context,
+                                                    uri = firstSavedUri,
+                                                    mimeType = firstProcessed.first.mimeType
+                                                )
+                                            }
+                                        }
+                                    }.onFailure { e ->
+                                        Timber.e(e, "Failed to save files to default folder")
+                                        viewModel.showMessage("Failed to save: ${e.message}")
                                     }
                                 }
                             }
                         },
                         onSaveCustom = { treeUri ->
                             coroutineScope.launch {
-                                val firstProcessed = processedFiles.firstOrNull()
-                                val savedUris = viewModel.saveProcessedFilesToCustom(treeUri)
+                                runCatching {
+                                    val firstProcessed = processedFiles.firstOrNull()
+                                    val savedUris = viewModel.saveProcessedFilesToCustom(treeUri)
 
-                                if (appSettings.shareResultAsDefault) {
-                                    val firstSavedUri = savedUris.firstOrNull()
-                                    if (firstSavedUri != null && firstProcessed != null) {
-                                        shareFileUseCase.shareUri(
-                                            context = context,
-                                            uri = firstSavedUri,
-                                            mimeType = firstProcessed.first.mimeType
-                                        )
+                                    if (appSettings.shareResultAsDefault) {
+                                        val firstSavedUri = savedUris.firstOrNull()
+                                        if (firstSavedUri != null && firstProcessed != null) {
+                                            shareFileUseCase.shareUri(
+                                                context = context,
+                                                uri = firstSavedUri,
+                                                mimeType = firstProcessed.first.mimeType
+                                            )
+                                        }
                                     }
+                                }.onFailure { e ->
+                                    Timber.e(e, "Failed to save files to custom folder")
+                                    viewModel.showMessage("Failed to save: ${e.message}")
                                 }
                             }
                         },
                         onShareOnly = {
                             coroutineScope.launch {
-                                val filesToShare = viewModel.getProcessedFilesForSharing()
-                                if (filesToShare.isNotEmpty()) {
-                                    val firstProcessedMime = processedFiles.firstOrNull()?.first?.mimeType
-                                    val allSameMime = processedFiles.all { it.first.mimeType == firstProcessedMime }
+                                runCatching {
+                                    val filesToShare = viewModel.getProcessedFilesForSharing()
+                                    if (filesToShare.isNotEmpty()) {
+                                        val firstProcessedMime = processedFiles.firstOrNull()?.first?.mimeType
+                                        val allSameMime = processedFiles.all { it.first.mimeType == firstProcessedMime }
 
-                                    shareFileUseCase.shareFiles(
-                                        context = context,
-                                        files = filesToShare,
-                                        mimeType = if (allSameMime) firstProcessedMime else "*/*"
-                                    )
+                                        shareFileUseCase.shareFiles(
+                                            context = context,
+                                            files = filesToShare,
+                                            mimeType = if (allSameMime) firstProcessedMime else "*/*"
+                                        )
+                                    }
+                                }.onFailure { e ->
+                                    Timber.e(e, "Failed to share processed files")
+                                    viewModel.showMessage("Failed to share: ${e.message}")
                                 }
                             }
                         },

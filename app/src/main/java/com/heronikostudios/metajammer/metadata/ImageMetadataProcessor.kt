@@ -42,7 +42,9 @@ class ImageMetadataProcessor(
         }
 
         private val PNG_SIGNATURE = byteArrayOf(0x89.toByte(), 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A)
-        private val PNG_METADATA_CHUNKS = setOf("tEXt", "zTXt", "iTXt", "eXIf")
+        private val PNG_METADATA_CHUNKS = setOf(
+            "tEXt", "zTXt", "iTXt", "eXIf", "pHYs", "tIME", "dSIG", "sCAL", "oFFs", "pCAL", "gIFg", "gIFx"
+        )
 
         /**
          * Strips ancillary metadata chunks (tEXt, zTXt, iTXt, eXIf) from a PNG byte array
