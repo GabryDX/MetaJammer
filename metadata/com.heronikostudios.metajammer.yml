@@ -16,7 +16,7 @@ Binaries: https://github.com/GabryDX/MetaJammer/releases/download/v%v/MetaJammer
 Builds:
   - versionName: 0.5.4
     versionCode: 9
-    commit: v0.5.4
+    commit: a1b721e1724c238a74ee8554e0cd5c0c669adab6
     subdir: app
     gradle:
       - floss
