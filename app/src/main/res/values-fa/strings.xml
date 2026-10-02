@@ -113,6 +113,7 @@
     <string name="save_to_default_folder">ذخیره در پوشه پیش‌فرض</string>
     <string name="save_to_custom_folder">ذخیره در پوشه سفارشی</string>
     <string name="back_to_home">بازگشت به خانه</string>
+    <string name="storage_permission_required">مجوز ذخیره‌سازی در اندروید ۹ و نسخه‌های قدیمی‌تر برای ذخیره در پوشه‌های پیش‌فرض الزامی است. یا می‌توانید از \'ذخیره در پوشه سفارشی\' استفاده کنید.</string>
 
     <!-- SettingsScreen -->
     <string name="settings">تنظیمات</string>

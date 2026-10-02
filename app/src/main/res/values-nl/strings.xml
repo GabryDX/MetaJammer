@@ -113,6 +113,7 @@
     <string name="save_to_default_folder">Opslaan in standaardmap</string>
     <string name="save_to_custom_folder">Opslaan in aangepaste map</string>
     <string name="back_to_home">Terug naar startpagina</string>
+    <string name="storage_permission_required">Opslagtoestemming is vereist op Android 9 en ouder om op te slaan in standaardmappen. Gebruik anders \'Opslaan in aangepaste map\'.</string>
 
     <!-- SettingsScreen -->
     <string name="settings">Instellingen</string>

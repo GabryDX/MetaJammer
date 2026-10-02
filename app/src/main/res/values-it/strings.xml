@@ -113,6 +113,7 @@
     <string name="save_to_default_folder">Salva nella cartella predefinita</string>
     <string name="save_to_custom_folder">Salva in una cartella personalizzata</string>
     <string name="back_to_home">Torna alla home</string>
+    <string name="storage_permission_required">L\'autorizzazione di archiviazione è richiesta su Android 9 e versioni precedenti per salvare nelle cartelle predefinite. In alternativa, usa \'Salva in una cartella personalizzata\'.</string>
 
     <!-- SettingsScreen -->
     <string name="settings">Impostazioni</string>

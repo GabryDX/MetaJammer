@@ -113,6 +113,7 @@
     <string name="save_to_default_folder">Αποθήκευση στον προεπιλεγμένο φάκελο</string>
     <string name="save_to_custom_folder">Αποθήκευση σε προσαρμοσμένο φάκελο</string>
     <string name="back_to_home">Επιστροφή στην αρχική</string>
+    <string name="storage_permission_required">Απαιτείται άδεια αποθήκευσης στο Android 9 και παλαιότερες εκδόσεις για αποθήκευση στους προεπιλεγμένους φακέλους. Εναλλακτικά, χρησιμοποιήστε το \'Αποθήκευση σε προσαρμοσμένο φάκελο\'.</string>
 
     <!-- SettingsScreen -->
     <string name="settings">Ρυθμίσεις</string>

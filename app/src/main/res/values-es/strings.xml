@@ -113,6 +113,7 @@
     <string name="save_to_default_folder">Guardar en carpeta predeterminada</string>
     <string name="save_to_custom_folder">Guardar en carpeta personalizada</string>
     <string name="back_to_home">Volver al inicio</string>
+    <string name="storage_permission_required">Se requiere permiso de almacenamiento en Android 9 y versiones anteriores para guardar en carpetas predeterminadas. Como alternativa, use \'Guardar en carpeta personalizada\'.</string>
 
     <!-- SettingsScreen -->
     <string name="settings">Ajustes</string>

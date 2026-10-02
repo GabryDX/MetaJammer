@@ -113,6 +113,7 @@
     <string name="save_to_default_folder">In Capsa Defalta Servare</string>
     <string name="save_to_custom_folder">In Capsa Propria Servare</string>
     <string name="back_to_home">Reditus ad Initium</string>
+    <string name="storage_permission_required">Venia repositionis necessaria est in Android 9 et prioribus ut in capsas praedefinitas servetur. Vel utere \'In Capsa Propria Servare\'.</string>
 
     <!-- SettingsScreen -->
     <string name="settings">Optiones</string>

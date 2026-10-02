@@ -113,6 +113,7 @@
     <string name="save_to_default_folder">บันทึกลงในโฟลเดอร์เริ่มต้น</string>
     <string name="save_to_custom_folder">บันทึกลงในโฟลเดอร์ที่กำหนดเอง</string>
     <string name="back_to_home">กลับไปหน้าหลัก</string>
+    <string name="storage_permission_required">ต้องได้รับสิทธิ์การเข้าถึงพื้นที่จัดเก็บข้อมูลบน Android 9 หรือเก่ากว่าเพื่อบันทึกลงในโฟลเดอร์เริ่มต้น หรือใช้ \'บันทึกลงในโฟลเดอร์ที่กำหนดเอง\'</string>
 
     <!-- SettingsScreen -->
     <string name="settings">การตั้งค่า</string>

@@ -113,6 +113,7 @@
     <string name="save_to_default_folder">שמור לתיקיית ברירת המחדל</string>
     <string name="save_to_custom_folder">שמור לתיקייה מותאמת אישית</string>
     <string name="back_to_home">חזרה לדף הבית</string>
+    <string name="storage_permission_required">נדרשת הרשאת אחסון ב-Android 9 ובגרסאות ישנות יותר כדי לשמור בתיקיות ברירת המחדל. לחלופין, השתמש ב-\'שמור לתיקייה מותאמת אישית\'.</string>
 
     <!-- SettingsScreen -->
     <string name="settings">הגדרות</string>

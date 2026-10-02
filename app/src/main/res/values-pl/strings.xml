@@ -113,6 +113,7 @@
     <string name="save_to_default_folder">Zapisz w domyślnym folderze</string>
     <string name="save_to_custom_folder">Zapisz w niestandardowym folderze</string>
     <string name="back_to_home">Wróć do strony głównej</string>
+    <string name="storage_permission_required">Uprawnienie do pamięci jest wymagane w systemie Android 9 i starszych, aby zapisywać w folderach domyślnych. Alternatywnie użyj opcji \'Zapisz w niestandardowym folderze\'.</string>
 
     <!-- SettingsScreen -->
     <string name="settings">Ustawienia</string>

@@ -113,6 +113,7 @@
     <string name="save_to_default_folder">Enregistrer dans le dossier par défaut</string>
     <string name="save_to_custom_folder">Enregistrer dans un dossier personnalisé</string>
     <string name="back_to_home">Retour à l\'accueil</string>
+    <string name="storage_permission_required">L\'autorisation de stockage est requise sur Android 9 et versions antérieures pour enregistrer dans les dossiers par défaut. Vous pouvez également utiliser \'Enregistrer dans un dossier personnalisé\'.</string>
 
     <!-- SettingsScreen -->
     <string name="settings">Paramètres</string>

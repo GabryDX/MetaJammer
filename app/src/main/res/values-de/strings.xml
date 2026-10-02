@@ -113,6 +113,7 @@
     <string name="save_to_default_folder">In Standardordner speichern</string>
     <string name="save_to_custom_folder">In benutzerdefiniertem Ordner speichern</string>
     <string name="back_to_home">Zurück zur Startseite</string>
+    <string name="storage_permission_required">Unter Android 9 und älter ist eine Speicherberechtigung erforderlich, um in Standardordnern zu speichern. Verwenden Sie alternativ \'In benutzerdefiniertem Ordner speichern\'.</string>
 
     <!-- SettingsScreen -->
     <string name="settings">Einstellungen</string>

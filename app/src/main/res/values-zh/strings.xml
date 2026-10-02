@@ -113,6 +113,7 @@
     <string name="save_to_default_folder">保存到默认文件夹</string>
     <string name="save_to_custom_folder">保存到自定义文件夹</string>
     <string name="back_to_home">返回首页</string>
+    <string name="storage_permission_required">在 Android 9 及更早版本上，需要存储权限才能保存到默认文件夹。或者，请使用“保存到自定义文件夹”。</string>
 
     <!-- SettingsScreen -->
     <string name="settings">设置</string>

@@ -113,6 +113,7 @@
     <string name="save_to_default_folder">Simpan ke Folder Default</string>
     <string name="save_to_custom_folder">Simpan ke Folder Kustom</string>
     <string name="back_to_home">Kembali ke Beranda</string>
+    <string name="storage_permission_required">Izin penyimpanan diperlukan di Android 9 dan yang lebih lama untuk menyimpan ke folder default. Atau, gunakan \'Simpan ke Folder Kustom\'.</string>
 
     <!-- SettingsScreen -->
     <string name="settings">Pengaturan</string>

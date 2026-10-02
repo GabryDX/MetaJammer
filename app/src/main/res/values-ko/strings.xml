@@ -113,6 +113,7 @@
     <string name="save_to_default_folder">기본 폴더에 저장</string>
     <string name="save_to_custom_folder">사용자 지정 폴더에 저장</string>
     <string name="back_to_home">홈으로 돌아가기</string>
+    <string name="storage_permission_required">Android 9 이하 버전에서 기본 폴더에 저장하려면 저장공간 권한이 필요합니다. 또는 \'사용자 지정 폴더에 저장\'을 사용하세요.</string>
 
     <!-- SettingsScreen -->
     <string name="settings">설정</string>

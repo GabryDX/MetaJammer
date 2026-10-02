@@ -113,6 +113,7 @@
     <string name="save_to_default_folder">デフォルトフォルダに保存</string>
     <string name="save_to_custom_folder">カスタムフォルダに保存</string>
     <string name="back_to_home">ホームに戻る</string>
+    <string name="storage_permission_required">Android 9以前でデフォルトフォルダに保存するには、ストレージの権限が必要です。または、\'カスタムフォルダに保存\'をご利用ください。</string>
 
     <!-- SettingsScreen -->
     <string name="settings">設定</string>
