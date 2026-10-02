@@ -51,6 +51,8 @@ class FileRepositoryTest {
         assertEquals(".mp3", repository.getExtensionFromMime("audio/mpeg"))
         assertEquals(".m4a", repository.getExtensionFromMime("audio/mp4"))
         assertEquals(".m4a", repository.getExtensionFromMime("audio/x-m4a"))
+        assertEquals(".svg", repository.getExtensionFromMime("image/svg+xml"))
+        assertEquals(".ogg", repository.getExtensionFromMime("audio/ogg"))
         assertEquals(".pdf", repository.getExtensionFromMime("application/pdf"))
         assertEquals(".bin", repository.getExtensionFromMime("application/octet-stream"))
         assertEquals(".bin", repository.getExtensionFromMime("unknown/mime"))

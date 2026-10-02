@@ -31,23 +31,48 @@ class MediaMetadataProcessor(
         } else {
             fileRepository.getExtension(inputUri)
         }
+        val isOgg = mimeType == "audio/ogg" || mimeType == "application/ogg" ||
+            extension.equals(".ogg", ignoreCase = true) || extension.equals("ogg", ignoreCase = true)
+
+        if (isOgg) {
+            val outputFile = fileRepository.createSharedTempFile("media_clean_", ".ogg")
+            val success = runCatching {
+                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.use { input ->
+                    outputFile.outputStream().use { output ->
+                        OggMetadataReader.stripMetadata(input, output)
+                    }
+                } ?: false
+            }.getOrDefault(false)
+
+            if (success) {
+                Timber.d("Successfully stripped OGG Vorbis metadata")
+                return outputFile
+            } else {
+                outputFile.delete()
+            }
+        }
+
         val outputFile = fileRepository.createSharedTempFile("media_clean_", extension)
         
         return try {
             remuxMedia(inputUri, outputFile, null, mimeType)
             outputFile
         } catch (e: Exception) {
-            Timber.w(e, "Standard media remuxing failed; attempting MP4 container scrubber fallback")
+            Timber.w(e, "Standard media remuxing failed; attempting fallback container scrubber")
             val fallbackSuccess = runCatching {
                 fileRepository.getContext().contentResolver.openInputStream(inputUri)?.use { input ->
                     outputFile.outputStream().use { output ->
-                        Mp4MetadataReader.stripContainerMetadata(input, output)
+                        if (isOgg) {
+                            OggMetadataReader.stripMetadata(input, output)
+                        } else {
+                            Mp4MetadataReader.stripContainerMetadata(input, output)
+                        }
                     }
                 } ?: false
             }.getOrDefault(false)
 
             if (fallbackSuccess) {
-                Timber.d("Successfully stripped metadata using MP4 container scrubber fallback")
+                Timber.d("Successfully stripped metadata using container scrubber fallback")
                 outputFile
             } else {
                 Timber.e(e, "Error removing metadata from media")
@@ -64,17 +89,42 @@ class MediaMetadataProcessor(
         } else {
             fileRepository.getExtension(inputUri)
         }
+        val isOgg = mimeType == "audio/ogg" || mimeType == "application/ogg" ||
+            extension.equals(".ogg", ignoreCase = true) || extension.equals("ogg", ignoreCase = true)
+
+        if (isOgg) {
+            val outputFile = fileRepository.createSharedTempFile("media_poisoned_", ".ogg")
+            val success = runCatching {
+                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.use { input ->
+                    outputFile.outputStream().use { output ->
+                        OggMetadataReader.poisonMetadata(input, output, plan)
+                    }
+                } ?: false
+            }.getOrDefault(false)
+
+            if (success) {
+                Timber.d("Successfully poisoned OGG Vorbis metadata")
+                return outputFile
+            } else {
+                outputFile.delete()
+            }
+        }
+
         val outputFile = fileRepository.createSharedTempFile("media_poisoned_", extension)
         
         return try {
             remuxMedia(inputUri, outputFile, plan, mimeType)
             outputFile
         } catch (e: Exception) {
-            Timber.w(e, "Standard media remuxing failed during poisoning; attempting MP4 container scrubber fallback")
+            Timber.w(e, "Standard media remuxing failed during poisoning; attempting fallback container scrubber")
             val fallbackSuccess = runCatching {
                 fileRepository.getContext().contentResolver.openInputStream(inputUri)?.use { input ->
                     outputFile.outputStream().use { output ->
-                        Mp4MetadataReader.stripContainerMetadata(input, output)
+                        if (isOgg) {
+                            OggMetadataReader.poisonMetadata(input, output, plan)
+                        } else {
+                            Mp4MetadataReader.stripContainerMetadata(input, output)
+                        }
                     }
                 } ?: false
             }.getOrDefault(false)

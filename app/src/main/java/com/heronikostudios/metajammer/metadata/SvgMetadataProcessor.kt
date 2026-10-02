@@ -25,14 +25,15 @@ class SvgMetadataProcessor(
 
     companion object {
         private val COMMENT_TAG_PATTERN = Pattern.compile("<!--[\\s\\S]*?-->")
-        private val METADATA_TAG_PATTERN = Pattern.compile("<metadata>.*?</metadata>", Pattern.DOTALL or Pattern.CASE_INSENSITIVE)
-        private val TITLE_TAG_PATTERN = Pattern.compile("<title>.*?</title>", Pattern.DOTALL or Pattern.CASE_INSENSITIVE)
-        private val DESC_TAG_PATTERN = Pattern.compile("<desc>.*?</desc>", Pattern.DOTALL or Pattern.CASE_INSENSITIVE)
+        private val METADATA_TAG_PATTERN = Pattern.compile("<metadata.*?>.*?</metadata>", Pattern.DOTALL or Pattern.CASE_INSENSITIVE)
+        private val TITLE_TAG_PATTERN = Pattern.compile("<title.*?>.*?</title>", Pattern.DOTALL or Pattern.CASE_INSENSITIVE)
+        private val DESC_TAG_PATTERN = Pattern.compile("<desc.*?>.*?</desc>", Pattern.DOTALL or Pattern.CASE_INSENSITIVE)
         private val SODIPODI_TAG_PATTERN = Pattern.compile("<sodipodi:namedview.*?(/>|>.*?</sodipodi:namedview>)", Pattern.DOTALL or Pattern.CASE_INSENSITIVE)
 
         private val METADATA_ELEMENT_NAMES = setOf(
-            "metadata", "title", "desc", "rdf:rdf",
-            "sodipodi:namedview", "inkscape:perspective", "inkscape:grid", "inkscape:guide"
+            "metadata", "title", "desc", "rdf", "rdf:rdf",
+            "sodipodi:namedview", "inkscape:perspective", "inkscape:grid", "inkscape:guide",
+            "cc:work", "work", "cc:license"
         )
 
         private fun createSafeDocumentBuilderFactory(): DocumentBuilderFactory {
@@ -242,23 +243,111 @@ class SvgMetadataProcessor(
             val entries = mutableListOf<MetadataEntry>()
             runCatching {
                 val doc = parseDocument(content)
+
+                // 1. Title: check root <title> element or Dublin Core title
                 val titles = doc.getElementsByTagName("title")
-                if (titles.length > 0) {
-                    val titleText = titles.item(0).textContent?.trim().orEmpty()
-                    if (titleText.isNotEmpty()) entries.add(MetadataEntry("Title", titleText))
+                var titleText = if (titles.length > 0) titles.item(0).textContent?.trim().orEmpty() else ""
+                if (titleText.isEmpty()) {
+                    titleText = findTextByTagOrLocalName(doc, "title").orEmpty()
+                }
+                if (titleText.isNotEmpty()) entries.add(MetadataEntry("Title", titleText))
+
+                // 2. Creator / Author: check dc:creator or author
+                val creatorText = findTextByTagOrLocalName(doc, "creator") ?: findTextByTagOrLocalName(doc, "author")
+                if (!creatorText.isNullOrBlank()) {
+                    entries.add(MetadataEntry("Creator", creatorText))
                 }
 
+                // 3. Description: check <desc> or dc:description
                 val descs = doc.getElementsByTagName("desc")
-                if (descs.length > 0) {
-                    val descText = descs.item(0).textContent?.trim().orEmpty()
-                    if (descText.isNotEmpty()) entries.add(MetadataEntry("Description", descText))
+                var descText = if (descs.length > 0) descs.item(0).textContent?.trim().orEmpty() else ""
+                if (descText.isEmpty()) {
+                    descText = findTextByTagOrLocalName(doc, "description").orEmpty()
+                }
+                if (descText.isNotEmpty()) entries.add(MetadataEntry("Description", descText))
+
+                // 4. Date: dc:date
+                val dateText = findTextByTagOrLocalName(doc, "date")
+                if (!dateText.isNullOrBlank()) {
+                    entries.add(MetadataEntry("Date", dateText))
                 }
 
-                val metadatas = doc.getElementsByTagName("metadata")
-                if (metadatas.length > 0) {
-                    entries.add(MetadataEntry("Metadata Tag", "Present (XMP/RDF)"))
+                // 5. Location / Coverage: dc:coverage
+                val coverageText = findTextByTagOrLocalName(doc, "coverage")
+                if (!coverageText.isNullOrBlank()) {
+                    entries.add(MetadataEntry("Location", coverageText))
                 }
 
+                // 6. Copyright / Rights: dc:rights
+                val rightsText = findTextByTagOrLocalName(doc, "rights")
+                if (!rightsText.isNullOrBlank()) {
+                    entries.add(MetadataEntry("Copyright", rightsText))
+                }
+
+                // 7. Publisher: dc:publisher
+                val publisherText = findTextByTagOrLocalName(doc, "publisher")
+                if (!publisherText.isNullOrBlank()) {
+                    entries.add(MetadataEntry("Publisher", publisherText))
+                }
+
+                // 8. Contributor: dc:contributor
+                val contributorText = findTextByTagOrLocalName(doc, "contributor")
+                if (!contributorText.isNullOrBlank()) {
+                    entries.add(MetadataEntry("Contributor", contributorText))
+                }
+
+                // 9. Subject / Keywords: dc:subject
+                val subjectText = findTextByTagOrLocalName(doc, "subject")
+                if (!subjectText.isNullOrBlank()) {
+                    entries.add(MetadataEntry("Keywords", subjectText))
+                }
+
+                // 10. License: cc:license or license
+                val licenseText = findLicense(doc)
+                if (!licenseText.isNullOrBlank()) {
+                    entries.add(MetadataEntry("License", licenseText))
+                }
+
+                // 11. Identifier: dc:identifier
+                val idText = findTextByTagOrLocalName(doc, "identifier")
+                if (!idText.isNullOrBlank()) {
+                    entries.add(MetadataEntry("Identifier", idText))
+                }
+
+                // 12. Source: dc:source
+                val sourceText = findTextByTagOrLocalName(doc, "source")
+                if (!sourceText.isNullOrBlank()) {
+                    entries.add(MetadataEntry("Source", sourceText))
+                }
+
+                // 13. Editor attributes on root element: inkscape:version, sodipodi:docname
+                val root = doc.documentElement
+                if (root != null) {
+                    val inkscapeVersion = root.getAttribute("inkscape:version")
+                    if (inkscapeVersion.isNotBlank()) {
+                        entries.add(MetadataEntry("Software", "Inkscape $inkscapeVersion"))
+                    }
+                    val docname = root.getAttribute("sodipodi:docname")
+                    if (docname.isNotBlank()) {
+                        entries.add(MetadataEntry("Document Name", docname))
+                    }
+                }
+
+                // 14. Embedded raster images:
+                val images = doc.getElementsByTagName("image")
+                var embeddedCount = 0
+                for (i in 0 until images.length) {
+                    val img = images.item(i) as? Element ?: continue
+                    val href = img.getAttribute("xlink:href").ifBlank { img.getAttribute("href") }
+                    if (href.startsWith("data:image/", ignoreCase = true)) {
+                        embeddedCount++
+                    }
+                }
+                if (embeddedCount > 0) {
+                    entries.add(MetadataEntry("Embedded Images", "$embeddedCount embedded image(s)"))
+                }
+
+                // 15. Comments
                 var commentCount = 0
                 fun countComments(n: Node) {
                     val children = n.childNodes
@@ -271,6 +360,12 @@ class SvgMetadataProcessor(
                 countComments(doc)
                 if (commentCount > 0) {
                     entries.add(MetadataEntry("Comments", "$commentCount comment(s)"))
+                }
+
+                // 16. Metadata tag presence indicator
+                val metadatas = doc.getElementsByTagName("metadata")
+                if (metadatas.length > 0) {
+                    entries.add(MetadataEntry("Metadata Tag", "Present (XMP/RDF)"))
                 }
             }.onFailure {
                 // Fallback to regex reading if XML parsing fails
@@ -286,12 +381,95 @@ class SvgMetadataProcessor(
                     if (desc.isNotEmpty()) entries.add(MetadataEntry("Description", desc))
                 }
 
+                val creatorMatcher = Pattern.compile("<(?:dc:)?creator.*?>([\\s\\S]*?)</(?:dc:)?creator>", Pattern.CASE_INSENSITIVE).matcher(content)
+                if (creatorMatcher.find()) {
+                    val creator = creatorMatcher.group(1).orEmpty().replace(Regex("<.*?>"), "").trim().replace(Regex("\\s+"), " ")
+                    if (creator.isNotEmpty()) entries.add(MetadataEntry("Creator", creator))
+                }
+
+                val dateMatcher = Pattern.compile("<(?:dc:)?date.*?>([\\s\\S]*?)</(?:dc:)?date>", Pattern.CASE_INSENSITIVE).matcher(content)
+                if (dateMatcher.find()) {
+                    val date = dateMatcher.group(1).orEmpty().replace(Regex("<.*?>"), "").trim()
+                    if (date.isNotEmpty()) entries.add(MetadataEntry("Date", date))
+                }
+
+                val coverageMatcher = Pattern.compile("<(?:dc:)?coverage.*?>([\\s\\S]*?)</(?:dc:)?coverage>", Pattern.CASE_INSENSITIVE).matcher(content)
+                if (coverageMatcher.find()) {
+                    val coverage = coverageMatcher.group(1).orEmpty().replace(Regex("<.*?>"), "").trim()
+                    if (coverage.isNotEmpty()) entries.add(MetadataEntry("Location", coverage))
+                }
+
+                val rightsMatcher = Pattern.compile("<(?:dc:)?rights.*?>([\\s\\S]*?)</(?:dc:)?rights>", Pattern.CASE_INSENSITIVE).matcher(content)
+                if (rightsMatcher.find()) {
+                    val rights = rightsMatcher.group(1).orEmpty().replace(Regex("<.*?>"), "").trim().replace(Regex("\\s+"), " ")
+                    if (rights.isNotEmpty()) entries.add(MetadataEntry("Copyright", rights))
+                }
+
+                val inkscapeMatcher = Pattern.compile("inkscape:version=\"([^\"]+)\"", Pattern.CASE_INSENSITIVE).matcher(content)
+                if (inkscapeMatcher.find()) {
+                    val ver = inkscapeMatcher.group(1).orEmpty()
+                    if (ver.isNotEmpty()) entries.add(MetadataEntry("Software", "Inkscape $ver"))
+                }
+
+                val docnameMatcher = Pattern.compile("sodipodi:docname=\"([^\"]+)\"", Pattern.CASE_INSENSITIVE).matcher(content)
+                if (docnameMatcher.find()) {
+                    val name = docnameMatcher.group(1).orEmpty()
+                    if (name.isNotEmpty()) entries.add(MetadataEntry("Document Name", name))
+                }
+
                 val metadataMatcher = METADATA_TAG_PATTERN.matcher(content)
                 if (metadataMatcher.find()) {
                     entries.add(MetadataEntry("Metadata Tag", "Present (likely XMP/RDF)"))
                 }
+
+                var commentMatches = 0
+                val commentMatcher = COMMENT_TAG_PATTERN.matcher(content)
+                while (commentMatcher.find()) commentMatches++
+                if (commentMatches > 0) {
+                    entries.add(MetadataEntry("Comments", "$commentMatches comment(s)"))
+                }
             }
             return entries
+        }
+
+        private fun findTextByTagOrLocalName(doc: Document, name: String): String? {
+            val list = doc.getElementsByTagNameNS("*", name)
+            for (i in 0 until list.length) {
+                val elem = list.item(i)
+                val raw = elem.textContent?.trim()?.replace(Regex("\\s+"), " ")
+                if (!raw.isNullOrBlank()) return raw
+            }
+            val byTag = doc.getElementsByTagName(name)
+            for (i in 0 until byTag.length) {
+                val elem = byTag.item(i)
+                val raw = elem.textContent?.trim()?.replace(Regex("\\s+"), " ")
+                if (!raw.isNullOrBlank()) return raw
+            }
+            val byPrefix = doc.getElementsByTagName("dc:$name")
+            for (i in 0 until byPrefix.length) {
+                val elem = byPrefix.item(i)
+                val raw = elem.textContent?.trim()?.replace(Regex("\\s+"), " ")
+                if (!raw.isNullOrBlank()) return raw
+            }
+            return null
+        }
+
+        private fun findLicense(doc: Document): String? {
+            val list = doc.getElementsByTagNameNS("*", "license")
+            for (i in 0 until list.length) {
+                val elem = list.item(i) as? Element ?: continue
+                val res = elem.getAttribute("rdf:resource").ifBlank { elem.getAttribute("resource") }
+                if (res.isNotBlank()) return res
+                val text = elem.textContent?.trim()?.replace(Regex("\\s+"), " ")
+                if (!text.isNullOrBlank()) return text
+            }
+            val byTag = doc.getElementsByTagName("cc:license")
+            for (i in 0 until byTag.length) {
+                val elem = byTag.item(i) as? Element ?: continue
+                val res = elem.getAttribute("rdf:resource").ifBlank { elem.getAttribute("resource") }
+                if (res.isNotBlank()) return res
+            }
+            return null
         }
 
         private fun fallbackRegexClean(content: String): String {
