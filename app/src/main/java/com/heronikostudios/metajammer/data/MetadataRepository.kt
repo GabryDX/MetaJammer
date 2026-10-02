@@ -70,7 +70,7 @@ class MetadataRepository(
         stripCameraSettings: Boolean = true,
         stripComments: Boolean = true
     ): File {
-        val mime = selectedFile.mimeType ?: ""
+        val mime = resolveEffectiveMime(selectedFile)
         return when {
             mime.startsWith("image/") -> {
                 when (mode) {
@@ -139,8 +139,30 @@ class MetadataRepository(
         }
     }
 
+    private fun resolveEffectiveMime(selectedFile: SelectedFile): String {
+        val mime = selectedFile.mimeType
+        if (!mime.isNullOrBlank() && mime != "application/octet-stream" && mime != "binary/octet-stream") {
+            return mime
+        }
+        val ext = selectedFile.displayName.substringAfterLast('.', "").lowercase(java.util.Locale.ROOT)
+        return when (ext) {
+            "jpg", "jpeg" -> "image/jpeg"
+            "png" -> "image/png"
+            "webp" -> "image/webp"
+            "heic", "heif" -> "image/heic"
+            "svg" -> "image/svg+xml"
+            "mp4" -> "video/mp4"
+            "mov" -> "video/quicktime"
+            "m4a" -> "audio/mp4"
+            "mp3" -> "audio/mpeg"
+            "ogg" -> "audio/ogg"
+            "pdf" -> "application/pdf"
+            else -> mime ?: ""
+        }
+    }
+
     suspend fun readMetadata(selectedFile: SelectedFile): List<MetadataEntry> {
-        val mime = selectedFile.mimeType ?: ""
+        val mime = resolveEffectiveMime(selectedFile)
         return when {
             mime.startsWith("image/") -> readImageMetadata(selectedFile)
             mime.startsWith("video/") || mime.startsWith("audio/") -> readMediaMetadata(selectedFile)
@@ -198,19 +220,85 @@ class MetadataRepository(
             Timber.e(it, "Failed to read media metadata for %s", selectedFile.uri)
         }
 
+        // Also query MP4 container box metadata for MP4, MOV, M4A, 3GP containers
+        runCatching {
+            resolver.openInputStream(selectedFile.uri)?.use { stream ->
+                val boxEntries = com.heronikostudios.metajammer.metadata.Mp4MetadataReader.readMetadata(stream)
+                for (boxEntry in boxEntries) {
+                    if (entries.none { it.key.equals(boxEntry.key, ignoreCase = true) }) {
+                        entries.add(boxEntry)
+                    }
+                }
+            }
+        }.onFailure {
+            Timber.e(it, "Failed to read MP4 box metadata for %s", selectedFile.uri)
+        }
+
         return entries
     }
 
     private fun readImageMetadata(selectedFile: SelectedFile): List<MetadataEntry> {
         val resolver = fileRepository.getContext().contentResolver
+        val mime = selectedFile.mimeType ?: ""
+        val isPng = mime == "image/png" || selectedFile.displayName.endsWith(".png", ignoreCase = true)
+
         return try {
-            resolver.openInputStream(selectedFile.uri)?.use { inputStream ->
+            val pngBytes = if (isPng) {
+                resolver.openInputStream(selectedFile.uri)?.use { it.readBytes() }
+            } else null
+            val pngInfo = pngBytes?.let { com.heronikostudios.metajammer.metadata.PngMetadataReader.readMetadata(it) }
+
+            val rawExifEntries = resolver.openInputStream(selectedFile.uri)?.use { inputStream ->
                 val exif = ExifInterface(inputStream)
                 PREVIEW_TAGS.mapNotNull { tag ->
                     val value = exif.getAttribute(tag)
-                    if (!value.isNullOrBlank()) MetadataEntry(tag, value) else null
+                    if (value.isNullOrBlank()) return@mapNotNull null
+
+                    // Filter out dummy compatibility values inserted by ExifInterface
+                    if (tag == ExifInterface.TAG_ORIENTATION && (value == "0" || value.toIntOrNull() == 0)) return@mapNotNull null
+                    if (tag == ExifInterface.TAG_IMAGE_WIDTH && value == "0") {
+                        return@mapNotNull pngInfo?.width?.let { MetadataEntry(tag, it.toString()) }
+                    }
+                    if (tag == ExifInterface.TAG_IMAGE_LENGTH && value == "0") {
+                        return@mapNotNull pngInfo?.height?.let { MetadataEntry(tag, it.toString()) }
+                    }
+                    MetadataEntry(tag, value)
                 }
             } ?: emptyList()
+
+            val combined = rawExifEntries.toMutableList()
+
+            if (isPng && pngInfo != null) {
+                if (pngInfo.width != null && combined.none { it.key == ExifInterface.TAG_IMAGE_WIDTH }) {
+                    combined.add(MetadataEntry(ExifInterface.TAG_IMAGE_WIDTH, pngInfo.width.toString()))
+                }
+                if (pngInfo.height != null && combined.none { it.key == ExifInterface.TAG_IMAGE_LENGTH }) {
+                    combined.add(MetadataEntry(ExifInterface.TAG_IMAGE_LENGTH, pngInfo.height.toString()))
+                }
+                pngInfo.entries.forEach { pngEntry ->
+                    if (combined.none { it.key.equals(pngEntry.key, ignoreCase = true) }) {
+                        combined.add(pngEntry)
+                    }
+                }
+            }
+
+            // Check if there is genuine metadata beyond just intrinsic image dimensions
+            val hasGenuineMetadata = combined.any { entry ->
+                entry.key != ExifInterface.TAG_IMAGE_WIDTH &&
+                entry.key != ExifInterface.TAG_IMAGE_LENGTH &&
+                entry.key != ExifInterface.TAG_ORIENTATION
+            }
+
+            if (!hasGenuineMetadata && combined.all {
+                it.key == ExifInterface.TAG_IMAGE_WIDTH ||
+                it.key == ExifInterface.TAG_IMAGE_LENGTH ||
+                it.key == ExifInterface.TAG_ORIENTATION ||
+                it.value == "0"
+            }) {
+                emptyList()
+            } else {
+                combined
+            }
         } catch (e: Exception) {
             Timber.e(e, "Could not read image metadata for %s", selectedFile.uri)
             listOf(MetadataEntry("Error", "Could not read metadata: ${e.message}"))

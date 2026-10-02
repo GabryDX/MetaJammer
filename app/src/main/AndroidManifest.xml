@@ -8,6 +8,10 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
 
+    <!-- Storage permission strictly for legacy Android 9 and older (API <= 28) to save to public folders.
+         Scoped Storage on Android 10+ (API >= 29) uses MediaStore without requiring storage permissions. -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
+
     <!-- MetaJammer follows the Principle of Least Privilege:
          - No broad storage permissions required (uses SAF and MediaStore).
          - narrowed FileProvider access to specific 'shared/' subfolders.

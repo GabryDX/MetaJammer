@@ -181,30 +181,34 @@ class QuickScrubHandler(
         coroutineScope {
             processed.map { (selectedFile, processedFile) ->
                 async {
-                    val (configuredPath, subPath) = resolveSavingPath(selectedFile.mimeType, appSettings)
-                    val outputName = buildOutputName(selectedFile.displayName, appSettings)
-                    val savedUri = saveFileUseCase.saveToDefaultFolder(
-                        sourceFile = processedFile,
-                        displayName = outputName,
-                        mimeType = selectedFile.mimeType,
-                        configuredPath = configuredPath,
-                        subPath = subPath
-                    )
-
-                    if (savedUri != null) {
-                        settingsRepository.logProcessedFile(
-                            ProcessedFileLog(
-                                uri = savedUri.toString(),
-                                displayName = outputName,
-                                mimeType = selectedFile.mimeType,
-                                timestamp = System.currentTimeMillis(),
-                                sizeBytes = processedFile.length()
-                            )
+                    runCatching {
+                        val (configuredPath, subPath) = resolveSavingPath(selectedFile.mimeType, appSettings)
+                        val outputName = buildOutputName(selectedFile.displayName, appSettings)
+                        val savedUri = saveFileUseCase.saveToDefaultFolder(
+                            sourceFile = processedFile,
+                            displayName = outputName,
+                            mimeType = selectedFile.mimeType,
+                            configuredPath = configuredPath,
+                            subPath = subPath
                         )
-                    }
-                    savedUri
+
+                        if (savedUri != null) {
+                            settingsRepository.logProcessedFile(
+                                ProcessedFileLog(
+                                    uri = savedUri.toString(),
+                                    displayName = outputName,
+                                    mimeType = selectedFile.mimeType,
+                                    timestamp = System.currentTimeMillis(),
+                                    sizeBytes = processedFile.length()
+                                )
+                            )
+                        }
+                        savedUri
+                    }.onFailure { e ->
+                        Timber.e(e, "QuickScrub failed to save to default folder: %s", selectedFile.displayName)
+                    }.getOrNull()
                 }
-            }.awaitAll()
+            }.awaitAll().filterNotNull()
         }
     }
 
@@ -216,28 +220,32 @@ class QuickScrubHandler(
         coroutineScope {
             processed.map { (selectedFile, processedFile) ->
                 async {
-                    val outputName = buildOutputName(selectedFile.displayName, appSettings)
-                    val savedUri = saveFileUseCase.saveToCustomFolder(
-                        treeUri = treeUri,
-                        sourceFile = processedFile,
-                        displayName = outputName,
-                        mimeType = selectedFile.mimeType
-                    )
-
-                    if (savedUri != null) {
-                        settingsRepository.logProcessedFile(
-                            ProcessedFileLog(
-                                uri = savedUri.toString(),
-                                displayName = outputName,
-                                mimeType = selectedFile.mimeType,
-                                timestamp = System.currentTimeMillis(),
-                                sizeBytes = processedFile.length()
-                            )
+                    runCatching {
+                        val outputName = buildOutputName(selectedFile.displayName, appSettings)
+                        val savedUri = saveFileUseCase.saveToCustomFolder(
+                            treeUri = treeUri,
+                            sourceFile = processedFile,
+                            displayName = outputName,
+                            mimeType = selectedFile.mimeType
                         )
-                    }
-                    savedUri
+
+                        if (savedUri != null) {
+                            settingsRepository.logProcessedFile(
+                                ProcessedFileLog(
+                                    uri = savedUri.toString(),
+                                    displayName = outputName,
+                                    mimeType = selectedFile.mimeType,
+                                    timestamp = System.currentTimeMillis(),
+                                    sizeBytes = processedFile.length()
+                                )
+                            )
+                        }
+                        savedUri
+                    }.onFailure { e ->
+                        Timber.e(e, "QuickScrub failed to save to custom folder: %s", selectedFile.displayName)
+                    }.getOrNull()
                 }
-            }.awaitAll()
+            }.awaitAll().filterNotNull()
         }
     }
 

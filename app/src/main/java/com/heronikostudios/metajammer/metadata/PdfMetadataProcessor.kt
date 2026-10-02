@@ -36,8 +36,6 @@ class PdfMetadataProcessor(
         runCatching {
             context.contentResolver.openInputStream(uri)?.use { inputStream ->
                 PDDocument.load(inputStream, MemoryUsageSetting.setupMixed(10L * 1024 * 1024)).use { document ->
-                    entries.add(MetadataEntry("Page Count", document.numberOfPages.toString()))
-                    
                     val info = document.documentInformation
                     info.title?.let { entries.add(MetadataEntry("Title", it)) }
                     info.author?.let { entries.add(MetadataEntry("Author", it)) }
@@ -45,6 +43,14 @@ class PdfMetadataProcessor(
                     info.keywords?.let { entries.add(MetadataEntry("Keywords", it)) }
                     info.creator?.let { entries.add(MetadataEntry("Creator", it)) }
                     info.producer?.let { entries.add(MetadataEntry("Producer", it)) }
+                    info.creationDate?.time?.let { entries.add(MetadataEntry("Creation Date", it.toString())) }
+                    info.modificationDate?.time?.let { entries.add(MetadataEntry("Modification Date", it.toString())) }
+
+                    // Check for PageLabels metadata
+                    val catalog = document.documentCatalog
+                    if (catalog.pageLabels != null || catalog.cosObject.containsKey(com.tom_roush.pdfbox.cos.COSName.getPDFName("PageLabels"))) {
+                        entries.add(MetadataEntry("Page Labels", "Custom numbering"))
+                    }
                 }
             }
         }.onFailure {
@@ -71,7 +77,14 @@ class PdfMetadataProcessor(
                     }
                     
                     document.documentInformation = info
-                    document.documentCatalog.metadata = null
+                    val catalog = document.documentCatalog
+                    catalog.metadata = null
+                    catalog.pageLabels = null
+                    catalog.cosObject.removeItem(com.tom_roush.pdfbox.cos.COSName.getPDFName("PageLabels"))
+                    catalog.cosObject.removeItem(com.tom_roush.pdfbox.cos.COSName.getPDFName("PieceInfo"))
+                    catalog.cosObject.removeItem(com.tom_roush.pdfbox.cos.COSName.getPDFName("StructTreeRoot"))
+                    catalog.cosObject.removeItem(com.tom_roush.pdfbox.cos.COSName.getPDFName("Metadata"))
+
                     stripWatermarks(document)
                     document.save(FileOutputStream(outputFile))
                 }
@@ -92,7 +105,14 @@ class PdfMetadataProcessor(
                 PDDocument.load(inputStream, MemoryUsageSetting.setupMixed(10L * 1024 * 1024)).use { document ->
                     // Overwrite metadata with a blank information dictionary
                     document.documentInformation = PDDocumentInformation()
-                    document.documentCatalog.metadata = null
+                    val catalog = document.documentCatalog
+                    catalog.metadata = null
+                    catalog.pageLabels = null
+                    catalog.cosObject.removeItem(com.tom_roush.pdfbox.cos.COSName.getPDFName("PageLabels"))
+                    catalog.cosObject.removeItem(com.tom_roush.pdfbox.cos.COSName.getPDFName("PieceInfo"))
+                    catalog.cosObject.removeItem(com.tom_roush.pdfbox.cos.COSName.getPDFName("StructTreeRoot"))
+                    catalog.cosObject.removeItem(com.tom_roush.pdfbox.cos.COSName.getPDFName("Metadata"))
+
                     stripWatermarks(document)
                     document.save(FileOutputStream(outputFile))
                 }
@@ -110,21 +130,17 @@ class PdfMetadataProcessor(
             for (page in document.pages) {
                 // 1. Remove Watermark Annotations
                 val annotations = page.annotations
-                val iterator = annotations.iterator()
-                var changed = false
-                while (iterator.hasNext()) {
-                    val annotation = iterator.next()
-                    // Check for Watermark subtype or intent
+                val remaining = annotations.filter { annotation ->
                     val subtype = annotation.subtype
                     val intent = annotation.getCOSObject().getNameAsString("IT")
-                    
-                    if (subtype == "Watermark" || subtype == "Stamp" || intent == "Watermark") {
-                        iterator.remove()
-                        changed = true
-                    }
+                    !(subtype == "Watermark" || subtype == "Stamp" || intent == "Watermark")
                 }
-                if (changed) {
-                    page.annotations = annotations
+                if (remaining.size != annotations.size) {
+                    if (remaining.isEmpty()) {
+                        page.cosObject.removeItem(com.tom_roush.pdfbox.cos.COSName.ANNOTS)
+                    } else {
+                        page.annotations = remaining
+                    }
                 }
             }
 

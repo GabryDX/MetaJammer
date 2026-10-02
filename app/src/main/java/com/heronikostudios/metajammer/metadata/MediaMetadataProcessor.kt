@@ -37,10 +37,24 @@ class MediaMetadataProcessor(
             remuxMedia(inputUri, outputFile, null, mimeType)
             outputFile
         } catch (e: Exception) {
-            Timber.e(e, "Error removing metadata from media")
-            // Security: Delete output if failed and throw to prevent leaking original
-            outputFile.delete()
-            throw e
+            Timber.w(e, "Standard media remuxing failed; attempting MP4 container scrubber fallback")
+            val fallbackSuccess = runCatching {
+                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.use { input ->
+                    outputFile.outputStream().use { output ->
+                        Mp4MetadataReader.stripContainerMetadata(input, output)
+                    }
+                } ?: false
+            }.getOrDefault(false)
+
+            if (fallbackSuccess) {
+                Timber.d("Successfully stripped metadata using MP4 container scrubber fallback")
+                outputFile
+            } else {
+                Timber.e(e, "Error removing metadata from media")
+                // Security: Delete output if failed and throw to prevent leaking original
+                outputFile.delete()
+                throw e
+            }
         }
     }
 
@@ -56,9 +70,23 @@ class MediaMetadataProcessor(
             remuxMedia(inputUri, outputFile, plan, mimeType)
             outputFile
         } catch (e: Exception) {
-            Timber.e(e, "Error poisoning metadata in media")
-            outputFile.delete()
-            throw e
+            Timber.w(e, "Standard media remuxing failed during poisoning; attempting MP4 container scrubber fallback")
+            val fallbackSuccess = runCatching {
+                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.use { input ->
+                    outputFile.outputStream().use { output ->
+                        Mp4MetadataReader.stripContainerMetadata(input, output)
+                    }
+                } ?: false
+            }.getOrDefault(false)
+
+            if (fallbackSuccess) {
+                Timber.d("Successfully sanitized container via fallback during poison")
+                outputFile
+            } else {
+                Timber.e(e, "Error poisoning metadata in media")
+                outputFile.delete()
+                throw e
+            }
         }
     }
 

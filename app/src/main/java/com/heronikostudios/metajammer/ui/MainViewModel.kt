@@ -277,6 +277,10 @@ class MainViewModel(
 
     // --- Cleanup & Messages ---
 
+    fun showMessage(msg: String) {
+        _message.value = msg
+    }
+
     fun clearMessage() {
         _message.value = null
         processingViewModel.clearMessage()

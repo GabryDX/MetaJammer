@@ -493,27 +493,31 @@ class ProcessingViewModel(
         val results = coroutineScope {
             _processedFiles.value.map { (selectedFile, processedFile) ->
                 async {
-                    val (configuredPath, subPath) = resolveSavingPath(selectedFile.mimeType, appSettings)
-                    val savedUri = saveFileUseCase.saveToDefaultFolder(
-                        sourceFile = processedFile,
-                        displayName = buildOutputName(selectedFile.displayName, appSettings),
-                        mimeType = selectedFile.mimeType,
-                        configuredPath = configuredPath,
-                        subPath = subPath
-                    )
-
-                    if (savedUri != null) {
-                        settingsRepository.logProcessedFile(
-                            ProcessedFileLog(
-                                uri = savedUri.toString(),
-                                displayName = buildOutputName(selectedFile.displayName, appSettings),
-                                mimeType = selectedFile.mimeType,
-                                timestamp = System.currentTimeMillis(),
-                                sizeBytes = processedFile.length()
-                            )
+                    runCatching {
+                        val (configuredPath, subPath) = resolveSavingPath(selectedFile.mimeType, appSettings)
+                        val savedUri = saveFileUseCase.saveToDefaultFolder(
+                            sourceFile = processedFile,
+                            displayName = buildOutputName(selectedFile.displayName, appSettings),
+                            mimeType = selectedFile.mimeType,
+                            configuredPath = configuredPath,
+                            subPath = subPath
                         )
-                    }
-                    savedUri
+
+                        if (savedUri != null) {
+                            settingsRepository.logProcessedFile(
+                                ProcessedFileLog(
+                                    uri = savedUri.toString(),
+                                    displayName = buildOutputName(selectedFile.displayName, appSettings),
+                                    mimeType = selectedFile.mimeType,
+                                    timestamp = System.currentTimeMillis(),
+                                    sizeBytes = processedFile.length()
+                                )
+                            )
+                        }
+                        savedUri
+                    }.onFailure { e ->
+                        Timber.e(e, "Failed to save processed file to default folder: %s", selectedFile.displayName)
+                    }.getOrNull()
                 }
             }.awaitAll().filterNotNull()
         }
@@ -530,25 +534,29 @@ class ProcessingViewModel(
         val results = coroutineScope {
             _processedFiles.value.map { (selectedFile, processedFile) ->
                 async {
-                    val savedUri = saveFileUseCase.saveToCustomFolder(
-                        treeUri = treeUri,
-                        sourceFile = processedFile,
-                        displayName = buildOutputName(selectedFile.displayName, appSettings),
-                        mimeType = selectedFile.mimeType
-                    )
-
-                    if (savedUri != null) {
-                        settingsRepository.logProcessedFile(
-                            ProcessedFileLog(
-                                uri = savedUri.toString(),
-                                displayName = buildOutputName(selectedFile.displayName, appSettings),
-                                mimeType = selectedFile.mimeType,
-                                timestamp = System.currentTimeMillis(),
-                                sizeBytes = processedFile.length()
-                            )
+                    runCatching {
+                        val savedUri = saveFileUseCase.saveToCustomFolder(
+                            treeUri = treeUri,
+                            sourceFile = processedFile,
+                            displayName = buildOutputName(selectedFile.displayName, appSettings),
+                            mimeType = selectedFile.mimeType
                         )
-                    }
-                    savedUri
+
+                        if (savedUri != null) {
+                            settingsRepository.logProcessedFile(
+                                ProcessedFileLog(
+                                    uri = savedUri.toString(),
+                                    displayName = buildOutputName(selectedFile.displayName, appSettings),
+                                    mimeType = selectedFile.mimeType,
+                                    timestamp = System.currentTimeMillis(),
+                                    sizeBytes = processedFile.length()
+                                )
+                            )
+                        }
+                        savedUri
+                    }.onFailure { e ->
+                        Timber.e(e, "Failed to save processed file to custom folder: %s", selectedFile.displayName)
+                    }.getOrNull()
                 }
             }.awaitAll().filterNotNull()
         }

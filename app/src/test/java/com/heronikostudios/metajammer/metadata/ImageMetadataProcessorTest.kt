@@ -228,4 +228,216 @@ class ImageMetadataProcessorTest {
         assertEquals(48.8584, exif.latLong!![0], 0.001)
         assertEquals(2.2945, exif.latLong!![1], 0.001)
     }
+
+    private fun createTestPngWithPhys(): File {
+        val file = tempFolder.newFile("test_phys_${System.nanoTime()}.png")
+        val pngSignature = byteArrayOf(0x89.toByte(), 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A)
+        val ihdrData = ByteArray(13) { 0 }
+        val physData = byteArrayOf(0, 0, 0x0B.toByte(), 0x13.toByte(), 0, 0, 0x0B.toByte(), 0x13.toByte(), 1)
+        val textData = "Comment\u0000MetaJammerTest".toByteArray(Charsets.ISO_8859_1)
+
+        val output = java.io.ByteArrayOutputStream()
+        output.write(pngSignature)
+        writePngChunk(output, "IHDR", ihdrData)
+        writePngChunk(output, "pHYs", physData)
+        writePngChunk(output, "tEXt", textData)
+        writePngChunk(output, "IEND", ByteArray(0))
+
+        file.writeBytes(output.toByteArray())
+        return file
+    }
+
+    private fun writePngChunk(out: java.io.ByteArrayOutputStream, type: String, data: ByteArray) {
+        val buffer = java.nio.ByteBuffer.allocate(4)
+        buffer.putInt(data.size)
+        out.write(buffer.array())
+
+        val typeBytes = type.toByteArray(Charsets.US_ASCII)
+        out.write(typeBytes)
+        out.write(data)
+
+        val crc = java.util.zip.CRC32()
+        crc.update(typeBytes)
+        crc.update(data)
+        buffer.clear()
+        buffer.putInt(crc.value.toInt())
+        out.write(buffer.array())
+    }
+
+    @Test
+    fun testRemoveMetadataOnPngFileStripsPhysAndAncillaryChunks() {
+        val testPng = createTestPngWithPhys()
+        val rawTextBefore = testPng.readText(Charsets.ISO_8859_1)
+        assertTrue("Original PNG must contain pHYs chunk", rawTextBefore.contains("pHYs"))
+        assertTrue("Original PNG must contain tEXt chunk", rawTextBefore.contains("tEXt"))
+
+        val cleanedFile = processor.removeMetadata(
+            inputUri = testPng.toUri(),
+            keepOrientation = true,
+            mimeType = "image/png"
+        )
+
+        assertTrue(cleanedFile.exists())
+        val rawTextAfter = cleanedFile.readText(Charsets.ISO_8859_1)
+        assertFalse("Cleaned PNG must have pHYs chunk stripped", rawTextAfter.contains("pHYs"))
+        assertFalse("Cleaned PNG must have tEXt chunk stripped", rawTextAfter.contains("tEXt"))
+        assertTrue("Cleaned PNG must preserve IHDR chunk", rawTextAfter.contains("IHDR"))
+        assertTrue("Cleaned PNG must preserve IEND chunk", rawTextAfter.contains("IEND"))
+
+        // Also verify with reviewer's test image if available
+        val reviewerImage = listOf(File("images/test/1.png"), File("../images/test/1.png")).firstOrNull { it.exists() }
+        if (reviewerImage != null) {
+            val cleanedReviewer = processor.removeMetadata(
+                inputUri = reviewerImage.toUri(),
+                keepOrientation = true,
+                mimeType = "image/png"
+            )
+            val reviewerAfter = cleanedReviewer.readText(Charsets.ISO_8859_1)
+            assertFalse("Cleaned reviewer image must not contain pHYs", reviewerAfter.contains("pHYs"))
+            assertFalse("Cleaned reviewer image must not contain zTXt", reviewerAfter.contains("zTXt"))
+        }
+    }
+
+    @Test
+    fun testPngMetadataReadAndCleanedPreviewOn1Png() {
+        val testPng = listOf(File("images/test/1.png"), File("../images/test/1.png")).firstOrNull { it.exists() } ?: return
+        
+        val metadataRepo = com.heronikostudios.metajammer.data.MetadataRepository(fileRepository)
+        val selectedOriginal = com.heronikostudios.metajammer.domain.model.SelectedFile(
+            uri = testPng.toUri(),
+            displayName = testPng.name,
+            mimeType = "image/png"
+        )
+        kotlinx.coroutines.runBlocking {
+            val entriesOriginal = metadataRepo.readMetadata(selectedOriginal)
+            assertEquals("1080", entriesOriginal.find { it.key == ExifInterface.TAG_IMAGE_WIDTH }?.value)
+            assertEquals("1080", entriesOriginal.find { it.key == ExifInterface.TAG_IMAGE_LENGTH }?.value)
+            assertTrue("Should contain resolution from pHYs", entriesOriginal.any { it.key == "Resolution" })
+            assertTrue("Should contain Author from tEXt", entriesOriginal.any { it.key == "Author" && it.value == "Test Metadata Injector" })
+            assertTrue("Should contain Model from tEXt or EXIF", entriesOriginal.any { it.key == "Model" && it.value == "PNG-MetaTestCam" })
+        }
+
+        val cleaned = processor.removeMetadata(
+            inputUri = testPng.toUri(),
+            keepOrientation = true,
+            mimeType = "image/png"
+        )
+        val selectedCleaned = com.heronikostudios.metajammer.domain.model.SelectedFile(
+            uri = cleaned.toUri(),
+            displayName = cleaned.name,
+            mimeType = "image/png"
+        )
+        kotlinx.coroutines.runBlocking {
+            val entriesCleaned = metadataRepo.readMetadata(selectedCleaned)
+            assertEquals(1, entriesCleaned.size)
+            assertEquals("Info", entriesCleaned[0].key)
+            assertEquals("No readable EXIF metadata found", entriesCleaned[0].value)
+            assertFalse(entriesCleaned.any { it.key == ExifInterface.TAG_IMAGE_WIDTH && it.value == "0" })
+            assertFalse(entriesCleaned.any { it.key == ExifInterface.TAG_IMAGE_LENGTH && it.value == "0" })
+            assertFalse(entriesCleaned.any { it.key == ExifInterface.TAG_ORIENTATION && it.value == "0" })
+        }
+    }
+
+    @Test
+    fun testInspectFakeMetadataSamples() {
+        val metadataRepo = com.heronikostudios.metajammer.data.MetadataRepository(fileRepository)
+        val fileNames = listOf(
+            "fake_metadata_sample.jpg" to "image/jpeg",
+            "fake_metadata_sample.pdf" to "application/pdf",
+            "fake_metadata_sample.mp4" to "video/mp4"
+        )
+        kotlinx.coroutines.runBlocking {
+            for ((name, mime) in fileNames) {
+                val file = listOf(File("test_data/$name"), File("../test_data/$name")).firstOrNull { it.exists() }
+                if (file == null) {
+                    println("Could not find file $name")
+                    continue
+                }
+                println("=== Testing ${file.name} ($mime) ===")
+                val selected = com.heronikostudios.metajammer.domain.model.SelectedFile(
+                    uri = file.toUri(),
+                    displayName = file.name,
+                    mimeType = mime
+                )
+                val entries = metadataRepo.readMetadata(selected)
+                println("Returned ${entries.size} entries for $name:")
+                entries.forEach { entry ->
+                    println("   ${entry.key} = '${entry.value}'")
+                }
+                assertTrue("Expected metadata entries in $name", entries.isNotEmpty())
+
+                // Now test metadata removal
+                val cleanedFile = metadataRepo.processFile(
+                    selectedFile = selected,
+                    mode = com.heronikostudios.metajammer.domain.model.ProcessingMode.REMOVE_METADATA,
+                    keepOrientation = true
+                )
+                assertTrue("Cleaned file must exist", cleanedFile.exists())
+                assertTrue("Cleaned file must not be empty", cleanedFile.length() > 0)
+
+                val cleanedSelected = com.heronikostudios.metajammer.domain.model.SelectedFile(
+                    uri = cleanedFile.toUri(),
+                    displayName = cleanedFile.name,
+                    mimeType = mime
+                )
+                val cleanedEntries = metadataRepo.readMetadata(cleanedSelected)
+                if (mime.startsWith("image/")) {
+                    assertTrue(
+                        "All metadata in $name should be removed, but found: ${cleanedEntries.map { "${it.key}=${it.value}" }}",
+                        cleanedEntries.all { it.key == "Info" }
+                    )
+                } else {
+                    assertTrue(
+                        "All metadata in $name should be removed, but found: ${cleanedEntries.map { "${it.key}=${it.value}" }}",
+                        cleanedEntries.isEmpty()
+                    )
+                }
+            }
+        }
+    }
+
+    @Test
+    fun testPoisonMetadataOnPngFileStripsPhysAndAncillaryChunks() {
+        val testPng = createTestPngWithPhys()
+
+        val fakePlan = MetadataReplacementPlan(
+            make = "SpoofedBrand",
+            model = "SpoofedModelX",
+            dateTime = "2025:12:31 23:59:59",
+            latitude = 12.3456,
+            longitude = 65.4321
+        )
+
+        val poisonedFile = processor.poisonMetadata(
+            inputUri = testPng.toUri(),
+            plan = fakePlan,
+            mimeType = "image/png"
+        )
+
+        assertTrue(poisonedFile.exists())
+        val rawTextAfter = poisonedFile.readText(Charsets.ISO_8859_1)
+        assertFalse("Poisoned PNG must have pHYs chunk stripped", rawTextAfter.contains("pHYs"))
+        assertFalse("Poisoned PNG must have tEXt chunk stripped", rawTextAfter.contains("tEXt"))
+        assertTrue("Poisoned PNG must preserve IHDR chunk", rawTextAfter.contains("IHDR"))
+        assertTrue("Poisoned PNG must preserve IEND chunk", rawTextAfter.contains("IEND"))
+    }
+
+    @Test
+    fun testReadMetadataForJpegReturnsExpectedTags() = kotlinx.coroutines.test.runTest {
+        val originalFile = createTestJpegWithExif()
+        val metadataRepo = com.heronikostudios.metajammer.data.MetadataRepository(fileRepository)
+        val selected = com.heronikostudios.metajammer.domain.model.SelectedFile(
+            uri = originalFile.toUri(),
+            displayName = originalFile.name,
+            mimeType = "image/jpeg"
+        )
+        val entries = metadataRepo.readMetadata(selected)
+
+        assertTrue("Entries should not be empty", entries.isNotEmpty())
+        assertTrue("Make tag should be present", entries.any { it.key == ExifInterface.TAG_MAKE && it.value == "RealCameraMake" })
+        assertTrue("Model tag should be present", entries.any { it.key == ExifInterface.TAG_MODEL && it.value == "RealCameraModel" })
+        assertTrue("GPS tag should be present", entries.any { it.key == ExifInterface.TAG_GPS_LATITUDE })
+    }
 }
+
+
