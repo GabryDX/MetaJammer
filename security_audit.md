@@ -42,7 +42,7 @@ The primary security objective of MetaJammer is **guaranteed non-leakage**: ensu
 ## 3. Data Protection & Privacy Architecture
 
 ### 3.1 Principle of Least Privilege (Permissions)
-* **Zero Storage Permissions:** MetaJammer does not declare or request `READ_EXTERNAL_STORAGE` or `WRITE_EXTERNAL_STORAGE` on any Android version (API 26–37).
+* **Zero Storage Permissions on Modern Android:** MetaJammer does not declare or request storage permissions on Android 10+ (API 29–37), relying on Scoped Storage and MediaStore. For legacy Android 9 and older (API <= 28), `WRITE_EXTERNAL_STORAGE` is strictly constrained to `android:maxSdkVersion="28"` solely for direct public folder writes when requested by the user.
 * **Storage Access Framework (SAF) & MediaStore:** User file selections and exports occur through system-mediated pickers (`ActivityResultContracts.OpenMultipleDocuments`, `OpenDocumentTree`, and `MediaStore`), guaranteeing that the application only accesses files explicitly chosen by the user.
 * **Scoped Notification Permission:** `POST_NOTIFICATIONS` is guarded by runtime API-level checks (`Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU`) and only used for background batch progress updates.
 

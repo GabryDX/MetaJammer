@@ -2,7 +2,5 @@
 - Added native ISO-BMFF container metadata reader and fallback scrubber for MP4/MOV.
 - Added fast-path PNG chunk reader and stripper to completely wipe pHYs and ancillary chunks.
 - Added fast-path JPEG marker stripper to remove COM and APP metadata markers.
-- Added pure Kotlin OGG Vorbis & Opus container reader, stripper, and poisoner.
-- Enhanced SVG parser for Dublin Core, editor attributes, and embedded image chunks.
 - Enhanced PDF sanitization for custom PageLabels, document catalogs, and structural dictionaries.
 - Improved SAF MIME type and extension detection using filename heuristics and magic bytes.

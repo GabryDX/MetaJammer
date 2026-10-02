@@ -26,7 +26,7 @@
 
 MetaJammer is built on the **Principle of Least Privilege**:
 
-- **Zero Broad Permissions & Zero Network:** The app requires NO `READ_EXTERNAL_STORAGE`, `WRITE_EXTERNAL_STORAGE`, or `INTERNET` permissions. It uses modern Scoped Storage, SAF, and an air-gapped local architecture.
+- **Zero Storage Permissions on Modern Android & Zero Network:** The app requires zero storage permissions on Android 10+ (API 29+), using modern Scoped Storage, MediaStore, and SAF (with legacy `WRITE_EXTERNAL_STORAGE` strictly capped to `maxSdkVersion="28"` solely for Android 9 default folder saves). Zero `INTERNET` permissions are declared.
 - **100% FOSS:** Built entirely with Free and Open Source Software. No proprietary SDKs, trackers, or "phone-home" analytics.
 - **Fail-Closed Processing:** If processing fails or encounters unexpected corruption, MetaJammer strictly fails closed—unscrubbed raw files are never inadvertently returned, shared, or exported.
 - **100% Air-Gapped Privacy:** The app declares NO `android.permission.INTERNET` permission. All processing, vector map rendering, and preset generation function entirely offline with zero network capability, making data exfiltration technically impossible at the OS permission level.
