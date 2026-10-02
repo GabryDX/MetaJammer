@@ -107,14 +107,15 @@ To defend against XML External Entity (XXE), Billion Laughs entity expansion, an
 ### 4.5 PDF Document Sanitization ([`PdfMetadataProcessor.kt`](app/src/main/java/com/heronikostudios/metajammer/metadata/PdfMetadataProcessor.kt))
 * **In-Memory Scrubbing:** Configured with `MemoryUsageSetting.setupMixed(10MB)`—all standard PDF documents under 10MB are parsed and scrubbed strictly in RAM with zero disk scratch files created, preventing unscrubbed document fragments from touching physical flash storage.
 * **Document Information Dictionary:** Replaces `PDDocumentInformation` with an empty structure (wipes Title, Author, Subject, Keywords, Creator, Producer, CreationDate, ModDate).
-* **Catalog XMP Metadata:** Nullifies `documentCatalog.metadata`.
+* **Catalog XMP & Structural Metadata:** Nullifies `documentCatalog.metadata`, resets custom `PageLabels`, and strips private application dictionary items (`PieceInfo`, `StructTreeRoot`).
 * **Watermark & Annotation Purging:** Iterates over all document pages to strip `Watermark` and `Stamp` annotations.
 * **Layer Sanitization:** Clears Optional Content Groups (OCGs) to prevent hidden watermark layers from persisting.
 
-### 4.6 Audio / Video Stream Remuxing ([`MediaMetadataProcessor.kt`](app/src/main/java/com/heronikostudios/metajammer/metadata/MediaMetadataProcessor.kt))
+### 4.6 Audio / Video Stream Remuxing & ISO-BMFF Box Scrubbing ([`MediaMetadataProcessor.kt`](app/src/main/java/com/heronikostudios/metajammer/metadata/MediaMetadataProcessor.kt), [`Mp4MetadataReader.kt`](app/src/main/java/com/heronikostudios/metajammer/metadata/Mp4MetadataReader.kt))
 * **Container Remuxing:** Re-muxes MP4, MOV, and M4A containers at the sample level using `MediaExtractor` and `MediaMuxer`.
 * **Atom Stripping:** Automatically drops location atoms (`loci`), user data atoms (`udta`), and custom encoder tags.
 * **Orientation Preservation:** Retains video orientation hint (`setOrientationHint`) to maintain visual layout without re-encoding video streams.
+* **Direct ISO-BMFF Box Scrubber Fallback:** For non-standard, synthetic, audio-only, or fragmented containers where native OS extractors fail, MetaJammer falls back to an in-place container-level scrubber that replaces `udta` (iTunes metadata, comments, custom tags, XMP) and metadata `uuid` boxes with standard `free` padding boxes, completely neutralizing metadata without altering sample tables or audio/video payload offsets.
 
 ---
 

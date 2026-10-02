@@ -21,9 +21,16 @@ Builds:
     gradle:
       - floss
 
+  - versionName: 0.5.3
+    versionCode: 8
+    commit: v0.5.3
+    subdir: app
+    gradle:
+      - floss
+
 AllowedAPKSigningKeys: 36d69bd78c8a4490c2bc3f53296abd68887e2a50ad9b9da1c36cccd64e96af01
 
 AutoUpdateMode: Version
 UpdateCheckMode: Tags
-CurrentVersion: 0.5.2
-CurrentVersionCode: 7
+CurrentVersion: 0.5.3
+CurrentVersionCode: 8
