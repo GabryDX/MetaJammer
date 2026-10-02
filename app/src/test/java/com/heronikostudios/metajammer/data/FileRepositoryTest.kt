@@ -181,6 +181,39 @@ class FileRepositoryTest {
     }
 
     @Test
+    @Config(sdk = [33])
+    fun `saveToDefaultFolder on Android 13 API 33 saves PDF to Documents folder`() = runTest {
+        val sourceFile = tempFolder.newFile("test_api33.pdf")
+        sourceFile.writeBytes(byteArrayOf(0x25, 0x50, 0x44, 0x46)) // %PDF
+
+        val resultUri = repository.saveToDefaultFolder(
+            sourceFile = sourceFile,
+            displayName = "test_api33.pdf",
+            mimeType = "application/pdf",
+            configuredPath = "Documents/MetaJammer"
+        )
+
+        assertNotNull("Result URI must not be null for PDF on API 33", resultUri)
+        assertTrue("Result URI should be content:// scheme", resultUri.toString().startsWith("content://"))
+    }
+
+    @Test
+    @Config(sdk = [28])
+    fun `saveToDefaultFolder on Android 9 API 28 saves PDF to Documents folder`() = runTest {
+        val sourceFile = tempFolder.newFile("test_api28.pdf")
+        sourceFile.writeBytes(byteArrayOf(0x25, 0x50, 0x44, 0x46)) // %PDF
+
+        val resultUri = repository.saveToDefaultFolder(
+            sourceFile = sourceFile,
+            displayName = "test_api28.pdf",
+            mimeType = "application/pdf",
+            configuredPath = "Documents/MetaJammer"
+        )
+
+        assertNotNull("Result URI must not be null for PDF on API 28", resultUri)
+    }
+
+    @Test
     fun `saveToDefaultFolder routes content scheme to saveToCustomFolder`() = runTest {
         val sourceFile = tempFolder.newFile("test_custom.jpg")
         sourceFile.writeBytes(byteArrayOf(1, 2, 3))

@@ -310,8 +310,10 @@ class ImageMetadataProcessor(
             fileRepository.getExtension(inputUri)
         }
 
+        val allCategories = stripGps && stripDeviceModel && stripDateTime && stripCameraSettings && stripComments
+
         // Fast-path for PNG images: strip chunks directly in memory without ExifInterface roundtrips
-        if (mimeType == "image/png" || extension.equals(".png", ignoreCase = true)) {
+        if (allCategories && (mimeType == "image/png" || extension.equals(".png", ignoreCase = true))) {
             val stripped = runCatching {
                 fileRepository.getContext().contentResolver.openInputStream(inputUri)?.use { it.readBytes() }?.let { stripPngChunks(it) }
             }.getOrNull()
@@ -323,7 +325,29 @@ class ImageMetadataProcessor(
             }
         }
 
-        val allCategories = stripGps && stripDeviceModel && stripDateTime && stripCameraSettings && stripComments
+        // Fast-path for JPEG images: strip APPn markers and COM markers directly in memory
+        if (allCategories && (mimeType == "image/jpeg" || extension.equals(".jpg", ignoreCase = true) || extension.equals(".jpeg", ignoreCase = true))) {
+            val stripped = runCatching {
+                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.use { it.readBytes() }?.let { stripJpegMarkers(it) }
+            }.getOrNull()
+
+            if (stripped != null) {
+                val outputFile = fileRepository.createSharedTempFile("img_clean_", ".jpg")
+                outputFile.writeBytes(stripped)
+                if (keepOrientation) {
+                    runCatching {
+                        val origExif = fileRepository.getContext().contentResolver.openInputStream(inputUri)?.use { ExifInterface(it) }
+                        val origOrientation = origExif?.getAttribute(ExifInterface.TAG_ORIENTATION)
+                        if (!origOrientation.isNullOrBlank() && origOrientation != "0" && origOrientation != "1") {
+                            val cleanExif = ExifInterface(outputFile.absolutePath)
+                            cleanExif.setAttribute(ExifInterface.TAG_ORIENTATION, origOrientation)
+                            cleanExif.saveAttributes()
+                        }
+                    }
+                }
+                return outputFile
+            }
+        }
         val tagsToStrip = if (allCategories) {
             ALL_SUPPORTED_TAGS
         } else {
@@ -435,15 +459,19 @@ class ImageMetadataProcessor(
 
         action(exif)
 
-        if (keepOrientation && !originalOrientation.isNullOrBlank()) {
+        if (keepOrientation && !originalOrientation.isNullOrBlank() && originalOrientation != "0") {
             exif.setAttribute(ExifInterface.TAG_ORIENTATION, originalOrientation)
         } else if (!keepOrientation) {
             exif.setAttribute(ExifInterface.TAG_ORIENTATION, null)
         }
 
-        // Always restore dimensions as they are intrinsic to the file structure
-        if (!originalWidth.isNullOrBlank()) exif.setAttribute(ExifInterface.TAG_IMAGE_WIDTH, originalWidth)
-        if (!originalHeight.isNullOrBlank()) exif.setAttribute(ExifInterface.TAG_IMAGE_LENGTH, originalHeight)
+        // Always restore dimensions as they are intrinsic to the file structure, unless they were dummy 0s
+        if (!originalWidth.isNullOrBlank() && originalWidth != "0") {
+            exif.setAttribute(ExifInterface.TAG_IMAGE_WIDTH, originalWidth)
+        }
+        if (!originalHeight.isNullOrBlank() && originalHeight != "0") {
+            exif.setAttribute(ExifInterface.TAG_IMAGE_LENGTH, originalHeight)
+        }
 
         if (thumbnailHandling == ThumbnailHandling.REMOVE) {
             exif.setAttribute(ExifInterface.TAG_JPEG_INTERCHANGE_FORMAT, null)
