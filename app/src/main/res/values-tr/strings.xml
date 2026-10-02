@@ -113,6 +113,7 @@
     <string name="save_to_default_folder">Varsayılan Klasöre Kaydet</string>
     <string name="save_to_custom_folder">Özel Klasöre Kaydet</string>
     <string name="back_to_home">Ana Sayfaya Dön</string>
+    <string name="storage_permission_required">Varsayılan klasörlere kaydetmek için Android 9 ve daha eski sürümlerde depolama izni gereklidir. Alternatif olarak \'Özel Klasöre Kaydet\' seçeneğini kullanın.</string>
 
     <!-- SettingsScreen -->
     <string name="settings">Ayarlar</string>

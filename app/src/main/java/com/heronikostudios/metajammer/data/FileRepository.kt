@@ -153,6 +153,16 @@ open class FileRepository(private val context: Context) {
                     return@use "image/svg+xml"
                 }
 
+                // OGG: OggS
+                if (read >= 4 &&
+                    buffer[0] == 'O'.code.toByte() &&
+                    buffer[1] == 'g'.code.toByte() &&
+                    buffer[2] == 'g'.code.toByte() &&
+                    buffer[3] == 'S'.code.toByte()
+                ) {
+                    return@use "audio/ogg"
+                }
+
                 // MP3: ID3 or sync word
                 if (buffer[0] == 'I'.code.toByte() && buffer[1] == 'D'.code.toByte() && buffer[2] == '3'.code.toByte()) {
                     return@use "audio/mpeg"

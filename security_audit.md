@@ -42,7 +42,7 @@ The primary security objective of MetaJammer is **guaranteed non-leakage**: ensu
 ## 3. Data Protection & Privacy Architecture
 
 ### 3.1 Principle of Least Privilege (Permissions)
-* **Zero Storage Permissions:** MetaJammer does not declare or request `READ_EXTERNAL_STORAGE` or `WRITE_EXTERNAL_STORAGE` on any Android version (API 26–37).
+* **Zero Storage Permissions on Modern Android:** MetaJammer does not declare or request storage permissions on Android 10+ (API 29–37), relying on Scoped Storage and MediaStore. For legacy Android 9 and older (API <= 28), `WRITE_EXTERNAL_STORAGE` is strictly constrained to `android:maxSdkVersion="28"` solely for direct public folder writes when requested by the user.
 * **Storage Access Framework (SAF) & MediaStore:** User file selections and exports occur through system-mediated pickers (`ActivityResultContracts.OpenMultipleDocuments`, `OpenDocumentTree`, and `MediaStore`), guaranteeing that the application only accesses files explicitly chosen by the user.
 * **Scoped Notification Permission:** `POST_NOTIFICATIONS` is guarded by runtime API-level checks (`Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU`) and only used for background batch progress updates.
 
@@ -95,8 +95,9 @@ To defend against XML External Entity (XXE), Billion Laughs entity expansion, an
   - `external-parameter-entities`: Disabled.
   - `load-external-dtd`: Disabled.
   - `isXIncludeAware = false` and `isExpandEntityReferences = false`.
-* **Sanitization:** Strips `<metadata>`, `<desc>`, `<title>`, `<rdf:RDF>`, editor metadata (`sodipodi`, `inkscape`), and HTML comment blocks (`<!-- ... -->`).
-* **Embedded Raster Scrubbing:** Base64-encoded raster images embedded within `<image>` tags are decoded, scrubbed via the native image processor, and re-encoded.
+* **Metadata Extraction & Sanitization:** Comprehensively parses and strips Dublin Core RDF (`dc:title`, `dc:creator`, `dc:date`, `dc:coverage`, `dc:rights`, `dc:publisher`, `dc:contributor`, `dc:subject`, `dc:identifier`, `dc:source`), Creative Commons licenses (`cc:license`, `cc:Work`), SVG `<title>` and `<desc>`, editor tracking elements (`sodipodi:namedview`, `inkscape:perspective`, `inkscape:grid`), editor attributes (`inkscape:version`, `sodipodi:docname`, Illustrator tracking), and full XML comment hierarchies (`<!-- ... -->`).
+* **Route Precedence Hardening:** Explicitly prioritizes `image/svg+xml` ahead of generic raster `image/*` checks in repository dispatchers, preventing vector XML streams from mistakenly routing through raster EXIF parsers.
+* **Embedded Raster Scrubbing:** Base64-encoded raster images embedded within `<image>` tags are decoded, scrubbed via native chunk/marker strippers (stripping ancillary PNG chunks like `tEXt` and JPEG markers like APP1/COM), and re-encoded.
 
 ### 4.4 Deep Image Stripping & In-Memory Chunk Parsing ([`ImageMetadataProcessor.kt`](app/src/main/java/com/heronikostudios/metajammer/metadata/ImageMetadataProcessor.kt))
 * **ExifInterface Reflection:** Targets all standard `TAG_` constants dynamically via reflection plus vendor-specific tags (`ImageResources`, `OwnerName`, `PrintIM`, `SensitivityType`, etc.) to clear all metadata fields regardless of library version.
@@ -116,6 +117,12 @@ To defend against XML External Entity (XXE), Billion Laughs entity expansion, an
 * **Atom Stripping:** Automatically drops location atoms (`loci`), user data atoms (`udta`), and custom encoder tags.
 * **Orientation Preservation:** Retains video orientation hint (`setOrientationHint`) to maintain visual layout without re-encoding video streams.
 * **Direct ISO-BMFF Box Scrubber Fallback:** For non-standard, synthetic, audio-only, or fragmented containers where native OS extractors fail, MetaJammer falls back to an in-place container-level scrubber that replaces `udta` (iTunes metadata, comments, custom tags, XMP) and metadata `uuid` boxes with standard `free` padding boxes, completely neutralizing metadata without altering sample tables or audio/video payload offsets.
+
+### 4.7 OGG Vorbis & Opus Container Sanitization ([`OggMetadataReader.kt`](app/src/main/java/com/heronikostudios/metajammer/metadata/OggMetadataReader.kt))
+* **Pure Kotlin Zero-Dependency Engine:** Implements a direct byte-level OGG container parser, packet reassembler, and comment header stripper/poisoner, eliminating reliance on Android's `MediaMuxer` (which lacks Vorbis container support and fails on non-Opus codecs).
+* **Comment Header Neutralization:** Reassembles bitstream packets across multi-page segment tables and replaces the Vorbis comment packet (`\x03vorbis`) or Opus tag packet (`OpusTags`) with a sanitized, minimal header. Completely removes user comments, location coordinates (`GPS_COORDINATES`, `LOCATION`), hardware serials (`DEVICE_ID`), contact details, embedded picture blocks (`METADATA_BLOCK_PICTURE`), and serialized XMP packets.
+* **Loss-Free Bit-Exact Audio:** Audio packets and elementary streams are preserved byte-for-byte without decoding or re-encoding, avoiding audio quality loss and artifact generation.
+* **Bitstream Integrity & CRC Recalculation:** Re-sequences all subsequent OGG pages with strictly consecutive page sequence numbers and recalculates 32-bit OGG CRC checksums using the standard generator polynomial `0x04C11DB7`, ensuring 100% compliance with RFC 3533 and media player compatibility across all Android versions (API 26–37).
 
 ---
 

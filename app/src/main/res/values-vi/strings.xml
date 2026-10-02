@@ -113,6 +113,7 @@
     <string name="save_to_default_folder">Lưu vào thư mục mặc định</string>
     <string name="save_to_custom_folder">Lưu vào thư mục tùy chỉnh</string>
     <string name="back_to_home">Quay lại Trang chủ</string>
+    <string name="storage_permission_required">Cần có quyền truy cập bộ nhớ trên Android 9 trở về trước để lưu vào các thư mục mặc định. Ngoài ra, bạn có thể dùng \'Lưu vào thư mục tùy chỉnh\'.</string>
 
     <!-- SettingsScreen -->
     <string name="settings">Cài đặt</string>

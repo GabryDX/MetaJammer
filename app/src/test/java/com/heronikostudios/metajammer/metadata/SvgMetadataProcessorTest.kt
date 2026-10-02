@@ -6,6 +6,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.ByteArrayOutputStream
+import java.io.File
 import java.nio.ByteBuffer
 import java.util.Base64
 import java.util.zip.CRC32
@@ -155,6 +156,84 @@ class SvgMetadataProcessorTest {
         assertEquals("Artwork Description", entriesMap["Description"])
         assertEquals("Present (XMP/RDF)", entriesMap["Metadata Tag"])
         assertEquals("2 comment(s)", entriesMap["Comments"])
+    }
+
+    @Test
+    fun `readSvgMetadataString parses rich Dublin Core, editor attributes, and comments from sample SVG`() {
+        val sampleSvgFile = listOf(
+            File("test_data/fake_metadata_sample.svg"),
+            File("../test_data/fake_metadata_sample.svg")
+        ).firstOrNull { it.exists() } ?: File("test_data/fake_metadata_sample.svg")
+        assertTrue("Sample SVG test file must exist", sampleSvgFile.exists())
+
+        val entries = SvgMetadataProcessor.readSvgMetadataString(sampleSvgFile.readText())
+        val entriesMap = entries.associate { it.key to it.value }
+
+        assertEquals("Classified Operations & Metadata Analysis 2026", entriesMap["Title"])
+        assertEquals("Dr. Jane Doe & Director Alex Vance", entriesMap["Creator"])
+        assertTrue(entriesMap["Description"]?.contains("Synthetic high-density vector specimen") == true)
+        assertEquals("2026-10-02T12:52:03+02:00", entriesMap["Date"])
+        assertEquals("Geneva, Switzerland (46.204391 N, 6.143158 E)", entriesMap["Location"])
+        assertEquals("Copyright © 2026 Acme Cybernetics Security Ltd. All Rights Reserved.", entriesMap["Copyright"])
+        assertEquals("Acme Cybernetics Security Ltd.", entriesMap["Publisher"])
+        assertEquals("Threat Intelligence Research Team", entriesMap["Contributor"])
+        assertTrue(entriesMap["Keywords"]?.contains("sanitization") == true)
+        assertEquals("http://creativecommons.org/licenses/by-nc/4.0/", entriesMap["License"])
+        assertEquals("urn:uuid:7f3b891a-1d54-4a56-829b-00123456789a", entriesMap["Identifier"])
+        assertEquals("https://internal.vault.cybernetics.corp/vector/2026/diagram.svg", entriesMap["Source"])
+        assertTrue(entriesMap["Software"]?.contains("Inkscape 1.3.2") == true)
+        assertEquals("classified_operations_2026.svg", entriesMap["Document Name"])
+        assertEquals("1 embedded image(s)", entriesMap["Embedded Images"])
+        assertEquals("11 comment(s)", entriesMap["Comments"])
+    }
+
+    @Test
+    fun `cleanSvgString strips all metadata, editor attributes, and scrubs embedded PNG chunks from sample SVG`() {
+        val sampleSvgFile = listOf(
+            File("test_data/fake_metadata_sample.svg"),
+            File("../test_data/fake_metadata_sample.svg")
+        ).firstOrNull { it.exists() } ?: File("test_data/fake_metadata_sample.svg")
+        assertTrue("Sample SVG test file must exist", sampleSvgFile.exists())
+
+        val originalContent = sampleSvgFile.readText()
+        val cleaned = SvgMetadataProcessor.cleanSvgString(originalContent)
+
+        // Metadata elements must be gone
+        assertFalse("Cleaned SVG should not contain title tag", cleaned.contains("<title>"))
+        assertFalse("Cleaned SVG should not contain desc tag", cleaned.contains("<desc>"))
+        assertFalse("Cleaned SVG should not contain metadata tag", cleaned.contains("<metadata"))
+        assertFalse("Cleaned SVG should not contain rdf:RDF", cleaned.contains("rdf:RDF"))
+        assertFalse("Cleaned SVG should not contain dc:creator", cleaned.contains("dc:creator"))
+        assertFalse("Cleaned SVG should not contain dc:coverage", cleaned.contains("dc:coverage"))
+        assertFalse("Cleaned SVG should not contain dc:date", cleaned.contains("dc:date"))
+        assertFalse("Cleaned SVG should not contain dc:rights", cleaned.contains("dc:rights"))
+
+        // XML comments must be stripped
+        assertFalse("Cleaned SVG should not contain comments", cleaned.contains("<!--"))
+        assertFalse("Cleaned SVG should not contain host comment", cleaned.contains("workstation-09.internal.corp"))
+        assertFalse("Cleaned SVG should not contain generator comment", cleaned.contains("Antigravity Vector Engine"))
+
+        // Editor attributes and elements must be removed
+        assertFalse("Cleaned SVG should not contain inkscape:version attribute", cleaned.contains("inkscape:version=\""))
+        assertFalse("Cleaned SVG should not contain inkscape version value", cleaned.contains("1.3.2 (091e20e"))
+        assertFalse("Cleaned SVG should not contain sodipodi:docname attribute", cleaned.contains("sodipodi:docname=\""))
+        assertFalse("Cleaned SVG should not contain document name value", cleaned.contains("classified_operations_2026.svg"))
+        assertFalse("Cleaned SVG should not contain sodipodi:namedview element", cleaned.contains("<sodipodi:namedview"))
+
+        // Embedded image must still exist, but without PNG metadata chunks
+        assertTrue("Cleaned SVG must retain embedded image tag", cleaned.contains("<image"))
+        val base64Match = Regex("data:image/png;base64,([A-Za-z0-9+/=]+)").find(cleaned)
+        assertTrue("Cleaned SVG must retain embedded PNG base64", base64Match != null)
+        val decodedPng = Base64.getDecoder().decode(base64Match!!.groupValues[1])
+        val pngString = String(decodedPng, Charsets.ISO_8859_1)
+        assertFalse("Embedded PNG must not contain tEXt metadata chunk", pngString.contains("tEXt"))
+        assertFalse("Embedded PNG must not contain author in chunk", pngString.contains("Dr. Jane Doe"))
+
+        // Visual elements must be preserved
+        assertTrue("Cleaned SVG must preserve width attribute", cleaned.contains("width=\"800\"") || cleaned.contains("width='800'"))
+        assertTrue("Cleaned SVG must preserve height attribute", cleaned.contains("height=\"600\"") || cleaned.contains("height='600'"))
+        assertTrue("Cleaned SVG must preserve rect elements", cleaned.contains("<rect"))
+        assertTrue("Cleaned SVG must preserve text elements", cleaned.contains("<text"))
     }
 
     private fun writePngChunk(out: ByteArrayOutputStream, type: String, data: ByteArray) {

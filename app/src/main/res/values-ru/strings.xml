@@ -113,6 +113,7 @@
     <string name="save_to_default_folder">Сохранить в папку по умолчанию</string>
     <string name="save_to_custom_folder">Сохранить в пользовательскую папку</string>
     <string name="back_to_home">Вернуться на главную</string>
+    <string name="storage_permission_required">Для сохранения в папки по умолчанию на Android 9 и более ранних версиях требуется разрешение на доступ к хранилищу. Либо используйте \'Сохранить в пользовательскую папку\'.</string>
 
     <!-- SettingsScreen -->
     <string name="settings">Настройки</string>

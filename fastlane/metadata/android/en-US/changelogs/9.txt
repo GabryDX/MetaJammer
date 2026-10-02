@@ -1,0 +1,5 @@
+- Added pure Kotlin OGG Vorbis & Opus bitstream reader, comment stripper, and metadata poisoner.
+- Added support for stripping Vorbis user comments, location tags, embedded picture blocks, and XMP packets without re-encoding audio.
+- Fixed SVG MIME type routing precedence and enhanced Dublin Core RDF, Creative Commons, and XML comment cleaning.
+- Restored 100% localization parity across all 24 supported languages (added missing storage permission explanation).
+- Extracted hardcoded location coordinate dialog hints to localized string resources.

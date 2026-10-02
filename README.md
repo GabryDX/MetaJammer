@@ -8,7 +8,7 @@
 
 ## Key Features
 
-- **🛡️ Deep Metadata Stripping:** More than just EXIF. MetaJammer targets EXIF, XMP, IPTC, JPEG COM markers, GPS coordinates, hardware serial numbers, embedded thumbnails, MP4/MOV ISO-BMFF container atoms (`udta`, `ilst`, `©xyz`, iTunes custom tags), PNG chunks (`tEXt`, `zTXt`, `iTXt`, `pHYs`, `eXIf`), PDF metadata (document catalog, page labels, annotations), and SVG embedded metadata to ensure no "leaks" remain.
+- **🛡️ Deep Metadata Stripping:** More than just EXIF. MetaJammer targets EXIF, XMP, IPTC, JPEG COM markers, GPS coordinates, hardware serial numbers, embedded thumbnails, MP4/MOV ISO-BMFF container atoms (`udta`, `ilst`, `©xyz`, iTunes custom tags), PNG chunks (`tEXt`, `zTXt`, `iTXt`, `pHYs`, `eXIf`), OGG Vorbis & Opus comment packets (user comments, location, hardware identifiers, picture blocks, XMP), PDF metadata (document catalog, page labels, annotations), and SVG embedded metadata to ensure no "leaks" remain.
 - **🧪 Metadata Poisoning & Profiles:** Don't just remove data—confuse it. Generate highly realistic fake metadata with camera hardware profiles (Pro Mirrorless, Smartphone, Vintage, Random) and instant location presets.
 - **🎛️ Granular Tag Controls:** Selectively strip or preserve individual metadata categories: GPS & Location, Device & Hardware, Date & Time, Camera Settings, and Author & Comments.
 - **📊 Before / After Visual Diff & Unified Scrolling:** Inspect original vs. modified metadata side-by-side with color-coded status badges (`REMOVED`, `POISONED`, `KEPT`), a sticky filter header (`All`, `Removed`, `Poisoned`, `Kept`), and collapsible poisoning settings for a smooth, single-scroll experience.
@@ -18,7 +18,7 @@
 - **📦 Background Batch Processing:** Reliable processing for 50+ high-resolution files at once using Android WorkManager, complete with system notifications.
 - **📜 History & Retention Control:** Keep an audit log of processed files with configurable privacy retention (clear after 24 hours, keep 100 items, clear on exit, or disable history) powered by an isolated Room database.
 - **📂 Flexible Output & Clean Navigation:** Save to custom folders via SAF, use standard MediaStore collections, share directly to other apps, or return to Home with one click. Intelligently preserves unsaved selections while clearing completed batches and dismissing status banners immediately.
-- **🖼️ Multi-Format Support:** Full compatibility with modern image formats (JPEG, PNG, WebP, HEIF/HEIC, SVG), video containers (MP4, MOV with orientation hint preservation and container-level atom scrubbing fallback), and PDF documents (in-memory metadata wiping/poisoning, page labels reset, and hidden annotation removal).
+- **🖼️ Multi-Format Support:** Full compatibility with modern image formats (JPEG, PNG, WebP, HEIF/HEIC, SVG with Dublin Core, editor tracking, and embedded raster scrubbing), video & audio containers (MP4, MOV, M4A with atom scrubbing fallback, and OGG Vorbis/Opus with pure Kotlin zero-recompression comment stripping), and PDF documents (in-memory metadata wiping/poisoning, page labels reset, and hidden annotation removal).
 - **🎨 Modern & Accessible UI:** Built with Jetpack Compose and Material 3, featuring Dynamic Color support, a dedicated OLED black mode, tuned Coil caching for butter-smooth 120Hz scrolling, and battery-aware theme scheduling.
 - **🌍 Global Reach:** Fully localized in 24 languages with 100% string parity: English, Arabic, German, Greek, Spanish, Persian, French, Hebrew, Hindi, Indonesian, Italian, Japanese, Korean, Latin, Dutch, Polish, Portuguese, Romanian, Russian, Thai, Turkish, Ukrainian, Vietnamese, and Chinese.
 
@@ -26,7 +26,7 @@
 
 MetaJammer is built on the **Principle of Least Privilege**:
 
-- **Zero Broad Permissions & Zero Network:** The app requires NO `READ_EXTERNAL_STORAGE`, `WRITE_EXTERNAL_STORAGE`, or `INTERNET` permissions. It uses modern Scoped Storage, SAF, and an air-gapped local architecture.
+- **Zero Storage Permissions on Modern Android & Zero Network:** The app requires zero storage permissions on Android 10+ (API 29+), using modern Scoped Storage, MediaStore, and SAF (with legacy `WRITE_EXTERNAL_STORAGE` strictly capped to `maxSdkVersion="28"` solely for Android 9 default folder saves). Zero `INTERNET` permissions are declared.
 - **100% FOSS:** Built entirely with Free and Open Source Software. No proprietary SDKs, trackers, or "phone-home" analytics.
 - **Fail-Closed Processing:** If processing fails or encounters unexpected corruption, MetaJammer strictly fails closed—unscrubbed raw files are never inadvertently returned, shared, or exported.
 - **100% Air-Gapped Privacy:** The app declares NO `android.permission.INTERNET` permission. All processing, vector map rendering, and preset generation function entirely offline with zero network capability, making data exfiltration technically impossible at the OS permission level.

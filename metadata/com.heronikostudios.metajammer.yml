@@ -14,16 +14,9 @@ Repo: https://github.com/GabryDX/MetaJammer.git
 Binaries: https://github.com/GabryDX/MetaJammer/releases/download/v%v/MetaJammer-v%v.apk
 
 Builds:
-  - versionName: 0.5.2
-    versionCode: 7
-    commit: 0cbc10de4eb819248febc5d07a68c20ccd272b47
-    subdir: app
-    gradle:
-      - floss
-
-  - versionName: 0.5.3
-    versionCode: 8
-    commit: v0.5.3
+  - versionName: 0.5.4
+    versionCode: 9
+    commit: v0.5.4
     subdir: app
     gradle:
       - floss
@@ -32,5 +25,5 @@ AllowedAPKSigningKeys: 36d69bd78c8a4490c2bc3f53296abd68887e2a50ad9b9da1c36cccd64
 
 AutoUpdateMode: Version
 UpdateCheckMode: Tags
-CurrentVersion: 0.5.3
-CurrentVersionCode: 8
+CurrentVersion: 0.5.4
+CurrentVersionCode: 9

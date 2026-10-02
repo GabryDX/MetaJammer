@@ -72,6 +72,26 @@ class MetadataRepository(
     ): File {
         val mime = resolveEffectiveMime(selectedFile)
         return when {
+            mime == "image/svg+xml" -> {
+                when (mode) {
+                    ProcessingMode.POISON_METADATA -> {
+                        val plan = requireNotNull(replacementPlan) { "Plan required for poison mode" }
+                        svgProcessor.poisonMetadata(selectedFile.uri, plan)
+                    }
+                    ProcessingMode.REMOVE_METADATA -> svgProcessor.removeMetadata(selectedFile.uri)
+                }
+            }
+
+            mime == "application/pdf" -> {
+                when (mode) {
+                    ProcessingMode.POISON_METADATA -> {
+                        val plan = requireNotNull(replacementPlan) { "Plan required for poison mode" }
+                        pdfProcessor.poisonMetadata(selectedFile.uri, plan)
+                    }
+                    ProcessingMode.REMOVE_METADATA -> pdfProcessor.removeMetadata(selectedFile.uri)
+                }
+            }
+
             mime.startsWith("image/") -> {
                 when (mode) {
                     ProcessingMode.POISON_METADATA -> {
@@ -115,26 +135,6 @@ class MetadataRepository(
                 }
             }
 
-            mime == "application/pdf" -> {
-                when (mode) {
-                    ProcessingMode.POISON_METADATA -> {
-                        val plan = requireNotNull(replacementPlan) { "Plan required for poison mode" }
-                        pdfProcessor.poisonMetadata(selectedFile.uri, plan)
-                    }
-                    ProcessingMode.REMOVE_METADATA -> pdfProcessor.removeMetadata(selectedFile.uri)
-                }
-            }
-
-            mime == "image/svg+xml" -> {
-                when (mode) {
-                    ProcessingMode.POISON_METADATA -> {
-                        val plan = requireNotNull(replacementPlan) { "Plan required for poison mode" }
-                        svgProcessor.poisonMetadata(selectedFile.uri, plan)
-                    }
-                    ProcessingMode.REMOVE_METADATA -> svgProcessor.removeMetadata(selectedFile.uri)
-                }
-            }
-
             else -> throw IllegalArgumentException("Unsupported file format for metadata processing: ${mime.ifBlank { "unknown" }} (${selectedFile.displayName})")
         }
     }
@@ -164,10 +164,10 @@ class MetadataRepository(
     suspend fun readMetadata(selectedFile: SelectedFile): List<MetadataEntry> {
         val mime = resolveEffectiveMime(selectedFile)
         return when {
+            mime == "image/svg+xml" -> svgProcessor.readMetadata(selectedFile.uri)
+            mime == "application/pdf" -> pdfProcessor.readMetadata(selectedFile.uri)
             mime.startsWith("image/") -> readImageMetadata(selectedFile)
             mime.startsWith("video/") || mime.startsWith("audio/") -> readMediaMetadata(selectedFile)
-            mime == "application/pdf" -> pdfProcessor.readMetadata(selectedFile.uri)
-            mime == "image/svg+xml" -> svgProcessor.readMetadata(selectedFile.uri)
             else -> listOf(MetadataEntry("Info", "Metadata preview not yet supported for $mime"))
         }
     }
@@ -175,7 +175,25 @@ class MetadataRepository(
     private fun readMediaMetadata(selectedFile: SelectedFile): List<MetadataEntry> {
         val resolver = fileRepository.getContext().contentResolver
         val entries = mutableListOf<MetadataEntry>()
-        
+        val mime = resolveEffectiveMime(selectedFile)
+        val isOgg = mime == "audio/ogg" || mime == "application/ogg" ||
+            selectedFile.displayName.endsWith(".ogg", ignoreCase = true)
+
+        if (isOgg) {
+            runCatching {
+                resolver.openInputStream(selectedFile.uri)?.use { stream ->
+                    val oggEntries = com.heronikostudios.metajammer.metadata.OggMetadataReader.readMetadata(stream)
+                    for (oe in oggEntries) {
+                        if (entries.none { it.key.equals(oe.key, ignoreCase = true) }) {
+                            entries.add(oe)
+                        }
+                    }
+                }
+            }.onFailure {
+                Timber.e(it, "Failed to read OGG metadata for %s", selectedFile.uri)
+            }
+        }
+
         runCatching {
             val retriever = android.media.MediaMetadataRetriever()
             retriever.useCompat { r ->
@@ -184,19 +202,29 @@ class MetadataRepository(
                     
                     // General metadata
                     r.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_TITLE)?.let {
-                        entries.add(MetadataEntry("Title", it))
+                        if (entries.none { e -> e.key.equals("Title", ignoreCase = true) }) {
+                            entries.add(MetadataEntry("Title", it))
+                        }
                     }
                     r.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_ARTIST)?.let {
-                        entries.add(MetadataEntry("Artist", it))
+                        if (entries.none { e -> e.key.equals("Artist", ignoreCase = true) }) {
+                            entries.add(MetadataEntry("Artist", it))
+                        }
                     }
                     r.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_ALBUM)?.let {
-                        entries.add(MetadataEntry("Album", it))
+                        if (entries.none { e -> e.key.equals("Album", ignoreCase = true) }) {
+                            entries.add(MetadataEntry("Album", it))
+                        }
                     }
                     r.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_DATE)?.let {
-                        entries.add(MetadataEntry("Date", it))
+                        if (entries.none { e -> e.key.equals("Date", ignoreCase = true) }) {
+                            entries.add(MetadataEntry("Date", it))
+                        }
                     }
                     r.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_LOCATION)?.let {
-                        entries.add(MetadataEntry("Location", it))
+                        if (entries.none { e -> e.key.equals("Location", ignoreCase = true) }) {
+                            entries.add(MetadataEntry("Location", it))
+                        }
                     }
                     
                     // Video specific
@@ -212,7 +240,9 @@ class MetadataRepository(
 
                     r.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_DURATION)?.let {
                         val durationMs = it.toLongOrNull() ?: 0L
-                        entries.add(MetadataEntry("Duration", "${durationMs / 1000}s"))
+                        if (durationMs > 0 && entries.none { e -> e.key.equals("Duration", ignoreCase = true) }) {
+                            entries.add(MetadataEntry("Duration", "${durationMs / 1000}s"))
+                        }
                     }
                 }
             }
@@ -221,17 +251,19 @@ class MetadataRepository(
         }
 
         // Also query MP4 container box metadata for MP4, MOV, M4A, 3GP containers
-        runCatching {
-            resolver.openInputStream(selectedFile.uri)?.use { stream ->
-                val boxEntries = com.heronikostudios.metajammer.metadata.Mp4MetadataReader.readMetadata(stream)
-                for (boxEntry in boxEntries) {
-                    if (entries.none { it.key.equals(boxEntry.key, ignoreCase = true) }) {
-                        entries.add(boxEntry)
+        if (!isOgg) {
+            runCatching {
+                resolver.openInputStream(selectedFile.uri)?.use { stream ->
+                    val boxEntries = com.heronikostudios.metajammer.metadata.Mp4MetadataReader.readMetadata(stream)
+                    for (boxEntry in boxEntries) {
+                        if (entries.none { it.key.equals(boxEntry.key, ignoreCase = true) }) {
+                            entries.add(boxEntry)
+                        }
                     }
                 }
+            }.onFailure {
+                Timber.e(it, "Failed to read MP4 box metadata for %s", selectedFile.uri)
             }
-        }.onFailure {
-            Timber.e(it, "Failed to read MP4 box metadata for %s", selectedFile.uri)
         }
 
         return entries

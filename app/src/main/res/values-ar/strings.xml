@@ -113,6 +113,7 @@
     <string name="save_to_default_folder">حفظ في المجلد الافتراضي</string>
     <string name="save_to_custom_folder">حفظ في مجلد مخصص</string>
     <string name="back_to_home">العودة إلى الرئيسية</string>
+    <string name="storage_permission_required">يلزم إذن التخزين على إصدار Android 9 والإصدارات الأقدم للحفظ في المجلدات الافتراضية. بدلاً من ذلك، استخدم \'حفظ في مجلد مخصص\'.</string>
 
     <!-- SettingsScreen -->
     <string name="settings">الإعدادات</string>

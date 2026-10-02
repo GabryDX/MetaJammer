@@ -113,6 +113,7 @@
     <string name="save_to_default_folder">डिफ़ॉल्ट फ़ोल्डर में सहेजें</string>
     <string name="save_to_custom_folder">कस्टम फ़ोल्डर में सहेजें</string>
     <string name="back_to_home">होम पर वापस जाएं</string>
+    <string name="storage_permission_required">डिफ़ॉल्ट फ़ोल्डर में सहेजने के लिए Android 9 और पुराने संस्करणों पर स्टोरेज अनुमति आवश्यक है। वैकल्पिक रूप से, \'कस्टम फ़ोल्डर में सहेजें\' का उपयोग करें।</string>
 
     <!-- SettingsScreen -->
     <string name="settings">सेटिंग्स</string>

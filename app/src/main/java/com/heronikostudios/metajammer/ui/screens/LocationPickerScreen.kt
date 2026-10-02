@@ -236,7 +236,7 @@ fun LocationPickerScreen(
                     OutlinedTextField(
                         value = inputLat,
                         onValueChange = { inputLat = it; errorMsg = null },
-                        label = { Text("Latitude (-90 to +90)") },
+                        label = { Text(stringResource(R.string.latitude_hint)) },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth()
@@ -245,7 +245,7 @@ fun LocationPickerScreen(
                     OutlinedTextField(
                         value = inputLon,
                         onValueChange = { inputLon = it; errorMsg = null },
-                        label = { Text("Longitude (-180 to +180)") },
+                        label = { Text(stringResource(R.string.longitude_hint)) },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth()
