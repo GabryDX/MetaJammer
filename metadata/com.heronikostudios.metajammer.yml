@@ -23,7 +23,7 @@ Builds:
 
   - versionName: 0.5.3
     versionCode: 8
-    commit: v0.5.3
+    commit: 6ecd2262e0031ae23d2dc365464f2e512c42a24f
     subdir: app
     gradle:
       - floss
