@@ -130,21 +130,17 @@ class PdfMetadataProcessor(
             for (page in document.pages) {
                 // 1. Remove Watermark Annotations
                 val annotations = page.annotations
-                val iterator = annotations.iterator()
-                var changed = false
-                while (iterator.hasNext()) {
-                    val annotation = iterator.next()
-                    // Check for Watermark subtype or intent
+                val remaining = annotations.filter { annotation ->
                     val subtype = annotation.subtype
                     val intent = annotation.getCOSObject().getNameAsString("IT")
-                    
-                    if (subtype == "Watermark" || subtype == "Stamp" || intent == "Watermark") {
-                        iterator.remove()
-                        changed = true
-                    }
+                    !(subtype == "Watermark" || subtype == "Stamp" || intent == "Watermark")
                 }
-                if (changed) {
-                    page.annotations = annotations
+                if (remaining.size != annotations.size) {
+                    if (remaining.isEmpty()) {
+                        page.cosObject.removeItem(com.tom_roush.pdfbox.cos.COSName.ANNOTS)
+                    } else {
+                        page.annotations = remaining
+                    }
                 }
             }
 

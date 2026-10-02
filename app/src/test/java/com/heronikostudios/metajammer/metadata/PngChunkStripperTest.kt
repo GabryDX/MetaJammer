@@ -78,8 +78,7 @@ class PngChunkStripperTest {
 
     @Test
     fun `stripPngChunks on reviewer test image removes pHYs and all metadata chunks`() {
-        val testImage = File("images/test/1.png")
-        if (!testImage.exists()) return
+        val testImage = listOf(File("images/test/1.png"), File("../images/test/1.png")).firstOrNull { it.exists() } ?: return
 
         val contentBefore = testImage.readText(Charsets.ISO_8859_1)
         assertTrue("1.png should contain pHYs", contentBefore.contains("pHYs"))
@@ -97,7 +96,90 @@ class PngChunkStripperTest {
         assertFalse("Cleaned 1.png must not contain zTXt chunk", contentAfter.contains("zTXt"))
         assertTrue("Cleaned 1.png should preserve IHDR chunk", contentAfter.contains("IHDR"))
         assertTrue("Cleaned 1.png should preserve IDAT chunk", contentAfter.contains("IDAT"))
-        assertTrue("Cleaned 1.png should preserve IEND chunk", contentAfter.contains("IEND"))
+        assertTrue(contentAfter.contains("IEND"))
+    }
+
+    @Test
+    fun `stripPngChunks removes tIME, dSIG, and sCAL chunks`() {
+        val pngFile = tempFolder.newFile("sample_with_time_dsig.png")
+        val strippedFile = tempFolder.newFile("sample_clean_time_dsig.png")
+
+        val pngSignature = byteArrayOf(0x89.toByte(), 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A)
+        val ihdrData = ByteArray(13) { 0 }
+        // tIME chunk: 2 bytes year, 1 byte month, 1 byte day, 1 byte hour, 1 byte minute, 1 byte second (7 bytes)
+        val timeData = byteArrayOf(0x07, 0xE6.toByte(), 10, 2, 12, 0, 0)
+        val dsigData = "DigitalSignaturePayload".toByteArray(Charsets.US_ASCII)
+        val scalData = byteArrayOf(1, 0, 0, 0, 0)
+
+        val outputBytes = java.io.ByteArrayOutputStream()
+        outputBytes.write(pngSignature)
+        writeChunk(outputBytes, "IHDR", ihdrData)
+        writeChunk(outputBytes, "tIME", timeData)
+        writeChunk(outputBytes, "dSIG", dsigData)
+        writeChunk(outputBytes, "sCAL", scalData)
+        writeChunk(outputBytes, "IEND", ByteArray(0))
+
+        pngFile.writeBytes(outputBytes.toByteArray())
+
+        val contentBefore = pngFile.readText(Charsets.ISO_8859_1)
+        assertTrue(contentBefore.contains("tIME"))
+        assertTrue(contentBefore.contains("dSIG"))
+        assertTrue(contentBefore.contains("sCAL"))
+
+        val success = ImageMetadataProcessor.stripPngChunks(pngFile, strippedFile)
+        assertTrue(success)
+
+        val contentAfter = strippedFile.readText(Charsets.ISO_8859_1)
+        assertFalse("tIME chunk must be stripped", contentAfter.contains("tIME"))
+        assertFalse("dSIG chunk must be stripped", contentAfter.contains("dSIG"))
+        assertFalse("sCAL chunk must be stripped", contentAfter.contains("sCAL"))
+        assertTrue("IHDR must be preserved", contentAfter.contains("IHDR"))
+        assertTrue("IEND must be preserved", contentAfter.contains("IEND"))
+    }
+
+    @Test
+    fun `stripPngChunks preserves essential rendering chunks like PLTE and tRNS`() {
+        val pngFile = tempFolder.newFile("sample_with_plte_trns.png")
+        val strippedFile = tempFolder.newFile("sample_clean_plte_trns.png")
+
+        val pngSignature = byteArrayOf(0x89.toByte(), 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A)
+        val ihdrData = ByteArray(13) { 0 }
+        val plteData = byteArrayOf(0xFF.toByte(), 0, 0, 0, 0xFF.toByte(), 0) // 2 colors
+        val trnsData = byteArrayOf(0xFF.toByte(), 0) // alpha
+        val textData = "Author\u0000Artist".toByteArray(Charsets.ISO_8859_1)
+
+        val outputBytes = java.io.ByteArrayOutputStream()
+        outputBytes.write(pngSignature)
+        writeChunk(outputBytes, "IHDR", ihdrData)
+        writeChunk(outputBytes, "PLTE", plteData)
+        writeChunk(outputBytes, "tRNS", trnsData)
+        writeChunk(outputBytes, "tEXt", textData)
+        writeChunk(outputBytes, "IEND", ByteArray(0))
+
+        pngFile.writeBytes(outputBytes.toByteArray())
+
+        val success = ImageMetadataProcessor.stripPngChunks(pngFile, strippedFile)
+        assertTrue(success)
+
+        val contentAfter = strippedFile.readText(Charsets.ISO_8859_1)
+        assertTrue("PLTE palette chunk must be preserved", contentAfter.contains("PLTE"))
+        assertTrue("tRNS transparency chunk must be preserved", contentAfter.contains("tRNS"))
+        assertFalse("tEXt chunk must be stripped", contentAfter.contains("tEXt"))
+    }
+
+    @Test
+    fun `stripPngChunks returns null on corrupted or invalid PNG inputs`() {
+        // Less than 8 bytes
+        org.junit.Assert.assertNull(ImageMetadataProcessor.stripPngChunks(byteArrayOf(1, 2, 3)))
+
+        // Invalid signature
+        val badSignature = byteArrayOf(1, 2, 3, 4, 5, 6, 7, 8)
+        org.junit.Assert.assertNull(ImageMetadataProcessor.stripPngChunks(badSignature))
+
+        // Truncated chunk (header says 100 bytes, but array ends)
+        val pngSignature = byteArrayOf(0x89.toByte(), 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A)
+        val truncated = pngSignature + byteArrayOf(0, 0, 0, 100, 'I'.code.toByte(), 'H'.code.toByte(), 'D'.code.toByte(), 'R'.code.toByte())
+        org.junit.Assert.assertNull(ImageMetadataProcessor.stripPngChunks(truncated))
     }
 
     private fun writeChunk(out: java.io.ByteArrayOutputStream, type: String, data: ByteArray) {

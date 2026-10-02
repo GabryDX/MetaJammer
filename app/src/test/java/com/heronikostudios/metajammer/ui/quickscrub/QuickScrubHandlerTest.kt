@@ -147,4 +147,77 @@ class QuickScrubHandlerTest {
 
         assertFalse("Stale outgoing directory must be cleaned up during preparation", staleDir.exists())
     }
+
+    @Test
+    fun testExecuteQuickScrubWithSaveToDefaultFolder() = runTest {
+        val file = createTestImage()
+        val selectedFile = SelectedFile(uri = file.toUri(), displayName = file.name, mimeType = "image/jpeg")
+
+        var statusMessages = mutableListOf<String>()
+        val settings = AppSettings(
+            sharedFilesProcessingMode = ProcessingMode.REMOVE_METADATA,
+            sharedFilesOutputAction = SharedInputOutputAction.SAVE_TO_DEFAULT_FOLDER
+        )
+
+        handler.executeQuickScrub(
+            files = listOf(selectedFile),
+            appSettings = settings,
+            onShareFilesReady = { _, _ -> },
+            onStatusMessage = { statusMessages.add(it) }
+        )
+
+        assertTrue("Status message should indicate saved to default folder", statusMessages.any { it.contains("Saved 1 file(s) to default folder") })
+    }
+
+    @Test
+    fun testExecuteQuickScrubWithSaveToSharedFolderWithoutPathFailsGracefully() = runTest {
+        val file = createTestImage()
+        val selectedFile = SelectedFile(uri = file.toUri(), displayName = file.name, mimeType = "image/jpeg")
+
+        var statusMessages = mutableListOf<String>()
+        val settings = AppSettings(
+            sharedFilesProcessingMode = ProcessingMode.REMOVE_METADATA,
+            sharedFilesOutputAction = SharedInputOutputAction.SAVE_TO_SHARED_FOLDER,
+            sharedFilesCustomPath = null
+        )
+
+        handler.executeQuickScrub(
+            files = listOf(selectedFile),
+            appSettings = settings,
+            onShareFilesReady = { _, _ -> },
+            onStatusMessage = { statusMessages.add(it) }
+        )
+
+        assertTrue(
+            "Should gracefully report missing folder",
+            statusMessages.any { it.contains("No shared-files folder configured") }
+        )
+    }
+
+    @Test
+    fun testExecuteQuickScrubInPoisonModeSpoofsMetadata() = runTest {
+        val file = createTestImage()
+        val selectedFile = SelectedFile(uri = file.toUri(), displayName = file.name, mimeType = "image/jpeg")
+
+        var readyFiles: List<File>? = null
+        val settings = AppSettings(
+            sharedFilesProcessingMode = ProcessingMode.POISON_METADATA,
+            sharedFilesOutputAction = SharedInputOutputAction.SHARE_TO_ANOTHER_APP,
+            poisoningProfile = PoisoningProfile.PRO_MIRRORLESS
+        )
+
+        handler.executeQuickScrub(
+            files = listOf(selectedFile),
+            appSettings = settings,
+            onShareFilesReady = { files, _ -> readyFiles = files },
+            onStatusMessage = { }
+        )
+
+        assertNotNull("Prepared share files should not be null", readyFiles)
+        val poisonedExif = ExifInterface(readyFiles!!.first().absolutePath)
+        val make = poisonedExif.getAttribute(ExifInterface.TAG_MAKE)
+        assertNotNull("Poisoned Make must be present", make)
+        assertNotEquals("Real original make must not match poisoned make", "QuickScrubMake", make)
+    }
 }
+

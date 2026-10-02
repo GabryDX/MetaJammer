@@ -185,4 +185,79 @@ class ProcessingViewModelTest {
         viewModel.clearMessage()
         assertNull(viewModel.message.value)
     }
+
+    @Test
+    fun testProcessFilesAndSaveProcessedFilesToDefault() = runTest {
+        val file = createTestImage()
+        val selectedFile = SelectedFile(uri = file.toUri(), displayName = "saved_test.jpg", mimeType = "image/jpeg")
+
+        viewModel.setProcessingMode(ProcessingMode.REMOVE_METADATA, listOf(selectedFile), AppSettings())
+        viewModel.processFiles(
+            selectedFiles = listOf(selectedFile),
+            appSettings = AppSettings()
+        )
+
+        var attempts = 0
+        while (viewModel.processedFiles.value.isEmpty() && attempts++ < 100) {
+            Thread.sleep(20)
+        }
+        assertEquals(1, viewModel.processedFiles.value.size)
+
+        val savedUris = viewModel.saveProcessedFilesToDefault(AppSettings())
+        assertEquals(1, savedUris.size)
+        assertTrue(viewModel.hasSavedOrShared.value)
+        assertEquals("Saved 1 file(s)", viewModel.message.value)
+    }
+
+    @Test
+    fun testSaveProcessedFilesToDefaultWhenEmpty() = runTest {
+        viewModel.clearProcessedFiles()
+        val savedUris = viewModel.saveProcessedFilesToDefault(AppSettings())
+        assertTrue(savedUris.isEmpty())
+        assertFalse(viewModel.hasSavedOrShared.value)
+    }
+
+    @Test
+    fun testSaveProcessedFilesToCustomWithInvalidUriFailsGracefully() = runTest {
+        val file = createTestImage()
+        val selectedFile = SelectedFile(uri = file.toUri(), displayName = "custom_test.jpg", mimeType = "image/jpeg")
+
+        viewModel.setProcessingMode(ProcessingMode.REMOVE_METADATA, listOf(selectedFile), AppSettings())
+        viewModel.processFiles(
+            selectedFiles = listOf(selectedFile),
+            appSettings = AppSettings()
+        )
+
+        var attempts = 0
+        while (viewModel.processedFiles.value.isEmpty() && attempts++ < 100) {
+            Thread.sleep(20)
+        }
+
+        val invalidUri = "content://invalid.tree.provider/document/root".toUri()
+        val savedUris = viewModel.saveProcessedFilesToCustom(invalidUri, AppSettings())
+        assertTrue(savedUris.isEmpty())
+        assertEquals("Failed to save files", viewModel.message.value)
+    }
+
+    @Test
+    fun testGetProcessedFilesForSharingPreparesFiles() = runTest {
+        val file = createTestImage()
+        val selectedFile = SelectedFile(uri = file.toUri(), displayName = "share_test.jpg", mimeType = "image/jpeg")
+
+        viewModel.setProcessingMode(ProcessingMode.REMOVE_METADATA, listOf(selectedFile), AppSettings())
+        viewModel.processFiles(
+            selectedFiles = listOf(selectedFile),
+            appSettings = AppSettings()
+        )
+
+        var attempts = 0
+        while (viewModel.processedFiles.value.isEmpty() && attempts++ < 100) {
+            Thread.sleep(20)
+        }
+
+        val preparedFiles = viewModel.getProcessedFilesForSharing(AppSettings())
+        assertEquals(1, preparedFiles.size)
+        assertTrue(preparedFiles[0].exists())
+        assertTrue(viewModel.hasSavedOrShared.value)
+    }
 }
