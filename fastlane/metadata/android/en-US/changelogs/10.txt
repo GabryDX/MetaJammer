@@ -1,0 +1,5 @@
+- Added configurable PDF hidden annotation and comment/markup stripping while preserving interactive navigation links.
+- Added JPEG JFIF density (DPI) preservation setting with embedded thumbnail zeroing and JFXX thumbnail stripping.
+- Switched JPEG marker and PNG chunk scrubbing to streaming I/O, reducing peak heap memory allocations to 64 KB.
+- Added streaming PNG metadata reader skipping raster IDAT chunks.
+- Optimized PDF page scanning and added concurrency throttling for multi-file processing.
