@@ -17,49 +17,60 @@ object PngMetadataReader {
     private val PNG_SIGNATURE = byteArrayOf(0x89.toByte(), 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A)
 
     fun readMetadata(bytes: ByteArray): PngMetadataInfo {
-        if (bytes.size < 8) return PngMetadataInfo()
-        for (i in 0 until 8) {
-            if (bytes[i] != PNG_SIGNATURE[i]) return PngMetadataInfo()
-        }
+        return readMetadata(java.io.ByteArrayInputStream(bytes))
+    }
+
+    fun readMetadata(inputStream: java.io.InputStream): PngMetadataInfo {
+        val sig = ByteArray(8)
+        if (!readFully(inputStream, sig) || !sig.contentEquals(PNG_SIGNATURE)) return PngMetadataInfo()
 
         var width: Int? = null
         var height: Int? = null
         val entries = mutableListOf<MetadataEntry>()
+        val headerBuf = ByteArray(8)
 
-        var offset = 8
-        while (offset + 8 <= bytes.size) {
-            val length = ByteBuffer.wrap(bytes, offset, 4).order(ByteOrder.BIG_ENDIAN).int
-            val chunkType = String(bytes, offset + 4, 4, StandardCharsets.US_ASCII)
-            val chunkDataOffset = offset + 8
-
-            if (length < 0 || chunkDataOffset + length > bytes.size) {
-                break
-            }
+        while (readFully(inputStream, headerBuf)) {
+            val length = ByteBuffer.wrap(headerBuf, 0, 4).order(ByteOrder.BIG_ENDIAN).int
+            if (length < 0) break
+            val chunkType = String(headerBuf, 4, 4, StandardCharsets.US_ASCII)
 
             when (chunkType) {
                 "IHDR" -> {
                     if (length >= 8) {
-                        width = ByteBuffer.wrap(bytes, chunkDataOffset, 4).order(ByteOrder.BIG_ENDIAN).int
-                        height = ByteBuffer.wrap(bytes, chunkDataOffset + 4, 4).order(ByteOrder.BIG_ENDIAN).int
+                        val data = ByteArray(length)
+                        if (!readFully(inputStream, data)) break
+                        width = ByteBuffer.wrap(data, 0, 4).order(ByteOrder.BIG_ENDIAN).int
+                        height = ByteBuffer.wrap(data, 4, 4).order(ByteOrder.BIG_ENDIAN).int
+                        skipFully(inputStream, 4L)
+                    } else {
+                        skipFully(inputStream, length + 4L)
                     }
                 }
                 "tEXt" -> {
-                    parseTextChunk(bytes, chunkDataOffset, length)?.let { (key, value) ->
+                    val data = ByteArray(length)
+                    if (!readFully(inputStream, data)) break
+                    parseTextChunk(data, 0, length)?.let { (key, value) ->
                         if (value.isNotBlank()) entries.add(MetadataEntry(key, value))
                     }
+                    skipFully(inputStream, 4L)
                 }
                 "iTXt" -> {
-                    parseItxtChunk(bytes, chunkDataOffset, length)?.let { (key, value) ->
+                    val data = ByteArray(length)
+                    if (!readFully(inputStream, data)) break
+                    parseItxtChunk(data, 0, length)?.let { (key, value) ->
                         if (value.isNotBlank() && !key.startsWith("XML:com.adobe.xmp", ignoreCase = true)) {
                             entries.add(MetadataEntry(key, value))
                         }
                     }
+                    skipFully(inputStream, 4L)
                 }
                 "pHYs" -> {
                     if (length >= 9) {
-                        val ppuX = ByteBuffer.wrap(bytes, chunkDataOffset, 4).order(ByteOrder.BIG_ENDIAN).int
-                        val ppuY = ByteBuffer.wrap(bytes, chunkDataOffset + 4, 4).order(ByteOrder.BIG_ENDIAN).int
-                        val unit = bytes[chunkDataOffset + 8].toInt() and 0xFF
+                        val data = ByteArray(length)
+                        if (!readFully(inputStream, data)) break
+                        val ppuX = ByteBuffer.wrap(data, 0, 4).order(ByteOrder.BIG_ENDIAN).int
+                        val ppuY = ByteBuffer.wrap(data, 4, 4).order(ByteOrder.BIG_ENDIAN).int
+                        val unit = data[8].toInt() and 0xFF
                         if (unit == 1) {
                             val dpiX = (ppuX * 0.0254).roundToInt()
                             val dpiY = (ppuY * 0.0254).roundToInt()
@@ -67,27 +78,62 @@ object PngMetadataReader {
                         } else {
                             entries.add(MetadataEntry("PixelAspectRatio", "${ppuX}:${ppuY}"))
                         }
+                        skipFully(inputStream, 4L)
+                    } else {
+                        skipFully(inputStream, length + 4L)
                     }
                 }
                 "tIME" -> {
                     if (length >= 7) {
-                        val year = ByteBuffer.wrap(bytes, chunkDataOffset, 2).order(ByteOrder.BIG_ENDIAN).short.toInt() and 0xFFFF
-                        val month = bytes[chunkDataOffset + 2].toInt() and 0xFF
-                        val day = bytes[chunkDataOffset + 3].toInt() and 0xFF
-                        val hour = bytes[chunkDataOffset + 4].toInt() and 0xFF
-                        val min = bytes[chunkDataOffset + 5].toInt() and 0xFF
-                        val sec = bytes[chunkDataOffset + 6].toInt() and 0xFF
+                        val data = ByteArray(length)
+                        if (!readFully(inputStream, data)) break
+                        val year = ByteBuffer.wrap(data, 0, 2).order(ByteOrder.BIG_ENDIAN).short.toInt() and 0xFFFF
+                        val month = data[2].toInt() and 0xFF
+                        val day = data[3].toInt() and 0xFF
+                        val hour = data[4].toInt() and 0xFF
+                        val min = data[5].toInt() and 0xFF
+                        val sec = data[6].toInt() and 0xFF
                         val timeStr = String.format("%04d:%02d:%02d %02d:%02d:%02d", year, month, day, hour, min, sec)
                         entries.add(MetadataEntry("DateTimeModified", timeStr))
+                        skipFully(inputStream, 4L)
+                    } else {
+                        skipFully(inputStream, length + 4L)
                     }
                 }
                 "IEND" -> break
+                else -> {
+                    if (!skipFully(inputStream, length + 4L)) break
+                }
             }
-
-            offset += 8 + length + 4 // 4 len + 4 type + data + 4 crc
         }
 
         return PngMetadataInfo(width, height, entries)
+    }
+
+    private fun readFully(input: java.io.InputStream, buffer: ByteArray, offset: Int = 0, length: Int = buffer.size): Boolean {
+        var total = 0
+        while (total < length) {
+            val count = input.read(buffer, offset + total, length - total)
+            if (count < 0) return false
+            total += count
+        }
+        return true
+    }
+
+    private fun skipFully(input: java.io.InputStream, bytesToSkip: Long): Boolean {
+        var remaining = bytesToSkip
+        val skipBuf = ByteArray(minOf(remaining, 8192L).toInt())
+        while (remaining > 0) {
+            val skipped = input.skip(remaining)
+            if (skipped > 0) {
+                remaining -= skipped
+            } else {
+                val read = input.read(skipBuf, 0, minOf(remaining, skipBuf.size.toLong()).toInt())
+                if (read < 0) return false
+                remaining -= read
+            }
+        }
+        return true
     }
 
     private fun parseTextChunk(bytes: ByteArray, offset: Int, length: Int): Pair<String, String>? {

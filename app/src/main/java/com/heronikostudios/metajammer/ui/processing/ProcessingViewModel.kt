@@ -18,6 +18,8 @@ import com.heronikostudios.metajammer.metadata.MetadataReplacementGenerator
 import com.heronikostudios.metajammer.util.SanitizationUtils
 import com.heronikostudios.metajammer.worker.MetadataProcessingWorker
 import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -426,25 +428,28 @@ class ProcessingViewModel(
             _hasSavedOrShared.value = false
             runCatching {
                 withContext(Dispatchers.IO) {
+                    val semaphore = kotlinx.coroutines.sync.Semaphore(2)
                     coroutineScope {
                         files.map { selectedFile ->
                             async {
-                                val plan = _replacementPlans.value[selectedFile.uri]
-                                selectedFile to processFileUseCase(
-                                    selectedFile = selectedFile,
-                                    processingMode = mode,
-                                    keepOrientation = appSettings.keepImageOrientation,
-                                    thumbnailHandling = appSettings.thumbnailHandling,
-                                    replacementPlan = plan,
-                                    stripGps = appSettings.stripGps,
-                                    stripDeviceModel = appSettings.stripDeviceModel,
-                                    stripDateTime = appSettings.stripDateTime,
-                                    stripCameraSettings = appSettings.stripCameraSettings,
-                                    stripComments = appSettings.stripComments,
-                                    stripPdfAnnotations = appSettings.stripPdfAnnotations,
-                                    stripPdfComments = appSettings.stripPdfComments,
-                                    preserveJpegJfif = appSettings.preserveJpegJfif
-                                )
+                                semaphore.withPermit {
+                                    val plan = _replacementPlans.value[selectedFile.uri]
+                                    selectedFile to processFileUseCase(
+                                        selectedFile = selectedFile,
+                                        processingMode = mode,
+                                        keepOrientation = appSettings.keepImageOrientation,
+                                        thumbnailHandling = appSettings.thumbnailHandling,
+                                        replacementPlan = plan,
+                                        stripGps = appSettings.stripGps,
+                                        stripDeviceModel = appSettings.stripDeviceModel,
+                                        stripDateTime = appSettings.stripDateTime,
+                                        stripCameraSettings = appSettings.stripCameraSettings,
+                                        stripComments = appSettings.stripComments,
+                                        stripPdfAnnotations = appSettings.stripPdfAnnotations,
+                                        stripPdfComments = appSettings.stripPdfComments,
+                                        preserveJpegJfif = appSettings.preserveJpegJfif
+                                    )
+                                }
                             }
                         }.awaitAll()
                     }

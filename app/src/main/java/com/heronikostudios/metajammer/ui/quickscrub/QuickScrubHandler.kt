@@ -20,6 +20,8 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import kotlinx.serialization.json.Json
 import timber.log.Timber
 import java.io.File
@@ -114,25 +116,28 @@ class QuickScrubHandler(
 
         runCatching {
             val processedResults = withContext(Dispatchers.IO) {
+                val semaphore = kotlinx.coroutines.sync.Semaphore(2)
                 coroutineScope {
                     files.map { selectedFile ->
                         async {
-                            val plan = replacementPlans[selectedFile.uri]
-                            selectedFile to processFileUseCase(
-                                selectedFile = selectedFile,
-                                processingMode = mode,
-                                keepOrientation = keepOrientation,
-                                thumbnailHandling = appSettings.thumbnailHandling,
-                                replacementPlan = plan,
-                                stripGps = appSettings.stripGps,
-                                stripDeviceModel = appSettings.stripDeviceModel,
-                                stripDateTime = appSettings.stripDateTime,
-                                stripCameraSettings = appSettings.stripCameraSettings,
-                                stripComments = appSettings.stripComments,
-                                stripPdfAnnotations = appSettings.stripPdfAnnotations,
-                                stripPdfComments = appSettings.stripPdfComments,
-                                preserveJpegJfif = appSettings.preserveJpegJfif
-                            )
+                            semaphore.withPermit {
+                                val plan = replacementPlans[selectedFile.uri]
+                                selectedFile to processFileUseCase(
+                                    selectedFile = selectedFile,
+                                    processingMode = mode,
+                                    keepOrientation = keepOrientation,
+                                    thumbnailHandling = appSettings.thumbnailHandling,
+                                    replacementPlan = plan,
+                                    stripGps = appSettings.stripGps,
+                                    stripDeviceModel = appSettings.stripDeviceModel,
+                                    stripDateTime = appSettings.stripDateTime,
+                                    stripCameraSettings = appSettings.stripCameraSettings,
+                                    stripComments = appSettings.stripComments,
+                                    stripPdfAnnotations = appSettings.stripPdfAnnotations,
+                                    stripPdfComments = appSettings.stripPdfComments,
+                                    preserveJpegJfif = appSettings.preserveJpegJfif
+                                )
+                            }
                         }
                     }.awaitAll()
                 }

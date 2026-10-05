@@ -540,6 +540,38 @@ class ImageMetadataProcessorTest {
         assertFalse("Cleaned JPEG should strip JFXX marker", strippedStr.contains("JFXX"))
         assertFalse("Cleaned JPEG should strip COM marker", strippedStr.contains("test\u0000"))
     }
+
+    @Test
+    fun testStreamingStripJpegMarkersMatchesByteArray() {
+        val originalFile = createTestJpegWithExif()
+        val originalBytes = originalFile.readBytes()
+
+        val byteStripped = ImageMetadataProcessor.stripJpegMarkers(originalBytes, preserveJfif = true)
+        assertNotNull(byteStripped)
+
+        val out = java.io.ByteArrayOutputStream()
+        val success = originalFile.inputStream().use { input ->
+            ImageMetadataProcessor.stripJpegMarkers(input, out, preserveJfif = true)
+        }
+        assertTrue(success)
+        assertArrayEquals("Streaming output must match byte array output exactly", byteStripped, out.toByteArray())
+    }
+
+    @Test
+    fun testStreamingStripPngChunksMatchesByteArray() {
+        val testPng = createTestPngWithPhys()
+        val originalBytes = testPng.readBytes()
+
+        val byteStripped = ImageMetadataProcessor.stripPngChunks(originalBytes)
+        assertNotNull(byteStripped)
+
+        val out = java.io.ByteArrayOutputStream()
+        val success = testPng.inputStream().use { input ->
+            ImageMetadataProcessor.stripPngChunks(input, out)
+        }
+        assertTrue(success)
+        assertArrayEquals("Streaming PNG output must match byte array output exactly", byteStripped, out.toByteArray())
+    }
 }
 
 

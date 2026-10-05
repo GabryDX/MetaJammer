@@ -91,6 +91,7 @@ class PdfMetadataProcessor(
                     val annotationAuthors = mutableSetOf<String>()
 
                     for (page in document.pages) {
+                        if (!page.cosObject.containsKey(com.tom_roush.pdfbox.cos.COSName.ANNOTS)) continue
                         val annots = page.annotations ?: continue
                         for (annot in annots) {
                             val subtype = annot.subtype ?: ""
@@ -174,7 +175,7 @@ class PdfMetadataProcessor(
                         stripAnnotations = stripAnnotations,
                         stripComments = stripComments
                     )
-                    document.save(FileOutputStream(outputFile))
+                    document.save(outputFile)
                 }
             } ?: throw IllegalStateException("Could not open input stream for $inputUri")
             outputFile
@@ -210,7 +211,7 @@ class PdfMetadataProcessor(
                         stripAnnotations = stripAnnotations,
                         stripComments = stripComments
                     )
-                    document.save(FileOutputStream(outputFile))
+                    document.save(outputFile)
                 }
             } ?: throw IllegalStateException("Could not open input stream for $inputUri")
             outputFile
@@ -228,6 +229,7 @@ class PdfMetadataProcessor(
     ) {
         runCatching {
             for (page in document.pages) {
+                if (!page.cosObject.containsKey(com.tom_roush.pdfbox.cos.COSName.ANNOTS)) continue
                 val annotations = page.annotations ?: continue
                 val remaining = annotations.filter { annotation ->
                     val subtype = annotation.subtype ?: ""

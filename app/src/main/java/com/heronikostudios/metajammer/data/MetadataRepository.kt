@@ -289,10 +289,11 @@ class MetadataRepository(
         val isPng = mime == "image/png" || selectedFile.displayName.endsWith(".png", ignoreCase = true)
 
         return try {
-            val pngBytes = if (isPng) {
-                resolver.openInputStream(selectedFile.uri)?.use { it.readBytes() }
+            val pngInfo = if (isPng) {
+                resolver.openInputStream(selectedFile.uri)?.use { stream ->
+                    com.heronikostudios.metajammer.metadata.PngMetadataReader.readMetadata(stream)
+                }
             } else null
-            val pngInfo = pngBytes?.let { com.heronikostudios.metajammer.metadata.PngMetadataReader.readMetadata(it) }
 
             val rawExifEntries = resolver.openInputStream(selectedFile.uri)?.use { inputStream ->
                 val exif = ExifInterface(inputStream)
