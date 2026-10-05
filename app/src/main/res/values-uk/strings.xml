@@ -158,6 +158,12 @@
     <string name="setting_keep_thumbnails_title">Зберігати оригінальні мініатюри</string>
     <string name="setting_keep_thumbnails_sub">Якщо файл містить вбудовану мініатюру, збережіть її як є. Якщо вимкнено, будь-яка наявна мініатюра буде видалена для максимальної приватності.</string>
     <string name="setting_thumbnails_warning">Попередження: збереження оригінальних мініатюр може призвести до витоку метаданих (місцезнаходження, інформація про пристрій), навіть якщо основні теги видалено.</string>
+    <string name="setting_strip_pdf_annotations_title">Видаляти приховані анотації та водяні знаки PDF</string>
+    <string name="setting_strip_pdf_annotations_sub">Видаляє водяні знаки, штампи та приховані або невидимі анотації з документів PDF</string>
+    <string name="setting_strip_pdf_comments_title">Видаляти коментарі та розмітку PDF</string>
+    <string name="setting_strip_pdf_comments_sub">Видаляє примітки, текстові поля, виділення та анотації рецензування з документів PDF</string>
+    <string name="setting_preserve_jpeg_jfif_title">Зберігати заголовок JPEG JFIF</string>
+    <string name="setting_preserve_jpeg_jfif_sub">Зберігає стандартні заголовки роздільності та співвідношення сторін, видаляючи вбудовані мініатюри. Якщо вимкнено, усі маркери JFIF видаляються.</string>
     <string name="setting_enable_map_title">Увімкнути вибір карти</string>
     <string name="setting_enable_map_sub">Дозволити додатку підключатися до Інтернету для відображення OpenStreetMap при виборі місцезнаходження</string>
     <string name="setting_nearby_scramble_title">Використовувати локалізоване отруєння</string>

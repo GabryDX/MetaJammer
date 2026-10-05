@@ -23,6 +23,37 @@ class PdfMetadataProcessor(
     private val fileRepository: FileRepository
 ) {
 
+    companion object {
+        private val COMMENT_MARKUP_SUBTYPES = setOf(
+            "Text",
+            "FreeText",
+            "Highlight",
+            "Underline",
+            "Squiggly",
+            "StrikeOut",
+            "Caret",
+            "Ink",
+            "Line",
+            "Square",
+            "Circle",
+            "Polygon",
+            "PolyLine",
+            "Popup",
+            "FileAttachment",
+            "Sound",
+            "Movie",
+            "Screen",
+            "RichMedia",
+            "3D",
+            "Redact"
+        )
+
+        private val WATERMARK_STAMP_SUBTYPES = setOf(
+            "Watermark",
+            "Stamp"
+        )
+    }
+
     private fun ensureInitialized() {
         if (!PDFBoxResourceLoader.isReady()) {
             PDFBoxResourceLoader.init(context)
@@ -51,6 +82,55 @@ class PdfMetadataProcessor(
                     if (catalog.pageLabels != null || catalog.cosObject.containsKey(com.tom_roush.pdfbox.cos.COSName.getPDFName("PageLabels"))) {
                         entries.add(MetadataEntry("Page Labels", "Custom numbering"))
                     }
+
+                    // Check for strippable annotations, watermarks, and comments
+                    var totalAnnotations = 0
+                    var hiddenCount = 0
+                    var watermarkCount = 0
+                    var commentCount = 0
+                    val annotationAuthors = mutableSetOf<String>()
+
+                    for (page in document.pages) {
+                        if (!page.cosObject.containsKey(com.tom_roush.pdfbox.cos.COSName.ANNOTS)) continue
+                        val annots = page.annotations ?: continue
+                        for (annot in annots) {
+                            val subtype = annot.subtype ?: ""
+                            val flags = annot.annotationFlags
+                            val isHidden = (flags and 2) != 0 || (flags and 1) != 0 || (flags and 32) != 0
+                            val isWatermark = subtype in WATERMARK_STAMP_SUBTYPES || annot.cosObject.getNameAsString("IT") == "Watermark"
+                            val isCommentOrMarkup = subtype in COMMENT_MARKUP_SUBTYPES
+
+                            if (isHidden || isWatermark || isCommentOrMarkup) {
+                                totalAnnotations++
+                                if (isHidden) hiddenCount++
+                                if (isWatermark) watermarkCount++
+                                if (isCommentOrMarkup) commentCount++
+
+                                val author = annot.cosObject.getString(com.tom_roush.pdfbox.cos.COSName.T)
+                                if (!author.isNullOrBlank()) {
+                                    annotationAuthors.add(author)
+                                }
+                            }
+                        }
+                    }
+
+                    if (totalAnnotations > 0) {
+                        val summary = buildString {
+                            append("$totalAnnotations found")
+                            val details = mutableListOf<String>()
+                            if (hiddenCount > 0) details.add("$hiddenCount hidden")
+                            if (watermarkCount > 0) details.add("$watermarkCount watermark/stamp")
+                            if (commentCount > 0 && details.isEmpty()) details.add("$commentCount comment/markup")
+                            if (details.isNotEmpty()) {
+                                append(" (${details.joinToString(", ")})")
+                            }
+                        }
+                        entries.add(MetadataEntry("Annotations", summary))
+                    }
+
+                    if (annotationAuthors.isNotEmpty()) {
+                        entries.add(MetadataEntry("Annotation Author", annotationAuthors.joinToString(", ")))
+                    }
                 }
             }
         }.onFailure {
@@ -60,7 +140,12 @@ class PdfMetadataProcessor(
         return@withContext entries
     }
 
-    suspend fun poisonMetadata(inputUri: Uri, plan: MetadataReplacementPlan): File = withContext(Dispatchers.IO) {
+    suspend fun poisonMetadata(
+        inputUri: Uri,
+        plan: MetadataReplacementPlan,
+        stripAnnotations: Boolean = true,
+        stripComments: Boolean = true
+    ): File = withContext(Dispatchers.IO) {
         ensureInitialized()
         val outputFile = fileRepository.createCacheFile(prefix = "pdf_poisoned_", suffix = ".pdf")
         try {
@@ -85,8 +170,12 @@ class PdfMetadataProcessor(
                     catalog.cosObject.removeItem(com.tom_roush.pdfbox.cos.COSName.getPDFName("StructTreeRoot"))
                     catalog.cosObject.removeItem(com.tom_roush.pdfbox.cos.COSName.getPDFName("Metadata"))
 
-                    stripWatermarks(document)
-                    document.save(FileOutputStream(outputFile))
+                    stripAnnotationsAndWatermarks(
+                        document = document,
+                        stripAnnotations = stripAnnotations,
+                        stripComments = stripComments
+                    )
+                    document.save(outputFile)
                 }
             } ?: throw IllegalStateException("Could not open input stream for $inputUri")
             outputFile
@@ -97,7 +186,11 @@ class PdfMetadataProcessor(
         }
     }
 
-    suspend fun removeMetadata(inputUri: Uri): File = withContext(Dispatchers.IO) {
+    suspend fun removeMetadata(
+        inputUri: Uri,
+        stripAnnotations: Boolean = true,
+        stripComments: Boolean = true
+    ): File = withContext(Dispatchers.IO) {
         ensureInitialized()
         val outputFile = fileRepository.createCacheFile(prefix = "pdf_clean_", suffix = ".pdf")
         try {
@@ -113,8 +206,12 @@ class PdfMetadataProcessor(
                     catalog.cosObject.removeItem(com.tom_roush.pdfbox.cos.COSName.getPDFName("StructTreeRoot"))
                     catalog.cosObject.removeItem(com.tom_roush.pdfbox.cos.COSName.getPDFName("Metadata"))
 
-                    stripWatermarks(document)
-                    document.save(FileOutputStream(outputFile))
+                    stripAnnotationsAndWatermarks(
+                        document = document,
+                        stripAnnotations = stripAnnotations,
+                        stripComments = stripComments
+                    )
+                    document.save(outputFile)
                 }
             } ?: throw IllegalStateException("Could not open input stream for $inputUri")
             outputFile
@@ -125,15 +222,30 @@ class PdfMetadataProcessor(
         }
     }
 
-    private fun stripWatermarks(document: PDDocument) {
+    private fun stripAnnotationsAndWatermarks(
+        document: PDDocument,
+        stripAnnotations: Boolean = true,
+        stripComments: Boolean = true
+    ) {
         runCatching {
             for (page in document.pages) {
-                // 1. Remove Watermark Annotations
-                val annotations = page.annotations
+                if (!page.cosObject.containsKey(com.tom_roush.pdfbox.cos.COSName.ANNOTS)) continue
+                val annotations = page.annotations ?: continue
                 val remaining = annotations.filter { annotation ->
-                    val subtype = annotation.subtype
+                    val subtype = annotation.subtype ?: ""
                     val intent = annotation.getCOSObject().getNameAsString("IT")
-                    !(subtype == "Watermark" || subtype == "Stamp" || intent == "Watermark")
+                    val flags = annotation.annotationFlags
+                    val isHidden = (flags and 2) != 0 || (flags and 1) != 0 || (flags and 32) != 0
+                    val isWatermark = subtype in WATERMARK_STAMP_SUBTYPES || intent == "Watermark"
+                    val isCommentOrMarkup = subtype in COMMENT_MARKUP_SUBTYPES
+
+                    val shouldStrip = when {
+                        stripAnnotations && (isHidden || isWatermark) -> true
+                        stripComments && isCommentOrMarkup -> true
+                        stripAnnotations && stripComments && subtype != "Link" && subtype != "Widget" -> true
+                        else -> false
+                    }
+                    !shouldStrip
                 }
                 if (remaining.size != annotations.size) {
                     if (remaining.isEmpty()) {
@@ -146,12 +258,12 @@ class PdfMetadataProcessor(
 
             // 2. Clear Optional Content Groups (OCGs) / Layers
             // OCGs are often used for watermarks that can be toggled on/off
-            if (document.documentCatalog.ocProperties != null) {
+            if (stripAnnotations && document.documentCatalog.ocProperties != null) {
                 document.documentCatalog.ocProperties = null
                 Timber.d("Cleared PDF OCG properties (layers)")
             }
         }.onFailure {
-            Timber.e(it, "Failed to strip watermarks from PDF")
+            Timber.e(it, "Failed to strip annotations and watermarks from PDF")
         }
     }
 }

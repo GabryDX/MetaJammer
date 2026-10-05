@@ -158,6 +158,12 @@
     <string name="setting_keep_thumbnails_title">คงรูปภาพตัวอย่างเดิม</string>
     <string name="setting_keep_thumbnails_sub">หากไฟล์มีรูปภาพตัวอย่างฝังอยู่ ให้คงไว้เหมือนเดิม หากปิดใช้งาน รูปภาพตัวอย่างที่มีอยู่จะถูกลบออกเพื่อความเป็นส่วนตัวสูงสุด</string>
     <string name="setting_thumbnails_warning">คำเตือน: การคงรูปภาพตัวอย่างเดิมอาจทำให้ข้อมูลเมตาหลุดรอด (ตำแหน่ง, ข้อมูลอุปกรณ์) แม้ว่าจะลบแท็กหลักออกแล้วก็ตาม</string>
+    <string name="setting_strip_pdf_annotations_title">ลบลายน้ำและคำอธิบายประกอบที่ซ่อนอยู่ใน PDF</string>
+    <string name="setting_strip_pdf_annotations_sub">ลบลายน้ำ ตราประทับ และคำอธิบายประกอบที่ซ่อนอยู่หรือมองไม่เห็นออกจากเอกสาร PDF</string>
+    <string name="setting_strip_pdf_comments_title">ลบความคิดเห็นและมาร์กอัปใน PDF</string>
+    <string name="setting_strip_pdf_comments_sub">ลบกระดาษโน้ต กล่องข้อความ ไฮไลต์ และคำอธิบายประกอบการตรวจทานออกจากเอกสาร PDF</string>
+    <string name="setting_preserve_jpeg_jfif_title">คงส่วนหัว JPEG JFIF ไว้</string>
+    <string name="setting_preserve_jpeg_jfif_sub">คงส่วนหัวความละเอียดและอัตราส่วนกว้างยาวมาตรฐานไว้ขณะลบภาพขนาดย่อที่ฝังอยู่ หากปิดใช้งาน เครื่องหมาย JFIF ทั้งหมดจะถูกลบออก</string>
     <string name="setting_enable_map_title">เปิดใช้งานตัวเลือกแผนที่</string>
     <string name="setting_enable_map_sub">อนุญาตให้แอปเชื่อมต่ออินเทอร์เน็ตเพื่อแสดง OpenStreetMap สำหรับการเลือกตำแหน่ง</string>
     <string name="setting_nearby_scramble_title">ใช้การวางยาพิษแบบระบุตำแหน่ง</string>

@@ -62,6 +62,9 @@ class MetadataProcessingWorker(
         const val KEY_STRIP_DATE_TIME = "strip_date_time"
         const val KEY_STRIP_CAMERA_SETTINGS = "strip_camera_settings"
         const val KEY_STRIP_COMMENTS = "strip_comments"
+        const val KEY_STRIP_PDF_ANNOTATIONS = "strip_pdf_annotations"
+        const val KEY_STRIP_PDF_COMMENTS = "strip_pdf_comments"
+        const val KEY_PRESERVE_JPEG_JFIF = "preserve_jpeg_jfif"
 
         @Deprecated("Use specific saving paths", ReplaceWith("KEY_UNIFIED_SAVING_PATH"))
         const val KEY_SAVING_PATH = "saving_path"
@@ -95,6 +98,9 @@ class MetadataProcessingWorker(
         val stripDateTime = inputData.getBoolean(KEY_STRIP_DATE_TIME, true)
         val stripCameraSettings = inputData.getBoolean(KEY_STRIP_CAMERA_SETTINGS, true)
         val stripComments = inputData.getBoolean(KEY_STRIP_COMMENTS, true)
+        val stripPdfAnnotations = inputData.getBoolean(KEY_STRIP_PDF_ANNOTATIONS, true)
+        val stripPdfComments = inputData.getBoolean(KEY_STRIP_PDF_COMMENTS, true)
+        val preserveJpegJfif = inputData.getBoolean(KEY_PRESERVE_JPEG_JFIF, true)
 
         val mode = ProcessingMode.valueOf(modeString)
         val thumbnailHandling = ThumbnailHandling.valueOf(thumbnailHandlingString)
@@ -148,7 +154,10 @@ class MetadataProcessingWorker(
                             stripDeviceModel = stripDeviceModel,
                             stripDateTime = stripDateTime,
                             stripCameraSettings = stripCameraSettings,
-                            stripComments = stripComments
+                            stripComments = stripComments,
+                            stripPdfAnnotations = stripPdfAnnotations,
+                            stripPdfComments = stripPdfComments,
+                            preserveJpegJfif = preserveJpegJfif
                         )
 
                         val displayName = SanitizationUtils.generateOutputName(

@@ -46,44 +46,78 @@ class ImageMetadataProcessor(
             "tEXt", "zTXt", "iTXt", "eXIf", "pHYs", "tIME", "dSIG", "sCAL", "oFFs", "pCAL", "gIFg", "gIFx"
         )
 
+        private fun readFully(input: java.io.InputStream, buffer: ByteArray, offset: Int = 0, length: Int = buffer.size): Boolean {
+            var total = 0
+            while (total < length) {
+                val count = input.read(buffer, offset + total, length - total)
+                if (count < 0) return false
+                total += count
+            }
+            return true
+        }
+
+        private fun skipFully(input: java.io.InputStream, bytesToSkip: Long): Boolean {
+            var remaining = bytesToSkip
+            val skipBuf = ByteArray(minOf(remaining, 8192L).toInt())
+            while (remaining > 0) {
+                val skipped = input.skip(remaining)
+                if (skipped > 0) {
+                    remaining -= skipped
+                } else {
+                    val read = input.read(skipBuf, 0, minOf(remaining, skipBuf.size.toLong()).toInt())
+                    if (read < 0) return false
+                    remaining -= read
+                }
+            }
+            return true
+        }
+
+        /**
+         * Strips ancillary metadata chunks (tEXt, zTXt, iTXt, eXIf) from a PNG stream
+         * without recompressing or altering image raster pixels.
+         */
+        fun stripPngChunks(input: java.io.InputStream, output: java.io.OutputStream): Boolean {
+            val sig = ByteArray(8)
+            if (!readFully(input, sig) || !sig.contentEquals(PNG_SIGNATURE)) return false
+            output.write(sig)
+
+            val headerBuf = ByteArray(8)
+            val copyBuf = ByteArray(65536)
+
+            while (readFully(input, headerBuf)) {
+                val length = java.nio.ByteBuffer.wrap(headerBuf, 0, 4).order(java.nio.ByteOrder.BIG_ENDIAN).int
+                if (length < 0) return false
+                val chunkType = String(headerBuf, 4, 4, Charsets.US_ASCII)
+                val totalPayloadAndCrc = length + 4L
+
+                if (chunkType in PNG_METADATA_CHUNKS) {
+                    Timber.d("Stripped PNG metadata chunk: %s (%d bytes)", chunkType, totalPayloadAndCrc + 8)
+                    if (!skipFully(input, totalPayloadAndCrc)) return false
+                } else {
+                    output.write(headerBuf)
+                    var remaining = totalPayloadAndCrc
+                    while (remaining > 0) {
+                        val toRead = minOf(remaining, copyBuf.size.toLong()).toInt()
+                        val read = input.read(copyBuf, 0, toRead)
+                        if (read < 0) return false
+                        output.write(copyBuf, 0, read)
+                        remaining -= read
+                    }
+                }
+
+                if (chunkType == "IEND") break
+            }
+            return true
+        }
+
         /**
          * Strips ancillary metadata chunks (tEXt, zTXt, iTXt, eXIf) from a PNG byte array
          * without recompressing or altering image raster pixels.
          */
         fun stripPngChunks(bytes: ByteArray): ByteArray? {
-            if (bytes.size < 8) return null
-            for (i in 0 until 8) {
-                if (bytes[i] != PNG_SIGNATURE[i]) return null
-            }
-
+            val input = java.io.ByteArrayInputStream(bytes)
             val output = java.io.ByteArrayOutputStream(bytes.size)
-            output.write(PNG_SIGNATURE)
-
-            var offset = 8
-            val buffer = java.nio.ByteBuffer.wrap(bytes)
-
-            while (offset + 8 <= bytes.size) {
-                buffer.position(offset)
-                val length = buffer.int
-                if (length < 0 || offset + 12L + length > bytes.size) {
-                    return null
-                }
-                val typeBytes = ByteArray(4)
-                buffer.get(typeBytes)
-                val chunkType = String(typeBytes, Charsets.US_ASCII)
-
-                val totalChunkSize = 12 + length
-                if (chunkType in PNG_METADATA_CHUNKS) {
-                    Timber.d("Stripped PNG metadata chunk: %s (%d bytes)", chunkType, totalChunkSize)
-                } else {
-                    output.write(bytes, offset, totalChunkSize)
-                }
-
-                offset += totalChunkSize
-                if (chunkType == "IEND") break
-            }
-
-            return output.toByteArray()
+            return if (stripPngChunks(input, output)) output.toByteArray() else null
         }
 
         /**
@@ -91,74 +125,171 @@ class ImageMetadataProcessor(
          * without recompressing or altering image raster pixels.
          */
         fun stripPngChunks(inputFile: File, outputFile: File): Boolean {
-            val bytes = inputFile.readBytes()
-            val stripped = stripPngChunks(bytes) ?: return false
-            outputFile.writeBytes(stripped)
+            return runCatching {
+                inputFile.inputStream().use { input ->
+                    outputFile.outputStream().use { output ->
+                        stripPngChunks(input, output)
+                    }
+                }
+            }.getOrDefault(false)
+        }
+
+        /**
+         * Strips metadata APPn markers (APP1 Exif/XMP, APP2 ICC, APP13 IPTC, COM) from a JPEG stream
+         * without recompressing raster image scan data.
+         * If preserveJfif is true, preserves standard 18-byte JFIF headers while sanitizing embedded thumbnails
+         * and dropping JFXX thumbnail extension markers.
+         */
+        fun stripJpegMarkers(input: java.io.InputStream, output: java.io.OutputStream, preserveJfif: Boolean = true): Boolean {
+            val b0 = input.read()
+            val b1 = input.read()
+            if (b0 != 0xFF || b1 != 0xD8) return false
+            output.write(0xFF)
+            output.write(0xD8)
+
+            val copyBuf = ByteArray(65536)
+
+            while (true) {
+                val b = input.read()
+                if (b < 0) break
+                if (b != 0xFF) {
+                    output.write(b)
+                    input.copyTo(output, bufferSize = 65536)
+                    break
+                }
+
+                var marker = input.read()
+                if (marker < 0) break
+                while (marker == 0xFF) {
+                    marker = input.read()
+                    if (marker < 0) break
+                }
+                if (marker < 0) break
+
+                if (marker == 0xD8) {
+                    output.write(0xFF)
+                    output.write(0xD8)
+                    continue
+                }
+                if (marker == 0xD9) { // EOI
+                    output.write(0xFF)
+                    output.write(0xD9)
+                    break
+                }
+                if (marker == 0xDA) { // SOS
+                    output.write(0xFF)
+                    output.write(0xDA)
+                    input.copyTo(output, bufferSize = 65536)
+                    break
+                }
+                if (marker == 0x00 || (marker in 0xD0..0xD7)) {
+                    output.write(0xFF)
+                    output.write(marker)
+                    continue
+                }
+
+                val lenHi = input.read()
+                val lenLo = input.read()
+                if (lenHi < 0 || lenLo < 0) return false
+                val length = (lenHi shl 8) or lenLo
+                if (length < 2) return false
+                val payloadLength = length - 2
+
+                if (marker == 0xE0) { // APP0 (JFIF / JFXX)
+                    if (!preserveJfif) {
+                        Timber.d("Stripped APP0 JFIF marker (preserveJfif=false, %d bytes)", length + 2)
+                        if (!skipFully(input, payloadLength.toLong())) return false
+                    } else {
+                        val payload = ByteArray(payloadLength)
+                        if (!readFully(input, payload)) return false
+
+                        val isJfif = payloadLength >= 5 &&
+                            payload[0] == 'J'.code.toByte() &&
+                            payload[1] == 'F'.code.toByte() &&
+                            payload[2] == 'I'.code.toByte() &&
+                            payload[3] == 'F'.code.toByte() &&
+                            payload[4] == 0.toByte()
+
+                        val isJfxx = payloadLength >= 5 &&
+                            payload[0] == 'J'.code.toByte() &&
+                            payload[1] == 'F'.code.toByte() &&
+                            payload[2] == 'X'.code.toByte() &&
+                            payload[3] == 'X'.code.toByte() &&
+                            payload[4] == 0.toByte()
+
+                        if (isJfxx) {
+                            Timber.d("Stripped JFXX thumbnail extension marker (%d bytes)", length + 2)
+                        } else if (isJfif && payloadLength >= 14) {
+                            val xThumb = payload[12].toInt() and 0xFF
+                            val yThumb = payload[13].toInt() and 0xFF
+
+                            if (xThumb == 0 && yThumb == 0 && payloadLength == 14) {
+                                output.write(0xFF)
+                                output.write(0xE0)
+                                output.write(lenHi)
+                                output.write(lenLo)
+                                output.write(payload)
+                            } else {
+                                output.write(0xFF)
+                                output.write(0xE0)
+                                output.write(0x00)
+                                output.write(0x10) // length = 16
+                                output.write(payload, 0, 12)
+                                output.write(0x00)
+                                output.write(0x00)
+                                Timber.d("Sanitized JFIF APP0: removed %d byte thumbnail", payloadLength - 14)
+                            }
+                        } else {
+                            Timber.d("Stripped non-standard APP0 marker (%d bytes)", length + 2)
+                        }
+                    }
+                } else {
+                    val isMetadata = (marker in 0xE1..0xEF) || marker == 0xFE
+                    if (isMetadata) {
+                        Timber.d("Stripped JPEG metadata marker: 0xFF%02X (%d bytes)", marker, length + 2)
+                        if (!skipFully(input, payloadLength.toLong())) return false
+                    } else {
+                        output.write(0xFF)
+                        output.write(marker)
+                        output.write(lenHi)
+                        output.write(lenLo)
+                        var remaining = payloadLength
+                        while (remaining > 0) {
+                            val toRead = minOf(remaining, copyBuf.size)
+                            val read = input.read(copyBuf, 0, toRead)
+                            if (read < 0) return false
+                            output.write(copyBuf, 0, read)
+                            remaining -= read
+                        }
+                    }
+                }
+            }
             return true
         }
 
         /**
          * Strips metadata APPn markers (APP1 Exif/XMP, APP2 ICC, APP13 IPTC, COM) from a JPEG byte array
          * without recompressing raster image scan data.
+         * If preserveJfif is true, preserves standard 18-byte JFIF headers while sanitizing embedded thumbnails
+         * and dropping JFXX thumbnail extension markers.
          */
-        fun stripJpegMarkers(bytes: ByteArray): ByteArray? {
-            if (bytes.size < 4 || (bytes[0].toInt() and 0xFF) != 0xFF || (bytes[1].toInt() and 0xFF) != 0xD8) {
-                return null
-            }
+        fun stripJpegMarkers(bytes: ByteArray, preserveJfif: Boolean = true): ByteArray? {
+            val input = java.io.ByteArrayInputStream(bytes)
             val output = java.io.ByteArrayOutputStream(bytes.size)
-            output.write(0xFF)
-            output.write(0xD8)
-            var offset = 2
-            while (offset + 1 < bytes.size) {
-                if ((bytes[offset].toInt() and 0xFF) != 0xFF) {
-                    output.write(bytes, offset, bytes.size - offset)
-                    break
-                }
-                val marker = bytes[offset + 1].toInt() and 0xFF
-                if (marker == 0xD9) { // EOI
-                    output.write(0xFF)
-                    output.write(0xD9)
-                    break
-                }
-                if (marker == 0xDA) { // SOS (Start of Scan)
-                    output.write(bytes, offset, bytes.size - offset)
-                    break
-                }
-                if (marker == 0x00 || (marker in 0xD0..0xD7)) {
-                    output.write(bytes, offset, 2)
-                    offset += 2
-                    continue
-                }
-                if (offset + 4 > bytes.size) {
-                    output.write(bytes, offset, bytes.size - offset)
-                    break
-                }
-                val length = ((bytes[offset + 2].toInt() and 0xFF) shl 8) or (bytes[offset + 3].toInt() and 0xFF)
-                val totalLength = 2 + length
-                if (offset + totalLength > bytes.size) {
-                    output.write(bytes, offset, bytes.size - offset)
-                    break
-                }
-
-                val isMetadata = (marker in 0xE1..0xEF) || marker == 0xFE
-                if (!isMetadata) {
-                    output.write(bytes, offset, totalLength)
-                } else {
-                    Timber.d("Stripped JPEG metadata marker: 0xFF%02X (%d bytes)", marker, totalLength)
-                }
-                offset += totalLength
-            }
-            return output.toByteArray()
+            return if (stripJpegMarkers(input, output, preserveJfif)) output.toByteArray() else null
         }
 
         /**
          * Strips metadata APPn markers from a JPEG file.
          */
-        fun stripJpegMarkers(inputFile: File, outputFile: File): Boolean {
-            val bytes = inputFile.readBytes()
-            val stripped = stripJpegMarkers(bytes) ?: return false
-            outputFile.writeBytes(stripped)
-            return true
+        fun stripJpegMarkers(inputFile: File, outputFile: File, preserveJfif: Boolean = true): Boolean {
+            return runCatching {
+                inputFile.inputStream().use { input ->
+                    outputFile.outputStream().use { output ->
+                        stripJpegMarkers(input, output, preserveJfif)
+                    }
+                }
+            }.getOrDefault(false)
         }
         val GPS_TAGS = setOf(
             ExifInterface.TAG_GPS_LATITUDE,
@@ -302,7 +433,8 @@ class ImageMetadataProcessor(
         stripDeviceModel: Boolean = true,
         stripDateTime: Boolean = true,
         stripCameraSettings: Boolean = true,
-        stripComments: Boolean = true
+        stripComments: Boolean = true,
+        preserveJfif: Boolean = true
     ): File {
         val extension = if (mimeType != null) {
             fileRepository.getExtensionFromMime(mimeType)
@@ -312,40 +444,54 @@ class ImageMetadataProcessor(
 
         val allCategories = stripGps && stripDeviceModel && stripDateTime && stripCameraSettings && stripComments
 
-        // Fast-path for PNG images: strip chunks directly in memory without ExifInterface roundtrips
+        // Fast-path for PNG images: strip chunks directly via stream without buffering whole file in RAM
         if (allCategories && (mimeType == "image/png" || extension.equals(".png", ignoreCase = true))) {
-            val stripped = runCatching {
-                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.use { it.readBytes() }?.let { stripPngChunks(it) }
-            }.getOrNull()
+            val outputFile = fileRepository.createSharedTempFile("img_clean_", ".png")
+            val success = runCatching {
+                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.use { input ->
+                    outputFile.outputStream().use { output ->
+                        stripPngChunks(input, output)
+                    }
+                } == true
+            }.getOrDefault(false)
 
-            if (stripped != null) {
-                val outputFile = fileRepository.createSharedTempFile("img_clean_", ".png")
-                outputFile.writeBytes(stripped)
+            if (success && outputFile.length() > 0) {
                 return outputFile
+            } else {
+                outputFile.delete()
             }
         }
 
-        // Fast-path for JPEG images: strip APPn markers and COM markers directly in memory
+        // Fast-path for JPEG images: strip APPn markers and COM markers directly via stream without buffering whole file in RAM
         if (allCategories && (mimeType == "image/jpeg" || extension.equals(".jpg", ignoreCase = true) || extension.equals(".jpeg", ignoreCase = true))) {
-            val stripped = runCatching {
-                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.use { it.readBytes() }?.let { stripJpegMarkers(it) }
-            }.getOrNull()
+            val outputFile = fileRepository.createSharedTempFile("img_clean_", ".jpg")
+            val origOrientation = if (keepOrientation) {
+                runCatching {
+                    fileRepository.getContext().contentResolver.openInputStream(inputUri)?.use { stream ->
+                        ExifInterface(stream).getAttribute(ExifInterface.TAG_ORIENTATION)
+                    }
+                }.getOrNull()
+            } else null
 
-            if (stripped != null) {
-                val outputFile = fileRepository.createSharedTempFile("img_clean_", ".jpg")
-                outputFile.writeBytes(stripped)
-                if (keepOrientation) {
+            val success = runCatching {
+                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.use { input ->
+                    outputFile.outputStream().use { output ->
+                        stripJpegMarkers(input, output, preserveJfif)
+                    }
+                } == true
+            }.getOrDefault(false)
+
+            if (success && outputFile.length() > 0) {
+                if (keepOrientation && !origOrientation.isNullOrBlank() && origOrientation != "0" && origOrientation != "1") {
                     runCatching {
-                        val origExif = fileRepository.getContext().contentResolver.openInputStream(inputUri)?.use { ExifInterface(it) }
-                        val origOrientation = origExif?.getAttribute(ExifInterface.TAG_ORIENTATION)
-                        if (!origOrientation.isNullOrBlank() && origOrientation != "0" && origOrientation != "1") {
-                            val cleanExif = ExifInterface(outputFile.absolutePath)
-                            cleanExif.setAttribute(ExifInterface.TAG_ORIENTATION, origOrientation)
-                            cleanExif.saveAttributes()
-                        }
+                        val cleanExif = ExifInterface(outputFile.absolutePath)
+                        cleanExif.setAttribute(ExifInterface.TAG_ORIENTATION, origOrientation)
+                        cleanExif.saveAttributes()
                     }
                 }
                 return outputFile
+            } else {
+                outputFile.delete()
             }
         }
         val tagsToStrip = if (allCategories) {
@@ -374,7 +520,8 @@ class ImageMetadataProcessor(
         stripDeviceModel: Boolean = true,
         stripDateTime: Boolean = true,
         stripCameraSettings: Boolean = true,
-        stripComments: Boolean = true
+        stripComments: Boolean = true,
+        preserveJfif: Boolean = true
     ): File {
         val allCategories = stripGps && stripDeviceModel && stripDateTime && stripCameraSettings && stripComments
         val tagsToStrip = if (allCategories) {

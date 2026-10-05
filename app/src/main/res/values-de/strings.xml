@@ -158,6 +158,12 @@
     <string name="setting_keep_thumbnails_title">Originale Thumbnails beibehalten</string>
     <string name="setting_keep_thumbnails_sub">Wenn die Datei ein eingebettetes Vorschaubild enthält, behalte es so bei, wie es ist. Wenn deaktiviert, wird jedes vorhandene Vorschaubild für maximale Privatsphäre entfernt.</string>
     <string name="setting_thumbnails_warning">Warnung: Das Beibehalten von Original-Thumbnails kann Metadaten (Standort, Geräteinfo) preisgeben, auch wenn die Haupt-Tags entfernt wurden.</string>
+    <string name="setting_strip_pdf_annotations_title">Ausgeblendete PDF-Anmerkungen &amp; Wasserzeichen entfernen</string>
+    <string name="setting_strip_pdf_annotations_sub">Entfernt Wasserzeichen, Stempel und ausgeblendete oder unsichtbare Anmerkungen aus PDF-Dokumenten</string>
+    <string name="setting_strip_pdf_comments_title">PDF-Kommentare &amp; Markierungen entfernen</string>
+    <string name="setting_strip_pdf_comments_sub">Entfernt Notizen, Textfelder, Hervorhebungen und Überprüfungsanmerkungen aus PDF-Dokumenten</string>
+    <string name="setting_preserve_jpeg_jfif_title">JPEG-JFIF-Header beibehalten</string>
+    <string name="setting_preserve_jpeg_jfif_sub">Standard-Auflösungs- und Seitenverhältnis-Header beibehalten, während eingebettete Miniaturansichten entfernt werden. Wenn deaktiviert, werden alle JFIF-Marker entfernt.</string>
     <string name="setting_enable_map_title">Karten-Picker aktivieren</string>
     <string name="setting_enable_map_sub">Der App erlauben, eine Verbindung zum Internet herzustellen, um OpenStreetMap für die Standortwahl anzuzeigen</string>
     <string name="setting_nearby_scramble_title">Lokalisierte Vergiftung verwenden</string>

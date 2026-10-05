@@ -310,6 +310,18 @@ class SettingsViewModel(
         settingsRepository.setStripComments(enabled)
     }
 
+    fun setStripPdfAnnotations(enabled: Boolean) = launchSettingUpdate {
+        settingsRepository.setStripPdfAnnotations(enabled)
+    }
+
+    fun setStripPdfComments(enabled: Boolean) = launchSettingUpdate {
+        settingsRepository.setStripPdfComments(enabled)
+    }
+
+    fun setPreserveJpegJfif(enabled: Boolean) = launchSettingUpdate {
+        settingsRepository.setPreserveJpegJfif(enabled)
+    }
+
     fun clearCache() {
         viewModelScope.launch(Dispatchers.IO) {
             fileRepository.clearCache()

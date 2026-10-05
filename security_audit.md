@@ -99,17 +99,20 @@ To defend against XML External Entity (XXE), Billion Laughs entity expansion, an
 * **Route Precedence Hardening:** Explicitly prioritizes `image/svg+xml` ahead of generic raster `image/*` checks in repository dispatchers, preventing vector XML streams from mistakenly routing through raster EXIF parsers.
 * **Embedded Raster Scrubbing:** Base64-encoded raster images embedded within `<image>` tags are decoded, scrubbed via native chunk/marker strippers (stripping ancillary PNG chunks like `tEXt` and JPEG markers like APP1/COM), and re-encoded.
 
-### 4.4 Deep Image Stripping & In-Memory Chunk Parsing ([`ImageMetadataProcessor.kt`](app/src/main/java/com/heronikostudios/metajammer/metadata/ImageMetadataProcessor.kt))
+### 4.4 Deep Image Stripping & Streaming Chunk Parsing ([`ImageMetadataProcessor.kt`](app/src/main/java/com/heronikostudios/metajammer/metadata/ImageMetadataProcessor.kt))
 * **ExifInterface Reflection:** Targets all standard `TAG_` constants dynamically via reflection plus vendor-specific tags (`ImageResources`, `OwnerName`, `PrintIM`, `SensitivityType`, etc.) to clear all metadata fields regardless of library version.
-* **JPEG Marker Stripping:** Drops APPn metadata markers (APP1 EXIF/XMP, APP2 ICC/FlashPix, APP13 IPTC, COM) directly from the byte stream without recompressing raster scan data.
-* **PNG Ancillary Chunk Stripping:** In-memory byte scanner strips `tEXt`, `zTXt`, `iTXt`, `pHYs`, and `eXIf` chunks, preserving only critical image rendering chunks (`IHDR`, `PLTE`, `IDAT`, `IEND`). Direct stream-to-file fast-path bypasses `ExifInterface` rewrites and eliminates intermediate disk copies entirely.
-* **Thumbnail Elimination:** Strips embedded EXIF preview thumbnails to prevent visual data leakage of cropped or removed sections.
+* **Streaming JPEG Marker Stripping & JFIF Preservation:** Drops non-essential APPn metadata markers (APP1 EXIF/XMP, APP2 ICC/FlashPix, APP13 IPTC, COM) directly via a streaming I/O pipeline (`stripJpegMarkers`) from `InputStream` to `OutputStream` using a fixed 64KB buffer, eliminating large byte array heap allocations and preventing OOM on multi-megabyte images. When JFIF preservation is enabled, preserves resolution density (DPI) while sanitizing embedded JFIF thumbnails (dimensions zeroed) and stripping JFXX extension thumbnails (`APP0` with `JFXX\u0000`).
+* **Streaming PNG Ancillary Chunk Stripping:** Direct streaming chunk processor (`stripPngChunks`) strips `tEXt`, `zTXt`, `iTXt`, `pHYs`, and `eXIf` chunks, preserving only critical image rendering chunks (`IHDR`, `PLTE`, `IDAT`, `IEND`). Stream-to-file fast-path bypasses `ExifInterface` rewrites and avoids buffering raster scanlines in RAM.
+* **Streaming PNG Metadata Extraction:** `PngMetadataReader.readMetadata(InputStream)` reads header and ancillary chunks directly while seeking over raster `IDAT` chunks without heap allocations.
+* **Thumbnail Elimination:** Strips embedded EXIF and JFIF preview thumbnails to prevent visual data leakage of cropped or removed sections.
 
 ### 4.5 PDF Document Sanitization ([`PdfMetadataProcessor.kt`](app/src/main/java/com/heronikostudios/metajammer/metadata/PdfMetadataProcessor.kt))
 * **In-Memory Scrubbing:** Configured with `MemoryUsageSetting.setupMixed(10MB)`—all standard PDF documents under 10MB are parsed and scrubbed strictly in RAM with zero disk scratch files created, preventing unscrubbed document fragments from touching physical flash storage.
 * **Document Information Dictionary:** Replaces `PDDocumentInformation` with an empty structure (wipes Title, Author, Subject, Keywords, Creator, Producer, CreationDate, ModDate).
 * **Catalog XMP & Structural Metadata:** Nullifies `documentCatalog.metadata`, resets custom `PageLabels`, and strips private application dictionary items (`PieceInfo`, `StructTreeRoot`).
-* **Watermark & Annotation Purging:** Iterates over all document pages to strip `Watermark` and `Stamp` annotations.
+* **Watermark & Hidden Annotation Purging:** Detects and strips invisible/hidden annotations bearing `Hidden` (`/F 2`), `Invisible` (`/F 1`), or `NoView` (`/F 32`) flags, as well as `Watermark` and `Stamp` annotations, preventing steganographic, tracking, or sensitive data leakage in invisible annotations while preserving interactive navigation links (`/Link`).
+* **User Comments & Markup Sanitization:** Configurably strips non-structural user comments and markups (`Text`, `FreeText`, `Highlight`, `Underline`, `Squiggly`, `StrikeOut`, `Stamp`, `Caret`, `Ink`, `Popup`, `FileAttachment`, `Sound`, `Movie`, `RichMedia`, `Screen`) to remove reviewer identities, notes, and embedded attachments.
+* **Optimized Page Scanning:** Fast inspection of `page.cosObject.containsKey(COSName.ANNOTS)` avoids unnecessary annotation structure instantiations on pages without annotations.
 * **Layer Sanitization:** Clears Optional Content Groups (OCGs) to prevent hidden watermark layers from persisting.
 
 ### 4.6 Audio / Video Stream Remuxing & ISO-BMFF Box Scrubbing ([`MediaMetadataProcessor.kt`](app/src/main/java/com/heronikostudios/metajammer/metadata/MediaMetadataProcessor.kt), [`Mp4MetadataReader.kt`](app/src/main/java/com/heronikostudios/metajammer/metadata/Mp4MetadataReader.kt))
@@ -123,6 +126,9 @@ To defend against XML External Entity (XXE), Billion Laughs entity expansion, an
 * **Comment Header Neutralization:** Reassembles bitstream packets across multi-page segment tables and replaces the Vorbis comment packet (`\x03vorbis`) or Opus tag packet (`OpusTags`) with a sanitized, minimal header. Completely removes user comments, location coordinates (`GPS_COORDINATES`, `LOCATION`), hardware serials (`DEVICE_ID`), contact details, embedded picture blocks (`METADATA_BLOCK_PICTURE`), and serialized XMP packets.
 * **Loss-Free Bit-Exact Audio:** Audio packets and elementary streams are preserved byte-for-byte without decoding or re-encoding, avoiding audio quality loss and artifact generation.
 * **Bitstream Integrity & CRC Recalculation:** Re-sequences all subsequent OGG pages with strictly consecutive page sequence numbers and recalculates 32-bit OGG CRC checksums using the standard generator polynomial `0x04C11DB7`, ensuring 100% compliance with RFC 3533 and media player compatibility across all Android versions (API 26–37).
+
+### 4.8 Concurrency Control & Memory Protection
+* **Foreground Concurrency Throttling:** Foreground batch processing is throttled using a concurrency `Semaphore` (maximum 2 parallel tasks) to prevent heap exhaustion and thread starvation during batch operations on high-resolution media on memory-constrained devices.
 
 ---
 

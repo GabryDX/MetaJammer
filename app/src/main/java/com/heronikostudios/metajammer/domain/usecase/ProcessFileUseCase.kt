@@ -19,7 +19,10 @@ class ProcessFileUseCase(
         stripDeviceModel: Boolean = true,
         stripDateTime: Boolean = true,
         stripCameraSettings: Boolean = true,
-        stripComments: Boolean = true
+        stripComments: Boolean = true,
+        stripPdfAnnotations: Boolean = true,
+        stripPdfComments: Boolean = true,
+        preserveJpegJfif: Boolean = true
     ): File {
         return metadataRepository.processFile(
             selectedFile = selectedFile,
@@ -31,7 +34,10 @@ class ProcessFileUseCase(
             stripDeviceModel = stripDeviceModel,
             stripDateTime = stripDateTime,
             stripCameraSettings = stripCameraSettings,
-            stripComments = stripComments
+            stripComments = stripComments,
+            stripPdfAnnotations = stripPdfAnnotations,
+            stripPdfComments = stripPdfComments,
+            preserveJpegJfif = preserveJpegJfif
         )
     }
 }

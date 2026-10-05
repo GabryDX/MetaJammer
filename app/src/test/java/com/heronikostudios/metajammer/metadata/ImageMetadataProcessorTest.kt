@@ -438,6 +438,140 @@ class ImageMetadataProcessorTest {
         assertTrue("Model tag should be present", entries.any { it.key == ExifInterface.TAG_MODEL && it.value == "RealCameraModel" })
         assertTrue("GPS tag should be present", entries.any { it.key == ExifInterface.TAG_GPS_LATITUDE })
     }
+
+    @Test
+    fun testStripJpegMarkersWithPreserveJfif() {
+        val originalFile = createTestJpegWithExif()
+        val originalBytes = originalFile.readBytes()
+
+        // 1. With preserveJfif = true (default)
+        val strippedPreserved = ImageMetadataProcessor.stripJpegMarkers(originalBytes, preserveJfif = true)
+        assertNotNull(strippedPreserved)
+
+        var foundApp0 = false
+        var offset = 2
+        while (offset < strippedPreserved!!.size - 4) {
+            if ((strippedPreserved[offset].toInt() and 0xFF) == 0xFF) {
+                val marker = strippedPreserved[offset + 1].toInt() and 0xFF
+                if (marker == 0xE0) {
+                    foundApp0 = true
+                    val length = ((strippedPreserved[offset + 2].toInt() and 0xFF) shl 8) or (strippedPreserved[offset + 3].toInt() and 0xFF)
+                    assertEquals("Standard JFIF length without thumbnail should be 16", 16, length)
+                    val id = String(strippedPreserved, offset + 4, 4, Charsets.US_ASCII)
+                    assertEquals("JFIF", id)
+                    val xThumb = strippedPreserved[offset + 16].toInt() and 0xFF
+                    val yThumb = strippedPreserved[offset + 17].toInt() and 0xFF
+                    assertEquals("Thumbnail X should be 0", 0, xThumb)
+                    assertEquals("Thumbnail Y should be 0", 0, yThumb)
+                    break
+                }
+                if (marker == 0xDA) break
+                val len = ((strippedPreserved[offset + 2].toInt() and 0xFF) shl 8) or (strippedPreserved[offset + 3].toInt() and 0xFF)
+                offset += 2 + len
+            } else {
+                offset++
+            }
+        }
+        assertTrue("APP0 JFIF should be preserved when preserveJfif = true", foundApp0)
+
+        // 2. With preserveJfif = false
+        val strippedRemoved = ImageMetadataProcessor.stripJpegMarkers(originalBytes, preserveJfif = false)
+        assertNotNull(strippedRemoved)
+
+        var foundApp0WhenRemoved = false
+        offset = 2
+        while (offset < strippedRemoved!!.size - 4) {
+            if ((strippedRemoved[offset].toInt() and 0xFF) == 0xFF) {
+                val marker = strippedRemoved[offset + 1].toInt() and 0xFF
+                if (marker == 0xE0) {
+                    foundApp0WhenRemoved = true
+                    break
+                }
+                if (marker == 0xDA) break
+                val len = ((strippedRemoved[offset + 2].toInt() and 0xFF) shl 8) or (strippedRemoved[offset + 3].toInt() and 0xFF)
+                offset += 2 + len
+            } else {
+                offset++
+            }
+        }
+        assertFalse("APP0 marker should be stripped when preserveJfif = false", foundApp0WhenRemoved)
+    }
+
+    @Test
+    fun testStripJpegMarkersDropsJfxxEvenWhenPreserveJfifIsTrue() {
+        val out = java.io.ByteArrayOutputStream()
+        out.write(byteArrayOf(0xFF.toByte(), 0xD8.toByte())) // SOI
+
+        // JFIF APP0 (length 16, payload 14 bytes)
+        val jfifPayload = byteArrayOf(
+            0xFF.toByte(), 0xE0.toByte(), 0x00.toByte(), 0x10.toByte(),
+            'J'.code.toByte(), 'F'.code.toByte(), 'I'.code.toByte(), 'F'.code.toByte(), 0x00.toByte(),
+            1, 2, 0, 0, 1, 0, 1, 0, 0
+        )
+        out.write(jfifPayload)
+
+        // JFXX APP0 (extension thumbnail: length 8 = 2 bytes length + 5 bytes 'JFXX\0' + 1 byte ext code)
+        val jfxxPayload = byteArrayOf(
+            0xFF.toByte(), 0xE0.toByte(), 0x00.toByte(), 0x08.toByte(),
+            'J'.code.toByte(), 'F'.code.toByte(), 'X'.code.toByte(), 'X'.code.toByte(), 0x00.toByte(),
+            0x10.toByte()
+        )
+        out.write(jfxxPayload)
+
+        // COM comment marker (length 6 = 2 bytes length + 4 bytes 'test')
+        val comPayload = byteArrayOf(
+            0xFF.toByte(), 0xFE.toByte(), 0x00.toByte(), 0x06.toByte(),
+            't'.code.toByte(), 'e'.code.toByte(), 's'.code.toByte(), 't'.code.toByte()
+        )
+        out.write(comPayload)
+
+        // SOS marker and dummy image data
+        out.write(byteArrayOf(0xFF.toByte(), 0xDA.toByte(), 0x00.toByte(), 0x02.toByte()))
+        out.write(byteArrayOf(0x12, 0x34, 0x56))
+        out.write(byteArrayOf(0xFF.toByte(), 0xD9.toByte())) // EOI
+
+        val syntheticJpeg = out.toByteArray()
+
+        val stripped = ImageMetadataProcessor.stripJpegMarkers(syntheticJpeg, preserveJfif = true)
+        assertNotNull(stripped)
+
+        val strippedStr = String(stripped!!, Charsets.ISO_8859_1)
+        assertTrue("Cleaned JPEG should preserve JFIF marker", strippedStr.contains("JFIF"))
+        assertFalse("Cleaned JPEG should strip JFXX marker", strippedStr.contains("JFXX"))
+        assertFalse("Cleaned JPEG should strip COM marker", strippedStr.contains("test\u0000"))
+    }
+
+    @Test
+    fun testStreamingStripJpegMarkersMatchesByteArray() {
+        val originalFile = createTestJpegWithExif()
+        val originalBytes = originalFile.readBytes()
+
+        val byteStripped = ImageMetadataProcessor.stripJpegMarkers(originalBytes, preserveJfif = true)
+        assertNotNull(byteStripped)
+
+        val out = java.io.ByteArrayOutputStream()
+        val success = originalFile.inputStream().use { input ->
+            ImageMetadataProcessor.stripJpegMarkers(input, out, preserveJfif = true)
+        }
+        assertTrue(success)
+        assertArrayEquals("Streaming output must match byte array output exactly", byteStripped, out.toByteArray())
+    }
+
+    @Test
+    fun testStreamingStripPngChunksMatchesByteArray() {
+        val testPng = createTestPngWithPhys()
+        val originalBytes = testPng.readBytes()
+
+        val byteStripped = ImageMetadataProcessor.stripPngChunks(originalBytes)
+        assertNotNull(byteStripped)
+
+        val out = java.io.ByteArrayOutputStream()
+        val success = testPng.inputStream().use { input ->
+            ImageMetadataProcessor.stripPngChunks(input, out)
+        }
+        assertTrue(success)
+        assertArrayEquals("Streaming PNG output must match byte array output exactly", byteStripped, out.toByteArray())
+    }
 }
 
 

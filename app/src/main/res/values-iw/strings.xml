@@ -158,6 +158,12 @@
     <string name="setting_keep_thumbnails_title">שמור תמונות ממוזערות מקוריות</string>
     <string name="setting_keep_thumbnails_sub">אם הקובץ מכיל תמונה ממוזערת מוטמעת, שמור עליה כפי שהיא.</string>
     <string name="setting_thumbnails_warning">אזהרה: שמירה על תמונות ממוזערות מקוריות עלולה להדליף מטא-דאטה.</string>
+    <string name="setting_strip_pdf_annotations_title">הסר הערות מוסתרות וסימני מים ב-PDF</string>
+    <string name="setting_strip_pdf_annotations_sub">הסר סימני מים, חותמות והערות מוסתרות או בלתי נראות ממסמכי PDF</string>
+    <string name="setting_strip_pdf_comments_title">הסר תגובות וסימוני PDF</string>
+    <string name="setting_strip_pdf_comments_sub">הסר פתקיות, תיבות טקסט, הדגשות והערות בדיקה ממסמכי PDF</string>
+    <string name="setting_preserve_jpeg_jfif_title">שמור על כותרת JPEG JFIF</string>
+    <string name="setting_preserve_jpeg_jfif_sub">שמור על כותרות רזולוציה ויחס גובה-רוחב סטנדרטיות תוך הסרת תמונות ממוזערות מוטמעות. אם מושבת, כל סמני JFIF יוסרו.</string>
     <string name="setting_enable_map_title">אפשר בחירת מפה</string>
     <string name="setting_enable_map_sub">אפשר לאפליקציה להתחבר לאינטרנט כדי להציג את OpenStreetMap</string>
     <string name="setting_nearby_scramble_title">השתמש בהרעלת נתונים מקומית</string>

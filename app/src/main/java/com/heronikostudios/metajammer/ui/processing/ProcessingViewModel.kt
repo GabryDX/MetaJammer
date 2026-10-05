@@ -18,6 +18,8 @@ import com.heronikostudios.metajammer.metadata.MetadataReplacementGenerator
 import com.heronikostudios.metajammer.util.SanitizationUtils
 import com.heronikostudios.metajammer.worker.MetadataProcessingWorker
 import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -225,14 +227,30 @@ class ProcessingViewModel(
                 val entries: List<MetadataDiffEntry> = when (mode) {
                     ProcessingMode.REMOVE_METADATA -> {
                         currentMetadata.map { entry ->
-                            val willStrip = com.heronikostudios.metajammer.metadata.ImageMetadataProcessor.shouldStripTag(
-                                entry.key,
-                                appSettings.stripGps,
-                                appSettings.stripDeviceModel,
-                                appSettings.stripDateTime,
-                                appSettings.stripCameraSettings,
-                                appSettings.stripComments
-                            )
+                            val isPdf = file.mimeType == "application/pdf" || file.displayName.endsWith(".pdf", ignoreCase = true)
+                            val willStrip = if (isPdf) {
+                                when (entry.key) {
+                                    "Annotations" -> appSettings.stripPdfAnnotations
+                                    "Annotation Author" -> appSettings.stripPdfAnnotations || appSettings.stripPdfComments
+                                    else -> com.heronikostudios.metajammer.metadata.ImageMetadataProcessor.shouldStripTag(
+                                        entry.key,
+                                        appSettings.stripGps,
+                                        appSettings.stripDeviceModel,
+                                        appSettings.stripDateTime,
+                                        appSettings.stripCameraSettings,
+                                        appSettings.stripComments
+                                    )
+                                }
+                            } else {
+                                com.heronikostudios.metajammer.metadata.ImageMetadataProcessor.shouldStripTag(
+                                    entry.key,
+                                    appSettings.stripGps,
+                                    appSettings.stripDeviceModel,
+                                    appSettings.stripDateTime,
+                                    appSettings.stripCameraSettings,
+                                    appSettings.stripComments
+                                )
+                            }
                             if (willStrip) {
                                 MetadataDiffEntry(
                                     key = entry.key,
@@ -343,6 +361,12 @@ class ProcessingViewModel(
                                         currentMap["Creator"]?.let { targetMap["Creator"] = it }
                                         currentMap["Producer"]?.let { targetMap["Producer"] = it }
                                     }
+                                    if (!appSettings.stripPdfAnnotations) {
+                                        currentMap["Annotations"]?.let { targetMap["Annotations"] = it }
+                                    }
+                                    if (!appSettings.stripPdfAnnotations && !appSettings.stripPdfComments) {
+                                        currentMap["Annotation Author"]?.let { targetMap["Annotation Author"] = it }
+                                    }
                                 }
                             }
 
@@ -404,22 +428,28 @@ class ProcessingViewModel(
             _hasSavedOrShared.value = false
             runCatching {
                 withContext(Dispatchers.IO) {
+                    val semaphore = kotlinx.coroutines.sync.Semaphore(2)
                     coroutineScope {
                         files.map { selectedFile ->
                             async {
-                                val plan = _replacementPlans.value[selectedFile.uri]
-                                selectedFile to processFileUseCase(
-                                    selectedFile = selectedFile,
-                                    processingMode = mode,
-                                    keepOrientation = appSettings.keepImageOrientation,
-                                    thumbnailHandling = appSettings.thumbnailHandling,
-                                    replacementPlan = plan,
-                                    stripGps = appSettings.stripGps,
-                                    stripDeviceModel = appSettings.stripDeviceModel,
-                                    stripDateTime = appSettings.stripDateTime,
-                                    stripCameraSettings = appSettings.stripCameraSettings,
-                                    stripComments = appSettings.stripComments
-                                )
+                                semaphore.withPermit {
+                                    val plan = _replacementPlans.value[selectedFile.uri]
+                                    selectedFile to processFileUseCase(
+                                        selectedFile = selectedFile,
+                                        processingMode = mode,
+                                        keepOrientation = appSettings.keepImageOrientation,
+                                        thumbnailHandling = appSettings.thumbnailHandling,
+                                        replacementPlan = plan,
+                                        stripGps = appSettings.stripGps,
+                                        stripDeviceModel = appSettings.stripDeviceModel,
+                                        stripDateTime = appSettings.stripDateTime,
+                                        stripCameraSettings = appSettings.stripCameraSettings,
+                                        stripComments = appSettings.stripComments,
+                                        stripPdfAnnotations = appSettings.stripPdfAnnotations,
+                                        stripPdfComments = appSettings.stripPdfComments,
+                                        preserveJpegJfif = appSettings.preserveJpegJfif
+                                    )
+                                }
                             }
                         }.awaitAll()
                     }
@@ -468,6 +498,9 @@ class ProcessingViewModel(
             .putBoolean(MetadataProcessingWorker.KEY_STRIP_DATE_TIME, settings.stripDateTime)
             .putBoolean(MetadataProcessingWorker.KEY_STRIP_CAMERA_SETTINGS, settings.stripCameraSettings)
             .putBoolean(MetadataProcessingWorker.KEY_STRIP_COMMENTS, settings.stripComments)
+            .putBoolean(MetadataProcessingWorker.KEY_STRIP_PDF_ANNOTATIONS, settings.stripPdfAnnotations)
+            .putBoolean(MetadataProcessingWorker.KEY_STRIP_PDF_COMMENTS, settings.stripPdfComments)
+            .putBoolean(MetadataProcessingWorker.KEY_PRESERVE_JPEG_JFIF, settings.preserveJpegJfif)
             .build()
 
         val workRequest = OneTimeWorkRequestBuilder<MetadataProcessingWorker>()

@@ -35,7 +35,10 @@ data class AppSettings(
     val stripDeviceModel: Boolean = true,
     val stripDateTime: Boolean = true,
     val stripCameraSettings: Boolean = true,
-    val stripComments: Boolean = true
+    val stripComments: Boolean = true,
+    val stripPdfAnnotations: Boolean = true,
+    val stripPdfComments: Boolean = true,
+    val preserveJpegJfif: Boolean = true
 ) {
     val activeLocationPreset: LocationPresetTarget
         get() = customLocationPresets.find { it.id == selectedCustomLocationPresetId } ?: locationPreset

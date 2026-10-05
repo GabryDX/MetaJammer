@@ -158,6 +158,12 @@
     <string name="setting_keep_thumbnails_title">Behoud originele miniaturen</string>
     <string name="setting_keep_thumbnails_sub">Als het bestand een ingebedde miniatuur bevat, behoud deze dan zoals hij is. Indien uitgeschakeld, worden alle bestaande miniaturen verwijderd voor maximale privacy.</string>
     <string name="setting_thumbnails_warning">Waarschuwing: Het behouden van originele miniaturen kan metadata lekken (locatie, apparaatinfo), zelfs als de belangrijkste tags zijn verwijderd.</string>
+    <string name="setting_strip_pdf_annotations_title">Verborgen PDF-annotaties &amp; watermerken verwijderen</string>
+    <string name="setting_strip_pdf_annotations_sub">Verwijder watermerken, stempels en verborgen of onzichtbare annotaties uit PDF-documenten</string>
+    <string name="setting_strip_pdf_comments_title">PDF-opmerkingen &amp; markeringen verwijderen</string>
+    <string name="setting_strip_pdf_comments_sub">Verwijder notities, tekstvakken, markeringen en revisie-annotaties uit PDF-documenten</string>
+    <string name="setting_preserve_jpeg_jfif_title">JPEG JFIF-header behouden</string>
+    <string name="setting_preserve_jpeg_jfif_sub">Behoud standaard resolutie- en beeldverhoudingheaders terwijl ingesloten miniaturen worden verwijderd. Indien uitgeschakeld, worden alle JFIF-markers verwijderd.</string>
     <string name="setting_enable_map_title">Kaartkiezer inschakelen</string>
     <string name="setting_enable_map_sub">Sta de app toe verbinding te maken met internet om OpenStreetMap te tonen voor locatiekeuze</string>
     <string name="setting_nearby_scramble_title">Gelokaliseerde vergiftiging gebruiken</string>

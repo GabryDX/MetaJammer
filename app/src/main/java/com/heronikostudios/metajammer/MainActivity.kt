@@ -587,6 +587,9 @@ fun MetaJammerApp(
                         onStripDateTimeChanged = viewModel::setStripDateTime,
                         onStripCameraSettingsChanged = viewModel::setStripCameraSettings,
                         onStripCommentsChanged = viewModel::setStripComments,
+                        onStripPdfAnnotationsChanged = viewModel::setStripPdfAnnotations,
+                        onStripPdfCommentsChanged = viewModel::setStripPdfComments,
+                        onPreserveJpegJfifChanged = viewModel::setPreserveJpegJfif,
                         modifier = screenModifier
                     )
                 }

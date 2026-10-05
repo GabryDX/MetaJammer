@@ -158,6 +158,12 @@
     <string name="setting_keep_thumbnails_title">حفظ تصاویر بندانگشتی اصلی</string>
     <string name="setting_keep_thumbnails_sub">اگر فایل حاوی تصویر بندانگشتی داخلی است، آن را همان‌طور که هست حفظ کنید. در صورت غیرفعال بودن، هر تصویر بندانگشتی موجود برای حداکثر حریم خصوصی حذف خواهد شد.</string>
     <string name="setting_thumbnails_warning">هشدار: حفظ تصاویر بندانگشتی اصلی ممکن است متاداده‌ها (مکان، اطلاعات دستگاه) را فاش کند، حتی اگر تگ‌های اصلی حذف شده باشند.</string>
+    <string name="setting_strip_pdf_annotations_title">حذف یادداشت‌های پنهان و واترمارک‌های PDF</string>
+    <string name="setting_strip_pdf_annotations_sub">حذف واترمارک‌ها، مهرها و یادداشت‌های پنهان یا نامرئی از اسناد PDF</string>
+    <string name="setting_strip_pdf_comments_title">حذف نظرات و نشانه‌گذاری‌های PDF</string>
+    <string name="setting_strip_pdf_comments_sub">حذف یادداشت‌های چسبان، کادرهای متنی، برجسته‌سازی‌ها و یادداشت‌های بازبینی از اسناد PDF</string>
+    <string name="setting_preserve_jpeg_jfif_title">حفظ هدر JPEG JFIF</string>
+    <string name="setting_preserve_jpeg_jfif_sub">حفظ هدرهای استاندارد وضوح و نسبت تصویر در حین حذف ریزعکس‌های تعبیه‌شده. در صورت غیرفعال بودن، تمام نشانگرهای JFIF حذف می‌شوند.</string>
     <string name="setting_enable_map_title">فعال کردن انتخابگر نقشه</string>
     <string name="setting_enable_map_sub">اجازه دادن به برنامه برای اتصال به اینترنت جهت نمایش OpenStreetMap برای انتخاب مکان</string>
     <string name="setting_nearby_scramble_title">استفاده از مسموم‌سازی موضعی</string>

@@ -158,6 +158,12 @@
     <string name="setting_keep_thumbnails_title">Giữ hình thu nhỏ gốc</string>
     <string name="setting_keep_thumbnails_sub">Nếu tệp chứa hình thu nhỏ được nhúng, hãy giữ nguyên. Nếu tắt, mọi hình thu nhỏ hiện có sẽ bị xóa để bảo mật tối đa.</string>
     <string name="setting_thumbnails_warning">Cảnh báo: Giữ hình thu nhỏ gốc có thể làm rò rỉ siêu dữ liệu (vị trí, thông tin thiết bị) ngay cả khi các thẻ chính đã được xóa.</string>
+    <string name="setting_strip_pdf_annotations_title">Xóa chú thích ẩn và hình mờ PDF</string>
+    <string name="setting_strip_pdf_annotations_sub">Xóa hình mờ, con dấu và chú thích ẩn hoặc không nhìn thấy khỏi tài liệu PDF</string>
+    <string name="setting_strip_pdf_comments_title">Xóa nhận xét và đánh dấu PDF</string>
+    <string name="setting_strip_pdf_comments_sub">Xóa ghi chú dán, hộp văn bản, vùng đánh dấu và chú thích xem lại khỏi tài liệu PDF</string>
+    <string name="setting_preserve_jpeg_jfif_title">Giữ lại tiêu đề JPEG JFIF</string>
+    <string name="setting_preserve_jpeg_jfif_sub">Giữ nguyên tiêu đề độ phân giải và tỷ lệ khung hình chuẩn trong khi xóa hình thu nhỏ được nhúng. Nếu tắt, tất cả các điểm đánh dấu JFIF sẽ bị xóa.</string>
     <string name="setting_enable_map_title">Bật chọn bản đồ</string>
     <string name="setting_enable_map_sub">Cho phép ứng dụng kết nối internet để hiển thị OpenStreetMap khi chọn vị trí</string>
     <string name="setting_nearby_scramble_title">Sử dụng đầu độc cục bộ</string>

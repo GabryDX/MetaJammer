@@ -158,6 +158,12 @@
     <string name="setting_keep_thumbnails_title">Keep original thumbnails</string>
     <string name="setting_keep_thumbnails_sub">If the file contains an embedded thumbnail, preserve it as-is. If disabled, any existing thumbnail will be removed for maximum privacy.</string>
     <string name="setting_thumbnails_warning">Warning: Keeping original thumbnails may leak metadata (location, device info) even if main tags are removed.</string>
+    <string name="setting_strip_pdf_annotations_title">Strip PDF hidden annotations &amp; watermarks</string>
+    <string name="setting_strip_pdf_annotations_sub">Remove watermarks, stamps, and hidden or invisible annotations from PDF documents</string>
+    <string name="setting_strip_pdf_comments_title">Strip PDF comments &amp; markups</string>
+    <string name="setting_strip_pdf_comments_sub">Remove sticky notes, text boxes, highlights, and review annotations from PDF documents</string>
+    <string name="setting_preserve_jpeg_jfif_title">Preserve JPEG JFIF header</string>
+    <string name="setting_preserve_jpeg_jfif_sub">Keep standard resolution and aspect ratio headers while stripping embedded thumbnails. If disabled, all JFIF markers are removed.</string>
     <string name="setting_enable_map_title">Enable map picker</string>
     <string name="setting_enable_map_sub">Allow the app to connect to the internet to show OpenStreetMap for location selection</string>
     <string name="setting_nearby_scramble_title">Use localized poisoning</string>

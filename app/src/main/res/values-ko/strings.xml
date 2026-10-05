@@ -158,6 +158,12 @@
     <string name="setting_keep_thumbnails_title">원본 썸네일 유지</string>
     <string name="setting_keep_thumbnails_sub">파일에 포함된 썸네일이 있으면 그대로 보존합니다. 비활성화하면 프라이버시를 위해 기존 썸네일이 제거됩니다.</string>
     <string name="setting_thumbnails_warning">경고: 원본 썸네일을 유지하면 주요 태그가 제거되더라도 메타데이터(위치, 기기 정보)가 유출될 수 있습니다.</string>
+    <string name="setting_strip_pdf_annotations_title">PDF 숨겨진 주석 및 워터마크 제거</string>
+    <string name="setting_strip_pdf_annotations_sub">PDF 문서에서 워터마크, 스탬프 및 숨겨지거나 보이지 않는 주석을 제거합니다</string>
+    <string name="setting_strip_pdf_comments_title">PDF 댓글 및 마크업 제거</string>
+    <string name="setting_strip_pdf_comments_sub">PDF 문서에서 메모, 텍스트 상자, 강조 표시 및 검토 주석을 제거합니다</string>
+    <string name="setting_preserve_jpeg_jfif_title">JPEG JFIF 헤더 유지</string>
+    <string name="setting_preserve_jpeg_jfif_sub">포함된 썸네일을 제거하면서 표준 해상도 및 화면비 헤더를 유지합니다. 비활성화하면 모든 JFIF 마커가 제거됩니다.</string>
     <string name="setting_enable_map_title">지도 선택기 활성화</string>
     <string name="setting_enable_map_sub">위치 선택을 위해 OpenStreetMap을 표시할 수 있도록 앱의 internet 연결을 허용합니다.</string>
     <string name="setting_nearby_scramble_title">지역화된 포이즈닝 사용</string>
