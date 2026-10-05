@@ -158,6 +158,12 @@
     <string name="setting_keep_thumbnails_title">मूल थंबनेल रखें</string>
     <string name="setting_keep_thumbnails_sub">यदि फ़ाइल में एम्बेेड थंबनेल है, तो इसे वैसे ही रखें। यदि अक्षम है, तो अधिकतम गोपनीयता के लिए किसी भी मौजूदा थंबनेल को हटा दिया जाएगा।</string>
     <string name="setting_thumbnails_warning">चेतावनी: मूल थंबनेल रखने से मेटाडेटा (स्थान, डिवाइस की जानकारी) लीक हो सकता है, भले ही मुख्य टैग हटा दिए गए हों।</string>
+    <string name="setting_strip_pdf_annotations_title">PDF छिपे हुए एनोटेशन और वॉटरमार्क हटाएं</string>
+    <string name="setting_strip_pdf_annotations_sub">PDF दस्तावेज़ों से वॉटरमार्क, स्टैम्प और छिपे या अदृश्य एनोटेशन हटाएं</string>
+    <string name="setting_strip_pdf_comments_title">PDF टिप्पणियां और मार्कअप हटाएं</string>
+    <string name="setting_strip_pdf_comments_sub">PDF दस्तावेज़ों से स्टिकी नोट्स, टेक्स्ट बॉक्स, हाइलाइट और समीक्षा एनोटेशन हटाएं</string>
+    <string name="setting_preserve_jpeg_jfif_title">JPEG JFIF हेडर सुरक्षित रखें</string>
+    <string name="setting_preserve_jpeg_jfif_sub">एंबेडेड थंबनेल हटाते समय मानक रिज़ॉल्यूशन और पहलू अनुपात हेडर बनाए रखें। अक्षम होने पर, सभी JFIF मार्कर हटा दिए जाते हैं।</string>
     <string name="setting_enable_map_title">मैप पिकर सक्षम करें</string>
     <string name="setting_enable_map_sub">स्थान चयन के लिए OpenStreetMap दिखाने हेतु ऐप को इंटरनेट से कनेक्ट करने की अनुमति दें</string>
     <string name="setting_nearby_scramble_title">स्थानीयकृत पॉइजनिंग का उपयोग करें</string>

@@ -158,6 +158,12 @@
     <string name="setting_keep_thumbnails_title">保留原始缩略图</string>
     <string name="setting_keep_thumbnails_sub">如果文件包含嵌入式缩略图，请将其按原样保留。如果禁用，任何现有的缩略图都将被删除以实现最大的隐私保护。</string>
     <string name="setting_thumbnails_warning">警告：保留原始缩略图可能会泄露元数据（位置、设备信息），即使删除了主标签也是如此。</string>
+    <string name="setting_strip_pdf_annotations_title">清除 PDF 隐藏注释和水印</string>
+    <string name="setting_strip_pdf_annotations_sub">从 PDF 文档中删除水印、图章以及隐藏或不可见的注释</string>
+    <string name="setting_strip_pdf_comments_title">清除 PDF 批注和标记</string>
+    <string name="setting_strip_pdf_comments_sub">从 PDF 文档中删除便签、文本框、高亮和审查批注</string>
+    <string name="setting_preserve_jpeg_jfif_title">保留 JPEG JFIF 标头</string>
+    <string name="setting_preserve_jpeg_jfif_sub">保留标准分辨率和宽高比标头，同时清除嵌入的缩略图。如果禁用，将删除所有 JFIF 标记。</string>
     <string name="setting_enable_map_title">启用地图选择器</string>
     <string name="setting_enable_map_sub">允许应用连接互联网以显示 OpenStreetMap 以进行位置选择</string>
     <string name="setting_nearby_scramble_title">使用本地化中毒</string>

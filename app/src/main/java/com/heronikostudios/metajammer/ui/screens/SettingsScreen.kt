@@ -69,7 +69,10 @@ fun SettingsScreen(
     onStripDeviceModelChanged: (Boolean) -> Unit = {},
     onStripDateTimeChanged: (Boolean) -> Unit = {},
     onStripCameraSettingsChanged: (Boolean) -> Unit = {},
-    onStripCommentsChanged: (Boolean) -> Unit = {}
+    onStripCommentsChanged: (Boolean) -> Unit = {},
+    onStripPdfAnnotationsChanged: (Boolean) -> Unit = {},
+    onStripPdfCommentsChanged: (Boolean) -> Unit = {},
+    onPreserveJpegJfifChanged: (Boolean) -> Unit = {}
 ) {
     val unifiedFolderPicker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { 
         onUnifiedSavingPathSelected(it) 
@@ -183,6 +186,27 @@ fun SettingsScreen(
                     message = stringResource(R.string.setting_thumbnails_warning)
                 )
             }
+
+            SettingSwitchRow(
+                title = stringResource(R.string.setting_preserve_jpeg_jfif_title),
+                subtitle = stringResource(R.string.setting_preserve_jpeg_jfif_sub),
+                checked = settings.preserveJpegJfif,
+                onCheckedChange = onPreserveJpegJfifChanged
+            )
+
+            SettingSwitchRow(
+                title = stringResource(R.string.setting_strip_pdf_annotations_title),
+                subtitle = stringResource(R.string.setting_strip_pdf_annotations_sub),
+                checked = settings.stripPdfAnnotations,
+                onCheckedChange = onStripPdfAnnotationsChanged
+            )
+
+            SettingSwitchRow(
+                title = stringResource(R.string.setting_strip_pdf_comments_title),
+                subtitle = stringResource(R.string.setting_strip_pdf_comments_sub),
+                checked = settings.stripPdfComments,
+                onCheckedChange = onStripPdfCommentsChanged
+            )
 
 
             SettingSwitchRow(

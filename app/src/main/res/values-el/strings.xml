@@ -158,6 +158,12 @@
     <string name="setting_keep_thumbnails_title">Διατήρηση αρχικών μικρογραφιών</string>
     <string name="setting_keep_thumbnails_sub">Εάν το αρχείο περιέχει μια ενσωματωμένη μικρογραφία, διατηρήστε την ως έχει. Εάν απενεργοποιηθεί, οποιαδήποτε υπάρχουσα μικρογραφία θα αφαιρεθεί για μέγιστο απόρρητο.</string>
     <string name="setting_thumbnails_warning">Προειδοποίηση: Η διατήρηση των αρχικών μικρογραφιών ενδέχεται να διαρρεύσει μεταδεδομένα (τοποθεσία, πληροφορίες συσκευής) ακόμα και αν αφαιρεθούν οι κύριες ετικέτες.</string>
+    <string name="setting_strip_pdf_annotations_title">Αφαίρεση κρυφών σχολίων &amp; υδατογραφημάτων PDF</string>
+    <string name="setting_strip_pdf_annotations_sub">Αφαιρεί υδατογραφήματα, σφραγίδες και κρυφά ή αόρατα σχόλια από έγγραφα PDF</string>
+    <string name="setting_strip_pdf_comments_title">Αφαίρεση σχολίων &amp; επισημάνσεων PDF</string>
+    <string name="setting_strip_pdf_comments_sub">Αφαιρεί σημειώσεις, πλαίσια κειμένου, επισημάνσεις και σχόλια αναθεώρησης από έγγραφα PDF</string>
+    <string name="setting_preserve_jpeg_jfif_title">Διατήρηση κεφαλίδας JPEG JFIF</string>
+    <string name="setting_preserve_jpeg_jfif_sub">Διατηρεί τις τυπικές κεφαλίδες ανάλυσης και αναλογίας διαστάσεων αφαιρώντας παράλληλα ενσωματωμένες μικρογραφίες. Εάν απενεργοποιηθεί, αφαιρούνται όλοι οι δείκτες JFIF.</string>
     <string name="setting_enable_map_title">Ενεργοποίηση επιλογέα χάρτη</string>
     <string name="setting_enable_map_sub">Επιτρέψτε στην εφαρμογή να συνδεθεί στο διαδίκτυο για να εμφανίσει το OpenStreetMap για την επιλογή τοποθεσίας</string>
     <string name="setting_nearby_scramble_title">Χρήση τοπικής δηλητηρίασης</string>

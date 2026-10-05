@@ -53,6 +53,9 @@ open class SettingsRepository(private val context: Context) {
         private val STRIP_DATE_TIME = booleanPreferencesKey("strip_date_time")
         private val STRIP_CAMERA_SETTINGS = booleanPreferencesKey("strip_camera_settings")
         private val STRIP_COMMENTS = booleanPreferencesKey("strip_comments")
+        private val STRIP_PDF_ANNOTATIONS = booleanPreferencesKey("strip_pdf_annotations")
+        private val STRIP_PDF_COMMENTS = booleanPreferencesKey("strip_pdf_comments")
+        private val PRESERVE_JPEG_JFIF = booleanPreferencesKey("preserve_jpeg_jfif")
     }
 
     private val json = Json { ignoreUnknownKeys = true }
@@ -248,6 +251,18 @@ open class SettingsRepository(private val context: Context) {
         context.dataStore.edit { it[STRIP_COMMENTS] = enabled }
     }
 
+    open suspend fun setStripPdfAnnotations(enabled: Boolean) {
+        context.dataStore.edit { it[STRIP_PDF_ANNOTATIONS] = enabled }
+    }
+
+    open suspend fun setStripPdfComments(enabled: Boolean) {
+        context.dataStore.edit { it[STRIP_PDF_COMMENTS] = enabled }
+    }
+
+    open suspend fun setPreserveJpegJfif(enabled: Boolean) {
+        context.dataStore.edit { it[PRESERVE_JPEG_JFIF] = enabled }
+    }
+
     private val historyRepository by lazy { HistoryRepository(context) }
 
     suspend fun logProcessedFile(log: ProcessedFileLog) {
@@ -303,7 +318,10 @@ open class SettingsRepository(private val context: Context) {
             stripDeviceModel = preferences[STRIP_DEVICE_MODEL] ?: true,
             stripDateTime = preferences[STRIP_DATE_TIME] ?: true,
             stripCameraSettings = preferences[STRIP_CAMERA_SETTINGS] ?: true,
-            stripComments = preferences[STRIP_COMMENTS] ?: true
+            stripComments = preferences[STRIP_COMMENTS] ?: true,
+            stripPdfAnnotations = preferences[STRIP_PDF_ANNOTATIONS] ?: true,
+            stripPdfComments = preferences[STRIP_PDF_COMMENTS] ?: true,
+            preserveJpegJfif = preferences[PRESERVE_JPEG_JFIF] ?: true
         )
     }
 

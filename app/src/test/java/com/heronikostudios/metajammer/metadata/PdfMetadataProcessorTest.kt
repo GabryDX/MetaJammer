@@ -228,5 +228,115 @@ class PdfMetadataProcessorTest {
             assertTrue("Watermark/Stamp annotations must be stripped", page.annotations.isEmpty())
         }
     }
+
+    @Test
+    fun testPagedOut008HiddenAnnotationDetectionAndStripping() = runTest {
+        val file = listOf(File("test_data/PagedOut_008.pdf"), File("../test_data/PagedOut_008.pdf")).firstOrNull { it.exists() }
+        assertNotNull("test_data/PagedOut_008.pdf should exist", file)
+
+        // 1. readMetadata should detect the hidden annotation and author
+        val entries = processor.readMetadata(file!!.toUri())
+        val annotationsEntry = entries.find { it.key == "Annotations" }
+        assertNotNull("Annotations entry should be present", annotationsEntry)
+        assertTrue("Annotations should report hidden annotation: ${annotationsEntry!!.value}", annotationsEntry.value.contains("1 hidden"))
+        val authorEntry = entries.find { it.key == "Annotation Author" }
+        assertNotNull("Annotation Author entry should be present", authorEntry)
+        assertEquals("PDF-XChange Editor", authorEntry!!.value)
+
+        // 2. removeMetadata with stripAnnotations = true should strip the hidden annotation and preserve 471 links
+        val cleanFile = processor.removeMetadata(file.toUri(), stripAnnotations = true, stripComments = true)
+        assertTrue(cleanFile.exists())
+        PDDocument.load(cleanFile).use { doc ->
+            var totalAnnotations = 0
+            var hiddenCount = 0
+            var textSubtypeCount = 0
+            for (page in doc.pages) {
+                for (annot in page.annotations) {
+                    totalAnnotations++
+                    val flags = annot.annotationFlags
+                    if ((flags and 2) != 0 || (flags and 1) != 0 || (flags and 32) != 0) {
+                        hiddenCount++
+                    }
+                    if (annot.subtype == "Text") {
+                        textSubtypeCount++
+                    }
+                }
+            }
+            assertEquals("471 navigation links should be preserved", 471, totalAnnotations)
+            assertEquals("Zero hidden annotations should remain", 0, hiddenCount)
+            assertEquals("Zero text subtype annotations should remain", 0, textSubtypeCount)
+        }
+
+        // Cleaned PDF should no longer report Annotations or Annotation Author
+        val cleanEntries = processor.readMetadata(cleanFile.toUri())
+        assertFalse("Annotations entry should not be present on clean file", cleanEntries.any { it.key == "Annotations" })
+        assertFalse("Annotation Author entry should not be present on clean file", cleanEntries.any { it.key == "Annotation Author" })
+
+        // 3. removeMetadata with stripAnnotations = false and stripComments = false should preserve the hidden annotation
+        val preservedFile = processor.removeMetadata(file.toUri(), stripAnnotations = false, stripComments = false)
+        PDDocument.load(preservedFile).use { doc ->
+            var totalAnnotations = 0
+            var hiddenCount = 0
+            for (page in doc.pages) {
+                for (annot in page.annotations) {
+                    totalAnnotations++
+                    val flags = annot.annotationFlags
+                    if ((flags and 2) != 0) {
+                        hiddenCount++
+                    }
+                }
+            }
+            assertEquals("472 total annotations should be preserved", 472, totalAnnotations)
+            assertEquals("1 hidden annotation should be preserved", 1, hiddenCount)
+        }
+    }
+
+    @Test
+    fun testSyntheticHiddenAnnotationAndMarkupStripping() = runTest {
+        val file = tempFolder.newFile("test_synthetic_annot.pdf")
+        PDDocument().use { doc ->
+            val page = PDPage()
+            doc.addPage(page)
+
+            // 1. Hidden annotation
+            val textAnnot = com.tom_roush.pdfbox.pdmodel.interactive.annotation.PDAnnotationText()
+            textAnnot.annotationFlags = 2 // Hidden flag
+            textAnnot.contents = "Secret hidden text"
+
+            // 2. Visible user comment
+            val commentAnnot = com.tom_roush.pdfbox.pdmodel.interactive.annotation.PDAnnotationText()
+            commentAnnot.annotationFlags = 4 // Print
+            commentAnnot.contents = "Visible comment"
+            commentAnnot.cosObject.setString(com.tom_roush.pdfbox.cos.COSName.T, "Reviewer1")
+
+            // 3. Link annotation (navigation)
+            val linkAnnot = com.tom_roush.pdfbox.pdmodel.interactive.annotation.PDAnnotationLink()
+            linkAnnot.annotationFlags = 4
+
+            page.annotations = listOf(textAnnot, commentAnnot, linkAnnot)
+            doc.save(file)
+        }
+
+        val entries = processor.readMetadata(file.toUri())
+        assertTrue("Annotations entry should be present", entries.any { it.key == "Annotations" })
+        assertTrue("Annotation Author should be present", entries.any { it.key == "Annotation Author" && it.value == "Reviewer1" })
+
+        // Strip both
+        val cleanedBoth = processor.removeMetadata(file.toUri(), stripAnnotations = true, stripComments = true)
+        PDDocument.load(cleanedBoth).use { doc ->
+            val page = doc.getPage(0)
+            assertEquals("Only link annotation should remain", 1, page.annotations.size)
+            assertEquals("Link", page.annotations[0].subtype)
+        }
+
+        // Keep comments, strip hidden annotations
+        val cleanedHiddenOnly = processor.removeMetadata(file.toUri(), stripAnnotations = true, stripComments = false)
+        PDDocument.load(cleanedHiddenOnly).use { doc ->
+            val page = doc.getPage(0)
+            assertEquals("Visible comment and link annotation should remain", 2, page.annotations.size)
+            assertTrue(page.annotations.any { it.subtype == "Link" })
+            assertTrue(page.annotations.any { it.subtype == "Text" })
+        }
+    }
 }
 

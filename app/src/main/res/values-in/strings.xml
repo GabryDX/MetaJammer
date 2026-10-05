@@ -158,6 +158,12 @@
     <string name="setting_keep_thumbnails_title">Pertahankan thumbnail asli</string>
     <string name="setting_keep_thumbnails_sub">Jika file berisi thumbnail tertanam, pertahankan apa adanya. Jika dinonaktifkan, thumbnail yang ada akan dihapus untuk privasi maksimum.</string>
     <string name="setting_thumbnails_warning">Peringatan: Mempertahankan thumbnail asli dapat membocorkan metadata (lokasi, info perangkat) bahkan jika tag utama dihapus.</string>
+    <string name="setting_strip_pdf_annotations_title">Hapus anotasi tersembunyi &amp; tanda air PDF</string>
+    <string name="setting_strip_pdf_annotations_sub">Hapus tanda air, stempel, dan anotasi tersembunyi atau tak terlihat dari dokumen PDF</string>
+    <string name="setting_strip_pdf_comments_title">Hapus komentar &amp; markup PDF</string>
+    <string name="setting_strip_pdf_comments_sub">Hapus catatan tempel, kotak teks, sorotan, dan anotasi tinjauan dari dokumen PDF</string>
+    <string name="setting_preserve_jpeg_jfif_title">Pertahankan header JPEG JFIF</string>
+    <string name="setting_preserve_jpeg_jfif_sub">Pertahankan header resolusi dan rasio aspek standar sambil menghapus gambar mini yang disematkan. Jika dinonaktifkan, semua penanda JFIF akan dihapus.</string>
     <string name="setting_enable_map_title">Aktifkan pemilih peta</string>
     <string name="setting_enable_map_sub">Izinkan aplikasi terhubung ke internet untuk menampilkan OpenStreetMap untuk pemilihan lokasi</string>
     <string name="setting_nearby_scramble_title">Gunakan peracunan terlokalisasi</string>

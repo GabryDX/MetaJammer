@@ -225,14 +225,30 @@ class ProcessingViewModel(
                 val entries: List<MetadataDiffEntry> = when (mode) {
                     ProcessingMode.REMOVE_METADATA -> {
                         currentMetadata.map { entry ->
-                            val willStrip = com.heronikostudios.metajammer.metadata.ImageMetadataProcessor.shouldStripTag(
-                                entry.key,
-                                appSettings.stripGps,
-                                appSettings.stripDeviceModel,
-                                appSettings.stripDateTime,
-                                appSettings.stripCameraSettings,
-                                appSettings.stripComments
-                            )
+                            val isPdf = file.mimeType == "application/pdf" || file.displayName.endsWith(".pdf", ignoreCase = true)
+                            val willStrip = if (isPdf) {
+                                when (entry.key) {
+                                    "Annotations" -> appSettings.stripPdfAnnotations
+                                    "Annotation Author" -> appSettings.stripPdfAnnotations || appSettings.stripPdfComments
+                                    else -> com.heronikostudios.metajammer.metadata.ImageMetadataProcessor.shouldStripTag(
+                                        entry.key,
+                                        appSettings.stripGps,
+                                        appSettings.stripDeviceModel,
+                                        appSettings.stripDateTime,
+                                        appSettings.stripCameraSettings,
+                                        appSettings.stripComments
+                                    )
+                                }
+                            } else {
+                                com.heronikostudios.metajammer.metadata.ImageMetadataProcessor.shouldStripTag(
+                                    entry.key,
+                                    appSettings.stripGps,
+                                    appSettings.stripDeviceModel,
+                                    appSettings.stripDateTime,
+                                    appSettings.stripCameraSettings,
+                                    appSettings.stripComments
+                                )
+                            }
                             if (willStrip) {
                                 MetadataDiffEntry(
                                     key = entry.key,
@@ -343,6 +359,12 @@ class ProcessingViewModel(
                                         currentMap["Creator"]?.let { targetMap["Creator"] = it }
                                         currentMap["Producer"]?.let { targetMap["Producer"] = it }
                                     }
+                                    if (!appSettings.stripPdfAnnotations) {
+                                        currentMap["Annotations"]?.let { targetMap["Annotations"] = it }
+                                    }
+                                    if (!appSettings.stripPdfAnnotations && !appSettings.stripPdfComments) {
+                                        currentMap["Annotation Author"]?.let { targetMap["Annotation Author"] = it }
+                                    }
                                 }
                             }
 
@@ -418,7 +440,10 @@ class ProcessingViewModel(
                                     stripDeviceModel = appSettings.stripDeviceModel,
                                     stripDateTime = appSettings.stripDateTime,
                                     stripCameraSettings = appSettings.stripCameraSettings,
-                                    stripComments = appSettings.stripComments
+                                    stripComments = appSettings.stripComments,
+                                    stripPdfAnnotations = appSettings.stripPdfAnnotations,
+                                    stripPdfComments = appSettings.stripPdfComments,
+                                    preserveJpegJfif = appSettings.preserveJpegJfif
                                 )
                             }
                         }.awaitAll()
@@ -468,6 +493,9 @@ class ProcessingViewModel(
             .putBoolean(MetadataProcessingWorker.KEY_STRIP_DATE_TIME, settings.stripDateTime)
             .putBoolean(MetadataProcessingWorker.KEY_STRIP_CAMERA_SETTINGS, settings.stripCameraSettings)
             .putBoolean(MetadataProcessingWorker.KEY_STRIP_COMMENTS, settings.stripComments)
+            .putBoolean(MetadataProcessingWorker.KEY_STRIP_PDF_ANNOTATIONS, settings.stripPdfAnnotations)
+            .putBoolean(MetadataProcessingWorker.KEY_STRIP_PDF_COMMENTS, settings.stripPdfComments)
+            .putBoolean(MetadataProcessingWorker.KEY_PRESERVE_JPEG_JFIF, settings.preserveJpegJfif)
             .build()
 
         val workRequest = OneTimeWorkRequestBuilder<MetadataProcessingWorker>()

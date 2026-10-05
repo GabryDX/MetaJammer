@@ -158,6 +158,12 @@
     <string name="setting_keep_thumbnails_title">Zachowaj oryginalne miniatury</string>
     <string name="setting_keep_thumbnails_sub">Jeśli plik zawiera osadzoną miniaturę, zachowaj ją w niezmienionej formie. Jeśli opcja jest wyłączona, wszelkie istniejące miniatury zostaną usunięte dla maksymalnej prywatności.</string>
     <string name="setting_thumbnails_warning">Ostrzeżenie: Zachowanie oryginalnych miniatur może ujawnić metadane (lokalizacja, informacje o urządzeniu), nawet jeśli główne tagi zostaną usunięte.</string>
+    <string name="setting_strip_pdf_annotations_title">Usuwaj ukryte adnotacje i znaki wodne PDF</string>
+    <string name="setting_strip_pdf_annotations_sub">Usuwaj znaki wodne, pieczęcie oraz ukryte lub niewidoczne adnotacje z dokumentów PDF</string>
+    <string name="setting_strip_pdf_comments_title">Usuwaj komentarze i znaczniki PDF</string>
+    <string name="setting_strip_pdf_comments_sub">Usuwaj notatki, pola tekstowe, wyróżnienia i adnotacje recenzenckie z dokumentów PDF</string>
+    <string name="setting_preserve_jpeg_jfif_title">Zachowaj nagłówek JPEG JFIF</string>
+    <string name="setting_preserve_jpeg_jfif_sub">Zachowaj standardowe nagłówki rozdzielczości i proporcji podczas usuwania osadzonych miniatur. Po wyłączeniu wszystkie znaczniki JFIF zostaną usunięte.</string>
     <string name="setting_enable_map_title">Włącz wybór na mapie</string>
     <string name="setting_enable_map_sub">Pozwól aplikacji na połączenie z internetem w celu wyświetlenia OpenStreetMap do wyboru lokalizacji</string>
     <string name="setting_nearby_scramble_title">Użyj lokalnego zatruwania</string>

@@ -158,6 +158,12 @@
     <string name="setting_keep_thumbnails_title">Păstrează miniaturile originale</string>
     <string name="setting_keep_thumbnails_sub">Dacă fișierul conține o miniatură încorporată, păstrează-o ca atare. Dacă opțiunea este dezactivată, orice miniatură existentă va fi eliminată pentru o confidențialitate maximă.</string>
     <string name="setting_thumbnails_warning">Avertisment: Păstrarea miniaturilor originale poate duce la scurgerea de metadate (locație, informații despre dispozitiv) chiar dacă etichetele principale sunt eliminate.</string>
+    <string name="setting_strip_pdf_annotations_title">Eliminare adnotări ascunse și filigrane PDF</string>
+    <string name="setting_strip_pdf_annotations_sub">Elimină filigrane, ștampile și adnotări ascunse sau invizibile din documentele PDF</string>
+    <string name="setting_strip_pdf_comments_title">Eliminare comentarii și marcaje PDF</string>
+    <string name="setting_strip_pdf_comments_sub">Elimină note, casete de text, evidențieri și adnotări de revizuire din documentele PDF</string>
+    <string name="setting_preserve_jpeg_jfif_title">Păstrare antet JPEG JFIF</string>
+    <string name="setting_preserve_jpeg_jfif_sub">Păstrează anteturile standard de rezoluție și raport de aspect, eliminând miniaturile încorporate. Dacă este dezactivat, toate marcajele JFIF sunt eliminate.</string>
     <string name="setting_enable_map_title">Activează selectorul de hartă</string>
     <string name="setting_enable_map_sub">Permite aplicației să se conecteze la internet pentru a afișa OpenStreetMap pentru selectarea locației</string>
     <string name="setting_nearby_scramble_title">Folosește otrăvirea localizată</string>

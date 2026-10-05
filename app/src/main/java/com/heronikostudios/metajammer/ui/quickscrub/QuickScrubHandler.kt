@@ -128,7 +128,10 @@ class QuickScrubHandler(
                                 stripDeviceModel = appSettings.stripDeviceModel,
                                 stripDateTime = appSettings.stripDateTime,
                                 stripCameraSettings = appSettings.stripCameraSettings,
-                                stripComments = appSettings.stripComments
+                                stripComments = appSettings.stripComments,
+                                stripPdfAnnotations = appSettings.stripPdfAnnotations,
+                                stripPdfComments = appSettings.stripPdfComments,
+                                preserveJpegJfif = appSettings.preserveJpegJfif
                             )
                         }
                     }.awaitAll()
@@ -317,6 +320,14 @@ class QuickScrubHandler(
             .putString(MetadataProcessingWorker.KEY_DEFAULT_PREFIX, settings.defaultPrefix)
             .putString(MetadataProcessingWorker.KEY_DEFAULT_SUFFIX, settings.defaultSuffix)
             .putBoolean(MetadataProcessingWorker.KEY_USE_RANDOM_NAMES, settings.useRandomFileNames)
+            .putBoolean(MetadataProcessingWorker.KEY_STRIP_GPS, settings.stripGps)
+            .putBoolean(MetadataProcessingWorker.KEY_STRIP_DEVICE_MODEL, settings.stripDeviceModel)
+            .putBoolean(MetadataProcessingWorker.KEY_STRIP_DATE_TIME, settings.stripDateTime)
+            .putBoolean(MetadataProcessingWorker.KEY_STRIP_CAMERA_SETTINGS, settings.stripCameraSettings)
+            .putBoolean(MetadataProcessingWorker.KEY_STRIP_COMMENTS, settings.stripComments)
+            .putBoolean(MetadataProcessingWorker.KEY_STRIP_PDF_ANNOTATIONS, settings.stripPdfAnnotations)
+            .putBoolean(MetadataProcessingWorker.KEY_STRIP_PDF_COMMENTS, settings.stripPdfComments)
+            .putBoolean(MetadataProcessingWorker.KEY_PRESERVE_JPEG_JFIF, settings.preserveJpegJfif)
             .build()
 
         val workRequest = OneTimeWorkRequestBuilder<MetadataProcessingWorker>()

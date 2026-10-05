@@ -158,6 +158,12 @@
     <string name="setting_keep_thumbnails_title">Orijinal küçük resimleri koru</string>
     <string name="setting_keep_thumbnails_sub">Dosya gömülü bir küçük resim içeriyorsa, olduğu gibi koru. Devre dışı bırakılırsa, maksimum gizlilik için mevcut küçük resimler kaldırılacaktır.</string>
     <string name="setting_thumbnails_warning">Uyarı: Orijinal küçük resimlerin korunması, ana etiketler kaldırılsa bile metadata (konum, cihaz bilgisi) sızdırabilir.</string>
+    <string name="setting_strip_pdf_annotations_title">PDF gizli açıklamalarını ve filigranları kaldır</string>
+    <string name="setting_strip_pdf_annotations_sub">PDF belgelerinden filigranları, damgaları ve gizli ya da görünmez açıklamaları kaldırın</string>
+    <string name="setting_strip_pdf_comments_title">PDF yorumlarını ve işaretlemelerini kaldır</string>
+    <string name="setting_strip_pdf_comments_sub">PDF belgelerinden yapışkan notları, metin kutularını, vurgulamaları ve inceleme açıklamalarını kaldırın</string>
+    <string name="setting_preserve_jpeg_jfif_title">JPEG JFIF başlığını koru</string>
+    <string name="setting_preserve_jpeg_jfif_sub">Gömülü küçük resimleri kaldırırken standart çözünürlük ve en-boy oranı başlıklarını koruyun. Devre dışı bırakılırsa tüm JFIF işaretçileri kaldırılır.</string>
     <string name="setting_enable_map_title">Harita seçiciyi etkinleştir</string>
     <string name="setting_enable_map_sub">Konum seçimi için OpenStreetMap\'i göstermek üzere uygulamanın internete bağlanmasına izin ver</string>
     <string name="setting_nearby_scramble_title">Yerelleştirilmiş zehirleme kullan</string>

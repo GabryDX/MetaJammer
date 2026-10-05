@@ -158,6 +158,12 @@
     <string name="setting_keep_thumbnails_title">Conserver les miniatures originales</string>
     <string name="setting_keep_thumbnails_sub">Si le fichier contient une miniature intégrée, conservez-la telle quelle. Si cette option est désactivée, toute miniature existante sera supprimée pour une confidentialité maximale.</string>
     <string name="setting_thumbnails_warning">Avertissement : la conservation des miniatures originales peut divulguer des métadonnées (emplacement, informations sur l\'appareil) même si les balises principales sont supprimées.</string>
+    <string name="setting_strip_pdf_annotations_title">Supprimer les filigranes et annotations masquées PDF</string>
+    <string name="setting_strip_pdf_annotations_sub">Supprime les filigranes, tampons et annotations masquées ou invisibles des documents PDF</string>
+    <string name="setting_strip_pdf_comments_title">Supprimer les commentaires et annotations PDF</string>
+    <string name="setting_strip_pdf_comments_sub">Supprime les notes, zones de texte, surlignages et annotations de révision des documents PDF</string>
+    <string name="setting_preserve_jpeg_jfif_title">Conserver l\'en-tête JPEG JFIF</string>
+    <string name="setting_preserve_jpeg_jfif_sub">Conserve les en-têtes standard de résolution et de proportions tout en supprimant les miniatures intégrées. Si désactivé, tous les marqueurs JFIF sont supprimés.</string>
     <string name="setting_enable_map_title">Activer le sélecteur de carte</string>
     <string name="setting_enable_map_sub">Autoriser l\'application à se connecter à Internet pour afficher OpenStreetMap pour la sélection de l\'emplacement</string>
     <string name="setting_nearby_scramble_title">Utiliser l\'empoisonnement localisé</string>

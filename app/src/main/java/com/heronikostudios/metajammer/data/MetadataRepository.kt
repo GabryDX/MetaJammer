@@ -68,7 +68,10 @@ class MetadataRepository(
         stripDeviceModel: Boolean = true,
         stripDateTime: Boolean = true,
         stripCameraSettings: Boolean = true,
-        stripComments: Boolean = true
+        stripComments: Boolean = true,
+        stripPdfAnnotations: Boolean = true,
+        stripPdfComments: Boolean = true,
+        preserveJpegJfif: Boolean = true
     ): File {
         val mime = resolveEffectiveMime(selectedFile)
         return when {
@@ -86,9 +89,18 @@ class MetadataRepository(
                 when (mode) {
                     ProcessingMode.POISON_METADATA -> {
                         val plan = requireNotNull(replacementPlan) { "Plan required for poison mode" }
-                        pdfProcessor.poisonMetadata(selectedFile.uri, plan)
+                        pdfProcessor.poisonMetadata(
+                            inputUri = selectedFile.uri,
+                            plan = plan,
+                            stripAnnotations = stripPdfAnnotations,
+                            stripComments = stripPdfComments
+                        )
                     }
-                    ProcessingMode.REMOVE_METADATA -> pdfProcessor.removeMetadata(selectedFile.uri)
+                    ProcessingMode.REMOVE_METADATA -> pdfProcessor.removeMetadata(
+                        inputUri = selectedFile.uri,
+                        stripAnnotations = stripPdfAnnotations,
+                        stripComments = stripPdfComments
+                    )
                 }
             }
 
@@ -106,7 +118,8 @@ class MetadataRepository(
                             stripDeviceModel = stripDeviceModel,
                             stripDateTime = stripDateTime,
                             stripCameraSettings = stripCameraSettings,
-                            stripComments = stripComments
+                            stripComments = stripComments,
+                            preserveJfif = preserveJpegJfif
                         )
                     }
                     ProcessingMode.REMOVE_METADATA -> {
@@ -119,7 +132,8 @@ class MetadataRepository(
                             stripDeviceModel = stripDeviceModel,
                             stripDateTime = stripDateTime,
                             stripCameraSettings = stripCameraSettings,
-                            stripComments = stripComments
+                            stripComments = stripComments,
+                            preserveJfif = preserveJpegJfif
                         )
                     }
                 }

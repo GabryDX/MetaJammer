@@ -158,6 +158,12 @@
     <string name="setting_keep_thumbnails_title">Сохранять исходные миниатюры</string>
     <string name="setting_keep_thumbnails_sub">Если файл содержит встроенную миниатюру, сохраните ее как есть. Если отключено, любая существующая миниатюра будет удалена для максимальной конфиденциальности.</string>
     <string name="setting_thumbnails_warning">Предупреждение: сохранение исходных миниатюр может привести к утечке метаданных (местоположение, информация об устройстве), даже если основные теги удалены.</string>
+    <string name="setting_strip_pdf_annotations_title">Удалять скрытые аннотации и водяные знаки PDF</string>
+    <string name="setting_strip_pdf_annotations_sub">Удаляет водяные знаки, штампы и скрытые или невидимые аннотации из документов PDF</string>
+    <string name="setting_strip_pdf_comments_title">Удалять комментарии и разметку PDF</string>
+    <string name="setting_strip_pdf_comments_sub">Удаляет заметки, текстовые поля, выделения и аннотации рецензирования из документов PDF</string>
+    <string name="setting_preserve_jpeg_jfif_title">Сохранять заголовок JPEG JFIF</string>
+    <string name="setting_preserve_jpeg_jfif_sub">Сохраняет стандартные заголовки разрешения и пропорций, удаляя встроенные миниатюры. При отключении все маркеры JFIF удаляются.</string>
     <string name="setting_enable_map_title">Включить выбор карты</string>
     <string name="setting_enable_map_sub">Разрешить приложению подключаться к Интернету для отображения OpenStreetMap при выборе местоположения</string>
     <string name="setting_nearby_scramble_title">Использовать локализованное отравление</string>

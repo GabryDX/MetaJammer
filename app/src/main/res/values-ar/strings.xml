@@ -158,6 +158,12 @@
     <string name="setting_keep_thumbnails_title">الحفاظ على المصغرات الأصلية</string>
     <string name="setting_keep_thumbnails_sub">إذا كان الملف يحتوي على مصغرة مضمنة، فسيتم الحفاظ عليها كما هي. إذا تم التعطيل، فسيتم إزالة أي مصغرة موجودة لأقصى قدر من الخصوصية.</string>
     <string name="setting_thumbnails_warning">تحذير: قد يؤدي الحفاظ على المصغرات الأصلية إلى تسريب بيانات وصفية (الموقع، معلومات الجهاز) حتى لو تم إزالة العلامات الرئيسية.</string>
+    <string name="setting_strip_pdf_annotations_title">إزالة التعليقات التوضيحية المخفية والعلامات المائية من PDF</string>
+    <string name="setting_strip_pdf_annotations_sub">إزالة العلامات المائية والأختام والتعليقات التوضيحية المخفية أو غير المرئية من مستندات PDF</string>
+    <string name="setting_strip_pdf_comments_title">إزالة تعليقات وملاحظات PDF</string>
+    <string name="setting_strip_pdf_comments_sub">إزالة الملاحظات الملصقة ومربعات النص والتمييزات وملاحظات المراجعة من مستندات PDF</string>
+    <string name="setting_preserve_jpeg_jfif_title">الاحتفاظ بترويسة JPEG JFIF</string>
+    <string name="setting_preserve_jpeg_jfif_sub">الاحتفاظ بترويسات الدقة ونسبة العرض إلى الارتفاع القياسية مع إزالة الصور المصغرة المضمنة. في حالة التعطيل، تتم إزالة كافة علامات JFIF.</string>
     <string name="setting_enable_map_title">تفعيل منتقي الخريطة</string>
     <string name="setting_enable_map_sub">السماح للتطبيق بالاتصال بالإنترنت لعرض OpenStreetMap لاختيار الموقع</string>
     <string name="setting_nearby_scramble_title">استخدام التسميم الموضعي</string>

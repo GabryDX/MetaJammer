@@ -100,8 +100,10 @@ class ImageMetadataProcessor(
         /**
          * Strips metadata APPn markers (APP1 Exif/XMP, APP2 ICC, APP13 IPTC, COM) from a JPEG byte array
          * without recompressing raster image scan data.
+         * If preserveJfif is true, preserves standard 18-byte JFIF headers while sanitizing embedded thumbnails
+         * and dropping JFXX thumbnail extension markers.
          */
-        fun stripJpegMarkers(bytes: ByteArray): ByteArray? {
+        fun stripJpegMarkers(bytes: ByteArray, preserveJfif: Boolean = true): ByteArray? {
             if (bytes.size < 4 || (bytes[0].toInt() and 0xFF) != 0xFF || (bytes[1].toInt() and 0xFF) != 0xD8) {
                 return null
             }
@@ -140,11 +142,54 @@ class ImageMetadataProcessor(
                     break
                 }
 
-                val isMetadata = (marker in 0xE1..0xEF) || marker == 0xFE
-                if (!isMetadata) {
-                    output.write(bytes, offset, totalLength)
+                if (marker == 0xE0) { // APP0 (JFIF / JFXX)
+                    if (!preserveJfif) {
+                        Timber.d("Stripped APP0 JFIF marker (preserveJfif=false, %d bytes)", totalLength)
+                    } else {
+                        val isJfif = offset + 8 < bytes.size &&
+                            bytes[offset + 4] == 'J'.code.toByte() &&
+                            bytes[offset + 5] == 'F'.code.toByte() &&
+                            bytes[offset + 6] == 'I'.code.toByte() &&
+                            bytes[offset + 7] == 'F'.code.toByte() &&
+                            bytes[offset + 8] == 0.toByte()
+
+                        val isJfxx = offset + 8 < bytes.size &&
+                            bytes[offset + 4] == 'J'.code.toByte() &&
+                            bytes[offset + 5] == 'F'.code.toByte() &&
+                            bytes[offset + 6] == 'X'.code.toByte() &&
+                            bytes[offset + 7] == 'X'.code.toByte() &&
+                            bytes[offset + 8] == 0.toByte()
+
+                        if (isJfxx) {
+                            Timber.d("Stripped JFXX thumbnail extension marker (%d bytes)", totalLength)
+                        } else if (isJfif && totalLength >= 18) {
+                            val xThumb = bytes[offset + 16].toInt() and 0xFF
+                            val yThumb = bytes[offset + 17].toInt() and 0xFF
+
+                            if (xThumb == 0 && yThumb == 0 && totalLength == 18) {
+                                output.write(bytes, offset, totalLength)
+                            } else {
+                                // Sanitize to clean 18-byte JFIF: zero out thumbnail dimensions and set length to 16
+                                output.write(0xFF)
+                                output.write(0xE0)
+                                output.write(0x00)
+                                output.write(0x10) // length = 16
+                                output.write(bytes, offset + 4, 12) // JFIF\0 (5) + ver (2) + units (1) + Xdensity (2) + Ydensity (2)
+                                output.write(0x00) // Xthumbnail = 0
+                                output.write(0x00) // Ythumbnail = 0
+                                Timber.d("Sanitized JFIF APP0: removed %d byte thumbnail", totalLength - 18)
+                            }
+                        } else {
+                            Timber.d("Stripped non-standard APP0 marker (%d bytes)", totalLength)
+                        }
+                    }
                 } else {
-                    Timber.d("Stripped JPEG metadata marker: 0xFF%02X (%d bytes)", marker, totalLength)
+                    val isMetadata = (marker in 0xE1..0xEF) || marker == 0xFE
+                    if (!isMetadata) {
+                        output.write(bytes, offset, totalLength)
+                    } else {
+                        Timber.d("Stripped JPEG metadata marker: 0xFF%02X (%d bytes)", marker, totalLength)
+                    }
                 }
                 offset += totalLength
             }
@@ -154,9 +199,9 @@ class ImageMetadataProcessor(
         /**
          * Strips metadata APPn markers from a JPEG file.
          */
-        fun stripJpegMarkers(inputFile: File, outputFile: File): Boolean {
+        fun stripJpegMarkers(inputFile: File, outputFile: File, preserveJfif: Boolean = true): Boolean {
             val bytes = inputFile.readBytes()
-            val stripped = stripJpegMarkers(bytes) ?: return false
+            val stripped = stripJpegMarkers(bytes, preserveJfif) ?: return false
             outputFile.writeBytes(stripped)
             return true
         }
@@ -302,7 +347,8 @@ class ImageMetadataProcessor(
         stripDeviceModel: Boolean = true,
         stripDateTime: Boolean = true,
         stripCameraSettings: Boolean = true,
-        stripComments: Boolean = true
+        stripComments: Boolean = true,
+        preserveJfif: Boolean = true
     ): File {
         val extension = if (mimeType != null) {
             fileRepository.getExtensionFromMime(mimeType)
@@ -328,7 +374,7 @@ class ImageMetadataProcessor(
         // Fast-path for JPEG images: strip APPn markers and COM markers directly in memory
         if (allCategories && (mimeType == "image/jpeg" || extension.equals(".jpg", ignoreCase = true) || extension.equals(".jpeg", ignoreCase = true))) {
             val stripped = runCatching {
-                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.use { it.readBytes() }?.let { stripJpegMarkers(it) }
+                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.use { it.readBytes() }?.let { stripJpegMarkers(it, preserveJfif) }
             }.getOrNull()
 
             if (stripped != null) {
@@ -374,7 +420,8 @@ class ImageMetadataProcessor(
         stripDeviceModel: Boolean = true,
         stripDateTime: Boolean = true,
         stripCameraSettings: Boolean = true,
-        stripComments: Boolean = true
+        stripComments: Boolean = true,
+        preserveJfif: Boolean = true
     ): File {
         val allCategories = stripGps && stripDeviceModel && stripDateTime && stripCameraSettings && stripComments
         val tagsToStrip = if (allCategories) {

@@ -257,6 +257,9 @@ class MainViewModel(
     fun setStripDateTime(enabled: Boolean) = settingsViewModel.setStripDateTime(enabled)
     fun setStripCameraSettings(enabled: Boolean) = settingsViewModel.setStripCameraSettings(enabled)
     fun setStripComments(enabled: Boolean) = settingsViewModel.setStripComments(enabled)
+    fun setStripPdfAnnotations(enabled: Boolean) = settingsViewModel.setStripPdfAnnotations(enabled)
+    fun setStripPdfComments(enabled: Boolean) = settingsViewModel.setStripPdfComments(enabled)
+    fun setPreserveJpegJfif(enabled: Boolean) = settingsViewModel.setPreserveJpegJfif(enabled)
 
     fun persistAndSetUnifiedSavingPath(uri: Uri?) = settingsViewModel.persistAndSetUnifiedSavingPath(uri)
     fun persistAndSetPicturesSavingPath(uri: Uri?) = settingsViewModel.persistAndSetPicturesSavingPath(uri)

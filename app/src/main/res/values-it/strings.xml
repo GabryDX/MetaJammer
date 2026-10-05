@@ -158,6 +158,12 @@
     <string name="setting_keep_thumbnails_title">Mantieni miniature originali</string>
     <string name="setting_keep_thumbnails_sub">Se il file contiene una miniatura incorporata, preservala così com\'è. Se disabilitato, qualsiasi miniatura esistente verrà rimossa per la massima privacy.</string>
     <string name="setting_thumbnails_warning">Avviso: mantenere le miniature originali potrebbe far trapelare metadati (posizione, informazioni sul dispositivo) anche se i tag principali vengono rimossi.</string>
+    <string name="setting_strip_pdf_annotations_title">Rimuovi annotazioni nascoste e filigrane PDF</string>
+    <string name="setting_strip_pdf_annotations_sub">Rimuovi filigrane, timbri e annotazioni nascoste o invisibili dai documenti PDF</string>
+    <string name="setting_strip_pdf_comments_title">Rimuovi commenti e revisioni PDF</string>
+    <string name="setting_strip_pdf_comments_sub">Rimuovi note, caselle di testo, evidenziazioni e annotazioni di revisione dai documenti PDF</string>
+    <string name="setting_preserve_jpeg_jfif_title">Mantieni intestazione JPEG JFIF</string>
+    <string name="setting_preserve_jpeg_jfif_sub">Mantieni le intestazioni standard di risoluzione e proporzioni rimuovendo le miniature incorporate. Se disattivato, tutti i marcatori JFIF vengono rimossi.</string>
     <string name="setting_enable_map_title">Abilita selettore mappa</string>
     <string name="setting_enable_map_sub">Consenti all\'app di connettersi a Internet per mostrare OpenStreetMap per la selezione della posizione</string>
     <string name="setting_nearby_scramble_title">Usa avvelenamento localizzato</string>

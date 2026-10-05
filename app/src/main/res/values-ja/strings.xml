@@ -158,6 +158,12 @@
     <string name="setting_keep_thumbnails_title">元のサムネイルを維持</string>
     <string name="setting_keep_thumbnails_sub">ファイルに埋め込みサムネイルが含まれている場合、そのまま保持します。無効にすると、プライバシーを最大化するために既存のサムネイルが削除されます。</string>
     <string name="setting_thumbnails_warning">警告：元のサムネイルを保持すると、メインのタグが削除されていてもメタデータ（位置、デバイス情報）が漏洩する可能性があります。</string>
+    <string name="setting_strip_pdf_annotations_title">PDFの非表示注釈と透かしを削除</string>
+    <string name="setting_strip_pdf_annotations_sub">PDF文書から透かし、スタンプ、非表示または不可視の注釈を削除します</string>
+    <string name="setting_strip_pdf_comments_title">PDFのコメントとマークアップを削除</string>
+    <string name="setting_strip_pdf_comments_sub">PDF文書から付箋、テキストボックス、ハイライト、校閲注釈を削除します</string>
+    <string name="setting_preserve_jpeg_jfif_title">JPEG JFIFヘッダーを保持</string>
+    <string name="setting_preserve_jpeg_jfif_sub">埋め込みサムネイルを削除しながら、標準の解像度とアスペクト比ヘッダーを保持します。無効にすると、すべてのJFIFマーカーが削除されます。</string>
     <string name="setting_enable_map_title">マップピッカーを有効にする</string>
     <string name="setting_enable_map_sub">位置選択のためにOpenStreetMapを表示するため、アプリのインターネット接続を許可します</string>
     <string name="setting_nearby_scramble_title">ローカライズされたポイズニングを使用する</string>
