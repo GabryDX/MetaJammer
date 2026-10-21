@@ -45,6 +45,7 @@
     <string name="metadata_preview">معاينة البيانات الوصفية</string>
     <string name="file_type">النوع: %1$s</string>
     <string name="no_metadata_found">لم يتم العثور على بيانات وصفية</string>
+    <string name="loading_metadata">جارٍ قراءة البيانات الوصفية…</string>
 
     <!-- ProcessingScreen -->
     <string name="process_files_title">معالجة الملفات</string>

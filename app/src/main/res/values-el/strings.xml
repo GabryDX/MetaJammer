@@ -45,6 +45,7 @@
     <string name="metadata_preview">Προεπισκόπηση μεταδεδομένων</string>
     <string name="file_type">Τύπος: %1$s</string>
     <string name="no_metadata_found">Δεν βρέθηκαν μεταδεδομένα</string>
+    <string name="loading_metadata">Ανάγνωση μεταδεδομένων…</string>
 
     <!-- ProcessingScreen -->
     <string name="process_files_title">Επεξεργασία αρχείων</string>

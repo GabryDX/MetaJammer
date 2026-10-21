@@ -4,17 +4,22 @@ import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
@@ -28,8 +33,11 @@ fun MetadataPreviewScreen(
     metadataPreview: Map<Uri, List<MetadataEntry>>,
     onContinue: () -> Unit,
     onBack: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isLoading: Boolean = false
 ) {
+    val anyLoading = isLoading || selectedFiles.any { !metadataPreview.containsKey(it.uri) }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -41,6 +49,9 @@ fun MetadataPreviewScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(selectedFiles) { file ->
+                val isFileLoading = !metadataPreview.containsKey(file.uri)
+                val entries = metadataPreview[file.uri].orEmpty()
+
                 Card(modifier = Modifier.fillMaxWidth()) {
                     Column(modifier = Modifier.padding(12.dp)) {
                         Text(
@@ -54,9 +65,26 @@ fun MetadataPreviewScreen(
 
                         HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
-                        val entries = metadataPreview[file.uri].orEmpty()
-
-                        if (entries.isEmpty()) {
+                        if (isFileLoading) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 12.dp),
+                                horizontalArrangement = Arrangement.Center,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(18.dp),
+                                    strokeWidth = 2.dp
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(
+                                    text = stringResource(R.string.loading_metadata),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        } else if (entries.isEmpty()) {
                             Text(
                                 text = stringResource(R.string.no_metadata_found),
                                 style = MaterialTheme.typography.bodyMedium,
@@ -92,9 +120,25 @@ fun MetadataPreviewScreen(
 
         Button(
             onClick = onContinue,
+            enabled = !anyLoading && selectedFiles.isNotEmpty(),
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(stringResource(R.string.continue_label))
+            if (anyLoading && selectedFiles.isNotEmpty()) {
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(16.dp),
+                        strokeWidth = 2.dp,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(stringResource(R.string.loading_metadata))
+                }
+            } else {
+                Text(stringResource(R.string.continue_label))
+            }
         }
 
         Button(

@@ -45,6 +45,7 @@
     <string name="metadata_preview">メタデータプレビュー</string>
     <string name="file_type">タイプ：%1$s</string>
     <string name="no_metadata_found">メタデータが見つかりません</string>
+    <string name="loading_metadata">メタデータを読み込み中…</string>
 
     <!-- ProcessingScreen -->
     <string name="process_files_title">ファイルを処理</string>

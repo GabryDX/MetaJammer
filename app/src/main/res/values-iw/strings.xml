@@ -45,6 +45,7 @@
     <string name="metadata_preview">תצוגה מקדימה של מטא-דאטה</string>
     <string name="file_type">סוג: %1$s</string>
     <string name="no_metadata_found">לא נמצא מטא-דאטה</string>
+    <string name="loading_metadata">קורא מטא-דאטה…</string>
 
     <!-- ProcessingScreen -->
     <string name="process_files_title">עבד קבצים</string>

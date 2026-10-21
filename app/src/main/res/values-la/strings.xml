@@ -45,6 +45,7 @@
     <string name="metadata_preview">Metadata Praevisus</string>
     <string name="file_type">Typus: %1$s</string>
     <string name="no_metadata_found">Metadata non inventa</string>
+    <string name="loading_metadata">Metadata leguntur…</string>
 
     <!-- ProcessingScreen -->
     <string name="process_files_title">Fasciculos Processus</string>

@@ -45,6 +45,7 @@
     <string name="metadata_preview">元数据预览</string>
     <string name="file_type">类型：%1$s</string>
     <string name="no_metadata_found">未找到元数据</string>
+    <string name="loading_metadata">正在读取元数据…</string>
 
     <!-- ProcessingScreen -->
     <string name="process_files_title">处理文件</string>

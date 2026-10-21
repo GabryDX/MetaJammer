@@ -45,6 +45,7 @@
     <string name="metadata_preview">मेटाडेटा पूर्वावलोकन</string>
     <string name="file_type">प्रकार: %1$s</string>
     <string name="no_metadata_found">कोई मेटाडेटा नहीं मिला</string>
+    <string name="loading_metadata">मेटाडेटा पढ़ा जा रहा है…</string>
 
     <!-- ProcessingScreen -->
     <string name="process_files_title">फ़ाइलें प्रोसेस करें</string>

@@ -120,6 +120,7 @@ class PdfMetadataProcessor(
                         val res = page.resources
                         if (res != null) {
                             for (cosName in res.xObjectNames) {
+                                if (res.isImageXObject(cosName)) continue
                                 val xobj = runCatching { res.getXObject(cosName) }.getOrNull()
                                 if (xobj is com.tom_roush.pdfbox.pdmodel.graphics.form.PDFormXObject) {
                                     val pieceInfo = xobj.cosObject.getDictionaryObject(com.tom_roush.pdfbox.cos.COSName.getPDFName("PieceInfo"))
@@ -284,6 +285,7 @@ class PdfMetadataProcessor(
                     val namesToRemove = mutableListOf<com.tom_roush.pdfbox.cos.COSName>()
 
                     for (cosName in res.xObjectNames) {
+                        if (res.isImageXObject(cosName)) continue
                         val xobj = runCatching { res.getXObject(cosName) }.getOrNull()
                         if (xobj is com.tom_roush.pdfbox.pdmodel.graphics.form.PDFormXObject) {
                             val pieceInfo = xobj.cosObject.getDictionaryObject(com.tom_roush.pdfbox.cos.COSName.getPDFName("PieceInfo"))

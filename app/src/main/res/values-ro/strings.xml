@@ -45,6 +45,7 @@
     <string name="metadata_preview">Previzualizare metadate</string>
     <string name="file_type">Tip: %1$s</string>
     <string name="no_metadata_found">Nu s-au găsit metadate</string>
+    <string name="loading_metadata">Se citesc metadatele…</string>
 
     <!-- ProcessingScreen -->
     <string name="process_files_title">Procesare fișiere</string>

@@ -260,4 +260,32 @@ class ProcessingViewModelTest {
         assertTrue(preparedFiles[0].exists())
         assertTrue(viewModel.hasSavedOrShared.value)
     }
+
+    @Test
+    fun testLoadMetadataPreviewSetsLoadingStateAndPopulatesMetadata() = runTest {
+        val file1 = createTestImage()
+        val file2 = createTestImage()
+        val selected1 = SelectedFile(uri = file1.toUri(), displayName = "test1.jpg", mimeType = "image/jpeg")
+        val selected2 = SelectedFile(uri = file2.toUri(), displayName = "test2.jpg", mimeType = "image/jpeg")
+
+        viewModel.loadMetadataPreview(listOf(selected1, selected2))
+
+        var attempts = 0
+        while ((viewModel.metadataPreview.value[selected1.uri].isNullOrEmpty() ||
+                viewModel.metadataPreview.value[selected2.uri].isNullOrEmpty() ||
+                viewModel.isLoadingMetadata.value) && attempts++ < 100) {
+            Thread.sleep(20)
+        }
+
+        assertFalse("isLoadingMetadata should become false after completion", viewModel.isLoadingMetadata.value)
+        assertTrue("metadataPreview should contain selected1", viewModel.metadataPreview.value.containsKey(selected1.uri))
+        assertTrue("metadataPreview should contain selected2", viewModel.metadataPreview.value.containsKey(selected2.uri))
+        assertFalse("selected1 metadata should not be empty", viewModel.metadataPreview.value[selected1.uri].isNullOrEmpty())
+        assertFalse("selected2 metadata should not be empty", viewModel.metadataPreview.value[selected2.uri].isNullOrEmpty())
+
+        // Clearing metadata resets loading state and map
+        viewModel.clearAllMetadataAndPlans()
+        assertFalse("isLoadingMetadata should be false after clear", viewModel.isLoadingMetadata.value)
+        assertTrue("metadataPreview should be empty after clear", viewModel.metadataPreview.value.isEmpty())
+    }
 }

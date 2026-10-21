@@ -45,6 +45,7 @@
     <string name="metadata_preview">ตัวอย่างข้อมูลเมตา</string>
     <string name="file_type">ประเภท: %1$s</string>
     <string name="no_metadata_found">ไม่พบข้อมูลเมตา</string>
+    <string name="loading_metadata">กำลังอ่านข้อมูลเมตา…</string>
 
     <!-- ProcessingScreen -->
     <string name="process_files_title">ประมวลผลไฟล์</string>

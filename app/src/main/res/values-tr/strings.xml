@@ -45,6 +45,7 @@
     <string name="metadata_preview">Metadata Önizleme</string>
     <string name="file_type">Tür: %1$s</string>
     <string name="no_metadata_found">Metadata bulunamadı</string>
+    <string name="loading_metadata">Metadata okunuyor…</string>
 
     <!-- ProcessingScreen -->
     <string name="process_files_title">Dosyaları İşle</string>
