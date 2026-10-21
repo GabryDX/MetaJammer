@@ -29,7 +29,7 @@ This document summarizes the audit performed to ensure that MetaJammer only uses
 | **JUnit** | `junit:junit` | EPL 2.0 | FOSS |
 | **AndroidX Test Ext** | `androidx.test.ext:junit` | Apache 2.0 | FOSS |
 | **Espresso** | `androidx.test.espresso:espresso-core` | Apache 2.0 | FOSS |
-| **Robolectric** | `org.robolectric:robolectric` | Apache 2.0 | FOSS |
+| **Robolectric** | `org.robolectric:robolectric` | MIT | FOSS |
 
 ## Map Implementation Audit
 
