@@ -154,4 +154,80 @@ class MetadataRepositoryTest {
         assertFalse("Cleaned OGG must not have GPS Coordinates", remainingMap.containsKey("GPS Coordinates"))
         assertFalse("Cleaned OGG must not have Embedded Picture", remainingMap.containsKey("Embedded Picture"))
     }
+
+    @Test
+    fun `readMetadata detects EXIF thumbnail when present`() = runTest {
+        val sampleJpg = listOf(
+            File("test_data/fake_metadata_sample.jpg"),
+            File("../test_data/fake_metadata_sample.jpg")
+        ).firstOrNull { it.exists() }
+        assertNotNull("Sample JPG must exist", sampleJpg)
+
+        val selectedFile = SelectedFile(
+            uri = sampleJpg!!.toUri(),
+            displayName = "fake_metadata_sample.jpg",
+            mimeType = "image/jpeg",
+            sizeBytes = sampleJpg.length()
+        )
+
+        val entries = metadataRepository.readMetadata(selectedFile)
+        val thumbEntry = entries.find { it.key == "Thumbnail" }
+        assertNotNull("Thumbnail entry must be detected", thumbEntry)
+        assertEquals("Present (EXIF)", thumbEntry?.value)
+    }
+
+    @Test
+    fun `readMetadata detects JFIF thumbnail dimensions when present`() = runTest {
+        val testJpeg = tempFolder.newFile("test_jfif_thumb.jpg")
+        val xThumb = 16
+        val yThumb = 16
+        val rawThumbData = ByteArray(xThumb * yThumb * 3) { 0x7F }
+        val app0Len = 16 + rawThumbData.size
+        val outStream = java.io.ByteArrayOutputStream()
+        outStream.write(byteArrayOf(0xFF.toByte(), 0xD8.toByte())) // SOI
+        outStream.write(0xFF)
+        outStream.write(0xE0)
+        outStream.write((app0Len shr 8) and 0xFF)
+        outStream.write(app0Len and 0xFF)
+        outStream.write(byteArrayOf(0x4A, 0x46, 0x49, 0x46, 0x00)) // JFIF\0
+        outStream.write(byteArrayOf(0x01, 0x01, 0x01, 0x00, 0x48, 0x00, 0x48)) // ver 1.1, dpi 72x72
+        outStream.write(xThumb)
+        outStream.write(yThumb)
+        outStream.write(rawThumbData)
+        // SOF0 1x1, SOS, data, EOI
+        outStream.write(byteArrayOf(
+            0xFF.toByte(), 0xC0.toByte(), 0x00, 0x0B, 0x08, 0x00, 0x01, 0x00, 0x01, 0x01, 0x01, 0x11, 0x00,
+            0xFF.toByte(), 0xDA.toByte(), 0x00, 0x08, 0x01, 0x01, 0x00, 0x00, 0x3F, 0x00,
+            0x00,
+            0xFF.toByte(), 0xD9.toByte()
+        ))
+        testJpeg.writeBytes(outStream.toByteArray())
+
+        val selectedFile = SelectedFile(
+            uri = testJpeg.toUri(),
+            displayName = "test_jfif_thumb.jpg",
+            mimeType = "image/jpeg",
+            sizeBytes = testJpeg.length()
+        )
+
+        val entries = metadataRepository.readMetadata(selectedFile)
+        val thumbEntry = entries.find { it.key == "Thumbnail" }
+        assertNotNull("Thumbnail entry must be detected", thumbEntry)
+        assertEquals("Present (JFIF 16x16)", thumbEntry?.value)
+    }
+
+    @Test
+    fun `readMetadata on beaver jpg confirms no embedded thumbnail`() = runTest {
+        val beaverFile = listOf(File("test_data/beaver.jpg"), File("../test_data/beaver.jpg")).firstOrNull { it.exists() }
+        if (beaverFile != null) {
+            val selectedFile = SelectedFile(
+                uri = beaverFile.toUri(),
+                displayName = "beaver.jpg",
+                mimeType = "image/jpeg",
+                sizeBytes = beaverFile.length()
+            )
+            val entries = metadataRepository.readMetadata(selectedFile)
+            assertFalse("beaver.jpg must not report a Thumbnail entry", entries.any { it.key == "Thumbnail" })
+        }
+    }
 }

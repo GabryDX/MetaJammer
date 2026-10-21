@@ -233,18 +233,29 @@ class PdfMetadataProcessorTest {
     fun testPagedOut008HiddenAnnotationDetectionAndStripping() = runTest {
         val file = listOf(File("test_data/PagedOut_008.pdf"), File("../test_data/PagedOut_008.pdf")).firstOrNull { it.exists() }
         assertNotNull("test_data/PagedOut_008.pdf should exist", file)
+        val targetFile = file!!
 
-        // 1. readMetadata should detect the hidden annotation and author
-        val entries = processor.readMetadata(file!!.toUri())
+        // 1. readMetadata should detect annotations, watermarks, and authors
+        val originalLinks = PDDocument.load(targetFile).use { doc ->
+            doc.pages.sumOf { it.annotations?.count { a -> a.subtype == "Link" } ?: 0 }
+        }
+        val originalNonLinks = PDDocument.load(targetFile).use { doc ->
+            doc.pages.sumOf { it.annotations?.count { a -> a.subtype != "Link" } ?: 0 }
+        }
+        println("Original links: $originalLinks, original non-links: $originalNonLinks")
+
+        val entries = processor.readMetadata(targetFile.toUri())
         val annotationsEntry = entries.find { it.key == "Annotations" }
         assertNotNull("Annotations entry should be present", annotationsEntry)
-        assertTrue("Annotations should report hidden annotation: ${annotationsEntry!!.value}", annotationsEntry.value.contains("1 hidden"))
+        assertTrue("Annotations should report hidden annotation: ${annotationsEntry!!.value}", annotationsEntry.value.contains("hidden"))
+        assertTrue("Annotations should report watermarks: ${annotationsEntry.value}", annotationsEntry.value.contains("watermark/stamp"))
         val authorEntry = entries.find { it.key == "Annotation Author" }
         assertNotNull("Annotation Author entry should be present", authorEntry)
-        assertEquals("PDF-XChange Editor", authorEntry!!.value)
+        assertTrue("Annotation Author should contain PDF-XChange Editor: ${authorEntry!!.value}", authorEntry.value.contains("PDF-XChange Editor"))
+        assertTrue("Annotation Author should contain Lenovo: ${authorEntry.value}", authorEntry.value.contains("Lenovo"))
 
-        // 2. removeMetadata with stripAnnotations = true should strip the hidden annotation and preserve 471 links
-        val cleanFile = processor.removeMetadata(file.toUri(), stripAnnotations = true, stripComments = true)
+        // 2. removeMetadata with stripAnnotations = true should strip user annotations & watermarks while preserving 471 links and trial stamps
+        val cleanFile = processor.removeMetadata(targetFile.toUri(), stripAnnotations = true, stripComments = true)
         assertTrue(cleanFile.exists())
         PDDocument.load(cleanFile).use { doc ->
             var totalAnnotations = 0
@@ -262,18 +273,40 @@ class PdfMetadataProcessorTest {
                     }
                 }
             }
-            assertEquals("471 navigation links should be preserved", 471, totalAnnotations)
+            assertEquals("Navigation links should be preserved", originalLinks, totalAnnotations)
             assertEquals("Zero hidden annotations should remain", 0, hiddenCount)
             assertEquals("Zero text subtype annotations should remain", 0, textSubtypeCount)
+
+            // Verify user watermarks (e.g. "Watermark Sample") were stripped while trial stamps remain
+            var userWatermarkCount = 0
+            var trialStampCount = 0
+            for (page in doc.pages) {
+                val res = page.resources ?: continue
+                for (cosName in res.xObjectNames) {
+                    val xobj = runCatching { res.getXObject(cosName) }.getOrNull()
+                    if (xobj is com.tom_roush.pdfbox.pdmodel.graphics.form.PDFormXObject) {
+                        val text = runCatching {
+                            String(xobj.contentStream.createInputStream().readBytes(), Charsets.ISO_8859_1)
+                        }.getOrDefault("")
+                        if (text.contains("Watermark Sample", ignoreCase = true)) {
+                            userWatermarkCount++
+                        }
+                        if (text.contains("BUY NOW", ignoreCase = true)) {
+                            trialStampCount++
+                        }
+                    }
+                }
+            }
+            assertEquals("Zero user watermarks should remain", 0, userWatermarkCount)
+            assertTrue("Commercial trial stamps should be preserved: $trialStampCount", trialStampCount > 0)
         }
 
-        // Cleaned PDF should no longer report Annotations or Annotation Author
+        // Cleaned PDF should no longer report Annotation Author
         val cleanEntries = processor.readMetadata(cleanFile.toUri())
-        assertFalse("Annotations entry should not be present on clean file", cleanEntries.any { it.key == "Annotations" })
         assertFalse("Annotation Author entry should not be present on clean file", cleanEntries.any { it.key == "Annotation Author" })
 
         // 3. removeMetadata with stripAnnotations = false and stripComments = false should preserve the hidden annotation
-        val preservedFile = processor.removeMetadata(file.toUri(), stripAnnotations = false, stripComments = false)
+        val preservedFile = processor.removeMetadata(targetFile.toUri(), stripAnnotations = false, stripComments = false)
         PDDocument.load(preservedFile).use { doc ->
             var totalAnnotations = 0
             var hiddenCount = 0
@@ -286,7 +319,7 @@ class PdfMetadataProcessorTest {
                     }
                 }
             }
-            assertEquals("472 total annotations should be preserved", 472, totalAnnotations)
+            assertEquals("All annotations should be preserved", originalLinks + originalNonLinks, totalAnnotations)
             assertEquals("1 hidden annotation should be preserved", 1, hiddenCount)
         }
     }

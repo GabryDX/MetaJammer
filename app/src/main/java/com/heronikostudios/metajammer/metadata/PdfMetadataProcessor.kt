@@ -91,24 +91,44 @@ class PdfMetadataProcessor(
                     val annotationAuthors = mutableSetOf<String>()
 
                     for (page in document.pages) {
-                        if (!page.cosObject.containsKey(com.tom_roush.pdfbox.cos.COSName.ANNOTS)) continue
-                        val annots = page.annotations ?: continue
-                        for (annot in annots) {
-                            val subtype = annot.subtype ?: ""
-                            val flags = annot.annotationFlags
-                            val isHidden = (flags and 2) != 0 || (flags and 1) != 0 || (flags and 32) != 0
-                            val isWatermark = subtype in WATERMARK_STAMP_SUBTYPES || annot.cosObject.getNameAsString("IT") == "Watermark"
-                            val isCommentOrMarkup = subtype in COMMENT_MARKUP_SUBTYPES
+                        if (page.cosObject.containsKey(com.tom_roush.pdfbox.cos.COSName.ANNOTS)) {
+                            val annots = page.annotations
+                            if (annots != null) {
+                                for (annot in annots) {
+                                    val subtype = annot.subtype ?: ""
+                                    val flags = annot.annotationFlags
+                                    val isHidden = (flags and 2) != 0 || (flags and 1) != 0 || (flags and 32) != 0
+                                    val isWatermark = subtype in WATERMARK_STAMP_SUBTYPES || annot.cosObject.getNameAsString("IT") == "Watermark"
+                                    val isCommentOrMarkup = subtype in COMMENT_MARKUP_SUBTYPES
 
-                            if (isHidden || isWatermark || isCommentOrMarkup) {
-                                totalAnnotations++
-                                if (isHidden) hiddenCount++
-                                if (isWatermark) watermarkCount++
-                                if (isCommentOrMarkup) commentCount++
+                                    if (isHidden || isWatermark || isCommentOrMarkup) {
+                                        totalAnnotations++
+                                        if (isHidden) hiddenCount++
+                                        if (isWatermark) watermarkCount++
+                                        if (isCommentOrMarkup) commentCount++
 
-                                val author = annot.cosObject.getString(com.tom_roush.pdfbox.cos.COSName.T)
-                                if (!author.isNullOrBlank()) {
-                                    annotationAuthors.add(author)
+                                        val author = annot.cosObject.getString(com.tom_roush.pdfbox.cos.COSName.T)
+                                        if (!author.isNullOrBlank()) {
+                                            annotationAuthors.add(author)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // Also check page resources for Form XObject watermarks
+                        val res = page.resources
+                        if (res != null) {
+                            for (cosName in res.xObjectNames) {
+                                val xobj = runCatching { res.getXObject(cosName) }.getOrNull()
+                                if (xobj is com.tom_roush.pdfbox.pdmodel.graphics.form.PDFormXObject) {
+                                    val pieceInfo = xobj.cosObject.getDictionaryObject(com.tom_roush.pdfbox.cos.COSName.getPDFName("PieceInfo"))
+                                    val isWatermark = (pieceInfo is com.tom_roush.pdfbox.cos.COSDictionary && pieceInfo.toString().contains("Watermark")) ||
+                                            xobj.cosObject.getNameAsString(com.tom_roush.pdfbox.cos.COSName.SUBTYPE) == "Watermark"
+                                    if (isWatermark) {
+                                        totalAnnotations++
+                                        watermarkCount++
+                                    }
                                 }
                             }
                         }
@@ -256,7 +276,79 @@ class PdfMetadataProcessor(
                 }
             }
 
-            // 2. Clear Optional Content Groups (OCGs) / Layers
+            // 2. Strip Form XObject watermarks (excluding commercial software trial stamps)
+            if (stripAnnotations) {
+                for (page in document.pages) {
+                    val res = page.resources ?: continue
+                    val xobjDict = res.cosObject.getCOSDictionary(com.tom_roush.pdfbox.cos.COSName.XOBJECT) ?: continue
+                    val namesToRemove = mutableListOf<com.tom_roush.pdfbox.cos.COSName>()
+
+                    for (cosName in res.xObjectNames) {
+                        val xobj = runCatching { res.getXObject(cosName) }.getOrNull()
+                        if (xobj is com.tom_roush.pdfbox.pdmodel.graphics.form.PDFormXObject) {
+                            val pieceInfo = xobj.cosObject.getDictionaryObject(com.tom_roush.pdfbox.cos.COSName.getPDFName("PieceInfo"))
+                            val isWatermark = (pieceInfo is com.tom_roush.pdfbox.cos.COSDictionary && pieceInfo.toString().contains("Watermark")) ||
+                                    xobj.cosObject.getNameAsString(com.tom_roush.pdfbox.cos.COSName.SUBTYPE) == "Watermark"
+
+                            if (isWatermark) {
+                                val streamText = runCatching {
+                                    val streamBytes = xobj.contentStream.createInputStream().readBytes()
+                                    String(streamBytes, Charsets.ISO_8859_1)
+                                }.getOrDefault("")
+
+                                val isTrialStamp = streamText.contains("BUY NOW", ignoreCase = true) ||
+                                        streamText.contains("PDF-XChange", ignoreCase = true) ||
+                                        streamText.contains("Evaluation", ignoreCase = true) ||
+                                        streamText.contains("Trial", ignoreCase = true) ||
+                                        streamText.contains("Demo", ignoreCase = true)
+
+                                if (!isTrialStamp) {
+                                    namesToRemove.add(cosName)
+                                }
+                            }
+                        }
+                    }
+
+                    if (namesToRemove.isNotEmpty()) {
+                        for (name in namesToRemove) {
+                            xobjDict.removeItem(name)
+                        }
+
+                        page.cosObject.removeItem(com.tom_roush.pdfbox.cos.COSName.getPDFName("PieceInfo"))
+
+                        val contentsCos = page.cosObject.getDictionaryObject(com.tom_roush.pdfbox.cos.COSName.CONTENTS)
+                        fun cleanStream(stream: com.tom_roush.pdfbox.cos.COSStream) {
+                            runCatching {
+                                val bytes = stream.createInputStream().readBytes()
+                                var text = String(bytes, Charsets.ISO_8859_1)
+                                for (name in namesToRemove) {
+                                    val nameStr = name.name
+                                    val artifactPattern = Regex(
+                                        """/Artifact\s*<<[^>]*?Subtype\s*/Watermark[^>]*?>>\s*BDC(?:(?!EMC).)*?/$nameStr\s+Do(?:(?!EMC).)*?EMC\s*""",
+                                        RegexOption.DOT_MATCHES_ALL
+                                    )
+                                    text = artifactPattern.replace(text, "")
+                                    text = text.replace(Regex("""/$nameStr\s+Do"""), "")
+                                }
+                                stream.createOutputStream().use { it.write(text.toByteArray(Charsets.ISO_8859_1)) }
+                            }
+                        }
+
+                        if (contentsCos is com.tom_roush.pdfbox.cos.COSStream) {
+                            cleanStream(contentsCos)
+                        } else if (contentsCos is com.tom_roush.pdfbox.cos.COSArray) {
+                            for (i in 0 until contentsCos.size()) {
+                                val item = contentsCos.get(i)
+                                if (item is com.tom_roush.pdfbox.cos.COSStream) {
+                                    cleanStream(item)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // 3. Clear Optional Content Groups (OCGs) / Layers
             // OCGs are often used for watermarks that can be toggled on/off
             if (stripAnnotations && document.documentCatalog.ocProperties != null) {
                 document.documentCatalog.ocProperties = null
