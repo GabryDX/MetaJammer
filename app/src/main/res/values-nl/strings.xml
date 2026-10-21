@@ -45,6 +45,7 @@
     <string name="metadata_preview">Metadata voorbeeld</string>
     <string name="file_type">Type: %1$s</string>
     <string name="no_metadata_found">Geen metadata gevonden</string>
+    <string name="loading_metadata">Metadata lezen…</string>
 
     <!-- ProcessingScreen -->
     <string name="process_files_title">Bestanden verwerken</string>

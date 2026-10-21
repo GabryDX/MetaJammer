@@ -45,6 +45,7 @@
     <string name="metadata_preview">Попередній перегляд метаданих</string>
     <string name="file_type">Тип: %1$s</string>
     <string name="no_metadata_found">Метаданих не знайдено</string>
+    <string name="loading_metadata">Читання метаданих…</string>
 
     <!-- ProcessingScreen -->
     <string name="process_files_title">Обробити файли</string>

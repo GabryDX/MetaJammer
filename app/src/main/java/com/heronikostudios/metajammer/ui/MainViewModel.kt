@@ -84,6 +84,7 @@ class MainViewModel(
 
     // Processing state
     val metadataPreview: StateFlow<Map<Uri, List<MetadataEntry>>> = processingViewModel.metadataPreview
+    val isLoadingMetadata: StateFlow<Boolean> = processingViewModel.isLoadingMetadata
     val changePreview: StateFlow<Map<Uri, List<MetadataDiffEntry>>> = processingViewModel.changePreview
     val replacementPlans: StateFlow<Map<Uri, MetadataReplacementPlan>> = processingViewModel.replacementPlans
     val selectedMode: StateFlow<ProcessingMode?> = processingViewModel.selectedMode
@@ -173,6 +174,10 @@ class MainViewModel(
         homeViewModel.clearSelection()
         processingViewModel.clearAllMetadataAndPlans()
         clearTempFiles()
+    }
+
+    fun loadMetadataPreview(files: List<SelectedFile>) {
+        processingViewModel.loadMetadataPreview(files)
     }
 
     // --- Processing Actions ---

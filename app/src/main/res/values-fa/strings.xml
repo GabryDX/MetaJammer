@@ -45,6 +45,7 @@
     <string name="metadata_preview">پیش‌نمایش متاداده</string>
     <string name="file_type">نوع: %1$s</string>
     <string name="no_metadata_found">متاداده‌ای یافت نشد</string>
+    <string name="loading_metadata">در حال خواندن متاداده…</string>
 
     <!-- ProcessingScreen -->
     <string name="process_files_title">پردازش فایل‌ها</string>

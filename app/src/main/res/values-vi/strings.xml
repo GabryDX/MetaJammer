@@ -45,6 +45,7 @@
     <string name="metadata_preview">Xem trước siêu dữ liệu</string>
     <string name="file_type">Loại: %1$s</string>
     <string name="no_metadata_found">Không tìm thấy siêu dữ liệu</string>
+    <string name="loading_metadata">Đang đọc siêu dữ liệu…</string>
 
     <!-- ProcessingScreen -->
     <string name="process_files_title">Xử lý tệp</string>

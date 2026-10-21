@@ -135,4 +135,14 @@ class MainViewModelTest {
         assertTrue("Selected files must be cleared after being saved or shared", viewModel.selectedFiles.value.isEmpty())
         assertNull("Message must be cleared", viewModel.message.value)
     }
+
+    @Test
+    fun testIsLoadingMetadataDelegatesToProcessingViewModel() {
+        assertFalse(viewModel.isLoadingMetadata.value)
+        val testFiles = listOf(
+            SelectedFile(uri = "content://media/1".toUri(), displayName = "image1.jpg", mimeType = "image/jpeg")
+        )
+        viewModel.loadMetadataPreview(testFiles)
+        assertTrue(viewModel.isLoadingMetadata.value)
+    }
 }

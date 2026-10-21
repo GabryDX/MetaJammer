@@ -295,8 +295,10 @@ class MetadataRepository(
                 }
             } else null
 
+            var hasExifThumbnail = false
             val rawExifEntries = resolver.openInputStream(selectedFile.uri)?.use { inputStream ->
                 val exif = ExifInterface(inputStream)
+                hasExifThumbnail = exif.hasThumbnail()
                 PREVIEW_TAGS.mapNotNull { tag ->
                     val value = exif.getAttribute(tag)
                     if (value.isNullOrBlank()) return@mapNotNull null
@@ -314,6 +316,17 @@ class MetadataRepository(
             } ?: emptyList()
 
             val combined = rawExifEntries.toMutableList()
+
+            if (hasExifThumbnail) {
+                combined.add(MetadataEntry("Thumbnail", "Present (EXIF)"))
+            } else if (!isPng) {
+                val jpegThumb = runCatching {
+                    resolver.openInputStream(selectedFile.uri)?.use { detectJpegThumbnail(it) }
+                }.getOrNull()
+                if (jpegThumb != null) {
+                    combined.add(MetadataEntry("Thumbnail", jpegThumb))
+                }
+            }
 
             if (isPng && pngInfo != null) {
                 if (pngInfo.width != null && combined.none { it.key == ExifInterface.TAG_IMAGE_WIDTH }) {
@@ -352,5 +365,49 @@ class MetadataRepository(
         }.ifEmpty {
             listOf(MetadataEntry("Info", "No readable EXIF metadata found"))
         }
+    }
+
+    private fun detectJpegThumbnail(inputStream: java.io.InputStream): String? {
+        val header = ByteArray(2)
+        if (inputStream.read(header) != 2 || header[0] != 0xFF.toByte() || header[1] != 0xD8.toByte()) {
+            return null
+        }
+        val markerBuf = ByteArray(4)
+        while (inputStream.read(markerBuf) == 4) {
+            if (markerBuf[0] != 0xFF.toByte()) break
+            val marker = markerBuf[1].toInt() and 0xFF
+            val length = ((markerBuf[2].toInt() and 0xFF) shl 8) or (markerBuf[3].toInt() and 0xFF)
+            if (length < 2) break
+            val payloadLen = length - 2
+
+            if (marker == 0xE0) { // APP0
+                val payload = ByteArray(payloadLen)
+                var total = 0
+                while (total < payloadLen) {
+                    val r = inputStream.read(payload, total, payloadLen - total)
+                    if (r < 0) break
+                    total += r
+                }
+                if (payloadLen >= 14 && payload.take(5).toByteArray().contentEquals(byteArrayOf(0x4A, 0x46, 0x49, 0x46, 0x00))) {
+                    val xThumb = payload[12].toInt() and 0xFF
+                    val yThumb = payload[13].toInt() and 0xFF
+                    if (xThumb > 0 && yThumb > 0) {
+                        return "Present (JFIF ${xThumb}x${yThumb})"
+                    }
+                } else if (payloadLen >= 6 && payload.take(5).toByteArray().contentEquals(byteArrayOf(0x4A, 0x46, 0x58, 0x58, 0x00))) {
+                    return "Present (JFXX extension)"
+                }
+            } else if (marker in 0xC0..0xFE && marker != 0xD8 && marker != 0xD9) {
+                var remaining = payloadLen.toLong()
+                while (remaining > 0) {
+                    val skipped = inputStream.skip(remaining)
+                    if (skipped <= 0) break
+                    remaining -= skipped
+                }
+            } else {
+                break
+            }
+        }
+        return null
     }
 }

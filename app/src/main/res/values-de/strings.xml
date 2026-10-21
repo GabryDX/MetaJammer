@@ -45,6 +45,7 @@
     <string name="metadata_preview">Metadaten-Vorschau</string>
     <string name="file_type">Typ: %1$s</string>
     <string name="no_metadata_found">Keine Metadaten gefunden</string>
+    <string name="loading_metadata">Metadaten werden gelesen…</string>
 
     <!-- ProcessingScreen -->
     <string name="process_files_title">Dateien verarbeiten</string>

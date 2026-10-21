@@ -55,6 +55,10 @@ class ProcessingViewModel(
     private val _metadataPreview = MutableStateFlow<Map<Uri, List<MetadataEntry>>>(emptyMap())
     val metadataPreview: StateFlow<Map<Uri, List<MetadataEntry>>> = _metadataPreview.asStateFlow()
 
+    private var metadataLoadingJob: Job? = null
+    private val _isLoadingMetadata = MutableStateFlow(false)
+    val isLoadingMetadata: StateFlow<Boolean> = _isLoadingMetadata.asStateFlow()
+
     private val _changePreview = MutableStateFlow<Map<Uri, List<MetadataDiffEntry>>>(emptyMap())
     val changePreview: StateFlow<Map<Uri, List<MetadataDiffEntry>>> = _changePreview.asStateFlow()
 
@@ -86,22 +90,46 @@ class ProcessingViewModel(
     val hasSavedOrShared: StateFlow<Boolean> = _hasSavedOrShared.asStateFlow()
 
     fun loadMetadataPreview(files: List<SelectedFile>) {
-        viewModelScope.launch {
-            runCatching {
+        metadataLoadingJob?.cancel()
+        if (files.isEmpty()) {
+            _isLoadingMetadata.value = false
+            _metadataPreview.value = emptyMap()
+            return
+        }
+
+        _isLoadingMetadata.value = true
+        val existingUris = files.map { it.uri }.toSet()
+        _metadataPreview.update { current -> current.filterKeys { it in existingUris } }
+
+        metadataLoadingJob = viewModelScope.launch {
+            try {
                 withContext(Dispatchers.IO) {
                     coroutineScope {
-                        files.map { file ->
-                            async {
-                                file.uri to metadataRepository.readMetadata(file)
+                        files.forEach { file ->
+                            if (_metadataPreview.value.containsKey(file.uri)) {
+                                return@forEach
                             }
-                        }.awaitAll().toMap()
+                            launch {
+                                val entries = runCatching {
+                                    metadataRepository.readMetadata(file)
+                                }.getOrElse { err ->
+                                    Timber.e(err, "Failed to read metadata for %s", file.uri)
+                                    listOf(MetadataEntry("Error", "Could not read metadata: ${err.message}"))
+                                }
+                                _metadataPreview.update { current ->
+                                    current + (file.uri to entries)
+                                }
+                            }
+                        }
                     }
                 }
-            }.onSuccess {
-                _metadataPreview.value = it
-            }.onFailure {
-                Timber.e(it, "Failed to read metadata for files")
-                _message.value = "Failed to read metadata: ${it.message}"
+            } catch (c: CancellationException) {
+                throw c
+            } catch (t: Throwable) {
+                Timber.e(t, "Failed to read metadata for files")
+                _message.value = "Failed to read metadata: ${t.message}"
+            } finally {
+                _isLoadingMetadata.value = false
             }
         }
     }
@@ -723,6 +751,8 @@ class ProcessingViewModel(
     }
 
     fun clearAllMetadataAndPlans() {
+        metadataLoadingJob?.cancel()
+        _isLoadingMetadata.value = false
         _metadataPreview.value = emptyMap()
         _changePreview.value = emptyMap()
         _replacementPlans.value = emptyMap()

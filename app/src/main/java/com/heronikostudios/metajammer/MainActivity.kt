@@ -109,6 +109,7 @@ fun MetaJammerApp(
 
     val selectedFiles by viewModel.selectedFiles.collectAsStateWithLifecycle()
     val metadataPreview by viewModel.metadataPreview.collectAsStateWithLifecycle()
+    val isLoadingMetadata by viewModel.isLoadingMetadata.collectAsStateWithLifecycle()
     val changePreview by viewModel.changePreview.collectAsStateWithLifecycle()
     val selectedMode by viewModel.selectedMode.collectAsStateWithLifecycle()
     val selectedProfile by viewModel.selectedProfile.collectAsStateWithLifecycle()
@@ -398,9 +399,16 @@ fun MetaJammerApp(
                 }
 
                 composable<Screen.Preview> {
+                    LaunchedEffect(selectedFiles) {
+                        if (selectedFiles.any { !metadataPreview.containsKey(it.uri) } && !isLoadingMetadata) {
+                            viewModel.loadMetadataPreview(selectedFiles)
+                        }
+                    }
+
                     MetadataPreviewScreen(
                         selectedFiles = selectedFiles,
                         metadataPreview = metadataPreview,
+                        isLoading = isLoadingMetadata,
                         onContinue = { navController.navigate(Screen.Process) },
                         onBack = { navController.popBackStack() },
                         modifier = screenModifier
