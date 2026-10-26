@@ -1,6 +1,5 @@
-- Added PDF Form XObject user watermark removal while strictly preserving commercial software trial stamps and document navigation links.
-- Added embedded thumbnail detection for EXIF IFD1 and JFIF/JFXX markers in metadata inspection.
-- Added progressive per-file background metadata extraction and loading state indicators in Metadata Preview.
-- Disabled Continue action during metadata extraction to prevent premature processing.
-- Optimized PDF watermark scanning performance by skipping Image XObjects.
-- Updated dependencies to Kotlin 2.4.21 and Kotlinx Serialization 1.12.0.
+- Added PDF user watermark removal while preserving trial stamps and navigation links.
+- Added embedded thumbnail detection for EXIF IFD1 and JFIF markers in inspection.
+- Added background loading indicators and progressive extraction in Metadata Preview.
+- Prevented premature processing during active metadata extraction.
+- Optimized PDF watermark scanning and updated dependencies to Kotlin 2.4.21.
