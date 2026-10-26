@@ -95,9 +95,13 @@ To verify the authenticity and integrity of MetaJammer APKs, you can use [AppVer
 ## Screenshots
 
 <p align="center">
-  <img src="images/screenshots/home_screen.jpg" alt="Home Screen" width="320"/>
-  <img src="images/screenshots/settings_screen.jpg" alt="Settings Screen" width="320"/>
-  <img src="images/screenshots/help_screen.jpg" alt="Help Screen" width="320"/>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/01_home_screen.jpg" alt="Home Screen" width="250"/>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/02_settings_screen.jpg" alt="Settings Screen" width="250"/>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/03_help_screen.jpg" alt="Help Screen" width="250"/>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/04_metadata_preview_screen.jpg" alt="Metadata Preview" width="250"/>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/05_process_files_screen.jpg" alt="Process Files & Diff" width="250"/>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/06_map_picker_screen.jpg" alt="Map Picker & Presets" width="250"/>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/07_output_screen.jpg" alt="Output Screen" width="250"/>
 </p>
 
 ## License
