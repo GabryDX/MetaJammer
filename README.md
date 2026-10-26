@@ -1,5 +1,14 @@
 <p align="center">
-  <img src="images/MetaJammer_Icon_Transparent.png" alt="MetaJammer Logo" width="128" height="128"/>
+  <img src="images/MetaJammer_Icon_Transparent.png" alt="MetaJammer Logo" width="128" height="128"/><br/>
+  <a href="https://github.com/GabryDX/MetaJammer/releases">
+    <img src="https://raw.githubusercontent.com/machiav3lli/oandbackupx/034b226cea5c1b30eb4f6a6f313e4dadcbb0ece4/badge_github.png" alt="Get it on GitHub" height="70">
+  </a>
+  <a href="https://f-droid.org/en/packages/com.heronikostudios.metajammer/">
+    <img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" height="70">
+  </a><br/>
+  <a href="https://github.com/GabryDX/MetaJammer/releases"><img src="https://img.shields.io/github/v/release/GabryDX/MetaJammer?logo=github&logoColor=white" alt="GitHub Release"></a>
+  <a href="https://f-droid.org/en/packages/com.heronikostudios.metajammer/"><img src="https://img.shields.io/f-droid/v/com.heronikostudios.metajammer?logo=f-droid&logoColor=white" alt="F-Droid Version"></a>
+  <a href="LICENSE.txt"><img src="https://img.shields.io/badge/License-ISC-blue.svg" alt="License"></a>
 </p>
 
 # MetaJammer
@@ -40,9 +49,21 @@ MetaJammer is committed to transparency, verifiable privacy, and user trust:
 - **[Security & Privacy Audit](security_audit.md):** In-depth assessment of the threat model, fail-closed architecture, parser hardening (XXE protection, path traversal, in-memory chunk parsing), and OWASP MASVS compliance.
 - **[FOSS Compliance Audit](foss_audit.md):** Complete audit verifying that 100% of dependencies, code, and assets are Free and Open Source Software.
 
-## F-Droid
+## Download
 
-MetaJammer is designed for F-Droid. You can build the F-Droid version using the `floss` flavor:
+MetaJammer is available on GitHub Releases and F-Droid:
+
+[<img src="https://raw.githubusercontent.com/machiav3lli/oandbackupx/034b226cea5c1b30eb4f6a6f313e4dadcbb0ece4/badge_github.png"
+     alt="Get it on GitHub"
+     height="75">](https://github.com/GabryDX/MetaJammer/releases)
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="75">](https://f-droid.org/en/packages/com.heronikostudios.metajammer/)
+
+- **GitHub Releases:** [github.com/GabryDX/MetaJammer/releases](https://github.com/GabryDX/MetaJammer/releases)
+- **F-Droid Package:** [f-droid.org/en/packages/com.heronikostudios.metajammer/](https://f-droid.org/en/packages/com.heronikostudios.metajammer/)
+
+You can also build the F-Droid version locally using the `floss` flavor:
 ```bash
 ./gradlew assembleFlossRelease
 ```
@@ -74,9 +95,13 @@ To verify the authenticity and integrity of MetaJammer APKs, you can use [AppVer
 ## Screenshots
 
 <p align="center">
-  <img src="images/screenshots/home_screen.jpg" alt="Home Screen" width="320"/>
-  <img src="images/screenshots/settings_screen.jpg" alt="Settings Screen" width="320"/>
-  <img src="images/screenshots/help_screen.jpg" alt="Help Screen" width="320"/>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/01_home_screen.jpg" alt="Home Screen" width="250"/>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/02_settings_screen.jpg" alt="Settings Screen" width="250"/>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/03_help_screen.jpg" alt="Help Screen" width="250"/>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/04_metadata_preview_screen.jpg" alt="Metadata Preview" width="250"/>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/05_process_files_screen.jpg" alt="Process Files & Diff" width="250"/>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/06_map_picker_screen.jpg" alt="Map Picker & Presets" width="250"/>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/07_output_screen.jpg" alt="Output Screen" width="250"/>
 </p>
 
 ## License
