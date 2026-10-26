@@ -210,6 +210,10 @@ class MainViewModel(
         return processingViewModel.saveProcessedFilesToDefault(settingsViewModel.appSettings.value)
     }
 
+    fun isLegacyDefaultFolderConfigured(mimeType: String?): Boolean {
+        return processingViewModel.isLegacyDefaultFolderConfigured(mimeType, settingsViewModel.appSettings.value)
+    }
+
     suspend fun saveProcessedFilesToCustom(treeUri: Uri): List<Uri> {
         return processingViewModel.saveProcessedFilesToCustom(treeUri, settingsViewModel.appSettings.value)
     }

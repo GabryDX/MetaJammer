@@ -86,7 +86,7 @@ class FileRepositoryTest {
 
     @Test
     @Config(sdk = [28])
-    fun `saveToDefaultFolder on Android 9 API 28 writes directly to public external storage and scans`() = runTest {
+    fun `saveToDefaultFolder on Android 9 API 28 writes directly to scoped storage and scans`() = runTest {
         val sourceFile = tempFolder.newFile("sample_image.png")
         sourceFile.writeBytes(byteArrayOf(1, 2, 3, 4, 5))
 
@@ -100,7 +100,7 @@ class FileRepositoryTest {
         assertNotNull("Result URI must not be null on API 28", resultUri)
 
         // Verify the file was written to Pictures/MetaJammer
-        val picturesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+        val picturesDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) ?: context.filesDir
         val metaJammerDir = File(picturesDir, "MetaJammer")
         val outputFile = File(metaJammerDir, "saved_sample_api28.png")
         assertTrue("Output file must exist in Pictures/MetaJammer on API 28", outputFile.exists())
@@ -122,7 +122,7 @@ class FileRepositoryTest {
 
         assertNotNull("Result URI must not be null on API 28", resultUri)
 
-        val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+        val downloadsDir = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) ?: context.filesDir
         val metaJammerDir = File(downloadsDir, "MetaJammer")
         val outputFile = File(metaJammerDir, "test_doc_api28.pdf")
         assertTrue("PDF must be saved to Downloads/MetaJammer on API 28", outputFile.exists())
@@ -143,7 +143,7 @@ class FileRepositoryTest {
 
         assertNotNull("Result URI must not be null on API 28", resultUri)
 
-        val moviesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES)
+        val moviesDir = context.getExternalFilesDir(Environment.DIRECTORY_MOVIES) ?: context.filesDir
         val metaJammerDir = File(moviesDir, "MetaJammer")
         val outputFile = File(metaJammerDir, "test_vid_api28.mp4")
         assertTrue("Video must be saved to Movies/MetaJammer on API 28", outputFile.exists())

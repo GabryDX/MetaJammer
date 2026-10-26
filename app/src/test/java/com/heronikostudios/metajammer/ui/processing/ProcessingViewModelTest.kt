@@ -288,4 +288,31 @@ class ProcessingViewModelTest {
         assertFalse("isLoadingMetadata should be false after clear", viewModel.isLoadingMetadata.value)
         assertTrue("metadataPreview should be empty after clear", viewModel.metadataPreview.value.isEmpty())
     }
+
+    @Test
+    fun testIsLegacyDefaultFolderConfiguredReturnsTrueOnlyForContentUri() {
+        val defaultSettings = AppSettings()
+        assertFalse(
+            "Default path Download/MetaJammer is relative, should return false",
+            viewModel.isLegacyDefaultFolderConfigured("image/jpeg", defaultSettings)
+        )
+
+        val safUnifiedSettings = AppSettings(
+            folderStructure = FolderStructure.UNIFIED,
+            unifiedSavingPath = "content://com.android.externalstorage.documents/tree/primary%3ADownload"
+        )
+        assertTrue(
+            "SAF content:// tree URI should return true for UNIFIED structure",
+            viewModel.isLegacyDefaultFolderConfigured("image/jpeg", safUnifiedSettings)
+        )
+
+        val safSplitSettings = AppSettings(
+            folderStructure = FolderStructure.SPLIT,
+            picturesSavingPath = "content://com.android.externalstorage.documents/tree/primary%3APictures"
+        )
+        assertTrue(
+            "SAF content:// tree URI should return true for SPLIT structure",
+            viewModel.isLegacyDefaultFolderConfigured("image/jpeg", safSplitSettings)
+        )
+    }
 }

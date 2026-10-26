@@ -341,26 +341,23 @@ open class FileRepository(private val context: Context) {
 
                 uri
             } else {
-                // Pre-Android 10 (Android 8 & 9, API 26-28): Direct file write to external storage + MediaScanner
-                @Suppress("DEPRECATION")
-                val targetDir = when {
-                    mimeType?.startsWith("image/") == true ->
-                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                    mimeType?.startsWith("video/") == true ->
-                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES)
-                    mimeType?.startsWith("audio/") == true ->
-                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)
-                    normalizedRelativePath.startsWith("Documents/") ->
-                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
-                    else ->
-                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                // Pre-Android 10 (Android 8 & 9, API 26-28):
+                // Without WRITE_EXTERNAL_STORAGE, save to app-specific external files directory
+                // (which requires zero permissions on API 19+) and index via MediaScanner.
+                val dirType = when {
+                    mimeType?.startsWith("image/") == true -> Environment.DIRECTORY_PICTURES
+                    mimeType?.startsWith("video/") == true -> Environment.DIRECTORY_MOVIES
+                    mimeType?.startsWith("audio/") == true -> Environment.DIRECTORY_MUSIC
+                    normalizedRelativePath.startsWith("Documents/") -> Environment.DIRECTORY_DOCUMENTS
+                    else -> Environment.DIRECTORY_DOWNLOADS
                 }
+                val baseDir = context.getExternalFilesDir(dirType) ?: context.filesDir
                 val subFolder = if (normalizedRelativePath.trimEnd('/').contains("/")) {
                     normalizedRelativePath.trimEnd('/').substringAfter("/")
                 } else {
                     "MetaJammer"
                 }
-                val destDir = File(targetDir, subFolder)
+                val destDir = File(baseDir, subFolder)
                 if (!destDir.exists()) {
                     destDir.mkdirs()
                 }
