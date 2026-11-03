@@ -94,7 +94,7 @@
     <string name="help_item_video_title">Videoverwerking</string>
     <string name="help_item_video_body">Ondersteunde formaten: MP4, MOV, M4A, OGG.\n\nVolledige remuxing wordt ondersteund voor deze containers. Dit proces verwijdert GPS, datums en apparaat-atomen om uw privacy te beschermen.</string>
     <string name="help_item_image_title">Beeld- &amp; vectorverwerking</string>
-    <string name="help_item_image_body">Ondersteunde formaten: JPG, PNG, WebP, HEIF, SVG.\n\nMetaJammer verwijdert EXIF-metadata van bitmapafbeeldingen en schoont XML/RDF-metadata van SVG\'s op. In de modus \"Poison\" worden gevoelige tags vervangen door realistische willekeurige gegevens.</string>
+    <string name="help_item_image_body">Ondersteunde formaten: JPG, PNG, WebP, HEIF/HEIC, SVG.\n\nMetaJammer verwijdert EXIF-metadata van bitmapafbeeldingen en schoont XML/RDF-metadata van SVG\'s op. In de modus \"Poison\" worden gevoelige tags vervangen door realistische willekeurige gegevens.</string>
     <string name="help_item_other_title">PDF- &amp; documentverwerking</string>
     <string name="help_item_other_body">Ondersteunde formaten: PDF.\n\nMetaJammer ondersteunt nu volledig PDF-documenten. U kunt metadata zoals Titel, Auteur, Onderwerp, Trefwoorden, Maker en Producent lezen, verwijderen en \"vergiftigen\". Het verwijdert ook verborgen watermerken en annotaties om ervoor te zorgen dat uw documenten schoon zijn voordat u ze deelt.</string>
     <string name="help_report_issue_title">Meld een probleem</string>
@@ -244,7 +244,7 @@
     <string name="onboarding_poison_vs_remove_title">Vergiftigen vs Verwijderen</string>
     <string name="onboarding_poison_vs_remove_desc"><b>Verwijderen:</b> Verwijdert alle metadata. Simpel en schoon.\n\n<b>Vergiftigen:</b> Vervangt gevoelige gegevens door valse, realistische waarden. Dit biedt <i>aannemelijke ontkenning</i> en misleidt automatische trackers.</string>
     <string name="onboarding_permissions_title">Voorbereiding</string>
-    <string name="onboarding_permissions_desc">MetaJammer heeft een paar machtigingen nodig om optimaal te werken. Je kunt ervoor kiezen om meldingen voor achtergrondtaken en internet voor de kaartkiezer in te schakelen.</string>
+    <string name="onboarding_permissions_desc">MetaJammer werkt volledig offline en vereist geen netwerktoegang. Je kunt optioneel meldingen inschakelen om achtergrondverwerking van grote bestandsbatches te volgen.</string>
     <string name="onboarding_finish_title">Alles klaar!</string>
     <string name="onboarding_finish_desc">Je bent klaar om je privacy te beschermen. Kies enkele bestanden of deel ze vanuit andere apps om te beginnen.</string>
     <string name="onboarding_get_started">Aan de slag</string>

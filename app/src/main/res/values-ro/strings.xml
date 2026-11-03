@@ -94,7 +94,7 @@
     <string name="help_item_video_title">Procesare video</string>
     <string name="help_item_video_body">Formate suportate: MP4, MOV, M4A, OGG.\n\nRemuxarea completă este suportată pentru aceste containere. Acest proces elimină datele GPS, datele calendaristice și atomii de dispozitiv pentru a-ți proteja confidențialitatea.</string>
     <string name="help_item_image_title">Procesare imagini și vectori</string>
-    <string name="help_item_image_body">Formate suportate: JPG, PNG, WebP, HEIF, SVG.\n\nMetaJammer elimină metadatele EXIF din imaginile bitmap și curăță metadatele XML/RDF din SVG-uri. În modul \"Alterare\", acesta înlocuiește etichetele sensibile cu date aleatorii realiste.</string>
+    <string name="help_item_image_body">Formate suportate: JPG, PNG, WebP, HEIF/HEIC, SVG.\n\nMetaJammer elimină metadatele EXIF din imaginile bitmap și curăță metadatele XML/RDF din SVG-uri. În modul \"Alterare\", acesta înlocuiește etichetele sensibile cu date aleatorii realiste.</string>
     <string name="help_item_other_title">Procesare PDF și documente</string>
     <string name="help_item_other_body">Formate suportate: PDF.\n\nMetaJammer acceptă acum pe deplin documentele PDF. Puteți citi, elimina și „otrăvi” metadate precum Titlu, Autor, Subiect, Cuvinte cheie, Creator și Producător. De asemenea, elimină filigranele ascunse și adnotările pentru a vă asigura că documentele sunt curate înainte de a fi partajate.</string>
     <string name="help_report_issue_title">Raportează o problemă</string>
@@ -244,7 +244,7 @@
     <string name="onboarding_poison_vs_remove_title">Alterare vs Eliminare</string>
     <string name="onboarding_poison_vs_remove_desc"><b>Eliminare:</b> Șterge toate metadatele. Simplu și curat.\n\n<b>Alterare:</b> Înlocuiește datele sensibile cu valori false, dar realiste. Acest lucru oferă <i>negare plauzibilă</i> și induce în eroare sistemele automate de urmărire.</string>
     <string name="onboarding_permissions_title">Pregătirea</string>
-    <string name="onboarding_permissions_desc">MetaJammer are nevoie de câteva permisiuni pentru a funcționa optim. Puteți alege să activați notificările pentru sarcinile de fundal și internetul pentru selectorul de hartă.</string>
+    <string name="onboarding_permissions_desc">MetaJammer funcționează complet offline și nu necesită acces la rețea. Puteți activa opțional notificările pentru a urmări procesarea în fundal a loturilor mari de fișiere.</string>
     <string name="onboarding_finish_title">Totul este gata!</string>
     <string name="onboarding_finish_desc">Sunteți gata să începeți să vă protejați confidențialitatea. Alegeți câteva fișiere sau partajați-le din alte aplicații pentru a începe.</string>
     <string name="onboarding_get_started">Să începem</string>

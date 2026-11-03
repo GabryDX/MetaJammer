@@ -94,7 +94,7 @@
     <string name="help_item_video_title">Pemrosesan Video</string>
     <string name="help_item_video_body">Format yang didukung: MP4, MOV, M4A, OGG.\n\nRemuxing penuh didukung untuk kontainer ini. Proses ini menghapus GPS, tanggal, dan atom perangkat untuk melindungi privasi Anda.</string>
     <string name="help_item_image_title">Pemrosesan Gambar &amp; Vektor</string>
-    <string name="help_item_image_body">Format yang didukung: JPG, PNG, WebP, HEIF, SVG.\n\nMetaJammer menghapus metadata EXIF dari gambar bitmap dan membersihkan metadata XML/RDF dari SVG. Dalam mode \"Poison\", metadata sensitif diganti dengan data acak yang realistis.</string>
+    <string name="help_item_image_body">Format yang didukung: JPG, PNG, WebP, HEIF/HEIC, SVG.\n\nMetaJammer menghapus metadata EXIF dari gambar bitmap dan membersihkan metadata XML/RDF dari SVG. Dalam mode \"Poison\", metadata sensitif diganti dengan data acak yang realistis.</string>
     <string name="help_item_other_title">Pemrosesan PDF &amp; Dokumen</string>
     <string name="help_item_other_body">Format yang didukung: PDF.\n\nMetaJammer kini sepenuhnya mendukung dokumen PDF. Anda dapat membaca, menghapus, dan \"meracuni\" metadata seperti Judul, Penulis, Subjek, Kata Kunci, Pembuat, dan Produser. Ini juga menghapus tanda air dan anotasi tersembunyi untuk memastikan dokumen Anda bersih sebelum dibagikan.</string>
     <string name="help_report_issue_title">Laporkan Masalah</string>
@@ -244,7 +244,7 @@
     <string name="onboarding_poison_vs_remove_title">Racuni vs Hapus</string>
     <string name="onboarding_poison_vs_remove_desc"><b>Hapus:</b> Menghapus semua metadata. Sederhana dan bersih.\n\n<b>Racuni:</b> Mengganti data sensitif dengan nilai palsu yang realistis. Ini memberikan <i>penyangkalan yang masuk akal</i> dan membingungkan pelacak otomatis.</string>
     <string name="onboarding_permissions_title">Bersiap-siap</string>
-    <string name="onboarding_permissions_desc">MetaJammer memerlukan beberapa izin untuk bekerja secara optimal. Anda dapat memilih untuk mengaktifkan notifikasi untuk tugas latar belakang dan internet untuk pemilih peta.</string>
+    <string name="onboarding_permissions_desc">MetaJammer bekerja sepenuhnya secara offline dan tidak memerlukan akses jaringan. Anda dapat mengaktifkan notifikasi untuk memantau pemrosesan latar belakang untuk kumpulan file besar.</string>
     <string name="onboarding_finish_title">Semua Siap!</string>
     <string name="onboarding_finish_desc">Anda siap untuk mulai melindungi privasi Anda. Pilih beberapa file atau bagikan dari aplikasi lain untuk memulai.</string>
     <string name="onboarding_get_started">Mulai</string>

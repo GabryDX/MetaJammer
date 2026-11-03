@@ -146,6 +146,13 @@ class HeicMetadataProcessor(
                 buffer.write(((value ushr (i * 8)) and 0xFFL).toInt())
             }
         }
+
+        private fun writeUint(buffer: ByteArray, value: Long, pos: Int, size: Int) {
+            for (i in 0 until size) {
+                val shift = (size - 1 - i) * 8
+                buffer[pos + i] = ((value ushr shift) and 0xFFL).toByte()
+            }
+        }
     }
 
     private data class BoxHeader(val type: String, val size: Long, val headerLen: Int)
@@ -780,8 +787,12 @@ class HeicMetadataProcessor(
     }
 
     /**
-     * Low-level ISOBMFF HEIC container rewriter.
-     * Rewrites `meta`, `iinf`, `iloc`, `iref`, and streams kept image extents into `mdat`.
+     * Low-level ISOBMFF HEIC container rewriter using in-place `free`-box padding architecture.
+     * Rewrites `meta` box children (`iinf`, `iloc`, `iref`) and pads `meta` with standard ISO-BMFF
+     * `free` boxes so that `meta` maintains its exact original length, leaving `mdat`, all image extents,
+     * and `idat` items 100% untouched and unshifted.
+     * Dropped extents in `mdat` (old EXIF/XMP or thumbnails) are securely zeroed out.
+     * Replacement EXIF payloads (e.g. for poisoning or category preservation) are appended to `mdat`.
      */
     private fun processHeicContainer(
         inputFile: File,
@@ -790,17 +801,21 @@ class HeicMetadataProcessor(
         thumbnailHandling: ThumbnailHandling
     ): Boolean {
         return runCatching {
+            val fileSize = inputFile.length()
+
+            // 1. Read top-level box positions and sizes
+            var currOffset = 0L
+            var metaHeaderLen = 8
+            var metaSize = 0L
+            var metaOffset = 0L
+            var metaPayload: ByteArray? = null
+
+            var mdatOffset = 0L
+            var mdatHeaderLen = 8
+            var mdatSize = 0L
+            var foundMdat = false
+
             RandomAccessFile(inputFile, "r").use { raf ->
-                val fileSize = raf.length()
-
-                // 1. Read top-level boxes
-                var currOffset = 0L
-                var ftypBytes: ByteArray? = null
-                var metaHeaderLen = 8
-                var metaSize = 0L
-                var metaOffset = 0L
-                var metaPayload: ByteArray? = null
-
                 while (currOffset < fileSize) {
                     raf.seek(currOffset)
                     val headerBuf = ByteArray(8)
@@ -813,14 +828,11 @@ class HeicMetadataProcessor(
                         if (raf.read(largeBuf) < 8) break
                         hlen = 16
                         bsize = ByteBuffer.wrap(largeBuf).order(ByteOrder.BIG_ENDIAN).long
+                    } else if (bsize == 0L) {
+                        bsize = fileSize - currOffset
                     }
 
-                    if (btype == "ftyp") {
-                        val buf = ByteArray(bsize.toInt())
-                        raf.seek(currOffset)
-                        raf.readFully(buf)
-                        ftypBytes = buf
-                    } else if (btype == "meta") {
+                    if (btype == "meta") {
                         metaOffset = currOffset
                         metaSize = bsize
                         metaHeaderLen = hlen
@@ -829,385 +841,532 @@ class HeicMetadataProcessor(
                         raf.seek(currOffset + hlen)
                         raf.readFully(buf)
                         metaPayload = buf
+                    } else if (btype == "mdat") {
+                        mdatOffset = currOffset
+                        mdatHeaderLen = hlen
+                        mdatSize = bsize
+                        foundMdat = true
                     }
 
                     currOffset += bsize
                 }
+            }
 
-                if (ftypBytes == null || metaPayload == null) {
-                    Timber.e("Missing required ftyp or meta boxes in HEIC file")
-                    return false
-                }
+            if (metaPayload == null || !foundMdat) {
+                Timber.e("Missing required meta or mdat boxes in HEIC file")
+                return false
+            }
 
-                // 2. Parse children of meta box
-                val metaVerFlags = metaPayload.copyOfRange(0, 4)
-                var childOffset = 4
-                val metaChildren = mutableMapOf<String, ByteArray>()
-                val metaChildrenOrder = mutableListOf<String>()
+            // 2. Parse children of meta box
+            val metaVerFlags = metaPayload.copyOfRange(0, 4)
+            var childOffset = 4
+            val metaChildren = mutableListOf<Pair<String, ByteArray>>()
 
-                while (childOffset + 8 <= metaPayload.size) {
-                    val csize = ByteBuffer.wrap(metaPayload, childOffset, 4).order(ByteOrder.BIG_ENDIAN).int.toLong() and 0xFFFFFFFFL
-                    val ctype = String(metaPayload, childOffset + 4, 4, Charsets.US_ASCII)
-                    val boxLen = csize.toInt()
-                    if (boxLen < 8 || childOffset + boxLen > metaPayload.size) break
+            while (childOffset + 8 <= metaPayload.size) {
+                val csize = ByteBuffer.wrap(metaPayload, childOffset, 4).order(ByteOrder.BIG_ENDIAN).int.toLong() and 0xFFFFFFFFL
+                val ctype = String(metaPayload, childOffset + 4, 4, Charsets.US_ASCII)
+                val boxLen = csize.toInt()
+                if (boxLen < 8 || childOffset + boxLen > metaPayload.size) break
 
-                    val cbytes = metaPayload.copyOfRange(childOffset, childOffset + boxLen)
-                    metaChildren[ctype] = cbytes
-                    metaChildrenOrder.add(ctype)
-                    childOffset += boxLen
-                }
+                val cbytes = metaPayload.copyOfRange(childOffset, childOffset + boxLen)
+                metaChildren.add(ctype to cbytes)
+                childOffset += boxLen
+            }
 
-                val iinfBytes = metaChildren["iinf"] ?: return false
-                val ilocBytes = metaChildren["iloc"] ?: return false
+            val pitmBytes = metaChildren.firstOrNull { it.first == "pitm" }?.second
+            val primaryItemId = parsePrimaryItemId(pitmBytes) ?: 1
 
-                // 3. Parse iinf to discover metadata items
-                val iinfVer = iinfBytes[8].toInt()
-                var infeCursor = if (iinfVer == 0) 14 else 16
-                val metadataItemIds = mutableSetOf<Int>()
-                val thumbnailItemIds = mutableSetOf<Int>()
-                val keptInfeBoxes = mutableListOf<ByteArray>()
-                var maxItemId = 1
-
-                while (infeCursor + 8 <= iinfBytes.size) {
-                    val infeSize = ByteBuffer.wrap(iinfBytes, infeCursor, 4).order(ByteOrder.BIG_ENDIAN).int
-                    if (infeSize < 8 || infeCursor + infeSize > iinfBytes.size) break
-                    val infeBytes = iinfBytes.copyOfRange(infeCursor, infeCursor + infeSize)
-                    val infeVer = infeBytes[8].toInt()
-                    val itemId: Int
-                    val itemType: String
-                    if (infeVer in 0..2) {
-                        itemId = ByteBuffer.wrap(infeBytes, 12, 2).order(ByteOrder.BIG_ENDIAN).short.toInt() and 0xFFFF
-                        itemType = if (infeVer == 2) String(infeBytes, 16, 4, Charsets.US_ASCII) else "mime"
-                    } else {
-                        itemId = ByteBuffer.wrap(infeBytes, 12, 4).order(ByteOrder.BIG_ENDIAN).int
-                        itemType = String(infeBytes, 18, 4, Charsets.US_ASCII)
-                    }
-                    if (itemId > maxItemId) maxItemId = itemId
-
-                    if (itemType.lowercase() in HEIC_METADATA_ITEM_TYPES) {
-                        metadataItemIds.add(itemId)
-                    } else {
-                        keptInfeBoxes.add(infeBytes)
-                    }
-
-                    infeCursor += infeSize
-                }
-
-                // If removing thumbnails, check iref for thmb references
-                val irefBytes = metaChildren["iref"]
-                if (thumbnailHandling == ThumbnailHandling.REMOVE && irefBytes != null) {
-                    val irefVer = irefBytes[8].toInt()
-                    var refCursor = 12
-                    while (refCursor + 8 <= irefBytes.size) {
-                        val refSize = ByteBuffer.wrap(irefBytes, refCursor, 4).order(ByteOrder.BIG_ENDIAN).int
-                        if (refSize < 8 || refCursor + refSize > irefBytes.size) break
-                        val refType = String(irefBytes, refCursor + 4, 4, Charsets.US_ASCII)
-                        if (refType == "thmb") {
-                            val fromId = if (irefVer == 0) {
-                                ByteBuffer.wrap(irefBytes, refCursor + 8, 2).order(ByteOrder.BIG_ENDIAN).short.toInt() and 0xFFFF
-                            } else {
-                                ByteBuffer.wrap(irefBytes, refCursor + 8, 4).order(ByteOrder.BIG_ENDIAN).int
-                            }
-                            thumbnailItemIds.add(fromId)
+            // 3. Find thumbnail items from iref FIRST
+            val irefBytes = metaChildren.firstOrNull { it.first == "iref" }?.second
+            val thumbnailItemIds = mutableSetOf<Int>()
+            var irefVer = 0
+            if (irefBytes != null) {
+                irefVer = irefBytes[8].toInt()
+                var refCursor = 12
+                while (refCursor + 8 <= irefBytes.size) {
+                    val refSize = ByteBuffer.wrap(irefBytes, refCursor, 4).order(ByteOrder.BIG_ENDIAN).int
+                    if (refSize < 8 || refCursor + refSize > irefBytes.size) break
+                    val refType = String(irefBytes, refCursor + 4, 4, Charsets.US_ASCII)
+                    if (refType == "thmb" && thumbnailHandling == ThumbnailHandling.REMOVE) {
+                        val fromId = if (irefVer == 0) {
+                            ByteBuffer.wrap(irefBytes, refCursor + 8, 2).order(ByteOrder.BIG_ENDIAN).short.toInt() and 0xFFFF
+                        } else {
+                            ByteBuffer.wrap(irefBytes, refCursor + 8, 4).order(ByteOrder.BIG_ENDIAN).int
                         }
-                        refCursor += refSize
+                        thumbnailItemIds.add(fromId)
                     }
+                    refCursor += refSize
                 }
+            }
 
-                val allIdsToDrop = metadataItemIds + thumbnailItemIds
+            // 4. Parse iinf to discover metadata items and filter kept infe
+            val iinfBytes = metaChildren.firstOrNull { it.first == "iinf" }?.second ?: return false
+            val iinfVer = iinfBytes[8].toInt()
+            var infeCursor = if (iinfVer == 0) 14 else 16
+            val metadataItemIds = mutableSetOf<Int>()
+            val keptInfeBoxes = mutableListOf<ByteArray>()
+            var existingExifItemId: Int? = null
+            var maxItemId = 1
 
-                // 4. Parse iloc to locate item extents
-                val ilocVer = ilocBytes[8].toInt()
-                val ilocFlags = ilocBytes.copyOfRange(9, 12)
-                val offsetSize = (ilocBytes[12].toInt() shr 4) and 0x0F
-                val lengthSize = ilocBytes[12].toInt() and 0x0F
-                val baseOffsetSize = (ilocBytes[13].toInt() shr 4) and 0x0F
-                val indexSize = if (ilocVer in 1..2) ilocBytes[13].toInt() and 0x0F else 0
-
-                var ilocIdx = 14
-                val itemCount = if (ilocVer < 2) {
-                    val count = ByteBuffer.wrap(ilocBytes, ilocIdx, 2).order(ByteOrder.BIG_ENDIAN).short.toInt() and 0xFFFF
-                    ilocIdx += 2
-                    count
+            while (infeCursor + 8 <= iinfBytes.size) {
+                val infeSize = ByteBuffer.wrap(iinfBytes, infeCursor, 4).order(ByteOrder.BIG_ENDIAN).int
+                if (infeSize < 8 || infeCursor + infeSize > iinfBytes.size) break
+                val infeBytes = iinfBytes.copyOfRange(infeCursor, infeCursor + infeSize)
+                val infeVer = infeBytes[8].toInt()
+                val itemId: Int
+                val itemType: String
+                if (infeVer in 0..2) {
+                    itemId = ByteBuffer.wrap(infeBytes, 12, 2).order(ByteOrder.BIG_ENDIAN).short.toInt() and 0xFFFF
+                    itemType = if (infeVer == 2) String(infeBytes, 16, 4, Charsets.US_ASCII) else "mime"
                 } else {
-                    val count = ByteBuffer.wrap(ilocBytes, ilocIdx, 4).order(ByteOrder.BIG_ENDIAN).int
-                    ilocIdx += 4
-                    count
+                    itemId = ByteBuffer.wrap(infeBytes, 12, 4).order(ByteOrder.BIG_ENDIAN).int
+                    itemType = String(infeBytes, 18, 4, Charsets.US_ASCII)
                 }
 
-                val keptItems = mutableListOf<ParsedItem>()
+                if (itemId > maxItemId) maxItemId = itemId
 
-                for (i in 0 until itemCount) {
-                    val itemId = if (ilocVer < 2) {
-                        val id = ByteBuffer.wrap(ilocBytes, ilocIdx, 2).order(ByteOrder.BIG_ENDIAN).short.toInt() and 0xFFFF
-                        ilocIdx += 2
-                        id
-                    } else {
-                        val id = ByteBuffer.wrap(ilocBytes, ilocIdx, 4).order(ByteOrder.BIG_ENDIAN).int
-                        ilocIdx += 4
-                        id
-                    }
-
-                    var cm = 0
-                    if (ilocVer in 1..2) {
-                        cm = ilocBytes[ilocIdx].toInt() and 0x0F
-                        ilocIdx += 2
-                    }
-
-                    val dref = ByteBuffer.wrap(ilocBytes, ilocIdx, 2).order(ByteOrder.BIG_ENDIAN).short.toInt() and 0xFFFF
-                    ilocIdx += 2
-
-                    val baseOffset = readUint(ilocBytes, ilocIdx, baseOffsetSize)
-                    ilocIdx += baseOffsetSize
-
-                    val extentCount = ByteBuffer.wrap(ilocBytes, ilocIdx, 2).order(ByteOrder.BIG_ENDIAN).short.toInt() and 0xFFFF
-                    ilocIdx += 2
-
-                    val extents = mutableListOf<ItemExtent>()
-                    for (e in 0 until extentCount) {
-                        if (ilocVer in 1..2 && indexSize > 0) ilocIdx += indexSize
-                        val extOffset = readUint(ilocBytes, ilocIdx, offsetSize)
-                        ilocIdx += offsetSize
-                        val extLength = readUint(ilocBytes, ilocIdx, lengthSize)
-                        ilocIdx += lengthSize
-                        extents.add(ItemExtent(baseOffset + extOffset, extLength))
-                    }
-
-                    if (itemId !in allIdsToDrop) {
-                        keptItems.add(ParsedItem(itemId, "image", cm, dref, extents))
-                    }
+                if (itemType.equals("Exif", ignoreCase = true)) {
+                    existingExifItemId = itemId
                 }
 
-                // If adding replacement Exif payload, create a new item ID and infe box
-                val newExifItemId = maxItemId + 1
-                if (replacementExifPayload != null) {
-                    val newInfe = ByteArrayOutputStream()
-                    newInfe.write(byteArrayOf(0, 0, 0, 21)) // size 21
+                val isMeta = itemType.lowercase() in HEIC_METADATA_ITEM_TYPES
+                val isThmb = itemId in thumbnailItemIds
+
+                if (replacementExifPayload != null && itemType.equals("Exif", ignoreCase = true)) {
+                    keptInfeBoxes.add(infeBytes)
+                } else if (isMeta || isThmb) {
+                    metadataItemIds.add(itemId)
+                } else {
+                    keptInfeBoxes.add(infeBytes)
+                }
+
+                infeCursor += infeSize
+            }
+
+            val allDropIds = (metadataItemIds + thumbnailItemIds).toMutableSet()
+            if (replacementExifPayload != null && existingExifItemId != null) {
+                allDropIds.remove(existingExifItemId)
+            }
+
+            val targetExifItemId = existingExifItemId ?: if (replacementExifPayload != null) maxItemId + 1 else null
+            if (replacementExifPayload != null && existingExifItemId == null && targetExifItemId != null) {
+                val newInfe = ByteArrayOutputStream()
+                if (iinfVer == 0) {
+                    newInfe.write(byteArrayOf(0, 0, 0, 21))
                     newInfe.write("infe".toByteArray(Charsets.US_ASCII))
                     newInfe.write(byteArrayOf(2, 0, 0, 0)) // ver 2, flags 0
-                    writeUint(newInfe, newExifItemId.toLong(), 2) // item_id
-                    writeUint(newInfe, 0L, 2) // item_protection_index = 0
+                    writeUint(newInfe, targetExifItemId.toLong(), 2)
+                    writeUint(newInfe, 0L, 2)
                     newInfe.write("Exif".toByteArray(Charsets.US_ASCII))
-                    newInfe.write(0) // null terminator for name
-                    keptInfeBoxes.add(newInfe.toByteArray())
-                }
-
-                // 5. Rebuild iinf box
-                val newIinf = ByteArrayOutputStream()
-                newIinf.write(byteArrayOf(0, 0, 0, 0)) // placeholder size
-                newIinf.write("iinf".toByteArray(Charsets.US_ASCII))
-                newIinf.write(iinfVer)
-                newIinf.write(iinfBytes.copyOfRange(9, 12))
-                if (iinfVer == 0) {
-                    writeUint(newIinf, keptInfeBoxes.size.toLong(), 2)
+                    newInfe.write(0)
                 } else {
-                    writeUint(newIinf, keptInfeBoxes.size.toLong(), 4)
+                    newInfe.write(byteArrayOf(0, 0, 0, 25))
+                    newInfe.write("infe".toByteArray(Charsets.US_ASCII))
+                    newInfe.write(byteArrayOf(3, 0, 0, 0)) // ver 3, flags 0
+                    writeUint(newInfe, targetExifItemId.toLong(), 4)
+                    writeUint(newInfe, 0L, 2)
+                    newInfe.write("Exif".toByteArray(Charsets.US_ASCII))
+                    newInfe.write(0)
                 }
-                keptInfeBoxes.forEach { newIinf.write(it) }
-                val finalIinfBytes = newIinf.toByteArray()
-                ByteBuffer.wrap(finalIinfBytes, 0, 4).order(ByteOrder.BIG_ENDIAN).putInt(finalIinfBytes.size)
-
-                // 6. Rebuild iref box (dropping references involving stripped items)
-                var finalIrefBytes: ByteArray? = null
-                val primaryItemId = parsePrimaryItemId(metaChildren["pitm"]) ?: keptItems.firstOrNull()?.itemId ?: 1
-
-                if (irefBytes != null) {
-                    val irefVer = irefBytes[8].toInt()
-                    val keptRefBoxes = mutableListOf<ByteArray>()
-                    var refCursor = 12
-                    while (refCursor + 8 <= irefBytes.size) {
-                        val refSize = ByteBuffer.wrap(irefBytes, refCursor, 4).order(ByteOrder.BIG_ENDIAN).int
-                        if (refSize < 8 || refCursor + refSize > irefBytes.size) break
-                        val rbytes = irefBytes.copyOfRange(refCursor, refCursor + refSize)
-                        val fromId = if (irefVer == 0) {
-                            ByteBuffer.wrap(rbytes, 8, 2).order(ByteOrder.BIG_ENDIAN).short.toInt() and 0xFFFF
-                        } else {
-                            ByteBuffer.wrap(rbytes, 8, 4).order(ByteOrder.BIG_ENDIAN).int
-                        }
-                        if (fromId !in allIdsToDrop) {
-                            keptRefBoxes.add(rbytes)
-                        }
-                        refCursor += refSize
-                    }
-
-                    if (replacementExifPayload != null) {
-                        // Add cdsc reference from newExifItemId -> primaryItemId
-                        val cdscBox = ByteArrayOutputStream()
-                        cdscBox.write(byteArrayOf(0, 0, 0, 14))
-                        cdscBox.write("cdsc".toByteArray(Charsets.US_ASCII))
-                        writeUint(cdscBox, newExifItemId.toLong(), 2)
-                        writeUint(cdscBox, 1L, 2) // count 1
-                        writeUint(cdscBox, primaryItemId.toLong(), 2)
-                        keptRefBoxes.add(cdscBox.toByteArray())
-                    }
-
-                    if (keptRefBoxes.isNotEmpty()) {
-                        val newIref = ByteArrayOutputStream()
-                        newIref.write(byteArrayOf(0, 0, 0, 0))
-                        newIref.write("iref".toByteArray(Charsets.US_ASCII))
-                        newIref.write(irefVer)
-                        newIref.write(irefBytes.copyOfRange(9, 12))
-                        keptRefBoxes.forEach { newIref.write(it) }
-                        val assembled = newIref.toByteArray()
-                        ByteBuffer.wrap(assembled, 0, 4).order(ByteOrder.BIG_ENDIAN).putInt(assembled.size)
-                        finalIrefBytes = assembled
-                    }
-                } else if (replacementExifPayload != null) {
-                    // Create minimal iref for the Exif reference
-                    val newIref = ByteArrayOutputStream()
-                    newIref.write(byteArrayOf(0, 0, 0, 26))
-                    newIref.write("iref".toByteArray(Charsets.US_ASCII))
-                    newIref.write(byteArrayOf(0, 0, 0, 0)) // ver 0, flags 0
-                    newIref.write(byteArrayOf(0, 0, 0, 14)) // cdsc size 14
-                    newIref.write("cdsc".toByteArray(Charsets.US_ASCII))
-                    writeUint(newIref, newExifItemId.toLong(), 2)
-                    writeUint(newIref, 1L, 2)
-                    writeUint(newIref, primaryItemId.toLong(), 2)
-                    finalIrefBytes = newIref.toByteArray()
-                }
-
-                // 7. Calculate new offsets and build new iloc box
-                fun buildIloc(offsets: List<Long>): ByteArray {
-                    val out = ByteArrayOutputStream()
-                    out.write(byteArrayOf(0, 0, 0, 0)) // placeholder size
-                    out.write("iloc".toByteArray(Charsets.US_ASCII))
-                    out.write(ilocVer)
-                    out.write(ilocFlags)
-                    out.write((4 shl 4) or 4) // offset_size=4, length_size=4
-                    out.write((4 shl 4) or (if (ilocVer in 1..2) indexSize else 0)) // base_offset_size=4
-                    val totalItems = keptItems.size + if (replacementExifPayload != null) 1 else 0
-                    if (ilocVer < 2) {
-                        writeUint(out, totalItems.toLong(), 2)
-                    } else {
-                        writeUint(out, totalItems.toLong(), 4)
-                    }
-
-                    for (i in keptItems.indices) {
-                        val item = keptItems[i]
-                        if (ilocVer < 2) writeUint(out, item.itemId.toLong(), 2) else writeUint(out, item.itemId.toLong(), 4)
-                        if (ilocVer in 1..2) out.write(byteArrayOf((item.constructionMethod and 0x0F).toByte(), 0))
-                        writeUint(out, item.dataReferenceIndex.toLong(), 2)
-                        writeUint(out, offsets[i], 4) // base_offset
-                        writeUint(out, item.extents.size.toLong(), 2) // extent_count
-                        for (ext in item.extents) {
-                            if (ilocVer in 1..2 && indexSize > 0) out.write(ByteArray(indexSize))
-                            writeUint(out, 0L, 4) // extent_offset = 0
-                            writeUint(out, ext.length, 4) // extent_length
-                        }
-                    }
-
-                    if (replacementExifPayload != null) {
-                        val exifIdx = keptItems.size
-                        if (ilocVer < 2) writeUint(out, newExifItemId.toLong(), 2) else writeUint(out, newExifItemId.toLong(), 4)
-                        if (ilocVer in 1..2) out.write(byteArrayOf(0, 0))
-                        writeUint(out, 0L, 2)
-                        writeUint(out, offsets[exifIdx], 4)
-                        writeUint(out, 1L, 2)
-                        if (ilocVer in 1..2 && indexSize > 0) out.write(ByteArray(indexSize))
-                        writeUint(out, 0L, 4)
-                        writeUint(out, replacementExifPayload.size.toLong(), 4)
-                    }
-
-                    val assembled = out.toByteArray()
-                    ByteBuffer.wrap(assembled, 0, 4).order(ByteOrder.BIG_ENDIAN).putInt(assembled.size)
-                    return assembled
-                }
-
-                // Fixed-size dummy iloc to calculate final meta size
-                val dummyOffsets = List(keptItems.size + if (replacementExifPayload != null) 1 else 0) { 0L }
-                val dummyIlocBytes = buildIloc(dummyOffsets)
-
-                // Assemble children of new meta box
-                val finalChildren = mutableListOf<ByteArray>()
-                for (ctype in metaChildrenOrder) {
-                    when (ctype) {
-                        "iinf" -> finalChildren.add(finalIinfBytes)
-                        "iloc" -> finalChildren.add(dummyIlocBytes) // same size as final iloc
-                        "iref" -> finalIrefBytes?.let { finalChildren.add(it) }
-                        else -> metaChildren[ctype]?.let { finalChildren.add(it) }
-                    }
-                }
-                if ("iref" !in metaChildrenOrder && finalIrefBytes != null) {
-                    finalChildren.add(finalIrefBytes)
-                }
-
-                val childrenTotalLen = finalChildren.sumOf { it.size }
-                val newMetaSize = 8 + 4 + childrenTotalLen
-                val newMdatOffset = ftypBytes.size.toLong() + newMetaSize
-                val mdatPayloadStart = newMdatOffset + 8L
-
-                // Calculate exact base offsets for each kept extent
-                val baseOffsets = mutableListOf<Long>()
-                var runningOffset = mdatPayloadStart
-                for (item in keptItems) {
-                    baseOffsets.add(runningOffset)
-                    val totalItemLen = item.extents.sumOf { it.length }
-                    runningOffset += totalItemLen
-                }
-                if (replacementExifPayload != null) {
-                    baseOffsets.add(runningOffset)
-                }
-
-                val finalIlocBytes = buildIloc(baseOffsets)
-
-                // 8. Write final output file
-                outputFile.outputStream().use { out ->
-                    out.write(ftypBytes)
-
-                    // Write meta box
-                    val metaHeader = ByteBuffer.allocate(8).order(ByteOrder.BIG_ENDIAN)
-                        .putInt(newMetaSize)
-                        .put("meta".toByteArray(Charsets.US_ASCII))
-                        .array()
-                    out.write(metaHeader)
-                    out.write(metaVerFlags)
-
-                    for (c in finalChildren) {
-                        val ctype = String(c, 4, 4, Charsets.US_ASCII)
-                        if (ctype == "iloc") {
-                            out.write(finalIlocBytes)
-                        } else {
-                            out.write(c)
-                        }
-                    }
-
-                    // Write mdat box
-                    val totalPayloadLen = keptItems.sumOf { it.extents.sumOf { ext -> ext.length } } +
-                        (replacementExifPayload?.size?.toLong() ?: 0L)
-                    val mdatSize = 8L + totalPayloadLen
-                    val mdatHeader = ByteBuffer.allocate(8).order(ByteOrder.BIG_ENDIAN)
-                        .putInt(mdatSize.toInt())
-                        .put("mdat".toByteArray(Charsets.US_ASCII))
-                        .array()
-                    out.write(mdatHeader)
-
-                    // Stream image extents from source using fixed 64KB buffer
-                    val buffer = ByteArray(65536)
-                    for (item in keptItems) {
-                        for (ext in item.extents) {
-                            raf.seek(ext.offset)
-                            var remaining = ext.length
-                            while (remaining > 0) {
-                                val toRead = minOf(remaining, buffer.size.toLong()).toInt()
-                                val bytesRead = raf.read(buffer, 0, toRead)
-                                if (bytesRead < 0) throw EOFException("Unexpected EOF while streaming HEIC extent")
-                                out.write(buffer, 0, bytesRead)
-                                remaining -= bytesRead
-                            }
-                        }
-                    }
-
-                    // Write replacement Exif payload if present
-                    if (replacementExifPayload != null) {
-                        out.write(replacementExifPayload)
-                    }
-                }
-
-                true
+                keptInfeBoxes.add(newInfe.toByteArray())
             }
+
+            // 5. Rebuild iinf box
+            val newIinf = ByteArrayOutputStream()
+            newIinf.write(byteArrayOf(0, 0, 0, 0)) // placeholder size
+            newIinf.write("iinf".toByteArray(Charsets.US_ASCII))
+            newIinf.write(iinfVer)
+            newIinf.write(iinfBytes.copyOfRange(9, 12))
+            if (iinfVer == 0) {
+                writeUint(newIinf, keptInfeBoxes.size.toLong(), 2)
+            } else {
+                writeUint(newIinf, keptInfeBoxes.size.toLong(), 4)
+            }
+            keptInfeBoxes.forEach { newIinf.write(it) }
+            val finalIinfBytes = newIinf.toByteArray()
+            ByteBuffer.wrap(finalIinfBytes, 0, 4).order(ByteOrder.BIG_ENDIAN).putInt(finalIinfBytes.size)
+
+            // 6. Rebuild iref box
+            var finalIrefBytes: ByteArray? = null
+            val keptRefs = mutableListOf<ByteArray>()
+            var hasExifCdsc = false
+
+            if (irefBytes != null) {
+                var refCursor = 12
+                while (refCursor + 8 <= irefBytes.size) {
+                    val refSize = ByteBuffer.wrap(irefBytes, refCursor, 4).order(ByteOrder.BIG_ENDIAN).int
+                    if (refSize < 8 || refCursor + refSize > irefBytes.size) break
+                    val rbox = irefBytes.copyOfRange(refCursor, refCursor + refSize)
+                    val rtype = String(rbox, 4, 4, Charsets.US_ASCII)
+                    val fid = if (irefVer == 0) {
+                        ByteBuffer.wrap(rbox, 8, 2).order(ByteOrder.BIG_ENDIAN).short.toInt() and 0xFFFF
+                    } else {
+                        ByteBuffer.wrap(rbox, 8, 4).order(ByteOrder.BIG_ENDIAN).int
+                    }
+                    val cnt = ByteBuffer.wrap(rbox, if (irefVer == 0) 10 else 12, 2).order(ByteOrder.BIG_ENDIAN).short.toInt() and 0xFFFF
+                    val toIds = mutableListOf<Int>()
+                    var toIdx = if (irefVer == 0) 12 else 14
+                    for (j in 0 until cnt) {
+                        if (irefVer == 0) {
+                            toIds.add(ByteBuffer.wrap(rbox, toIdx, 2).order(ByteOrder.BIG_ENDIAN).short.toInt() and 0xFFFF)
+                            toIdx += 2
+                        } else {
+                            toIds.add(ByteBuffer.wrap(rbox, toIdx, 4).order(ByteOrder.BIG_ENDIAN).int)
+                            toIdx += 4
+                        }
+                    }
+
+                    if (fid == targetExifItemId && rtype == "cdsc") {
+                        hasExifCdsc = true
+                    }
+
+                    if (fid !in allDropIds && toIds.none { it in allDropIds }) {
+                        keptRefs.add(rbox)
+                    }
+                    refCursor += refSize
+                }
+            }
+
+            if (replacementExifPayload != null && !hasExifCdsc && targetExifItemId != null) {
+                val cdsc = ByteArrayOutputStream()
+                if (irefVer == 0) {
+                    cdsc.write(byteArrayOf(0, 0, 0, 14))
+                    cdsc.write("cdsc".toByteArray(Charsets.US_ASCII))
+                    writeUint(cdsc, targetExifItemId.toLong(), 2)
+                    writeUint(cdsc, 1L, 2)
+                    writeUint(cdsc, primaryItemId.toLong(), 2)
+                } else {
+                    cdsc.write(byteArrayOf(0, 0, 0, 18))
+                    cdsc.write("cdsc".toByteArray(Charsets.US_ASCII))
+                    writeUint(cdsc, targetExifItemId.toLong(), 4)
+                    writeUint(cdsc, 1L, 2)
+                    writeUint(cdsc, primaryItemId.toLong(), 4)
+                }
+                keptRefs.add(cdsc.toByteArray())
+            }
+
+            if (keptRefs.isNotEmpty()) {
+                val newIref = ByteArrayOutputStream()
+                newIref.write(byteArrayOf(0, 0, 0, 0))
+                newIref.write("iref".toByteArray(Charsets.US_ASCII))
+                newIref.write(irefVer)
+                newIref.write(if (irefBytes != null) irefBytes.copyOfRange(9, 12) else byteArrayOf(0, 0, 0))
+                keptRefs.forEach { newIref.write(it) }
+                val assembled = newIref.toByteArray()
+                ByteBuffer.wrap(assembled, 0, 4).order(ByteOrder.BIG_ENDIAN).putInt(assembled.size)
+                finalIrefBytes = assembled
+            }
+
+            // 7. Parse iloc box
+            val ilocBytes = metaChildren.firstOrNull { it.first == "iloc" }?.second ?: return false
+            val ilocVer = ilocBytes[8].toInt()
+            val offsetSize = (ilocBytes[12].toInt() shr 4) and 0x0F
+            val lengthSize = ilocBytes[12].toInt() and 0x0F
+            val baseOffsetSize = (ilocBytes[13].toInt() shr 4) and 0x0F
+            val indexSize = if (ilocVer in 1..2) ilocBytes[13].toInt() and 0x0F else 0
+
+            var ilocIdx = 14
+            val itemCount = if (ilocVer < 2) {
+                val count = ByteBuffer.wrap(ilocBytes, ilocIdx, 2).order(ByteOrder.BIG_ENDIAN).short.toInt() and 0xFFFF
+                ilocIdx += 2
+                count
+            } else {
+                val count = ByteBuffer.wrap(ilocBytes, ilocIdx, 4).order(ByteOrder.BIG_ENDIAN).int
+                ilocIdx += 4
+                count
+            }
+
+            val keptIlocItems = mutableListOf<Triple<Int, ByteArray, Int>>() // itemId, itemBytes, cm
+            val extentsToZero = mutableListOf<ItemExtent>()
+
+            for (i in 0 until itemCount) {
+                val startPos = ilocIdx
+                val itemId = if (ilocVer < 2) {
+                    val id = ByteBuffer.wrap(ilocBytes, ilocIdx, 2).order(ByteOrder.BIG_ENDIAN).short.toInt() and 0xFFFF
+                    ilocIdx += 2
+                    id
+                } else {
+                    val id = ByteBuffer.wrap(ilocBytes, ilocIdx, 4).order(ByteOrder.BIG_ENDIAN).int
+                    ilocIdx += 4
+                    id
+                }
+
+                var cm = 0
+                if (ilocVer in 1..2) {
+                    val rCm = ByteBuffer.wrap(ilocBytes, ilocIdx, 2).order(ByteOrder.BIG_ENDIAN).short.toInt() and 0xFFFF
+                    cm = rCm and 0x0F
+                    ilocIdx += 2
+                }
+
+                val dref = ByteBuffer.wrap(ilocBytes, ilocIdx, 2).order(ByteOrder.BIG_ENDIAN).short.toInt() and 0xFFFF
+                ilocIdx += 2
+
+                val baseOffset = readUint(ilocBytes, ilocIdx, baseOffsetSize)
+                ilocIdx += baseOffsetSize
+
+                val extentCount = ByteBuffer.wrap(ilocBytes, ilocIdx, 2).order(ByteOrder.BIG_ENDIAN).short.toInt() and 0xFFFF
+                ilocIdx += 2
+
+                for (e in 0 until extentCount) {
+                    if (ilocVer in 1..2 && indexSize > 0) ilocIdx += indexSize
+                    val extOffset = readUint(ilocBytes, ilocIdx, offsetSize)
+                    ilocIdx += offsetSize
+                    val extLength = readUint(ilocBytes, ilocIdx, lengthSize)
+                    ilocIdx += lengthSize
+
+                    if ((itemId in allDropIds || itemId == targetExifItemId) && cm == 0) {
+                        extentsToZero.add(ItemExtent(baseOffset + extOffset, extLength))
+                    }
+                }
+
+                val itemBytes = ilocBytes.copyOfRange(startPos, ilocIdx)
+                if (itemId != targetExifItemId && itemId !in allDropIds) {
+                    keptIlocItems.add(Triple(itemId, itemBytes, cm))
+                }
+            }
+
+            // If replacement Exif payload is present, add it to keptIlocItems
+            if (replacementExifPayload != null && targetExifItemId != null) {
+                val appendedExifOffset = mdatOffset + mdatSize
+                val newItem = ByteArrayOutputStream()
+                if (ilocVer < 2) {
+                    writeUint(newItem, targetExifItemId.toLong(), 2)
+                } else {
+                    writeUint(newItem, targetExifItemId.toLong(), 4)
+                }
+                if (ilocVer in 1..2) {
+                    newItem.write(byteArrayOf(0, 0)) // reserved = 0, cm = 0
+                }
+                writeUint(newItem, 0L, 2) // dref = 0
+                if (baseOffsetSize > 0) {
+                    newItem.write(ByteArray(baseOffsetSize))
+                }
+                writeUint(newItem, 1L, 2) // extent_count = 1
+                if (ilocVer in 1..2 && indexSize > 0) {
+                    newItem.write(ByteArray(indexSize))
+                }
+                writeUint(newItem, appendedExifOffset, offsetSize)
+                writeUint(newItem, replacementExifPayload.size.toLong(), lengthSize)
+
+                keptIlocItems.add(Triple(targetExifItemId, newItem.toByteArray(), 0))
+            }
+
+            // Function to assemble iloc given a specific meta growth
+            fun assembleIloc(growth: Int): ByteArray {
+                val out = ByteArrayOutputStream()
+                out.write(ilocBytes.copyOfRange(0, 14))
+                if (ilocVer < 2) {
+                    writeUint(out, keptIlocItems.size.toLong(), 2)
+                } else {
+                    writeUint(out, keptIlocItems.size.toLong(), 4)
+                }
+                for ((_, itemBytes, cm) in keptIlocItems) {
+                    val ib = itemBytes.copyOf()
+                    if (growth > 0 && cm == 0) {
+                        val idSize = if (ilocVer < 2) 2 else 4
+                        val cmSize = if (ilocVer in 1..2) 2 else 0
+                        val drefSize = 2
+                        val extCntSize = 2
+                        val idxSize = if (ilocVer in 1..2) indexSize else 0
+                        val cur = idSize + cmSize + drefSize + baseOffsetSize + extCntSize + idxSize
+                        val curOff = readUint(ib, cur, offsetSize)
+                        writeUint(ib, curOff + growth, cur, offsetSize)
+                    }
+                    out.write(ib)
+                }
+                val assembled = out.toByteArray()
+                ByteBuffer.wrap(assembled, 0, 4).order(ByteOrder.BIG_ENDIAN).putInt(assembled.size)
+                return assembled
+            }
+
+            // 8. Rebuild meta children and pad with free box
+            val newChildren = mutableListOf<Pair<String, ByteArray>>()
+            for ((btype, cdata) in metaChildren) {
+                when (btype) {
+                    "iinf" -> newChildren.add("iinf" to finalIinfBytes)
+                    "iloc" -> newChildren.add("iloc" to ByteArray(0)) // placeholder
+                    "iref" -> if (finalIrefBytes != null) newChildren.add("iref" to finalIrefBytes)
+                    "free" -> { /* drop old free boxes inside meta, will re-pad */ }
+                    else -> newChildren.add(btype to cdata)
+                }
+            }
+            if (finalIrefBytes != null && newChildren.none { it.first == "iref" }) {
+                newChildren.add("iref" to finalIrefBytes)
+            }
+
+            val testIloc = assembleIloc(0)
+            val currentPayloadLen = newChildren.sumOf { (btype, cdata) ->
+                if (btype == "iloc") testIloc.size else cdata.size
+            }
+            val targetPayloadLen = (metaSize - metaHeaderLen - 4).toInt()
+
+            var growth = 0
+            val diff = targetPayloadLen - currentPayloadLen
+            val finalChildren = mutableListOf<ByteArray>()
+
+            if (diff >= 8) {
+                val freeBox = ByteBuffer.allocate(diff).order(ByteOrder.BIG_ENDIAN)
+                    .putInt(diff)
+                    .put("free".toByteArray(Charsets.US_ASCII))
+                    .array()
+                for ((btype, cdata) in newChildren) {
+                    finalChildren.add(if (btype == "iloc") testIloc else cdata)
+                }
+                finalChildren.add(freeBox)
+            } else if (diff >= 0) {
+                growth = if (diff > 0) 8 - diff else 0
+                val finalIloc = assembleIloc(growth)
+                for ((btype, cdata) in newChildren) {
+                    finalChildren.add(if (btype == "iloc") finalIloc else cdata)
+                }
+                if (growth > 0) {
+                    val freeBox = ByteBuffer.allocate(8).order(ByteOrder.BIG_ENDIAN)
+                        .putInt(8)
+                        .put("free".toByteArray(Charsets.US_ASCII))
+                        .array()
+                    finalChildren.add(freeBox)
+                }
+            } else {
+                growth = -diff
+                val finalIloc = assembleIloc(growth)
+                for ((btype, cdata) in newChildren) {
+                    finalChildren.add(if (btype == "iloc") finalIloc else cdata)
+                }
+            }
+
+            val newMetaStream = ByteArrayOutputStream()
+            val newMetaSize = metaHeaderLen + 4 + finalChildren.sumOf { it.size }
+            if (metaHeaderLen == 8) {
+                val hdr = ByteBuffer.allocate(8).order(ByteOrder.BIG_ENDIAN)
+                    .putInt(newMetaSize)
+                    .put("meta".toByteArray(Charsets.US_ASCII))
+                    .array()
+                newMetaStream.write(hdr)
+            } else {
+                val hdr = ByteBuffer.allocate(16).order(ByteOrder.BIG_ENDIAN)
+                    .putInt(1)
+                    .put("meta".toByteArray(Charsets.US_ASCII))
+                    .putLong(newMetaSize.toLong())
+                    .array()
+                newMetaStream.write(hdr)
+            }
+            newMetaStream.write(metaVerFlags)
+            finalChildren.forEach { newMetaStream.write(it) }
+            val finalMetaBytes = newMetaStream.toByteArray()
+
+            // 9. Zero out dropped extents directly in inputFile
+            RandomAccessFile(inputFile, "rw").use { rwRaf ->
+                val zeroBuf = ByteArray(65536)
+                for (extent in extentsToZero) {
+                    if (extent.offset + extent.length <= fileSize) {
+                        rwRaf.seek(extent.offset)
+                        var rem = extent.length
+                        while (rem > 0) {
+                            val toWrite = minOf(rem, zeroBuf.size.toLong()).toInt()
+                            rwRaf.write(zeroBuf, 0, toWrite)
+                            rem -= toWrite
+                        }
+                    }
+                }
+            }
+
+            // 10. Stream to outputFile
+            RandomAccessFile(inputFile, "r").use { raf ->
+                outputFile.outputStream().use { out ->
+                    if (metaOffset < mdatOffset) {
+                        // Standard layout: ftyp -> meta -> mdat
+                        streamRange(raf, out, 0L, metaOffset)
+                        out.write(finalMetaBytes)
+
+                        val postMetaStart = metaOffset + metaSize
+                        if (mdatOffset > postMetaStart) {
+                            streamRange(raf, out, postMetaStart, mdatOffset)
+                        }
+
+                        val newMdatSize = mdatSize + (replacementExifPayload?.size?.toLong() ?: 0L)
+                        if (mdatHeaderLen == 8) {
+                            val buf = ByteBuffer.allocate(8).order(ByteOrder.BIG_ENDIAN)
+                                .putInt(newMdatSize.toInt())
+                                .put("mdat".toByteArray(Charsets.US_ASCII))
+                                .array()
+                            out.write(buf)
+                        } else {
+                            val buf = ByteBuffer.allocate(16).order(ByteOrder.BIG_ENDIAN)
+                                .putInt(1)
+                                .put("mdat".toByteArray(Charsets.US_ASCII))
+                                .putLong(newMdatSize)
+                                .array()
+                            out.write(buf)
+                        }
+
+                        val mdatPayloadStart = mdatOffset + mdatHeaderLen
+                        val mdatPayloadEnd = mdatOffset + mdatSize
+                        streamRange(raf, out, mdatPayloadStart, mdatPayloadEnd)
+
+                        if (replacementExifPayload != null) {
+                            out.write(replacementExifPayload)
+                        }
+
+                        if (mdatPayloadEnd < fileSize) {
+                            streamRange(raf, out, mdatPayloadEnd, fileSize)
+                        }
+                    } else {
+                        // Alternative layout: mdat -> meta
+                        streamRange(raf, out, 0L, mdatOffset)
+
+                        val newMdatSize = mdatSize + (replacementExifPayload?.size?.toLong() ?: 0L)
+                        if (mdatHeaderLen == 8) {
+                            val buf = ByteBuffer.allocate(8).order(ByteOrder.BIG_ENDIAN)
+                                .putInt(newMdatSize.toInt())
+                                .put("mdat".toByteArray(Charsets.US_ASCII))
+                                .array()
+                            out.write(buf)
+                        } else {
+                            val buf = ByteBuffer.allocate(16).order(ByteOrder.BIG_ENDIAN)
+                                .putInt(1)
+                                .put("mdat".toByteArray(Charsets.US_ASCII))
+                                .putLong(newMdatSize)
+                                .array()
+                            out.write(buf)
+                        }
+
+                        val mdatPayloadStart = mdatOffset + mdatHeaderLen
+                        val mdatPayloadEnd = mdatOffset + mdatSize
+                        streamRange(raf, out, mdatPayloadStart, mdatPayloadEnd)
+
+                        if (replacementExifPayload != null) {
+                            out.write(replacementExifPayload)
+                        }
+
+                        streamRange(raf, out, mdatPayloadEnd, metaOffset)
+                        out.write(finalMetaBytes)
+
+                        val postMetaEnd = metaOffset + metaSize
+                        if (postMetaEnd < fileSize) {
+                            streamRange(raf, out, postMetaEnd, fileSize)
+                        }
+                    }
+                }
+            }
+
+            true
         }.onFailure { e ->
             Timber.e(e, "Failed to process HEIC container")
         }.getOrDefault(false)
+    }
+
+    private fun streamRange(raf: RandomAccessFile, out: java.io.OutputStream, start: Long, end: Long) {
+        if (start >= end) return
+        raf.seek(start)
+        val buffer = ByteArray(65536)
+        var remaining = end - start
+        while (remaining > 0) {
+            val toRead = minOf(remaining, buffer.size.toLong()).toInt()
+            val read = raf.read(buffer, 0, toRead)
+            if (read < 0) throw EOFException("Unexpected EOF while streaming container")
+            out.write(buffer, 0, read)
+            remaining -= read
+        }
     }
 
     private fun parsePrimaryItemId(pitmBytes: ByteArray?): Int? {

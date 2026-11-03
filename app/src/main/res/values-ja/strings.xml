@@ -94,7 +94,7 @@
     <string name="help_item_video_title">ビデオ処理</string>
     <string name="help_item_video_body">サポートされている形式：MP4、MOV、M4A、OGG。\n\nこれらのコンテナの完全なリマックがサポートされています。このプロセスにより、プライバシーを保護するためにGPS、日付、およびデバイスアトムが削除されます。</string>
     <string name="help_item_image_title">画像とベクターの処理</string>
-    <string name="help_item_image_body">サポートされている形式：JPG, PNG, WebP, HEIF, SVG。\n\nMetaJammerはビットマップ画像からEXIFメタデータを削除し、SVGからXML/RDFメタデータをクリーンアップします。「ポイズン」モードでは、機密タグを現実的なランダムデータに置き換えます。</string>
+    <string name="help_item_image_body">サポートされている形式：JPG, PNG, WebP, HEIF/HEIC, SVG。\n\nMetaJammerはビットマップ画像からEXIFメタデータを削除し、SVGからXML/RDFメタデータをクリーンアップします。「ポイズン」モードでは、機密タグを現実的なランダムデータに置き換えます。</string>
     <string name="help_item_other_title">PDFおよびドキュメント処理</string>
     <string name="help_item_other_body">対応フォーマット：PDF。\n\nMetaJammerはPDFドキュメントに完全対応しました。タイトル、作成者、件名、キーワード、作成アプリ、プロデューサーなどのメタデータを読み取り、削除、および「ポイズニング（偽装）」することができます。また、隠しウォーターマークや注釈も除去し、共有前にドキュメントがクリーンであることを保証します。</string>
     <string name="help_report_issue_title">問題を報告する</string>
@@ -244,7 +244,7 @@
     <string name="onboarding_poison_vs_remove_title">ポイズン（偽装） vs 削除</string>
     <string name="onboarding_poison_vs_remove_desc"><b>削除：</b> すべてのメタデータを削除します。シンプルでクリーンです。\n\n<b>ポイズン：</b> 機密データを偽の現実的な値に置き換えます。これにより<i>「もっともらしい否認」</i>が可能になり、自動追跡を混乱させます。</string>
     <string name="onboarding_permissions_title">準備を整える</string>
-    <string name="onboarding_permissions_desc">MetaJammer が最適に動作するためには、いくつかの権限が必要です。バックグラウンドタスクの通知や、マップピッカー用のインターネット接続を有効にできます。</string>
+    <string name="onboarding_permissions_desc">MetaJammerは完全にオフラインで動作し、ネットワークアクセスを必要としません。大量のファイルバッチのバックグラウンド処理を追跡するために、通知を有効にすることもできます。</string>
     <string name="onboarding_finish_title">準備完了！</string>
     <string name="onboarding_finish_desc">プライバシーの保護を開始する準備ができました。ファイルを選択するか、他のアプリから共有して開始してください。</string>
     <string name="onboarding_get_started">使ってみる</string>

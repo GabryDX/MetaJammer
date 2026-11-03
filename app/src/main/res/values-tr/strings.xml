@@ -94,7 +94,7 @@
     <string name="help_item_video_title">Video İşleme</string>
     <string name="help_item_video_body">Desteklenen formatlar: MP4, MOV, M4A, OGG.\n\nBu kapsayıcılar için tam remuxing desteklenir. Bu işlem, gizliliğinizi korumak için GPS, tarih ve cihaz atomlarını kaldırır.</string>
     <string name="help_item_image_title">Görüntü ve Vektör İşleme</string>
-    <string name="help_item_image_body">Desteklenen formatlar: JPG, PNG, WebP, HEIF, SVG.\n\nMetaJammer, bitmap görüntülerden EXIF meta verilerini temizler ve SVG\'lerden XML/RDF meta verilerini temizler. \"Zehirleme\" modunda, hassas etiketleri gerçekçi rastgele verilerle değiştirir.</string>
+    <string name="help_item_image_body">Desteklenen formatlar: JPG, PNG, WebP, HEIF/HEIC, SVG.\n\nMetaJammer, bitmap görüntülerden EXIF meta verilerini temizler ve SVG\'lerden XML/RDF meta verilerini temizler. \"Zehirleme\" modunda, hassas etiketleri gerçekçi rastgele verilerle değiştirir.</string>
     <string name="help_item_other_title">PDF ve Belge İşleme</string>
     <string name="help_item_other_body">Desteklenen formatlar: PDF.\n\nMetaJammer artık PDF belgelerini tam olarak destekliyor. Başlık, Yazar, Konu, Anahtar Kelimeler, Oluşturucu ve Üretici gibi meta verileri okuyabilir, silebilir ve \"zehirleyebilirsiniz\". Ayrıca, paylaşmadan önce belgelerinizin temiz olduğundan emin olmak için gizli filigranları ve açıklamaları da temizler.</string>
     <string name="help_report_issue_title">Sorun Bildir</string>
@@ -244,7 +244,7 @@
     <string name="onboarding_poison_vs_remove_title">Zehirle vs Kaldır</string>
     <string name="onboarding_poison_vs_remove_desc"><b>Kaldır:</b> Tüm metadataları siler. Basit ve temiz.\n\n<b>Zehirle:</b> Hassas verileri sahte, gerçekçi değerlerle değiştirir. Bu, <i>makul reddedilebilirlik</i> sağlar ve otomatik takipçileri şaşırtır.</string>
     <string name="onboarding_permissions_title">Hazırlanıyoruz</string>
-    <string name="onboarding_permissions_desc">MetaJammer\'ın en iyi şekilde çalışması için birkaç izne ihtiyacı var. Arka plan görevleri için bildirimleri ve harita seçici için interneti etkinleştirmeyi seçebilirsiniz.</string>
+    <string name="onboarding_permissions_desc">MetaJammer tamamen çevrimdışı çalışır ve hiçbir ağ erişimi gerektirmez. Büyük dosya gruplarının arka plan işlemesini takip etmek için isteğe bağlı olarak bildirimleri etkinleştirebilirsiniz.</string>
     <string name="onboarding_finish_title">Her Şey Hazır!</string>
     <string name="onboarding_finish_desc">Gizliliğinizi korumaya başlamaya hazırsınız. Başlamak için bazı dosyalar seçin veya diğer uygulamalardan paylaşın.</string>
     <string name="onboarding_get_started">Başlayın</string>

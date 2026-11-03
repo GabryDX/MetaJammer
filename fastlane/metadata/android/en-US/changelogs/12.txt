@@ -1,0 +1,5 @@
+- Added lossless zero-recompression HEIC/HEIF metadata stripping and poisoning.
+- Fixed container corruption for multi-tile iPhone photos and Nokia/Samsung thumbnails.
+- Completely removed legacy storage permissions (WRITE_EXTERNAL_STORAGE).
+- Added GitHub-standard security policy and reorganized documentation in docs/.
+- Updated localized onboarding and format guides across 24 languages.

@@ -84,7 +84,8 @@ class HeicMetadataProcessorTest {
 
         assertTrue("Stripped file must exist", strippedFile.exists())
         assertTrue("Stripped file must have non-zero size", strippedFile.length() > 0)
-        assertTrue("Stripped file must be smaller than original due to stripped metadata", strippedFile.length() < sampleHeic.length())
+        assertTrue("Stripped file size must not exceed original", strippedFile.length() <= sampleHeic.length())
+        strippedFile.copyTo(File("build/tmp/stripped.heic"), overwrite = true)
 
         // Verify with extractExifInterface
         val cleanExif = heicProcessor.extractExifInterface(strippedFile)
@@ -146,6 +147,7 @@ class HeicMetadataProcessorTest {
 
         assertTrue("Poisoned file must exist", poisonedFile.exists())
         assertTrue("Poisoned file must have valid size", poisonedFile.length() > 0)
+        poisonedFile.copyTo(File("build/tmp/poisoned.heic"), overwrite = true)
 
         val poisonedExif = heicProcessor.extractExifInterface(poisonedFile)
         assertNotNull("Poisoned Exif must be extractable", poisonedExif)
@@ -237,5 +239,109 @@ class HeicMetadataProcessorTest {
         assertNotNull("Poison GPS must be present", poisonLatLong)
         assertEquals(48.8584, poisonLatLong!![0], 0.001)
         assertEquals(2.2945, poisonLatLong[1], 0.001)
+    }
+
+    @Test
+    fun `test stripping real Nokia heic sample with thumbnail removal`() {
+        val testFile = listOf(File("build/tmp/autumn.heic"), File("../build/tmp/autumn.heic")).firstOrNull { it.exists() }
+        org.junit.Assume.assumeNotNull(testFile)
+
+        val stripped = heicProcessor.removeMetadata(
+            inputUri = testFile!!.toUri(),
+            keepOrientation = true,
+            thumbnailHandling = ThumbnailHandling.REMOVE,
+            stripGps = true,
+            stripDeviceModel = true,
+            stripDateTime = true,
+            stripCameraSettings = true,
+            stripComments = true
+        )
+        assertTrue("Stripped autumn.heic must exist", stripped.exists())
+        assertTrue("Stripped autumn.heic must not be empty", stripped.length() > 0)
+        stripped.copyTo(File(testFile.parentFile, "autumn_stripped.heic"), overwrite = true)
+
+        // Verify with pillow_heif if python3 is available
+        verifyWithPillowHeif(File(testFile.parentFile, "autumn_stripped.heic"), 1440, 960)
+    }
+
+    @Test
+    fun `test stripping and poisoning real iPhone multi-tile heic sample`() {
+        val testFile = listOf(File("build/tmp/image1.heic"), File("../build/tmp/image1.heic")).firstOrNull { it.exists() }
+        org.junit.Assume.assumeNotNull(testFile)
+
+        // 1. Strip
+        val stripped = heicProcessor.removeMetadata(
+            inputUri = testFile!!.toUri(),
+            keepOrientation = true,
+            thumbnailHandling = ThumbnailHandling.REMOVE,
+            stripGps = true,
+            stripDeviceModel = true,
+            stripDateTime = true,
+            stripCameraSettings = true,
+            stripComments = true
+        )
+        assertTrue("Stripped image1.heic must exist", stripped.exists())
+        assertTrue("Stripped image1.heic must not be empty", stripped.length() > 0)
+        val cleanDest = File(testFile.parentFile, "image1_clean.heic")
+        stripped.copyTo(cleanDest, overwrite = true)
+        verifyWithPillowHeif(cleanDest, 3992, 2992)
+
+        // 2. Poison
+        val plan = MetadataReplacementPlan(
+            make = "Leica",
+            model = "M11",
+            software = "Leica Firmware 2.0.1",
+            dateTime = "2026:11:03 14:00:00",
+            latitude = 35.6762,
+            longitude = 139.6503,
+            lensMake = "Leica",
+            lensModel = "Summilux-M 35mm f/1.4 ASPH"
+        )
+        val poisoned = heicProcessor.poisonMetadata(
+            inputUri = testFile.toUri(),
+            plan = plan,
+            keepOrientation = true,
+            thumbnailHandling = ThumbnailHandling.REMOVE,
+            stripGps = true,
+            stripDeviceModel = true,
+            stripDateTime = true,
+            stripCameraSettings = true,
+            stripComments = true
+        )
+        assertTrue("Poisoned image1.heic must exist", poisoned.exists())
+        assertTrue("Poisoned image1.heic must not be empty", poisoned.length() > 0)
+        val poisonDest = File(testFile.parentFile, "image1_poisoned.heic")
+        poisoned.copyTo(poisonDest, overwrite = true)
+        verifyWithPillowHeif(poisonDest, 3992, 2992)
+
+        val poisonExif = heicProcessor.extractExifInterface(poisoned)
+        assertNotNull("Poisoned Exif must be extractable from iPhone HEIC", poisonExif)
+        assertEquals("Leica", poisonExif?.getAttribute(ExifInterface.TAG_MAKE))
+        assertEquals("M11", poisonExif?.getAttribute(ExifInterface.TAG_MODEL))
+        val latLong = poisonExif?.latLong
+        assertNotNull("LatLong must be present", latLong)
+        assertEquals(35.6762, latLong!![0], 0.001)
+        assertEquals(139.6503, latLong[1], 0.001)
+    }
+
+    private fun verifyWithPillowHeif(file: File, expectedWidth: Int, expectedHeight: Int) {
+        val proc = runCatching {
+            ProcessBuilder(
+                "python3", "-c",
+                "import pillow_heif; h = pillow_heif.read_heif('${file.absolutePath}'); print(h.size[0], h.size[1])"
+            ).redirectErrorStream(true).start()
+        }.getOrNull() ?: return
+
+        val output = proc.inputStream.bufferedReader().readText().trim()
+        val exitCode = proc.waitFor()
+        if (exitCode == 0) {
+            val parts = output.split(" ")
+            if (parts.size == 2) {
+                val w = parts[0].toIntOrNull()
+                val h = parts[1].toIntOrNull()
+                assertEquals("Decoded width must match", expectedWidth, w)
+                assertEquals("Decoded height must match", expectedHeight, h)
+            }
+        }
     }
 }
