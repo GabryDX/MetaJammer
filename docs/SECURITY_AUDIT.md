@@ -53,7 +53,7 @@ The primary security objective of MetaJammer is **guaranteed non-leakage**: ensu
 * **Offline Landmark & Custom Location Presets:** Pre-defined landmark coordinates (e.g., Tokyo, London, Paris, New York) and user-defined custom location presets function 100% offline. Custom presets are serialized via Kotlinx Serialization and persisted in application-private AndroidX DataStore preferences with zero network lookups, zero reverse-geocoding, and zero cloud synchronization.
 
 ### 3.3 Cloud Backup Elimination
-Android Auto-Backup is strictly disabled in [`AndroidManifest.xml`](app/src/main/AndroidManifest.xml) to prevent sensitive or unscrubbed files from leaking to cloud storage:
+Android Auto-Backup is strictly disabled in [`AndroidManifest.xml`](../app/src/main/AndroidManifest.xml) to prevent sensitive or unscrubbed files from leaking to cloud storage:
 ```xml
 android:allowBackup="false"
 android:dataExtractionRules="@xml/data_extraction_rules"
@@ -74,7 +74,7 @@ android:fullBackupContent="@xml/backup_rules"
 
 ## 4. Input Validation & Processor Hardening
 
-### 4.1 Path Traversal & Filename Sanitization ([`SanitizationUtils.kt`](app/src/main/java/com/heronikostudios/metajammer/util/SanitizationUtils.kt))
+### 4.1 Path Traversal & Filename Sanitization ([`SanitizationUtils.kt`](../app/src/main/java/com/heronikostudios/metajammer/util/SanitizationUtils.kt))
 To prevent directory traversal attacks (e.g., `../../system/`) or filesystem-level command injections:
 * Filenames are stripped of path delimiters (`/`, `\`), control characters (`\u0000`–`\u001F`), and reserved filesystem characters (`:`, `*`, `?`, `"`, `<`, `>`, `|`).
 * Leading dot prefixes (`.`) are sanitized to prevent unauthorized hidden file creation.
@@ -87,7 +87,7 @@ MetaJammer enforces a **fail-closed** architecture:
 * Any partially created temporary file is deleted from disk.
 * The application **never** falls back to returning or sharing the unscrubbed original file.
 
-### 4.3 XML / SVG Parser Hardening ([`SvgMetadataProcessor.kt`](app/src/main/java/com/heronikostudios/metajammer/metadata/SvgMetadataProcessor.kt))
+### 4.3 XML / SVG Parser Hardening ([`SvgMetadataProcessor.kt`](../app/src/main/java/com/heronikostudios/metajammer/metadata/SvgMetadataProcessor.kt))
 To defend against XML External Entity (XXE), Billion Laughs entity expansion, and SSRF attacks:
 * The DOM `DocumentBuilderFactory` is configured with strict security features:
   - `disallow-doctype-decl`: Prohibits inline DTD declarations.
@@ -99,21 +99,21 @@ To defend against XML External Entity (XXE), Billion Laughs entity expansion, an
 * **Route Precedence Hardening:** Explicitly prioritizes `image/svg+xml` ahead of generic raster `image/*` checks in repository dispatchers, preventing vector XML streams from mistakenly routing through raster EXIF parsers.
 * **Embedded Raster Scrubbing:** Base64-encoded raster images embedded within `<image>` tags are decoded, scrubbed via native chunk/marker strippers (stripping ancillary PNG chunks like `tEXt` and JPEG markers like APP1/COM), and re-encoded.
 
-### 4.4 Deep Image Stripping & Streaming Chunk Parsing ([`ImageMetadataProcessor.kt`](app/src/main/java/com/heronikostudios/metajammer/metadata/ImageMetadataProcessor.kt))
+### 4.4 Deep Image Stripping & Streaming Chunk Parsing ([`ImageMetadataProcessor.kt`](../app/src/main/java/com/heronikostudios/metajammer/metadata/ImageMetadataProcessor.kt))
 * **ExifInterface Reflection:** Targets all standard `TAG_` constants dynamically via reflection plus vendor-specific tags (`ImageResources`, `OwnerName`, `PrintIM`, `SensitivityType`, etc.) to clear all metadata fields regardless of library version.
 * **Streaming JPEG Marker Stripping & JFIF Preservation:** Drops non-essential APPn metadata markers (APP1 EXIF/XMP, APP2 ICC/FlashPix, APP13 IPTC, COM) directly via a streaming I/O pipeline (`stripJpegMarkers`) from `InputStream` to `OutputStream` using a fixed 64KB buffer, eliminating large byte array heap allocations and preventing OOM on multi-megabyte images. When JFIF preservation is enabled, preserves resolution density (DPI) while sanitizing embedded JFIF thumbnails (dimensions zeroed) and stripping JFXX extension thumbnails (`APP0` with `JFXX\u0000`).
 * **Streaming PNG Ancillary Chunk Stripping:** Direct streaming chunk processor (`stripPngChunks`) strips `tEXt`, `zTXt`, `iTXt`, `pHYs`, and `eXIf` chunks, preserving only critical image rendering chunks (`IHDR`, `PLTE`, `IDAT`, `IEND`). Stream-to-file fast-path bypasses `ExifInterface` rewrites and avoids buffering raster scanlines in RAM.
 * **Streaming PNG Metadata Extraction:** `PngMetadataReader.readMetadata(InputStream)` reads header and ancillary chunks directly while seeking over raster `IDAT` chunks without heap allocations.
 * **Thumbnail Elimination & Proactive Detection:** Strips embedded EXIF and JFIF preview thumbnails to prevent visual data leakage of cropped or removed sections. Simultaneously, `MetadataRepository.readMetadata` actively inspects and flags embedded thumbnails (EXIF IFD1 `JPEGInterchangeFormat` / `StripOffsets`, JFIF APP0 thumbnail dimensions, and JFXX extension markers) during metadata inspection, ensuring users are fully aware of sub-raster thumbnail caches before exporting or sharing.
 
-### 4.5 HEIC / HEIF ISO-BMFF Container Sanitization ([`HeicMetadataProcessor.kt`](app/src/main/java/com/heronikostudios/metajammer/metadata/HeicMetadataProcessor.kt))
+### 4.5 HEIC / HEIF ISO-BMFF Container Sanitization ([`HeicMetadataProcessor.kt`](../app/src/main/java/com/heronikostudios/metajammer/metadata/HeicMetadataProcessor.kt))
 * **Zero Recompression & Pure Container-Level Rewriting:** Sanitizes and synthesizes metadata strictly at the ISO-BMFF container level, rewriting top-level and metadata boxes (`meta`, `iinf`, `iloc`, `idat`, `mdat`) without decompressing or re-encoding image bitstreams. This guarantees zero visual degradation, zero generational loss, and instant processing speeds.
 * **Metadata Item Neutralization:** Scans the item information box (`iinf`) and item location box (`iloc`) to identify Exif items (`Exif`) and XMP packets (`mime`). Completely removes them during full stripping or selectively preserves tags according to user category selections (GPS, Device Model, Date/Time, Camera Settings, Comments).
 * **Synthetic Metadata Injection & Poisoning:** Synthesizes realistic EXIF payloads with realistic IFD0, Exif IFD, and GPS IFD structures, injecting new `infe` entries and properly allocated `iloc` extents into the container while maintaining 100% ISO-BMFF compliance.
 * **Thumbnail Stripping & Reference Decoupling:** Purges embedded thumbnail items and unlinks thumbnail references (`thmb`) from the item reference box (`iref`), preventing thumbnail-based visual leakage of cropped or sensitive images.
 * **Universal Standalone EXIF Extraction:** Solves Android platform limitations where `ExifInterface` fails on API 26–27 or unit test environments by directly parsing `iinf` and `iloc`, locating the raw EXIF item payload, and streaming it via `STREAM_TYPE_EXIF_DATA_ONLY`, ensuring flawless metadata reading and diffing across all supported Android versions (API 26–37).
 
-### 4.6 PDF Document Sanitization ([`PdfMetadataProcessor.kt`](app/src/main/java/com/heronikostudios/metajammer/metadata/PdfMetadataProcessor.kt))
+### 4.6 PDF Document Sanitization ([`PdfMetadataProcessor.kt`](../app/src/main/java/com/heronikostudios/metajammer/metadata/PdfMetadataProcessor.kt))
 * **In-Memory Scrubbing:** Configured with `MemoryUsageSetting.setupMixed(10MB)`—all standard PDF documents under 10MB are parsed and scrubbed strictly in RAM with zero disk scratch files created, preventing unscrubbed document fragments from touching physical flash storage.
 * **Document Information Dictionary:** Replaces `PDDocumentInformation` with an empty structure (wipes Title, Author, Subject, Keywords, Creator, Producer, CreationDate, ModDate).
 * **Catalog XMP & Structural Metadata:** Nullifies `documentCatalog.metadata`, resets custom `PageLabels`, and strips private application dictionary items (`PieceInfo`, `StructTreeRoot`).
@@ -126,13 +126,13 @@ To defend against XML External Entity (XXE), Billion Laughs entity expansion, an
 * **Optimized Page Scanning:** Fast inspection of `page.cosObject.containsKey(COSName.ANNOTS)` avoids unnecessary annotation structure instantiations on pages without annotations.
 * **Layer Sanitization:** Clears Optional Content Groups (OCGs) to prevent hidden watermark layers from persisting.
 
-### 4.7 Audio / Video Stream Remuxing & ISO-BMFF Box Scrubbing ([`MediaMetadataProcessor.kt`](app/src/main/java/com/heronikostudios/metajammer/metadata/MediaMetadataProcessor.kt), [`Mp4MetadataReader.kt`](app/src/main/java/com/heronikostudios/metajammer/metadata/Mp4MetadataReader.kt))
+### 4.7 Audio / Video Stream Remuxing & ISO-BMFF Box Scrubbing ([`MediaMetadataProcessor.kt`](../app/src/main/java/com/heronikostudios/metajammer/metadata/MediaMetadataProcessor.kt), [`Mp4MetadataReader.kt`](../app/src/main/java/com/heronikostudios/metajammer/metadata/Mp4MetadataReader.kt))
 * **Container Remuxing:** Re-muxes MP4, MOV, and M4A containers at the sample level using `MediaExtractor` and `MediaMuxer`.
 * **Atom Stripping:** Automatically drops location atoms (`loci`), user data atoms (`udta`), and custom encoder tags.
 * **Orientation Preservation:** Retains video orientation hint (`setOrientationHint`) to maintain visual layout without re-encoding video streams.
 * **Direct ISO-BMFF Box Scrubber Fallback:** For non-standard, synthetic, audio-only, or fragmented containers where native OS extractors fail, MetaJammer falls back to an in-place container-level scrubber that replaces `udta` (iTunes metadata, comments, custom tags, XMP) and metadata `uuid` boxes with standard `free` padding boxes, completely neutralizing metadata without altering sample tables or audio/video payload offsets.
 
-### 4.8 OGG Vorbis & Opus Container Sanitization ([`OggMetadataReader.kt`](app/src/main/java/com/heronikostudios/metajammer/metadata/OggMetadataReader.kt))
+### 4.8 OGG Vorbis & Opus Container Sanitization ([`OggMetadataReader.kt`](../app/src/main/java/com/heronikostudios/metajammer/metadata/OggMetadataReader.kt))
 * **Pure Kotlin Zero-Dependency Engine:** Implements a direct byte-level OGG container parser, packet reassembler, and comment header stripper/poisoner, eliminating reliance on Android's `MediaMuxer` (which lacks Vorbis container support and fails on non-Opus codecs).
 * **Comment Header Neutralization:** Reassembles bitstream packets across multi-page segment tables and replaces the Vorbis comment packet (`\x03vorbis`) or Opus tag packet (`OpusTags`) with a sanitized, minimal header. Completely removes user comments, location coordinates (`GPS_COORDINATES`, `LOCATION`), hardware serials (`DEVICE_ID`), contact details, embedded picture blocks (`METADATA_BLOCK_PICTURE`), and serialized XMP packets.
 * **Loss-Free Bit-Exact Audio:** Audio packets and elementary streams are preserved byte-for-byte without decoding or re-encoding, avoiding audio quality loss and artifact generation.
@@ -141,7 +141,7 @@ To defend against XML External Entity (XXE), Billion Laughs entity expansion, an
 ### 4.9 Concurrency Control & Memory Protection
 * **Foreground Concurrency Throttling:** Foreground batch processing is throttled using a concurrency `Semaphore` (maximum 2 parallel tasks) to prevent heap exhaustion and thread starvation during batch operations on high-resolution media on memory-constrained devices.
 
-### 4.10 UI Race Condition Hardening & Progressive Metadata Extraction ([`ProcessingViewModel.kt`](app/src/main/java/com/heronikostudios/metajammer/ui/processing/ProcessingViewModel.kt), [`MetadataPreviewScreen.kt`](app/src/main/java/com/heronikostudios/metajammer/ui/screens/MetadataPreviewScreen.kt))
+### 4.10 UI Race Condition Hardening & Progressive Metadata Extraction ([`ProcessingViewModel.kt`](../app/src/main/java/com/heronikostudios/metajammer/ui/processing/ProcessingViewModel.kt), [`MetadataPreviewScreen.kt`](../app/src/main/java/com/heronikostudios/metajammer/ui/screens/MetadataPreviewScreen.kt))
 * **Progressive Asynchronous Streaming:** Metadata is extracted per-file asynchronously on background IO threads without blocking the main thread or halting multi-file previews behind a single slow file.
 * **Action Gating:** The "Continue" navigation action is strictly disabled until metadata reading has finished across all selected files, accompanied by clear visual loading indicators (`Reading metadata…`) on cards and buttons. This prevents race conditions where poisoning plans or stripping routines might execute with incomplete or missing metadata models.
 * **Fail-Closed Async Recovery:** In the event of an I/O or parser exception on any individual file during preview extraction, the error is captured and isolated without blocking other files or hanging the user interface.
@@ -159,7 +159,7 @@ To defend against XML External Entity (XXE), Billion Laughs entity expansion, an
 | `FileProvider` | `false` | None | Grants temporary read-only permissions via `FLAG_GRANT_READ_URI_PERMISSION`. |
 | `InitializationProvider` | `false` | None | Internal startup provider. |
 
-### 5.2 FileProvider Hardening ([`file_paths.xml`](app/src/main/res/xml/file_paths.xml))
+### 5.2 FileProvider Hardening ([`file_paths.xml`](../app/src/main/res/xml/file_paths.xml))
 `FileProvider` access is strictly confined to dedicated subdirectories:
 ```xml
 <paths>
@@ -170,7 +170,7 @@ To defend against XML External Entity (XXE), Billion Laughs entity expansion, an
 * **No Root Exposure:** The root filesystem, external storage, and internal app directories are **not** accessible via `FileProvider`.
 * **Scoped Sharing:** Shared files are stored exclusively within `context.cacheDir/shared/`, granting other apps temporary read access only when explicitly shared via `Intent.createChooser`.
 
-### 5.3 Intent Validation ([`IntentUtils.kt`](app/src/main/java/com/heronikostudios/metajammer/util/IntentUtils.kt))
+### 5.3 Intent Validation ([`IntentUtils.kt`](../app/src/main/java/com/heronikostudios/metajammer/util/IntentUtils.kt))
 * Validates incoming intent action (`ACTION_SEND`, `ACTION_SEND_MULTIPLE`).
 * Checks URI schemes (`content://`, `file://`), deduplicates targets, and handles security exceptions when reading external content URIs.
 
@@ -179,7 +179,7 @@ To defend against XML External Entity (XXE), Billion Laughs entity expansion, an
 ## 6. Packaging & Supply Chain Security
 
 ### 6.1 Dependency Auditing
-* **100% FOSS:** Every dependency is audited for open-source compliance (Apache 2.0, MIT, BSD-2-Clause, EPL 2.0).
+* **100% FOSS:** Every dependency is audited for open-source compliance (Apache 2.0, MIT, BSD-2-Clause, EPL 2.0). See [FOSS Compliance Audit](FOSS_AUDIT.md).
 * **Attack Surface Reduction:** Stripped unused BouncyCastle post-quantum crypto tables (`org/bouncycastle/pqc/**`), residual properties (`org/bouncycastle/x509/*.properties`), and unused OkHttp public suffix assets (`okhttp3/internal/publicsuffix/**`) from release APK packaging, reducing binary size by ~44% (8.9MB to 5.0MB) and eliminating unused cryptographic and network parsing code.
 
 ### 6.2 Code Shrinking & Obfuscation

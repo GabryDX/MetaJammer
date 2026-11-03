@@ -46,8 +46,9 @@ MetaJammer is built on the **Principle of Least Privilege**:
 ## Security, Privacy & Transparency
 
 MetaJammer is committed to transparency, verifiable privacy, and user trust:
-- **[Security & Privacy Audit](security_audit.md):** In-depth assessment of the threat model, fail-closed architecture, parser hardening (XXE protection, path traversal, in-memory chunk parsing), and OWASP MASVS compliance.
-- **[FOSS Compliance Audit](foss_audit.md):** Complete audit verifying that 100% of dependencies, code, and assets are Free and Open Source Software.
+- **[Security Policy](SECURITY.md):** Vulnerability reporting procedures, supported versions, and responsible disclosure guidelines.
+- **[Security & Privacy Audit](docs/SECURITY_AUDIT.md):** In-depth assessment of the threat model, fail-closed architecture, parser hardening (XXE protection, path traversal, in-memory chunk parsing), and OWASP MASVS compliance.
+- **[FOSS Compliance Audit](docs/FOSS_AUDIT.md):** Complete audit verifying that 100% of dependencies, code, and assets are Free and Open Source Software.
 
 ## Download
 
