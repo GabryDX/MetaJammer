@@ -94,7 +94,7 @@
     <string name="help_item_video_title">Video Processing</string>
     <string name="help_item_video_body">فرمت‌های پشتیبانی شده: MP4, MOV, M4A, OGG.\n\nریمکس کامل برای این ظروف پشتیبانی می‌شود. این فرآیند GPS، تاریخ‌ها و اتم‌های دستگاه را برای محافظت از حریم خصوصی شما حذف می‌کند.</string>
     <string name="help_item_image_title">پردازش تصویر و برداری</string>
-    <string name="help_item_image_body">فرمت‌های پشتیبانی شده: JPG, PNG, WebP, HEIF, SVG.\n\nMetaJammer متاداده EXIF را از تصاویر بیت‌مپ حذف می‌کند و متاداده XML/RDF را از SVGها پاک می‌کند. در حالت \"مسموم‌سازی\"، تگ‌های حساس را با داده‌های تصادفی واقع‌گرایانه جایگزین می‌کند.</string>
+    <string name="help_item_image_body">فرمت‌های پشتیبانی شده: JPG, PNG, WebP, HEIF/HEIC, SVG.\n\nMetaJammer متاداده EXIF را از تصاویر بیت‌مپ حذف می‌کند و متاداده XML/RDF را از SVGها پاک می‌کند. در حالت \"مسموم‌سازی\"، تگ‌های حساس را با داده‌های تصادفی واقع‌گرایانه جایگزین می‌کند.</string>
     <string name="help_item_other_title">پردازش PDF و اسناد</string>
     <string name="help_item_other_body">فرمت‌های پشتیبانی شده: PDF.\n\nنرم‌افزار MetaJammer اکنون به‌طور کامل از اسناد PDF پشتیبانی می‌کند. شما می‌توانید متادیتاهایی مانند عنوان، نویسنده، موضوع، کلمات کلیدی، سازنده و تولیدکننده را بخوانید، حذف کنید و مسموم کنید. همچنین واترمارک‌های پنهان و یادداشت‌ها را پاک می‌کند تا از تمیز بودن اسناد شما قبل از اشتراک‌گذاری اطمینان حاصل شود.</string>
     <string name="help_report_issue_title">Report an Issue</string>
@@ -244,7 +244,7 @@
     <string name="onboarding_poison_vs_remove_title">مسموم‌سازی در مقابل حذف</string>
     <string name="onboarding_poison_vs_remove_desc"><b>حذف:</b> تمام متاداده‌ها را پاک می‌کند. ساده و تمیز.\n\n<b>مسموم‌سازی:</b> داده‌های حساس را با مقادیر جعلی و واقع‌گرایانه جایگزین می‌کند. این کار <i>انکار موجه</i> ایجاد کرده و ردیاب‌های خودکار را گمراه می‌کند.</string>
     <string name="onboarding_permissions_title">آماده‌سازی</string>
-    <string name="onboarding_permissions_desc">MetaJammer برای عملکرد بهتر به چند مجوز نیاز دارد. می‌توانید اعلان‌ها برای کارهای پس‌زمینه و اینترنت برای انتخابگر نقشه را فعال کنید.</string>
+    <string name="onboarding_permissions_desc">برنامه MetaJammer کاملاً آفلاین کار می‌کند و به هیچ دسترسی به شبکه نیاز ندارد. در صورت تمایل می‌توانید اعلان‌ها را برای پیگیری پردازش پس‌زمینه دسته‌های بزرگ فایل فعال کنید.</string>
     <string name="onboarding_finish_title">همه چیز آماده است!</string>
     <string name="onboarding_finish_desc">شما آماده‌اید تا محافظت از حریم خصوصی خود را شروع کنید. چند فایل انتخاب کنید یا از برنامه‌های دیگر به اشتراک بگذارید تا شروع کنید.</string>
     <string name="onboarding_get_started">شروع کنید</string>

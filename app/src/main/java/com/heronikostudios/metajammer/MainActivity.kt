@@ -126,14 +126,15 @@ fun MetaJammerApp(
         contract = ActivityResultContracts.RequestPermission()
     ) { _ -> }
 
-    val storagePermissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (isGranted) {
+    val legacyDefaultFolderPicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocumentTree()
+    ) { treeUri ->
+        if (treeUri != null) {
+            viewModel.persistAndSetUnifiedSavingPath(treeUri)
             coroutineScope.launch {
                 runCatching {
                     val firstProcessed = processedFiles.firstOrNull()
-                    val savedUris = viewModel.saveProcessedFilesToDefault()
+                    val savedUris = viewModel.saveProcessedFilesToCustom(treeUri)
 
                     if (appSettings.shareResultAsDefault) {
                         val firstSavedUri = savedUris.firstOrNull()
@@ -146,12 +147,10 @@ fun MetaJammerApp(
                         }
                     }
                 }.onFailure { e ->
-                    Timber.e(e, "Failed to save files to default folder after permission grant")
+                    Timber.e(e, "Failed to save files to default SAF folder")
                     viewModel.showMessage("Failed to save: ${e.message}")
                 }
             }
-        } else {
-            viewModel.showMessage(context.getString(R.string.storage_permission_required))
         }
     }
 
@@ -476,9 +475,9 @@ fun MetaJammerApp(
                         shareResultAsDefault = appSettings.shareResultAsDefault,
                         onSaveDefault = {
                             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P &&
-                                context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                                !viewModel.isLegacyDefaultFolderConfigured(processedFiles.firstOrNull()?.first?.mimeType)
                             ) {
-                                storagePermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                legacyDefaultFolderPicker.launch(null)
                             } else {
                                 coroutineScope.launch {
                                     runCatching {

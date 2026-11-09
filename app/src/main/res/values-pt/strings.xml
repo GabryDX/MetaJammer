@@ -94,7 +94,7 @@
     <string name="help_item_video_title">Processamento de vídeo</string>
     <string name="help_item_video_body">Formatos suportados: MP4, MOV, M4A, OGG.\n\nO remuxing completo é suportado para estes contentores. Este processo remove GPS, datas e átomos do dispositivo para proteger a sua privacidade.</string>
     <string name="help_item_image_title">Processamento de Imagem e Vetores</string>
-    <string name="help_item_image_body">Formatos suportados: JPG, PNG, WebP, HEIF, SVG.\n\nO MetaJammer remove os metadados EXIF das imagens bitmap e limpa os metadados XML/RDF dos SVGs. No modo \"Envenenar\", substitui etiquetas sensíveis por dados aleatórios realistas.</string>
+    <string name="help_item_image_body">Formatos suportados: JPG, PNG, WebP, HEIF/HEIC, SVG.\n\nO MetaJammer remove os metadados EXIF das imagens bitmap e limpa os metadados XML/RDF dos SVGs. No modo \"Envenenar\", substitui etiquetas sensíveis por dados aleatórios realistas.</string>
     <string name="help_item_other_title">Processamento de PDF e Documentos</string>
     <string name="help_item_other_body">Formatos suportados: PDF.\n\nO MetaJammer agora suporta totalmente documentos PDF. Você pode ler, remover e \"envenenar\" metadados como Título, Autor, Assunto, Palavras-chave, Criador e Produtor. Ele também remove marcas d\'água ocultas e anotações para garantir que seus documentos estejam limpos antes de serem compartilhados.</string>
     <string name="help_report_issue_title">Comunicar um problema</string>
@@ -244,7 +244,7 @@
     <string name="onboarding_poison_vs_remove_title">Envenenar vs Remover</string>
     <string name="onboarding_poison_vs_remove_desc"><b>Remover:</b> Apaga todos os metadados. Simples e limpo.\n\n<b>Envenenar:</b> Substitui dados sensíveis por valores falsos e realistas. Isto proporciona <i>negação plausível</i> e confunde os rastreadores automatizados.</string>
     <string name="onboarding_permissions_title">Preparação</string>
-    <string name="onboarding_permissions_desc">O MetaJammer precisa de algumas permissões para funcionar da melhor forma. Pode optar por ativar notificações para tarefas em segundo plano e internet para o seletor de mapas.</string>
+    <string name="onboarding_permissions_desc">O MetaJammer funciona totalmente offline e não requer acesso à rede. Opcionalmente, você pode ativar as notificações para acompanhar o processamento em segundo plano de grandes lotes de arquivos.</string>
     <string name="onboarding_finish_title">Tudo pronto!</string>
     <string name="onboarding_finish_desc">Está pronto para começar a proteger a sua privacidade. Escolha alguns ficheiros ou partilhe-os de outras aplicações para começar.</string>
     <string name="onboarding_get_started">Começar</string>

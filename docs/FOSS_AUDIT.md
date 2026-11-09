@@ -45,10 +45,10 @@ The Location Picker and Custom Location Preset features are 100% offline and air
 - **Icons**: Uses Material Icons (Apache 2.0).
 - **Fonts**: No custom fonts are bundled; it uses system fonts.
 - **Packaging Hygiene**: Unused third-party auxiliary files (BouncyCastle PQC tables and properties, OkHttp publicsuffix lists) are strictly stripped during packaging, maintaining minimal attack surface and clean FOSS binaries.
-- **License**: The project itself is licensed under the **ISC License** ([LICENSE.txt](LICENSE.txt)).
+- **License**: The project itself is licensed under the **ISC License** ([LICENSE.txt](../LICENSE.txt)).
 
 ## Conclusion
 
 The MetaJammer project is **100% FOSS-compliant**. No proprietary SDKs (e.g., Google Play Services, Firebase, AdMob) or non-FOSS libraries are used in the project.
 
-For an in-depth analysis of the application's threat model, data protection architecture, and parser hardening, refer to the [Security & Privacy Audit](security_audit.md).
+For an in-depth analysis of the application's threat model, data protection architecture, and parser hardening, refer to the [Security & Privacy Audit](SECURITY_AUDIT.md).

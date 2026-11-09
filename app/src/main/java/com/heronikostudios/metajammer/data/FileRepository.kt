@@ -137,13 +137,29 @@ open class FileRepository(private val context: Context) {
                     return@use "image/webp"
                 }
 
-                // MP4 / MOV: bytes 4..7 == 'ftyp'
+                // ISO-BMFF container (MP4, MOV, HEIC, HEIF): bytes 4..7 == 'ftyp'
                 if (read >= 8 &&
                     buffer[4] == 'f'.code.toByte() &&
                     buffer[5] == 't'.code.toByte() &&
                     buffer[6] == 'y'.code.toByte() &&
                     buffer[7] == 'p'.code.toByte()
                 ) {
+                    val brands = StringBuilder()
+                    var offset = 8
+                    while (offset + 4 <= read) {
+                        // Skip minor version at bytes 12..15
+                        if (offset != 12) {
+                            brands.append(String(buffer, offset, 4, java.nio.charset.StandardCharsets.US_ASCII)).append(',')
+                        }
+                        offset += 4
+                    }
+                    val brandsStr = brands.toString().lowercase(java.util.Locale.ROOT)
+                    if (brandsStr.contains("heic") || brandsStr.contains("heix") ||
+                        brandsStr.contains("heim") || brandsStr.contains("heis") ||
+                        brandsStr.contains("mif1") || brandsStr.contains("msf1")
+                    ) {
+                        return@use "image/heic"
+                    }
                     return@use "video/mp4"
                 }
 
@@ -341,26 +357,23 @@ open class FileRepository(private val context: Context) {
 
                 uri
             } else {
-                // Pre-Android 10 (Android 8 & 9, API 26-28): Direct file write to external storage + MediaScanner
-                @Suppress("DEPRECATION")
-                val targetDir = when {
-                    mimeType?.startsWith("image/") == true ->
-                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                    mimeType?.startsWith("video/") == true ->
-                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES)
-                    mimeType?.startsWith("audio/") == true ->
-                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)
-                    normalizedRelativePath.startsWith("Documents/") ->
-                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
-                    else ->
-                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                // Pre-Android 10 (Android 8 & 9, API 26-28):
+                // Without WRITE_EXTERNAL_STORAGE, save to app-specific external files directory
+                // (which requires zero permissions on API 19+) and index via MediaScanner.
+                val dirType = when {
+                    mimeType?.startsWith("image/") == true -> Environment.DIRECTORY_PICTURES
+                    mimeType?.startsWith("video/") == true -> Environment.DIRECTORY_MOVIES
+                    mimeType?.startsWith("audio/") == true -> Environment.DIRECTORY_MUSIC
+                    normalizedRelativePath.startsWith("Documents/") -> Environment.DIRECTORY_DOCUMENTS
+                    else -> Environment.DIRECTORY_DOWNLOADS
                 }
+                val baseDir = context.getExternalFilesDir(dirType) ?: context.filesDir
                 val subFolder = if (normalizedRelativePath.trimEnd('/').contains("/")) {
                     normalizedRelativePath.trimEnd('/').substringAfter("/")
                 } else {
                     "MetaJammer"
                 }
-                val destDir = File(targetDir, subFolder)
+                val destDir = File(baseDir, subFolder)
                 if (!destDir.exists()) {
                     destDir.mkdirs()
                 }

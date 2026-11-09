@@ -694,6 +694,11 @@ class ProcessingViewModel(
         results
     }
 
+    fun isLegacyDefaultFolderConfigured(mimeType: String?, settings: AppSettings): Boolean {
+        val (path, _) = resolveSavingPath(mimeType, settings)
+        return path?.startsWith("content://") == true
+    }
+
     private fun resolveSavingPath(mimeType: String?, settings: AppSettings): Pair<String?, String?> {
         return if (settings.folderStructure == FolderStructure.UNIFIED) {
             val subPath = if (settings.useSubfoldersInUnified) {

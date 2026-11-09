@@ -94,7 +94,7 @@
     <string name="help_item_video_title">Processus Videophoniae</string>
     <string name="help_item_video_body">Formae sustentatae: MP4, MOV, M4A, OGG.\n\nPlena remuscendi ratio his vasis sustinetur. Haec ratio GPS, dies, et instrumenti atomos tollit ut tuam privatiam protegat.</string>
     <string name="help_item_image_title">Processus Imaginis et Vectoris</string>
-    <string name="help_item_image_body">Formae sustentatae: JPG, PNG, WebP, HEIF, SVG.\n\nMetaJammer metadata EXIF ex imaginibus bitmap tollit et metadata XML/RDF ex SVG mundat. In modo \"Venenare\", notas sensitivas cum datis fortuitis verisimilibus mutat.</string>
+    <string name="help_item_image_body">Formae sustentatae: JPG, PNG, WebP, HEIF/HEIC, SVG.\n\nMetaJammer metadata EXIF ex imaginibus bitmap tollit et metadata XML/RDF ex SVG mundat. In modo \"Venenare\", notas sensitivas cum datis fortuitis verisimilibus mutat.</string>
     <string name="help_item_other_title">PDF et Documentorum Processio</string>
     <string name="help_item_other_body">Formata fulta: PDF.\n\nMetaJammer nunc documenta PDF plene sustinet. Legere, delere, et metadata \"venenare\" potes, sicut Titulum, Auctorem, Argumentum, Verba Clavem, Creatorem, et Produtorem. Etiam notae aquatiles occultas et annotationes delet ut documenta tua munda sint antequam communicentur.</string>
     <string name="help_report_issue_title">Rem Deferre</string>
@@ -244,7 +244,7 @@
     <string name="onboarding_poison_vs_remove_title">Venenare vs Tollere</string>
     <string name="onboarding_poison_vs_remove_desc"><b>Tollere:</b> Omnia metadata delet. Simplex et mundum.\n\n<b>Venenare:</b> Data sensitiva cum falsis verisimilibus mutat. Hoc <i>negationem probabilem</i> praebet et exploratores automatarios confundit.</string>
     <string name="onboarding_permissions_title">Praeparatio</string>
-    <string name="onboarding_permissions_desc">MetaJammer paucis permissionibus eget ut optime operetur. Notificationes pro operibus in occulto et interrete pro tabula seligenda permittere potes.</string>
+    <string name="onboarding_permissions_desc">MetaJammer omnino sine interreti operatur neque ullum retis accessum requirit. Libitum est notificationes admittere ad magnas fasciculorum series in curriculo tractandas sequendas.</string>
     <string name="onboarding_finish_title">Omnia Parata!</string>
     <string name="onboarding_finish_desc">Paratus es tuam privatiam protegere. Aliquos fasciculos selige vel ex aliis applicationibus communica ut incipias.</string>
     <string name="onboarding_get_started">Incipere</string>

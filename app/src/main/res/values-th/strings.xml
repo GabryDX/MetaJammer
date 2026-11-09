@@ -94,7 +94,7 @@
     <string name="help_item_video_title">Video Processing</string>
     <string name="help_item_video_body">รูปแบบที่รองรับ: MP4, MOV, M4A, OGG\n\nรองรับการ remux อย่างเต็มรูปแบบสำหรับคอนเทนเนอร์เหล่านี้ กระบวนการนี้จะลบ GPS วันที่ และข้อมูลอุปกรณ์เพื่อปกป้องความเป็นส่วนตัวของคุณ</string>
     <string name="help_item_image_title">การประมวลผลรูปภาพและเวกเตอร์</string>
-    <string name="help_item_image_body">รูปแบบที่รองรับ: JPG, PNG, WebP, HEIF, SVG\n\nMetaJammer ลบข้อมูลเมตา EXIF จากรูปภาพบิตแมป และล้างข้อมูลเมตา XML/RDF จาก SVG ในโหมด \"วางยา\" มันจะแทนที่แท็กที่ละเอียดอ่อนด้วยข้อมูลสุ่มที่สมจริง</string>
+    <string name="help_item_image_body">รูปแบบที่รองรับ: JPG, PNG, WebP, HEIF/HEIC, SVG\n\nMetaJammer ลบข้อมูลเมตา EXIF จากรูปภาพบิตแมป และล้างข้อมูลเมตา XML/RDF จาก SVG ในโหมด \"วางยา\" มันจะแทนที่แท็กที่ละเอียดอ่อนด้วยข้อมูลสุ่มที่สมจริง</string>
     <string name="help_item_other_title">การประมวลผล PDF และเอกสาร</string>
     <string name="help_item_other_body">รูปแบบที่รองรับ: PDF\n\nขณะนี้ MetaJammer รองรับเอกสาร PDF อย่างเต็มรูปแบบแล้ว คุณสามารถอ่าน ลบ และ \"วางยา\" ข้อมูลเมตา เช่น ชื่อเรื่อง ผู้เขียน หัวข้อ คำสำคัญ ผู้สร้าง และผู้ผลิต นอกจากนี้ยังลบลายน้ำและคำอธิบายประกอบที่ซ่อนอยู่ เพื่อให้แน่ใจว่าเอกสารของคุณสะอาดก่อนที่จะแชร์</string>
     <string name="help_report_issue_title">Report an Issue</string>
@@ -244,7 +244,7 @@
     <string name="onboarding_poison_vs_remove_title">วางยา vs ลบ</string>
     <string name="onboarding_poison_vs_remove_desc"><b>ลบ:</b> ลบข้อมูลเมตาทั้งหมด เรียบง่ายและสะอาดตา\n\n<b>วางยา:</b> แทนที่ข้อมูลที่ละเอียดอ่อนด้วยค่าจำลองที่สมจริง สิ่งนี้ให้ <i>การปฏิเสธที่สมเหตุสมผล</i> และทำให้ผู้ติดตามอัตโนมัติสับสน</string>
     <string name="onboarding_permissions_title">เตรียมความพร้อม</string>
-    <string name="onboarding_permissions_desc">MetaJammer ต้องการสิทธิ์บางอย่างเพื่อให้ทำงานได้ดีที่สุด คุณสามารถเลือกเปิดการแจ้งเตือนสำหรับงานเบื้องหลังและอินเทอร์เน็ตสำหรับตัวเลือกแผนที่</string>
+    <string name="onboarding_permissions_desc">MetaJammer ทำงานแบบออฟไลน์โดยสมบูรณ์และไม่ต้องใช้การเชื่อมต่อเครือข่าย คุณสามารถเปิดใช้งานการแจ้งเตือนเพื่อติดตามการประมวลผลพื้นหลังสำหรับไฟล์จำนวนมากได้</string>
     <string name="onboarding_finish_title">เรียบร้อยแล้ว!</string>
     <string name="onboarding_finish_desc">คุณพร้อมที่จะเริ่มปกป้องความเป็นส่วนตัวของคุณแล้ว เลือกไฟล์หรือแชร์จากแอปอื่นเพื่อเริ่มต้น</string>
     <string name="onboarding_get_started">เริ่มต้นใช้งาน</string>

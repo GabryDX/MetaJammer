@@ -94,7 +94,7 @@
     <string name="help_item_video_title">Video Processing</string>
     <string name="help_item_video_body">समर्थित प्रारूप: MP4, MOV, M4A, OGG।\n\nइन कंटेनरों के लिए पूर्ण रिमक्सिंग (re-muxing) समर्थित है। यह प्रक्रिया आपकी गोपनीयता की रक्षा के लिए GPS, तिथियां और डिवाइस विवरण हटा देती है।</string>
     <string name="help_item_image_title">इमेज और वेक्टर प्रोसेसिंग</string>
-    <string name="help_item_image_body">समर्थित प्रारूप: JPG, PNG, WebP, HEIF, SVG।\n\nMetaJammer बिटमैप छवियों से EXIF मेटाडेटा हटाता है और SVG से XML/RDF मेटाडेटा साफ़ करता है। \"पॉइज़न\" मोड में, यह संवेदनशील टैग को वास्तविक यादृच्छिक डेटा से बदल देता है।</string>
+    <string name="help_item_image_body">समर्थित प्रारूप: JPG, PNG, WebP, HEIF/HEIC, SVG।\n\nMetaJammer बिटमैप छवियों से EXIF मेटाडेटा हटाता है और SVG से XML/RDF मेटाडेटा साफ़ करता है। \"पॉइज़न\" मोड में, यह संवेदनशील टैग को वास्तविक यादृच्छिक डेटा से बदल देता है।</string>
     <string name="help_item_other_title">PDF और दस्तावेज़ प्रसंस्करण</string>
     <string name="help_item_other_body">समर्थित प्रारूप: PDF।\n\nMetaJammer अब पूरी तरह से PDF दस्तावेजों का समर्थन करता है। आप शीर्षक, लेखक, विषय, कीवर्ड, निर्माता और उत्पादक जैसे मेटाडेटा को पढ़ सकते हैं, हटा सकते हैं और \"पॉइजन\" कर सकते हैं। यह साझा करने से पहले आपके दस्तावेज़ों को साफ सुनिश्चित करने के लिए छिपे हुए वॉटरमार्क और एनोटेशन को भी हटा देता है।</string>
     <string name="help_report_issue_title">Report an Issue</string>
@@ -244,7 +244,7 @@
     <string name="onboarding_poison_vs_remove_title">पॉइज़न बनाम हटाना</string>
     <string name="onboarding_poison_vs_remove_desc"><b>हटाना:</b> सभी मेटाडेटा हटा देता है। सरल और साफ।\n\n<b>पॉइज़न:</b> संवेदनशील डेटा को नकली, वास्तविक मूल्यों से बदल देता है। यह <i>विश्वसनीय इनकार</i> प्रदान करता है और स्वचालित ट्रैकर्स को भ्रमित करता है।</string>
     <string name="onboarding_permissions_title">तैयार हो रहे हैं</string>
-    <string name="onboarding_permissions_desc">MetaJammer को बेहतर ढंग से काम करने के लिए कुछ अनुमतियों की आवश्यकता है। आप बैकग्राउंड कार्यों के लिए नोटिफिकेशन और मैप पिकर के लिए इंटरनेट सक्षम करना चुन सकते हैं।</string>
+    <string name="onboarding_permissions_desc">MetaJammer पूरी तरह से ऑफ़लाइन काम करता है और इसके लिए किसी नेटवर्क एक्सेस की आवश्यकता नहीं है। बड़ी फ़ाइलों के बैचों के बैकग्राउंड प्रोसेसिंग को ट्रैक करने के लिए आप वैकल्पिक रूप से नोटिफिकेशन सक्षम कर सकते हैं।</string>
     <string name="onboarding_finish_title">सब तैयार है!</string>
     <string name="onboarding_finish_desc">आप अपनी गोपनीयता की रक्षा शुरू करने के लिए तैयार हैं। शुरू करने के लिए कुछ फ़ाइलें चुनें या अन्य ऐप्स से साझा करें।</string>
     <string name="onboarding_get_started">शुरू करें</string>

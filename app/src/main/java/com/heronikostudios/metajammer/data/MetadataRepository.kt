@@ -6,6 +6,7 @@ import com.heronikostudios.metajammer.domain.model.MetadataReplacementPlan
 import com.heronikostudios.metajammer.domain.model.ProcessingMode
 import com.heronikostudios.metajammer.domain.model.SelectedFile
 import com.heronikostudios.metajammer.domain.model.ThumbnailHandling
+import com.heronikostudios.metajammer.metadata.HeicMetadataProcessor
 import com.heronikostudios.metajammer.metadata.ImageMetadataProcessor
 import com.heronikostudios.metajammer.metadata.MediaMetadataProcessor
 import com.heronikostudios.metajammer.metadata.PdfMetadataProcessor
@@ -19,6 +20,7 @@ class MetadataRepository(
 ) {
     private val context = fileRepository.getContext()
     private val imageProcessor = ImageMetadataProcessor(fileRepository)
+    private val heicProcessor = HeicMetadataProcessor(fileRepository)
     private val mediaProcessor = MediaMetadataProcessor(fileRepository)
     private val pdfProcessor = PdfMetadataProcessor(context, fileRepository)
     private val svgProcessor = SvgMetadataProcessor(fileRepository)
@@ -74,6 +76,10 @@ class MetadataRepository(
         preserveJpegJfif: Boolean = true
     ): File {
         val mime = resolveEffectiveMime(selectedFile)
+        val isHeic = mime == "image/heic" || mime == "image/heif" ||
+            selectedFile.displayName.endsWith(".heic", ignoreCase = true) ||
+            selectedFile.displayName.endsWith(".heif", ignoreCase = true)
+
         return when {
             mime == "image/svg+xml" -> {
                 when (mode) {
@@ -101,6 +107,37 @@ class MetadataRepository(
                         stripAnnotations = stripPdfAnnotations,
                         stripComments = stripPdfComments
                     )
+                }
+            }
+
+            isHeic -> {
+                when (mode) {
+                    ProcessingMode.POISON_METADATA -> {
+                        val plan = requireNotNull(replacementPlan) { "Plan required for poison mode" }
+                        heicProcessor.poisonMetadata(
+                            inputUri = selectedFile.uri,
+                            plan = plan,
+                            keepOrientation = keepOrientation,
+                            thumbnailHandling = thumbnailHandling,
+                            stripGps = stripGps,
+                            stripDeviceModel = stripDeviceModel,
+                            stripDateTime = stripDateTime,
+                            stripCameraSettings = stripCameraSettings,
+                            stripComments = stripComments
+                        )
+                    }
+                    ProcessingMode.REMOVE_METADATA -> {
+                        heicProcessor.removeMetadata(
+                            inputUri = selectedFile.uri,
+                            keepOrientation = keepOrientation,
+                            thumbnailHandling = thumbnailHandling,
+                            stripGps = stripGps,
+                            stripDeviceModel = stripDeviceModel,
+                            stripDateTime = stripDateTime,
+                            stripCameraSettings = stripCameraSettings,
+                            stripComments = stripComments
+                        )
+                    }
                 }
             }
 
@@ -177,9 +214,14 @@ class MetadataRepository(
 
     suspend fun readMetadata(selectedFile: SelectedFile): List<MetadataEntry> {
         val mime = resolveEffectiveMime(selectedFile)
+        val isHeic = mime == "image/heic" || mime == "image/heif" ||
+            selectedFile.displayName.endsWith(".heic", ignoreCase = true) ||
+            selectedFile.displayName.endsWith(".heif", ignoreCase = true)
+
         return when {
             mime == "image/svg+xml" -> svgProcessor.readMetadata(selectedFile.uri)
             mime == "application/pdf" -> pdfProcessor.readMetadata(selectedFile.uri)
+            isHeic -> heicProcessor.readMetadata(selectedFile)
             mime.startsWith("image/") -> readImageMetadata(selectedFile)
             mime.startsWith("video/") || mime.startsWith("audio/") -> readMediaMetadata(selectedFile)
             else -> listOf(MetadataEntry("Info", "Metadata preview not yet supported for $mime"))

@@ -94,7 +94,7 @@
     <string name="help_item_video_title">Обработка видео</string>
     <string name="help_item_video_body">Поддерживаемые форматы: MP4, MOV, M4A, OGG.\n\nПолный ремуксинг поддерживается для этих контейнеров. Этот процесс удаляет GPS, даты и атомы устройства для защиты вашей конфиденциальности.</string>
     <string name="help_item_image_title">Обработка изображений и векторов</string>
-    <string name="help_item_image_body">Поддерживаемые форматы: JPG, PNG, WebP, HEIF, SVG.\n\nMetaJammer удаляет метаданные EXIF из растровых изображений и очищает метаданные XML/RDF из SVG. В режиме «Отравление» он заменяет конфиденциальные теги реалистичными случайными данными.</string>
+    <string name="help_item_image_body">Поддерживаемые форматы: JPG, PNG, WebP, HEIF/HEIC, SVG.\n\nMetaJammer удаляет метаданные EXIF из растровых изображений и очищает метаданные XML/RDF из SVG. В режиме «Отравление» он заменяет конфиденциальные теги реалистичными случайными данными.</string>
     <string name="help_item_other_title">Обработка PDF и документов</string>
     <string name="help_item_other_body">Поддерживаемые форматы: PDF.\n\nMetaJammer теперь полностью поддерживает PDF-документы. Вы можете читать, удалять и «отравлять» (подменять) метаданные, такие как заголовок, автор, тема, ключевые слова, создатель и производитель. Программа также удаляет скрытые водяные знаки и аннотации, чтобы ваши документы были чистыми перед отправкой.</string>
     <string name="help_report_issue_title">Сообщить о проблеме</string>
@@ -244,7 +244,7 @@
     <string name="onboarding_poison_vs_remove_title">Отравление против Удаления</string>
     <string name="onboarding_poison_vs_remove_desc"><b>Удаление:</b> Удаляет все метаданные. Просто и чисто.\n\n<b>Отравление:</b> Заменяет конфиденциальные данные ложными, реалистичными значениями. Это обеспечивает <i>правдоподобное отрицание</i> и запутывает автоматизированные трекеры.</string>
     <string name="onboarding_permissions_title">Подготовка</string>
-    <string name="onboarding_permissions_desc">MetaJammer требуется несколько разрешений для наилучшей работы. Вы можете включить уведомления для фоновых задач и доступ к интернету для выбора местоположения на карте.</string>
+    <string name="onboarding_permissions_desc">MetaJammer работает полностью автономно и не требует доступа к сети. При желании вы можете включить уведомления для отслеживания фоновой обработки больших пакетов файлов.</string>
     <string name="onboarding_finish_title">Все готово!</string>
     <string name="onboarding_finish_desc">Вы готовы начать защищать свою конфиденциальность. Выберите файлы или поделитесь ими из других приложений, чтобы начать.</string>
     <string name="onboarding_get_started">Начать</string>

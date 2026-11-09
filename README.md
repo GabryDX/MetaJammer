@@ -17,7 +17,7 @@
 
 ## Key Features
 
-- **🛡️ Deep Metadata Stripping:** More than just EXIF. MetaJammer targets EXIF, XMP, IPTC, JPEG COM markers, GPS coordinates, hardware serial numbers, embedded thumbnails, MP4/MOV ISO-BMFF container atoms (`udta`, `ilst`, `©xyz`, iTunes custom tags), PNG chunks (`tEXt`, `zTXt`, `iTXt`, `pHYs`, `eXIf`), OGG Vorbis & Opus comment packets (user comments, location, hardware identifiers, picture blocks, XMP), PDF metadata (document catalog, page labels, hidden/invisible annotations, Form XObject user watermarks, and user comments/markups while preserving interactive navigation links and software trial stamps), and SVG embedded metadata to ensure no "leaks" remain.
+- **🛡️ Deep Metadata Stripping:** More than just EXIF. MetaJammer targets EXIF, XMP, IPTC, JPEG COM markers, GPS coordinates, hardware serial numbers, embedded thumbnails, HEIC/HEIF ISO-BMFF container items (`meta`, `iinf`, `iloc`, EXIF and XMP item scrubbing with zero recompression), MP4/MOV ISO-BMFF container atoms (`udta`, `ilst`, `©xyz`, iTunes custom tags), PNG chunks (`tEXt`, `zTXt`, `iTXt`, `pHYs`, `eXIf`), OGG Vorbis & Opus comment packets (user comments, location, hardware identifiers, picture blocks, XMP), PDF metadata (document catalog, page labels, hidden/invisible annotations, Form XObject user watermarks, and user comments/markups while preserving interactive navigation links and software trial stamps), and SVG embedded metadata to ensure no "leaks" remain.
 - **🧪 Metadata Poisoning & Profiles:** Don't just remove data—confuse it. Generate highly realistic fake metadata with camera hardware profiles (Pro Mirrorless, Smartphone, Vintage, Random) and instant location presets.
 - **🎛️ Granular Tag Controls:** Selectively strip or preserve individual metadata categories: GPS & Location, Device & Hardware, Date & Time, Camera Settings, Author & Comments, PDF hidden annotations, PDF user comments & markups, and JPEG JFIF resolution density (DPI) preservation with embedded thumbnail zeroing.
 - **📊 Before / After Visual Diff & Unified Scrolling:** Inspect original vs. modified metadata side-by-side with color-coded status badges (`REMOVED`, `POISONED`, `KEPT`), a sticky filter header (`All`, `Removed`, `Poisoned`, `Kept`), and collapsible poisoning settings for a smooth, single-scroll experience.
@@ -27,7 +27,7 @@
 - **📦 Background Batch Processing:** Reliable processing for 50+ high-resolution files at once using Android WorkManager, complete with system notifications.
 - **📜 History & Retention Control:** Keep an audit log of processed files with configurable privacy retention (clear after 24 hours, keep 100 items, clear on exit, or disable history) powered by an isolated Room database.
 - **📂 Flexible Output & Clean Navigation:** Save to custom folders via SAF, use standard MediaStore collections, share directly to other apps, or return to Home with one click. Intelligently preserves unsaved selections while clearing completed batches and dismissing status banners immediately.
-- **🖼️ Multi-Format Support:** Full compatibility with modern image formats (JPEG with JFIF DPI preservation & thumbnail zeroing, PNG, WebP, HEIF/HEIC, SVG with Dublin Core, editor tracking, and embedded raster scrubbing), video & audio containers (MP4, MOV, M4A with atom scrubbing fallback, and OGG Vorbis/Opus with pure Kotlin zero-recompression comment stripping), and PDF documents (in-memory metadata wiping/poisoning, page labels reset, hidden annotation purging, and comment/markup stripping while preserving navigation links).
+- **🖼️ Multi-Format Support:** Full compatibility with modern image formats (JPEG with JFIF DPI preservation & thumbnail zeroing, PNG, WebP, HEIF/HEIC pure container-level zero-recompression processing, SVG with Dublin Core, editor tracking, and embedded raster scrubbing), video & audio containers (MP4, MOV, M4A with atom scrubbing fallback, and OGG Vorbis/Opus with pure Kotlin zero-recompression comment stripping), and PDF documents (in-memory metadata wiping/poisoning, page labels reset, hidden annotation purging, and comment/markup stripping while preserving navigation links).
 - **🎨 Modern & Accessible UI:** Built with Jetpack Compose and Material 3, featuring Dynamic Color support, a dedicated OLED black mode, tuned Coil caching for butter-smooth 120Hz scrolling, and battery-aware theme scheduling.
 - **🌍 Global Reach:** Fully localized in 24 languages with 100% string parity: English, Arabic, German, Greek, Spanish, Persian, French, Hebrew, Hindi, Indonesian, Italian, Japanese, Korean, Latin, Dutch, Polish, Portuguese, Romanian, Russian, Thai, Turkish, Ukrainian, Vietnamese, and Chinese.
 
@@ -35,7 +35,7 @@
 
 MetaJammer is built on the **Principle of Least Privilege**:
 
-- **Zero Storage Permissions on Modern Android & Zero Network:** The app requires zero storage permissions on Android 10+ (API 29+), using modern Scoped Storage, MediaStore, and SAF (with legacy `WRITE_EXTERNAL_STORAGE` strictly capped to `maxSdkVersion="28"` solely for Android 9 default folder saves). Zero `INTERNET` permissions are declared.
+- **Zero Storage Permissions & Zero Network:** The app requires zero storage permissions across all supported Android versions (API 26–37), using modern Scoped Storage, MediaStore, and the Storage Access Framework (SAF) with zero declared storage permissions in the manifest. Zero `INTERNET` permissions are declared.
 - **100% FOSS:** Built entirely with Free and Open Source Software. No proprietary SDKs, trackers, or "phone-home" analytics.
 - **Fail-Closed Processing:** If processing fails or encounters unexpected corruption, MetaJammer strictly fails closed—unscrubbed raw files are never inadvertently returned, shared, or exported.
 - **100% Air-Gapped Privacy:** The app declares NO `android.permission.INTERNET` permission. All processing, vector map rendering, and preset generation function entirely offline with zero network capability, making data exfiltration technically impossible at the OS permission level.
@@ -46,8 +46,9 @@ MetaJammer is built on the **Principle of Least Privilege**:
 ## Security, Privacy & Transparency
 
 MetaJammer is committed to transparency, verifiable privacy, and user trust:
-- **[Security & Privacy Audit](security_audit.md):** In-depth assessment of the threat model, fail-closed architecture, parser hardening (XXE protection, path traversal, in-memory chunk parsing), and OWASP MASVS compliance.
-- **[FOSS Compliance Audit](foss_audit.md):** Complete audit verifying that 100% of dependencies, code, and assets are Free and Open Source Software.
+- **[Security Policy](SECURITY.md):** Vulnerability reporting procedures, supported versions, and responsible disclosure guidelines.
+- **[Security & Privacy Audit](docs/SECURITY_AUDIT.md):** In-depth assessment of the threat model, fail-closed architecture, parser hardening (XXE protection, path traversal, in-memory chunk parsing), and OWASP MASVS compliance.
+- **[FOSS Compliance Audit](docs/FOSS_AUDIT.md):** Complete audit verifying that 100% of dependencies, code, and assets are Free and Open Source Software.
 
 ## Download
 

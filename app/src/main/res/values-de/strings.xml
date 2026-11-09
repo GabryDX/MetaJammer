@@ -94,7 +94,7 @@
     <string name="help_item_video_title">Videoverarbeitung</string>
     <string name="help_item_video_body">Unterstützte Formate: MP4, MOV, M4A, OGG.\n\nVollständiges Remuxing wird für diese Container unterstützt. Dieser Vorgang entfernt GPS, Daten und Geräteatome, um Ihre Privatsphäre zu schützen.</string>
     <string name="help_item_image_title">Bild- &amp; Vektorverarbeitung</string>
-    <string name="help_item_image_body">Unterstützte Formate: JPG, PNG, WebP, HEIF, SVG.\n\nMetaJammer entfernt EXIF-Metadaten aus Bitmap-Bildern und bereinigt XML/RDF-Metadaten aus SVGs. Im Modus „Vergiften“ werden sensible Tags durch realistische Zufallsdaten ersetzt.</string>
+    <string name="help_item_image_body">Unterstützte Formate: JPG, PNG, WebP, HEIF/HEIC, SVG.\n\nMetaJammer entfernt EXIF-Metadaten aus Bitmap-Bildern und bereinigt XML/RDF-Metadaten aus SVGs. Im Modus „Vergiften“ werden sensible Tags durch realistische Zufallsdaten ersetzt.</string>
     <string name="help_item_other_title">PDF- &amp; Dokumentenverarbeitung</string>
     <string name="help_item_other_body">Unterstützte Formate: PDF.\n\nMetaJammer unterstützt jetzt PDF-Dokumente vollständig. Sie können Metadaten wie Titel, Autor, Thema, Schlagwörter, Ersteller und Produzent lesen, entfernen und „vergiften“. Außerdem werden versteckte Wasserzeichen und Anmerkungen entfernt, um sicherzustellen, dass Ihre Dokumente vor der Freigabe sauber sind.</string>
     <string name="help_report_issue_title">Ein Problem melden</string>
@@ -244,7 +244,7 @@
     <string name="onboarding_poison_vs_remove_title">Vergiften vs. Entfernen</string>
     <string name="onboarding_poison_vs_remove_desc"><b>Entfernen:</b> Löscht alle Metadaten. Einfach und sauber.\n\n<b>Vergiften:</b> Ersetzt sensible Daten durch gefälschte, realistische Werte. Dies bietet <i>glaubwürdige Abstreitbarkeit</i> und verwirrt automatisierte Tracker.</string>
     <string name="onboarding_permissions_title">Vorbereitungen</string>
-    <string name="onboarding_permissions_desc">MetaJammer benötigt einige Berechtigungen, um optimal zu funktionieren. Du kannst Benachrichtigungen für Hintergrundaufgaben und das Internet für den Karten-Picker aktivieren.</string>
+    <string name="onboarding_permissions_desc">MetaJammer funktioniert vollständig offline und erfordert keinen Netzwerkzugriff. Du kannst optional Benachrichtigungen aktivieren, um die Hintergrundverarbeitung großer Dateimengen zu verfolgen.</string>
     <string name="onboarding_finish_title">Alles fertig!</string>
     <string name="onboarding_finish_desc">Du bist bereit, deine Privatsphäre zu schützen. Wähle einige Dateien aus oder teile sie aus anderen Apps, um zu beginnen.</string>
     <string name="onboarding_get_started">Loslegen</string>
