@@ -2,7 +2,7 @@
 
 **Last Updated:** November 10, 2026  
 **Developer:** HeroNikoStudios / Gabriele N.  
-**Contact:** gabrydx@hotmail.com  
+**Contact:** heronikostudios@gmail.com  
 **Source Code:** [https://github.com/GabryDX/MetaJammer](https://github.com/GabryDX/MetaJammer)
 
 ---
@@ -92,6 +92,6 @@ If we update this Privacy Policy, the revised version will be published in this 
 
 If you have any questions, feedback, or concerns regarding this Privacy Policy or MetaJammer's privacy practices, please contact:
 
-* **Maintainer:** Gabriele N. / HeroNikoStudios
-* **Email:** gabrydx@hotmail.com
+* **Maintainer:** HeroNikoStudios / Gabriele N.
+* **Email:** heronikostudios@gmail.com
 * **Issue Tracker:** [https://github.com/GabryDX/MetaJammer/issues](https://github.com/GabryDX/MetaJammer/issues)
