@@ -5,6 +5,9 @@
   </a>
   <a href="https://f-droid.org/en/packages/com.heronikostudios.metajammer/">
     <img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" height="70">
+  </a>
+  <a href="https://github.com/ImranR98/Obtainium">
+    <img src="https://raw.githubusercontent.com/ImranR98/Obtainium/main/assets/graphics/badge_obtainium.png" alt="Get it on Obtainium" height="70">
   </a><br/>
   <a href="https://github.com/GabryDX/MetaJammer/releases"><img src="https://img.shields.io/github/v/release/GabryDX/MetaJammer?logo=github&logoColor=white" alt="GitHub Release"></a>
   <a href="https://f-droid.org/en/packages/com.heronikostudios.metajammer/"><img src="https://img.shields.io/f-droid/v/com.heronikostudios.metajammer?logo=f-droid&logoColor=white" alt="F-Droid Version"></a>
@@ -52,7 +55,7 @@ MetaJammer is committed to transparency, verifiable privacy, and user trust:
 
 ## Download
 
-MetaJammer is available on GitHub Releases and F-Droid:
+MetaJammer is available on GitHub Releases, F-Droid, and Obtainium:
 
 [<img src="https://raw.githubusercontent.com/machiav3lli/oandbackupx/034b226cea5c1b30eb4f6a6f313e4dadcbb0ece4/badge_github.png"
      alt="Get it on GitHub"
@@ -60,9 +63,13 @@ MetaJammer is available on GitHub Releases and F-Droid:
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
      alt="Get it on F-Droid"
      height="75">](https://f-droid.org/en/packages/com.heronikostudios.metajammer/)
+[<img src="https://raw.githubusercontent.com/ImranR98/Obtainium/main/assets/graphics/badge_obtainium.png"
+     alt="Get it on Obtainium"
+     height="75">](https://github.com/ImranR98/Obtainium)
 
 - **GitHub Releases:** [github.com/GabryDX/MetaJammer/releases](https://github.com/GabryDX/MetaJammer/releases)
 - **F-Droid Package:** [f-droid.org/en/packages/com.heronikostudios.metajammer/](https://f-droid.org/en/packages/com.heronikostudios.metajammer/)
+- **Obtainium:** Add `https://github.com/GabryDX/MetaJammer` in Obtainium, or [tap here on Android](obtainium://app/%7B%22id%22%3A%22com.heronikostudios.metajammer%22%2C%22url%22%3A%22https%3A%2F%2Fgithub.com%2FGabryDX%2FMetaJammer%22%2C%22author%22%3A%22GabryDX%22%2C%22name%22%3A%22MetaJammer%22%7D) for instant automatic background updates.
 
 You can also build the F-Droid version locally using the `floss` flavor:
 ```bash
