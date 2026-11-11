@@ -27,7 +27,7 @@ If you discover a security vulnerability, data leakage issue, or fail-closed byp
 ### Alternative Contact
 
 If you cannot submit a report through GitHub Advisories, you may contact the maintainer directly via email:
-- **Email:** `gabrydx@hotmail.com`
+- **Email:** `heronikostudios@gmail.com`
 - **Subject:** `[SECURITY] MetaJammer Vulnerability Report`
 
 ### What to Include in Your Report
