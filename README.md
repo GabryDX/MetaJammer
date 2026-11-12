@@ -6,7 +6,7 @@
   <a href="https://f-droid.org/en/packages/com.heronikostudios.metajammer/">
     <img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" height="70">
   </a>
-  <a href="https://github.com/ImranR98/Obtainium">
+  <a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/%7B%22id%22%3A%22com.heronikostudios.metajammer%22%2C%22url%22%3A%22https%3A%2F%2Fgithub.com%2FGabryDX%2FMetaJammer%22%2C%22author%22%3A%22GabryDX%22%2C%22name%22%3A%22MetaJammer%22%7D">
     <img src="https://raw.githubusercontent.com/ImranR98/Obtainium/main/assets/graphics/badge_obtainium.png" alt="Get it on Obtainium" height="70">
   </a><br/>
   <a href="https://github.com/GabryDX/MetaJammer/releases"><img src="https://img.shields.io/github/v/release/GabryDX/MetaJammer?logo=github&logoColor=white" alt="GitHub Release"></a>
@@ -65,11 +65,11 @@ MetaJammer is available on GitHub Releases, F-Droid, and Obtainium:
      height="75">](https://f-droid.org/en/packages/com.heronikostudios.metajammer/)
 [<img src="https://raw.githubusercontent.com/ImranR98/Obtainium/main/assets/graphics/badge_obtainium.png"
      alt="Get it on Obtainium"
-     height="75">](https://github.com/ImranR98/Obtainium)
+     height="75">](https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/%7B%22id%22%3A%22com.heronikostudios.metajammer%22%2C%22url%22%3A%22https%3A%2F%2Fgithub.com%2FGabryDX%2FMetaJammer%22%2C%22author%22%3A%22GabryDX%22%2C%22name%22%3A%22MetaJammer%22%7D)
 
 - **GitHub Releases:** [github.com/GabryDX/MetaJammer/releases](https://github.com/GabryDX/MetaJammer/releases)
 - **F-Droid Package:** [f-droid.org/en/packages/com.heronikostudios.metajammer/](https://f-droid.org/en/packages/com.heronikostudios.metajammer/)
-- **Obtainium:** Add `https://github.com/GabryDX/MetaJammer` in Obtainium, or [tap here on Android](obtainium://app/%7B%22id%22%3A%22com.heronikostudios.metajammer%22%2C%22url%22%3A%22https%3A%2F%2Fgithub.com%2FGabryDX%2FMetaJammer%22%2C%22author%22%3A%22GabryDX%22%2C%22name%22%3A%22MetaJammer%22%7D) for instant automatic background updates.
+- **Obtainium:** Add `https://github.com/GabryDX/MetaJammer` in Obtainium, or [tap here on Android](https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/%7B%22id%22%3A%22com.heronikostudios.metajammer%22%2C%22url%22%3A%22https%3A%2F%2Fgithub.com%2FGabryDX%2FMetaJammer%22%2C%22author%22%3A%22GabryDX%22%2C%22name%22%3A%22MetaJammer%22%7D) for instant automatic background updates.
 
 You can also build the F-Droid version locally using the `floss` flavor:
 ```bash
