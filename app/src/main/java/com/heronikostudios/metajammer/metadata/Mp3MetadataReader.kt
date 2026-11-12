@@ -32,22 +32,60 @@ object Mp3MetadataReader {
         try {
             // Read leading ID3v2 tags
             val id3v2Header = ByteArray(10)
-            if (readFully(input, id3v2Header)) {
-                if (isId3v2Header(id3v2Header)) {
-                    val majorVersion = id3v2Header[3].toInt() and 0xFF
-                    val revision = id3v2Header[4].toInt() and 0xFF
-                    val flags = id3v2Header[5].toInt() and 0xFF
-                    val tagSize = decodeSyncsafeInteger(id3v2Header, 6)
+            var bytesRead = 0
+            while (bytesRead < 10) {
+                val r = input.read(id3v2Header, bytesRead, 10 - bytesRead)
+                if (r < 0) break
+                bytesRead += r
+            }
 
-                    entries.add(MetadataEntry("ID3 Version", "ID3v2.$majorVersion.$revision"))
-                    entries.add(MetadataEntry("Tag Header Size", "${tagSize + 10} bytes"))
+            if (bytesRead == 10 && isId3v2Header(id3v2Header)) {
+                val majorVersion = id3v2Header[3].toInt() and 0xFF
+                val revision = id3v2Header[4].toInt() and 0xFF
+                val flags = id3v2Header[5].toInt() and 0xFF
+                val tagSize = decodeSyncsafeInteger(id3v2Header, 6)
 
-                    if (tagSize in 1..MAX_ID3V2_SCAN_SIZE) {
-                        val tagBody = ByteArray(tagSize)
-                        if (readFully(input, tagBody)) {
-                            parseId3v2Frames(tagBody, majorVersion, entries)
-                        }
+                entries.add(MetadataEntry("ID3 Version", "ID3v2.$majorVersion.$revision"))
+                entries.add(MetadataEntry("Tag Header Size", "${tagSize + 10} bytes"))
+
+                if (tagSize in 1..MAX_ID3V2_SCAN_SIZE) {
+                    val tagBody = ByteArray(tagSize)
+                    if (readFully(input, tagBody)) {
+                        parseId3v2Frames(tagBody, majorVersion, entries)
                     }
+                }
+            } else {
+                // No ID3v2 header found at the start. Scan stream tail for ID3v1 tag.
+                val tailBuffer = ByteArray(ID3V1_TAG_SIZE)
+                var tailCount = 0
+
+                if (bytesRead > 0) {
+                    System.arraycopy(id3v2Header, 0, tailBuffer, 0, bytesRead)
+                    tailCount = bytesRead
+                }
+
+                val buffer = ByteArray(BUFFER_SIZE)
+                while (true) {
+                    val r = input.read(buffer)
+                    if (r < 0) break
+
+                    if (r >= ID3V1_TAG_SIZE) {
+                        System.arraycopy(buffer, r - ID3V1_TAG_SIZE, tailBuffer, 0, ID3V1_TAG_SIZE)
+                        tailCount = ID3V1_TAG_SIZE
+                    } else {
+                        val total = tailCount + r
+                        if (total > ID3V1_TAG_SIZE) {
+                            val shift = total - ID3V1_TAG_SIZE
+                            System.arraycopy(tailBuffer, shift, tailBuffer, 0, tailCount - shift)
+                            tailCount -= shift
+                        }
+                        System.arraycopy(buffer, 0, tailBuffer, tailCount, r)
+                        tailCount += r
+                    }
+                }
+
+                if (tailCount == ID3V1_TAG_SIZE) {
+                    parseId3v1Tag(tailBuffer, entries)
                 }
             }
         } catch (e: Exception) {
@@ -66,8 +104,19 @@ object Mp3MetadataReader {
             // Step 1: Skip all leading ID3v2 tags
             val headerBuffer = ByteArray(10)
             while (true) {
-                if (!readFully(input, headerBuffer)) {
+                var bytesRead = 0
+                while (bytesRead < 10) {
+                    val r = input.read(headerBuffer, bytesRead, 10 - bytesRead)
+                    if (r < 0) break
+                    bytesRead += r
+                }
+
+                if (bytesRead < 10) {
                     // Reached EOF before 10 bytes: write what was read and exit
+                    if (bytesRead > 0) {
+                        output.write(headerBuffer, 0, bytesRead)
+                    }
+                    output.flush()
                     return true
                 }
 
@@ -80,8 +129,9 @@ object Mp3MetadataReader {
                     skipFully(input, toSkip)
                 } else {
                     // Non-ID3 bytes: this is the start of the audio stream.
-                    // Pass these 10 bytes to the streaming pipeline.
-                    streamStrippedAudio(firstBytes = headerBuffer, input = input, output = output)
+                    // Pass these bytes to the streaming pipeline.
+                    val validBytes = if (bytesRead == 10) headerBuffer else headerBuffer.copyOf(bytesRead)
+                    streamStrippedAudio(firstBytes = validBytes, input = input, output = output)
                     break
                 }
             }
@@ -292,40 +342,92 @@ object Mp3MetadataReader {
         }
     }
 
+    private fun parseId3v1Tag(tag: ByteArray, entries: MutableList<MetadataEntry>) {
+        if (tag.size != ID3V1_TAG_SIZE) return
+        if (tag[0] != ID3V1_MAGIC[0] || tag[1] != ID3V1_MAGIC[1] || tag[2] != ID3V1_MAGIC[2]) return
+
+        val isV1_1 = tag[125] == 0.toByte() && tag[126] != 0.toByte()
+        val versionStr = if (isV1_1) "ID3v1.1" else "ID3v1"
+        entries.add(MetadataEntry("ID3 Version", versionStr))
+
+        val title = String(tag, 3, 30, StandardCharsets.ISO_8859_1).trim('\u0000', ' ')
+        if (title.isNotBlank()) entries.add(MetadataEntry("Title", title))
+
+        val artist = String(tag, 33, 30, StandardCharsets.ISO_8859_1).trim('\u0000', ' ')
+        if (artist.isNotBlank()) entries.add(MetadataEntry("Artist", artist))
+
+        val album = String(tag, 63, 30, StandardCharsets.ISO_8859_1).trim('\u0000', ' ')
+        if (album.isNotBlank()) entries.add(MetadataEntry("Album", album))
+
+        val year = String(tag, 93, 4, StandardCharsets.ISO_8859_1).trim('\u0000', ' ')
+        if (year.isNotBlank()) entries.add(MetadataEntry("Date", year))
+
+        val commentLen = if (isV1_1) 28 else 30
+        val comment = String(tag, 97, commentLen, StandardCharsets.ISO_8859_1).trim('\u0000', ' ')
+        if (comment.isNotBlank()) entries.add(MetadataEntry("Comment", comment))
+
+        if (isV1_1) {
+            val track = tag[126].toInt() and 0xFF
+            if (track > 0) entries.add(MetadataEntry("Track Number", track.toString()))
+        }
+    }
+
     /**
      * Streams the audio payload while stripping trailing ID3v1 tags (last 128 bytes starting with "TAG").
+     * Uses a zero-allocation tail buffer to eliminate GC allocations and streaming overhead.
      */
     private fun streamStrippedAudio(firstBytes: ByteArray, input: InputStream, output: OutputStream) {
-        val tailBuffer = ByteArrayOutputStream(ID3V1_TAG_SIZE)
-        tailBuffer.write(firstBytes)
+        val tailBuffer = ByteArray(ID3V1_TAG_SIZE)
+        var tailCount = 0
+
+        if (firstBytes.size > ID3V1_TAG_SIZE) {
+            val prefixLen = firstBytes.size - ID3V1_TAG_SIZE
+            output.write(firstBytes, 0, prefixLen)
+            System.arraycopy(firstBytes, prefixLen, tailBuffer, 0, ID3V1_TAG_SIZE)
+            tailCount = ID3V1_TAG_SIZE
+        } else if (firstBytes.isNotEmpty()) {
+            System.arraycopy(firstBytes, 0, tailBuffer, 0, firstBytes.size)
+            tailCount = firstBytes.size
+        }
 
         val readBuffer = ByteArray(BUFFER_SIZE)
         while (true) {
             val bytesRead = input.read(readBuffer)
             if (bytesRead < 0) break
 
-            tailBuffer.write(readBuffer, 0, bytesRead)
-            val currentBytes = tailBuffer.toByteArray()
-
-            if (currentBytes.size > ID3V1_TAG_SIZE) {
-                val flushLen = currentBytes.size - ID3V1_TAG_SIZE
-                output.write(currentBytes, 0, flushLen)
-
-                tailBuffer.reset()
-                tailBuffer.write(currentBytes, flushLen, ID3V1_TAG_SIZE)
+            val total = tailCount + bytesRead
+            if (total > ID3V1_TAG_SIZE) {
+                val toWrite = total - ID3V1_TAG_SIZE
+                if (toWrite <= tailCount) {
+                    output.write(tailBuffer, 0, toWrite)
+                    val remainingInTail = tailCount - toWrite
+                    System.arraycopy(tailBuffer, toWrite, tailBuffer, 0, remainingInTail)
+                    tailCount = remainingInTail
+                    System.arraycopy(readBuffer, 0, tailBuffer, tailCount, bytesRead)
+                    tailCount += bytesRead
+                } else {
+                    output.write(tailBuffer, 0, tailCount)
+                    val fromReadToWrite = toWrite - tailCount
+                    output.write(readBuffer, 0, fromReadToWrite)
+                    val remainingInRead = bytesRead - fromReadToWrite
+                    System.arraycopy(readBuffer, fromReadToWrite, tailBuffer, 0, remainingInRead)
+                    tailCount = remainingInRead
+                }
+            } else {
+                System.arraycopy(readBuffer, 0, tailBuffer, tailCount, bytesRead)
+                tailCount += bytesRead
             }
         }
 
         // Check if the remaining 128 bytes are an ID3v1 tag
-        val finalTail = tailBuffer.toByteArray()
-        if (finalTail.size == ID3V1_TAG_SIZE &&
-            finalTail[0] == ID3V1_MAGIC[0] &&
-            finalTail[1] == ID3V1_MAGIC[1] &&
-            finalTail[2] == ID3V1_MAGIC[2]
+        if (tailCount == ID3V1_TAG_SIZE &&
+            tailBuffer[0] == ID3V1_MAGIC[0] &&
+            tailBuffer[1] == ID3V1_MAGIC[1] &&
+            tailBuffer[2] == ID3V1_MAGIC[2]
         ) {
             Timber.d("Detected and stripped trailing ID3v1 tag")
-        } else {
-            output.write(finalTail)
+        } else if (tailCount > 0) {
+            output.write(tailBuffer, 0, tailCount)
         }
     }
 

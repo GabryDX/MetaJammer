@@ -40,8 +40,8 @@ class MediaMetadataProcessor(
         if (isMp3) {
             val outputFile = fileRepository.createSharedTempFile("media_clean_", ".mp3")
             val success = runCatching {
-                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.use { input ->
-                    outputFile.outputStream().use { output ->
+                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.buffered()?.use { input ->
+                    outputFile.outputStream().buffered().use { output ->
                         Mp3MetadataReader.stripMetadata(input, output)
                     }
                 } ?: false
@@ -59,8 +59,8 @@ class MediaMetadataProcessor(
         if (isOgg) {
             val outputFile = fileRepository.createSharedTempFile("media_clean_", ".ogg")
             val success = runCatching {
-                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.use { input ->
-                    outputFile.outputStream().use { output ->
+                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.buffered()?.use { input ->
+                    outputFile.outputStream().buffered().use { output ->
                         OggMetadataReader.stripMetadata(input, output)
                     }
                 } ?: false
@@ -82,8 +82,8 @@ class MediaMetadataProcessor(
         } catch (e: Exception) {
             Timber.w(e, "Standard media remuxing failed; attempting fallback container scrubber")
             val fallbackSuccess = runCatching {
-                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.use { input ->
-                    outputFile.outputStream().use { output ->
+                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.buffered()?.use { input ->
+                    outputFile.outputStream().buffered().use { output ->
                         if (isOgg) {
                             OggMetadataReader.stripMetadata(input, output)
                         } else if (isMp3) {
@@ -122,8 +122,8 @@ class MediaMetadataProcessor(
         if (isMp3) {
             val outputFile = fileRepository.createSharedTempFile("media_poisoned_", ".mp3")
             val success = runCatching {
-                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.use { input ->
-                    outputFile.outputStream().use { output ->
+                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.buffered()?.use { input ->
+                    outputFile.outputStream().buffered().use { output ->
                         Mp3MetadataReader.poisonMetadata(input, output, plan)
                     }
                 } ?: false
@@ -141,8 +141,8 @@ class MediaMetadataProcessor(
         if (isOgg) {
             val outputFile = fileRepository.createSharedTempFile("media_poisoned_", ".ogg")
             val success = runCatching {
-                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.use { input ->
-                    outputFile.outputStream().use { output ->
+                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.buffered()?.use { input ->
+                    outputFile.outputStream().buffered().use { output ->
                         OggMetadataReader.poisonMetadata(input, output, plan)
                     }
                 } ?: false
@@ -164,8 +164,8 @@ class MediaMetadataProcessor(
         } catch (e: Exception) {
             Timber.w(e, "Standard media remuxing failed during poisoning; attempting fallback container scrubber")
             val fallbackSuccess = runCatching {
-                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.use { input ->
-                    outputFile.outputStream().use { output ->
+                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.buffered()?.use { input ->
+                    outputFile.outputStream().buffered().use { output ->
                         if (isOgg) {
                             OggMetadataReader.poisonMetadata(input, output, plan)
                         } else if (isMp3) {
