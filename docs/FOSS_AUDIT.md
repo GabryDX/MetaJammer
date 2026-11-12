@@ -40,6 +40,15 @@ The Location Picker and Custom Location Preset features are 100% offline and air
 - **Offline & Custom Location Presets**: Users can select built-in landmarks or define custom location presets visually on the vector map or via decimal coordinates. Custom presets are serialized using FOSS `kotlinx-serialization-json` and stored locally in AndroidX DataStore preferences without network lookups or external geocoding.
 - **Zero Network Activity**: No tiles, APIs, or network requests are ever dispatched. MetaJammer requires no `INTERNET` permission and carries zero F-Droid Anti-Features (`TetheredNet` completely eliminated).
 
+## Container Engine & Parser Audit
+
+All core media parsers and container scrubbers are implemented entirely in pure Kotlin using standard library APIs, eliminating external binary libraries, native code, and closed codecs:
+- **HEIC / HEIF**: ISO-BMFF box parser (`HeicMetadataProcessor.kt`) with zero recompression.
+- **MP4 / MOV / M4A**: Direct ISO-BMFF atom parser and box scrubber (`Mp4MetadataReader.kt`).
+- **MP3**: Stream-level ID3v2/v1 and C2PA manifest parser and stripper (`Mp3MetadataReader.kt`).
+- **OGG Vorbis & Opus**: Pure Kotlin page parser and Vorbis comment packet reassembler (`OggMetadataReader.kt`).
+- **PNG & SVG**: Streaming chunk parser (`PngMetadataReader.kt`) and secure XML parser (`SvgMetadataProcessor.kt`).
+
 ## Project Assets and Licensing Audit
 
 - **Icons**: Uses Material Icons (Apache 2.0).

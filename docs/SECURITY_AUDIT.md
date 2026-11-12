@@ -141,10 +141,17 @@ To defend against XML External Entity (XXE), Billion Laughs entity expansion, an
 * **Loss-Free Bit-Exact Audio:** Audio packets and elementary streams are preserved byte-for-byte without decoding or re-encoding, avoiding audio quality loss and artifact generation.
 * **Bitstream Integrity & CRC Recalculation:** Re-sequences all subsequent OGG pages with strictly consecutive page sequence numbers and recalculates 32-bit OGG CRC checksums using the standard generator polynomial `0x04C11DB7`, ensuring 100% compliance with RFC 3533 and media player compatibility across all Android versions (API 26–37).
 
-### 4.9 Concurrency Control & Memory Protection
+### 4.9 MP3 (MPEG Audio Layer III) ID3 & C2PA Container Sanitization ([`Mp3MetadataReader.kt`](../app/src/main/java/com/heronikostudios/metajammer/metadata/Mp3MetadataReader.kt))
+* **Pure Kotlin Zero-Dependency Engine:** Implements a stream-level parser and stripper for MP3 audio containers, eliminating reliance on Android's native `MediaMuxer` (which lacks MP3 track muxing support and fails on `audio/mpeg`).
+* **Leading ID3v2 & C2PA Manifest Removal:** Detects and skips all leading ID3v2 (v2.2, v2.3, v2.4) headers and extended headers. Specifically neutralizes embedded **Content Authenticity Initiative (C2PA)** provenance tracking manifests embedded inside `GEOB` (General Encapsulated Object) frames, private tracking tags (`PRIV`), embedded album artwork (`APIC`), and comments (`COMM`).
+* **Trailing ID3v1 & APEv2 Removal:** Employs a rolling 128-byte FIFO buffer to inspect the stream tail and cleanly drop trailing ID3v1 tags (`TAG...`) without seeking or loading entire audio payloads into memory.
+* **Metadata Poisoning & ID3v2.3 Synthesis:** Generates a clean, specification-compliant ID3v2.3 tag containing spoofed metadata (`TIT2`, `TPE1`, `TALB`, `TYER`, `COMM`, `TSSE`) and prepends it to raw audio frames, leaving zero residual C2PA or provenance artifacts.
+* **Lossless Elementary Audio Stream Preservation:** Raw MPEG audio frames (beginning with sync words `0xFF 0xE0`–`0xFF 0xFF`) are passed through directly without re-encoding, avoiding any loss in audio acoustic quality.
+
+### 4.10 Concurrency Control & Memory Protection
 * **Foreground Concurrency Throttling:** Foreground batch processing is throttled using a concurrency `Semaphore` (maximum 2 parallel tasks) to prevent heap exhaustion and thread starvation during batch operations on high-resolution media on memory-constrained devices.
 
-### 4.10 UI Race Condition Hardening & Progressive Metadata Extraction ([`ProcessingViewModel.kt`](../app/src/main/java/com/heronikostudios/metajammer/ui/processing/ProcessingViewModel.kt), [`MetadataPreviewScreen.kt`](../app/src/main/java/com/heronikostudios/metajammer/ui/screens/MetadataPreviewScreen.kt))
+### 4.11 UI Race Condition Hardening & Progressive Metadata Extraction ([`ProcessingViewModel.kt`](../app/src/main/java/com/heronikostudios/metajammer/ui/processing/ProcessingViewModel.kt), [`MetadataPreviewScreen.kt`](../app/src/main/java/com/heronikostudios/metajammer/ui/screens/MetadataPreviewScreen.kt))
 * **Progressive Asynchronous Streaming:** Metadata is extracted per-file asynchronously on background IO threads without blocking the main thread or halting multi-file previews behind a single slow file.
 * **Action Gating:** The "Continue" navigation action is strictly disabled until metadata reading has finished across all selected files, accompanied by clear visual loading indicators (`Reading metadata…`) on cards and buttons. This prevents race conditions where poisoning plans or stripping routines might execute with incomplete or missing metadata models.
 * **Fail-Closed Async Recovery:** In the event of an I/O or parser exception on any individual file during preview extraction, the error is captured and isolated without blocking other files or hanging the user interface.

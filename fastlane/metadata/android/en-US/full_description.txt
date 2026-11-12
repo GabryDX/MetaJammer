@@ -9,7 +9,7 @@ Key Features:
 - Interactive Map Picker & Custom Presets: Visually choose a "fake" location on a 100% offline Compose vector world map with landmark presets and user-defined custom location presets.
 - Quick Scrub & Share: Standalone HUD activity to scrub and re-share files directly with zero overhead.
 - Background Batch Processing: Reliable processing for 50+ high-resolution files at once using Android WorkManager.
-- Multi-Format Support: Full compatibility with modern image formats (JPEG, PNG, WebP, HEIF/HEIC, SVG), video containers (MP4, MOV), and PDF documents (metadata stripping/poisoning and hidden annotation removal).
+- Multi-Format Support: Full compatibility with modern image formats (JPEG, PNG, WebP, HEIF/HEIC, SVG), video containers (MP4, MOV), audio files (MP3, OGG Vorbis/Opus), and PDF documents (metadata stripping/poisoning and hidden annotation removal).
 
 Privacy & Security:
 - Zero Broad Permissions & Zero Network: The app requires NO storage or network permissions. It uses modern Scoped Storage, SAF, and an air-gapped local architecture.
