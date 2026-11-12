@@ -348,7 +348,14 @@ class ImageMetadataProcessorTest {
         )
         kotlinx.coroutines.runBlocking {
             for ((name, mime) in fileNames) {
-                val file = listOf(File("test_data/$name"), File("../test_data/$name")).firstOrNull { it.exists() }
+                val file = listOf(
+                    File("test_data/fake/$name"),
+                    File("../test_data/fake/$name"),
+                    File("test_data/real/$name"),
+                    File("../test_data/real/$name"),
+                    File("test_data/$name"),
+                    File("../test_data/$name")
+                ).firstOrNull { it.exists() }
                 if (file == null) {
                     println("Could not find file $name")
                     continue

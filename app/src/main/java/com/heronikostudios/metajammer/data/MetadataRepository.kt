@@ -235,6 +235,24 @@ class MetadataRepository(
         val isOgg = mime == "audio/ogg" || mime == "application/ogg" ||
             selectedFile.displayName.endsWith(".ogg", ignoreCase = true)
 
+        val isMp3 = mime == "audio/mpeg" || mime == "audio/mp3" ||
+            selectedFile.displayName.endsWith(".mp3", ignoreCase = true)
+
+        if (isMp3) {
+            runCatching {
+                resolver.openInputStream(selectedFile.uri)?.use { stream ->
+                    val mp3Entries = com.heronikostudios.metajammer.metadata.Mp3MetadataReader.readMetadata(stream)
+                    for (me in mp3Entries) {
+                        if (entries.none { it.key.equals(me.key, ignoreCase = true) }) {
+                            entries.add(me)
+                        }
+                    }
+                }
+            }.onFailure {
+                Timber.e(it, "Failed to read MP3 metadata for %s", selectedFile.uri)
+            }
+        }
+
         if (isOgg) {
             runCatching {
                 resolver.openInputStream(selectedFile.uri)?.use { stream ->
@@ -307,7 +325,7 @@ class MetadataRepository(
         }
 
         // Also query MP4 container box metadata for MP4, MOV, M4A, 3GP containers
-        if (!isOgg) {
+        if (!isOgg && !isMp3) {
             runCatching {
                 resolver.openInputStream(selectedFile.uri)?.use { stream ->
                     val boxEntries = com.heronikostudios.metajammer.metadata.Mp4MetadataReader.readMetadata(stream)

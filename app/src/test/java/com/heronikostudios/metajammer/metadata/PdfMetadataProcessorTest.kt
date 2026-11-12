@@ -231,7 +231,12 @@ class PdfMetadataProcessorTest {
 
     @Test
     fun testPagedOut008HiddenAnnotationDetectionAndStripping() = runTest {
-        val file = listOf(File("test_data/PagedOut_008.pdf"), File("../test_data/PagedOut_008.pdf")).firstOrNull { it.exists() }
+        val file = listOf(
+            File("test_data/real/PagedOut_008.pdf"),
+            File("../test_data/real/PagedOut_008.pdf"),
+            File("test_data/PagedOut_008.pdf"),
+            File("../test_data/PagedOut_008.pdf")
+        ).firstOrNull { it.exists() }
         assertNotNull("test_data/PagedOut_008.pdf should exist", file)
         val targetFile = file!!
 

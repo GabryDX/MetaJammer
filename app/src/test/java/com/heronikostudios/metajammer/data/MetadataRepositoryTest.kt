@@ -32,14 +32,18 @@ class MetadataRepositoryTest {
     private lateinit var metadataRepository: MetadataRepository
 
     private val sampleSvgFile = listOf(
+        File("test_data/fake/fake_metadata_sample.svg"),
+        File("../test_data/fake/fake_metadata_sample.svg"),
         File("test_data/fake_metadata_sample.svg"),
         File("../test_data/fake_metadata_sample.svg")
-    ).firstOrNull { it.exists() } ?: File("test_data/fake_metadata_sample.svg")
+    ).firstOrNull { it.exists() } ?: File("test_data/fake/fake_metadata_sample.svg")
 
     private val sampleOggFile = listOf(
+        File("test_data/fake/fake_metadata_sample.ogg"),
+        File("../test_data/fake/fake_metadata_sample.ogg"),
         File("test_data/fake_metadata_sample.ogg"),
         File("../test_data/fake_metadata_sample.ogg")
-    ).firstOrNull { it.exists() } ?: File("test_data/fake_metadata_sample.ogg")
+    ).firstOrNull { it.exists() } ?: File("test_data/fake/fake_metadata_sample.ogg")
 
     @Before
     fun setUp() {
@@ -158,6 +162,8 @@ class MetadataRepositoryTest {
     @Test
     fun `readMetadata detects EXIF thumbnail when present`() = runTest {
         val sampleJpg = listOf(
+            File("test_data/fake/fake_metadata_sample.jpg"),
+            File("../test_data/fake/fake_metadata_sample.jpg"),
             File("test_data/fake_metadata_sample.jpg"),
             File("../test_data/fake_metadata_sample.jpg")
         ).firstOrNull { it.exists() }
@@ -218,7 +224,12 @@ class MetadataRepositoryTest {
 
     @Test
     fun `readMetadata on beaver jpg confirms no embedded thumbnail`() = runTest {
-        val beaverFile = listOf(File("test_data/beaver.jpg"), File("../test_data/beaver.jpg")).firstOrNull { it.exists() }
+        val beaverFile = listOf(
+            File("test_data/real/beaver.jpg"),
+            File("../test_data/real/beaver.jpg"),
+            File("test_data/beaver.jpg"),
+            File("../test_data/beaver.jpg")
+        ).firstOrNull { it.exists() }
         if (beaverFile != null) {
             val selectedFile = SelectedFile(
                 uri = beaverFile.toUri(),

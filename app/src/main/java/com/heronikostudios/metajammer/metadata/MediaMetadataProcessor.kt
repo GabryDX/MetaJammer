@@ -34,6 +34,28 @@ class MediaMetadataProcessor(
         val isOgg = mimeType == "audio/ogg" || mimeType == "application/ogg" ||
             extension.equals(".ogg", ignoreCase = true) || extension.equals("ogg", ignoreCase = true)
 
+        val isMp3 = mimeType == "audio/mpeg" || mimeType == "audio/mp3" ||
+            extension.equals(".mp3", ignoreCase = true) || extension.equals("mp3", ignoreCase = true)
+
+        if (isMp3) {
+            val outputFile = fileRepository.createSharedTempFile("media_clean_", ".mp3")
+            val success = runCatching {
+                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.use { input ->
+                    outputFile.outputStream().use { output ->
+                        Mp3MetadataReader.stripMetadata(input, output)
+                    }
+                } ?: false
+            }.getOrDefault(false)
+
+            if (success) {
+                Timber.d("Successfully stripped MP3 metadata")
+                return outputFile
+            } else {
+                outputFile.delete()
+                throw IllegalStateException("Failed to strip MP3 metadata")
+            }
+        }
+
         if (isOgg) {
             val outputFile = fileRepository.createSharedTempFile("media_clean_", ".ogg")
             val success = runCatching {
@@ -64,6 +86,8 @@ class MediaMetadataProcessor(
                     outputFile.outputStream().use { output ->
                         if (isOgg) {
                             OggMetadataReader.stripMetadata(input, output)
+                        } else if (isMp3) {
+                            Mp3MetadataReader.stripMetadata(input, output)
                         } else {
                             Mp4MetadataReader.stripContainerMetadata(input, output)
                         }
@@ -91,6 +115,28 @@ class MediaMetadataProcessor(
         }
         val isOgg = mimeType == "audio/ogg" || mimeType == "application/ogg" ||
             extension.equals(".ogg", ignoreCase = true) || extension.equals("ogg", ignoreCase = true)
+
+        val isMp3 = mimeType == "audio/mpeg" || mimeType == "audio/mp3" ||
+            extension.equals(".mp3", ignoreCase = true) || extension.equals("mp3", ignoreCase = true)
+
+        if (isMp3) {
+            val outputFile = fileRepository.createSharedTempFile("media_poisoned_", ".mp3")
+            val success = runCatching {
+                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.use { input ->
+                    outputFile.outputStream().use { output ->
+                        Mp3MetadataReader.poisonMetadata(input, output, plan)
+                    }
+                } ?: false
+            }.getOrDefault(false)
+
+            if (success) {
+                Timber.d("Successfully poisoned MP3 metadata")
+                return outputFile
+            } else {
+                outputFile.delete()
+                throw IllegalStateException("Failed to poison MP3 metadata")
+            }
+        }
 
         if (isOgg) {
             val outputFile = fileRepository.createSharedTempFile("media_poisoned_", ".ogg")
@@ -122,6 +168,8 @@ class MediaMetadataProcessor(
                     outputFile.outputStream().use { output ->
                         if (isOgg) {
                             OggMetadataReader.poisonMetadata(input, output, plan)
+                        } else if (isMp3) {
+                            Mp3MetadataReader.poisonMetadata(input, output, plan)
                         } else {
                             Mp4MetadataReader.stripContainerMetadata(input, output)
                         }
