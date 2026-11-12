@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -61,6 +62,7 @@ class HistoryViewModelTest {
 
         viewModel.clearProcessedFilesHistory("History Cleared Successfully")
 
+        advanceUntilIdle()
         // Flush Robolectric main thread looper
         org.robolectric.shadows.ShadowLooper.idleMainLooper()
 
