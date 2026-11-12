@@ -92,7 +92,7 @@
     <!-- HelpScreen -->
     <string name="help_title">עזרה ומדריכים</string>
     <string name="help_item_video_title">עיבוד וידאו</string>
-    <string name="help_item_video_body">פורמטים נתמכים: MP4, MOV, M4A, OGG.\n\nתהליך זה מסיר GPS, תאריכים ונתוני מכשיר כדי להגן על פרטיותך.</string>
+    <string name="help_item_video_body">פורמטים נתמכים: MP4, MOV, M4A, MP3, OGG.\n\nתהליך זה מסיר GPS, תאריכים ונתוני מכשיר כדי להגן על פרטיותך.</string>
     <string name="help_item_image_title">עיבוד תמונה וקטורים</string>
     <string name="help_item_image_body">פורמטים נתמכים: JPG, PNG, WebP, HEIF/HEIC, SVG.\n\nMetaJammer מסיר מטא-נתונים EXIF מתמונות ביטמפ ומנקה מטא-נתונים XML/RDF מקובצי SVG. במצב \"הרעלה\", הוא מחליף תגיות רגישות בנתונים אקראיים מציאותיים.</string>
     <string name="help_item_other_title">עיבוד PDF ומסמכים</string>

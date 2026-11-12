@@ -92,7 +92,7 @@
     <!-- HelpScreen -->
     <string name="help_title">Aide et tutoriels</string>
     <string name="help_item_video_title">Traitement vidéo</string>
-    <string name="help_item_video_body">Formats pris en charge : MP4, MOV, M4A, OGG.\n\nLe remuxage complet est pris en charge pour ces conteneurs. Ce processus supprime le GPS, les dates et les atomes de l\'appareil pour protéger votre vie privée.</string>
+    <string name="help_item_video_body">Formats pris en charge : MP4, MOV, M4A, MP3, OGG.\n\nLe remuxage complet est pris en charge pour ces conteneurs. Ce processus supprime le GPS, les dates et les atomes de l\'appareil pour protéger votre vie privée.</string>
     <string name="help_item_image_title">Traitement d\'images et de vecteurs</string>
     <string name="help_item_image_body">Formats pris en charge : JPG, PNG, WebP, HEIF/HEIC, SVG.\n\nMetaJammer supprime les métadonnées EXIF des images bitmap et nettoie les métadonnées XML/RDF des SVG. En mode \"Poison\", il remplace les balises sensibles par des données aléatoires réalistes.</string>
     <string name="help_item_other_title">Traitement de PDF et de documents</string>

@@ -92,7 +92,7 @@
     <!-- HelpScreen -->
     <string name="help_title">帮助与教程</string>
     <string name="help_item_video_title">视频处理</string>
-    <string name="help_item_video_body">支持的格式：MP4, MOV, M4A, OGG。\n\n这些格式支持完整的“重混”(Remuxing) 过程。该过程会删除 GPS、日期和设备信息，以保护您的隐私。</string>
+    <string name="help_item_video_body">支持的格式：MP4, MOV, M4A, MP3, OGG。\n\n这些格式支持完整的“重混”(Remuxing) 过程。该过程会删除 GPS、日期和设备信息，以保护您的隐私。</string>
     <string name="help_item_image_title">图像和矢量处理</string>
     <string name="help_item_image_body">支持的格式：JPG, PNG, WebP, HEIF/HEIC, SVG。\n\nMetaJammer 会从位图中删除 EXIF 元数据，并清理 SVG 中的 XML/RDF 元数据。在“投毒”模式下，它会将敏感标签替换为现实的随机数据。</string>
     <string name="help_item_other_title">PDF 和文档处理</string>

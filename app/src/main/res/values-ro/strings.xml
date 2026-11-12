@@ -92,7 +92,7 @@
     <!-- HelpScreen -->
     <string name="help_title">Ajutor și tutoriale</string>
     <string name="help_item_video_title">Procesare video</string>
-    <string name="help_item_video_body">Formate suportate: MP4, MOV, M4A, OGG.\n\nRemuxarea completă este suportată pentru aceste containere. Acest proces elimină datele GPS, datele calendaristice și atomii de dispozitiv pentru a-ți proteja confidențialitatea.</string>
+    <string name="help_item_video_body">Formate suportate: MP4, MOV, M4A, MP3, OGG.\n\nRemuxarea completă este suportată pentru aceste containere. Acest proces elimină datele GPS, datele calendaristice și atomii de dispozitiv pentru a-ți proteja confidențialitatea.</string>
     <string name="help_item_image_title">Procesare imagini și vectori</string>
     <string name="help_item_image_body">Formate suportate: JPG, PNG, WebP, HEIF/HEIC, SVG.\n\nMetaJammer elimină metadatele EXIF din imaginile bitmap și curăță metadatele XML/RDF din SVG-uri. În modul \"Alterare\", acesta înlocuiește etichetele sensibile cu date aleatorii realiste.</string>
     <string name="help_item_other_title">Procesare PDF și documente</string>

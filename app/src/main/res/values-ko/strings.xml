@@ -92,7 +92,7 @@
     <!-- HelpScreen -->
     <string name="help_title">도움말 및 튜토리얼</string>
     <string name="help_item_video_title">동영상 처리</string>
-    <string name="help_item_video_body">지원되는 형식: MP4, MOV, M4A, OGG.\n\n이러한 컨테이너에 대해 전체 리먹싱이 지원됩니다. 이 프로세스는 개인 정보를 보호하기 위해 GPS, 날짜 및 장치 원자를 제거합니다.</string>
+    <string name="help_item_video_body">지원되는 형식: MP4, MOV, M4A, MP3, OGG.\n\n이러한 컨테이너에 대해 전체 리먹싱이 지원됩니다. 이 프로세스는 개인 정보를 보호하기 위해 GPS, 날짜 및 장치 원자를 제거합니다.</string>
     <string name="help_item_image_title">이미지 및 벡터 처리</string>
     <string name="help_item_image_body">지원되는 형식: JPG, PNG, WebP, HEIF/HEIC, SVG.\n\nMetaJammer는 비트맵 이미지에서 EXIF 메타데이터를 제거하고 SVG에서 XML/RDF 메타데이터를 정리합니다. \"포이즌\" 모드에서는 민감한 태그를 실제와 유사한 무작위 데이터로 대체합니다.</string>
     <string name="help_item_other_title">PDF 및 문서 처리</string>

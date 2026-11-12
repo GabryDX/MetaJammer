@@ -92,7 +92,7 @@
     <!-- HelpScreen -->
     <string name="help_title">Help &amp; Tutorials</string>
     <string name="help_item_video_title">Video Processing</string>
-    <string name="help_item_video_body">समर्थित प्रारूप: MP4, MOV, M4A, OGG।\n\nइन कंटेनरों के लिए पूर्ण रिमक्सिंग (re-muxing) समर्थित है। यह प्रक्रिया आपकी गोपनीयता की रक्षा के लिए GPS, तिथियां और डिवाइस विवरण हटा देती है।</string>
+    <string name="help_item_video_body">समर्थित प्रारूप: MP4, MOV, M4A, MP3, OGG।\n\nइन कंटेनरों के लिए पूर्ण रिमक्सिंग (re-muxing) समर्थित है। यह प्रक्रिया आपकी गोपनीयता की रक्षा के लिए GPS, तिथियां और डिवाइस विवरण हटा देती है।</string>
     <string name="help_item_image_title">इमेज और वेक्टर प्रोसेसिंग</string>
     <string name="help_item_image_body">समर्थित प्रारूप: JPG, PNG, WebP, HEIF/HEIC, SVG।\n\nMetaJammer बिटमैप छवियों से EXIF मेटाडेटा हटाता है और SVG से XML/RDF मेटाडेटा साफ़ करता है। \"पॉइज़न\" मोड में, यह संवेदनशील टैग को वास्तविक यादृच्छिक डेटा से बदल देता है।</string>
     <string name="help_item_other_title">PDF और दस्तावेज़ प्रसंस्करण</string>

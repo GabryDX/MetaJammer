@@ -92,7 +92,7 @@
     <!-- HelpScreen -->
     <string name="help_title">Pomoc i poradniki</string>
     <string name="help_item_video_title">Przetwarzanie wideo</string>
-    <string name="help_item_video_body">Obsługiwane formaty: MP4, MOV, M4A, OGG.\n\nPełny remuxing jest obsługiwany dla tych kontenerów. Proces ten usuwa dane GPS, daty i atomy urządzenia, aby chronić Twoją prywatność.</string>
+    <string name="help_item_video_body">Obsługiwane formaty: MP4, MOV, M4A, MP3, OGG.\n\nPełny remuxing jest obsługiwany dla tych kontenerów. Proces ten usuwa dane GPS, daty i atomy urządzenia, aby chronić Twoją prywatność.</string>
     <string name="help_item_image_title">Przetwarzanie obrazów i wektorów</string>
     <string name="help_item_image_body">Obsługiwane formaty: JPG, PNG, WebP, HEIF/HEIC, SVG.\n\nMetaJammer usuwa metadane EXIF z obrazów bitmapowych i czyści metadane XML/RDF z plików SVG. W trybie „Zatruwanie” zastępuje wrażliwe tagi realistycznymi losowymi danymi.</string>
     <string name="help_item_other_title">Przetwarzanie dokumentów i plików PDF</string>

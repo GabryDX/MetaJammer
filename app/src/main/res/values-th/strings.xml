@@ -92,7 +92,7 @@
     <!-- HelpScreen -->
     <string name="help_title">Help &amp; Tutorials</string>
     <string name="help_item_video_title">Video Processing</string>
-    <string name="help_item_video_body">รูปแบบที่รองรับ: MP4, MOV, M4A, OGG\n\nรองรับการ remux อย่างเต็มรูปแบบสำหรับคอนเทนเนอร์เหล่านี้ กระบวนการนี้จะลบ GPS วันที่ และข้อมูลอุปกรณ์เพื่อปกป้องความเป็นส่วนตัวของคุณ</string>
+    <string name="help_item_video_body">รูปแบบที่รองรับ: MP4, MOV, M4A, MP3, OGG\n\nรองรับการ remux อย่างเต็มรูปแบบสำหรับคอนเทนเนอร์เหล่านี้ กระบวนการนี้จะลบ GPS วันที่ และข้อมูลอุปกรณ์เพื่อปกป้องความเป็นส่วนตัวของคุณ</string>
     <string name="help_item_image_title">การประมวลผลรูปภาพและเวกเตอร์</string>
     <string name="help_item_image_body">รูปแบบที่รองรับ: JPG, PNG, WebP, HEIF/HEIC, SVG\n\nMetaJammer ลบข้อมูลเมตา EXIF จากรูปภาพบิตแมป และล้างข้อมูลเมตา XML/RDF จาก SVG ในโหมด \"วางยา\" มันจะแทนที่แท็กที่ละเอียดอ่อนด้วยข้อมูลสุ่มที่สมจริง</string>
     <string name="help_item_other_title">การประมวลผล PDF และเอกสาร</string>

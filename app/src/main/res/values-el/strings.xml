@@ -92,7 +92,7 @@
     <!-- HelpScreen -->
     <string name="help_title">Βοήθεια και οδηγοί</string>
     <string name="help_item_video_title">Επεξεργασία βίντεο</string>
-    <string name="help_item_video_body">Υποστηριζόμενες μορφές: MP4, MOV, M4A, OGG.\n\nΥποστηρίζεται πλήρης επαναπολυπλεξία για αυτούς τους περιέκτες. Αυτή η διαδικασία αφαιρεί το GPS, τις ημερομηνίες και τα άτομα της συσκευής για την προστασία του απορρήτου σας.</string>
+    <string name="help_item_video_body">Υποστηριζόμενες μορφές: MP4, MOV, M4A, MP3, OGG.\n\nΥποστηρίζεται πλήρης επαναπολυπλεξία για αυτούς τους περιέκτες. Αυτή η διαδικασία αφαιρεί το GPS, τις ημερομηνίες και τα άτομα της συσκευής για την προστασία του απορρήτου σας.</string>
     <string name="help_item_image_title">Επεξεργασία εικόνας και διανυσματικών γραφικών</string>
     <string name="help_item_image_body">Υποστηριζόμενες μορφές: JPG, PNG, WebP, HEIF/HEIC, SVG.\n\nΤο MetaJammer αφαιρεί τα μεταδεδομένα EXIF από εικόνες bitmap και καθαρίζει τα μεταδεδομένα XML/RDF από SVG. Στη λειτουργία «Δηλητηρίαση», αντικαθιστά ευαίσθητες ετικέτες με ρεαλιστικά τυχαία δεδομένα.</string>
     <string name="help_item_other_title">Επεξεργασία PDF &amp; Εγγράφων</string>

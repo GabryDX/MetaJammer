@@ -92,7 +92,7 @@
     <!-- HelpScreen -->
     <string name="help_title">Yardım ve Eğitimler</string>
     <string name="help_item_video_title">Video İşleme</string>
-    <string name="help_item_video_body">Desteklenen formatlar: MP4, MOV, M4A, OGG.\n\nBu kapsayıcılar için tam remuxing desteklenir. Bu işlem, gizliliğinizi korumak için GPS, tarih ve cihaz atomlarını kaldırır.</string>
+    <string name="help_item_video_body">Desteklenen formatlar: MP4, MOV, M4A, MP3, OGG.\n\nBu kapsayıcılar için tam remuxing desteklenir. Bu işlem, gizliliğinizi korumak için GPS, tarih ve cihaz atomlarını kaldırır.</string>
     <string name="help_item_image_title">Görüntü ve Vektör İşleme</string>
     <string name="help_item_image_body">Desteklenen formatlar: JPG, PNG, WebP, HEIF/HEIC, SVG.\n\nMetaJammer, bitmap görüntülerden EXIF meta verilerini temizler ve SVG\'lerden XML/RDF meta verilerini temizler. \"Zehirleme\" modunda, hassas etiketleri gerçekçi rastgele verilerle değiştirir.</string>
     <string name="help_item_other_title">PDF ve Belge İşleme</string>

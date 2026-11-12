@@ -92,7 +92,7 @@
     <!-- HelpScreen -->
     <string name="help_title">Help &amp; Tutorials</string>
     <string name="help_item_video_title">Video &amp; Audio Processing</string>
-    <string name="help_item_video_body">Supported formats: MP4, MOV, M4A, OGG.\n\nFull re-muxing is supported for these containers. This process strips GPS, dates, and device atoms to protect your privacy.</string>
+    <string name="help_item_video_body">Supported formats: MP4, MOV, M4A, MP3, OGG.\n\nFull re-muxing is supported for these containers. This process strips GPS, dates, and device atoms to protect your privacy.</string>
     <string name="help_item_image_title">Image &amp; Vector Processing</string>
     <string name="help_item_image_body">Supported formats: JPG, PNG, WebP, HEIF/HEIC, SVG.\n\nMetaJammer strips EXIF metadata from bitmap images and cleans XML/RDF metadata from SVGs. In \"Poison\" mode, it replaces sensitive tags with realistic random data.</string>
     <string name="help_item_other_title">PDF &amp; Document Processing</string>
