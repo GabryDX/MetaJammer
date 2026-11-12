@@ -1,5 +1,5 @@
 - Added pure Kotlin MP3 metadata stripper and poisoner, fixing MediaMuxer crashes.
-- Strips ID3v1, ID3v2.2-v2.4 tags, embedded album art, and private tracking frames.
+- Strips and inspects ID3v1, ID3v2.2-v2.4 tags, album art, and tracking frames.
 - Identifies and neutralizes Content Authenticity Initiative (C2PA) manifests.
-- Lossless zero-recompression streaming preserves elementary MPEG audio frames.
+- Zero-allocation streaming preserves elementary MPEG audio frames losslessly.
 - Updated technical security and FOSS audits for audio container sanitization.
