@@ -1,0 +1,20 @@
+MetaJammer es una aplicación de Android centrada en la privacidad diseñada para ofuscar, falsear o eliminar por completo los metadatos de tus archivos multimedia. Proporciona a los usuarios un control total sobre su huella digital antes de compartir fotos, vídeos o documentos en línea.
+
+Características principales:
+- Eliminación profunda de metadatos: Elimina EXIF, XMP, coordenadas GPS, números de serie de hardware, miniaturas incrustadas, fragmentos PNG y metadatos vectoriales SVG.
+- Envenenamiento de metadatos y perfiles: No te limites a borrar datos: confunde a los rastreadores. Genera metadatos falsos realistas con perfiles de hardware de cámara y ajustes de ubicación preestablecidos.
+- Control granular de etiquetas: Elige selectivamente qué categorías eliminar o conservar (GPS, Dispositivo, Fecha/Hora, Ajustes de cámara, Autor/Comentarios).
+- Diferencias visuales antes / después: Compara los metadatos originales y modificados lado a lado con insignias de estado codificadas por colores y filtros por categoría.
+- Vista previa de metadatos: Inspecciona los metadatos existentes de tus archivos antes de procesarlos para ver exactamente qué información está expuesta.
+- Selector de mapa interactivo y preajustes: Elige visualmente una ubicación falsa en un mapa vectorial Compose 100% sin conexión, con monumentos famosos y ubicaciones personalizadas.
+- Limpieza rápida y compartir: Actividad HUD independiente para limpiar y volver a compartir archivos al instante sin pasos intermedios.
+- Procesamiento por lotes en segundo plano: Procesamiento fiable de más de 50 archivos de alta resolución a la vez mediante Android WorkManager.
+- Compatibilidad multiformato: Compatibilidad total con formatos de imagen modernos (JPEG, PNG, WebP, HEIF/HEIC, SVG), contenedores de vídeo (MP4, MOV), archivos de audio (MP3, OGG Vorbis/Opus) y documentos PDF (eliminación de metadatos, envenenamiento y borrado de anotaciones/revisiones ocultas).
+
+Privacidad y Seguridad:
+- Sin permisos amplios y sin red: La app NO requiere permisos de almacenamiento ni de red. Utiliza Scoped Storage, SAF y una arquitectura local totalmente aislada (air-gapped).
+- 100% FOSS: Construida íntegramente con software libre y de código abierto. Sin SDK propietarios, rastreadores ni análisis invasivos.
+- Procesamiento Fail-Closed: Ante cualquier fallo, el procesamiento se detiene de inmediato; nunca se exportan archivos sin limpiar por error.
+- Privacidad 100% sin conexión: El permiso INTERNET está totalmente eliminado. El mapa y el procesamiento son 100% locales, eliminando riesgos de filtración.
+- Sin fugas en la nube: El servicio de copia de seguridad automática de Android está desactivado para garantizar que los datos nunca salgan del dispositivo.
+- Limpieza automática: Todos los residuos temporales de procesamiento y cachés de uso compartido se limpian automáticamente.

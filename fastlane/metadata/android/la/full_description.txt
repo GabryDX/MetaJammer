@@ -1,0 +1,20 @@
+MetaJammer est applicatio Android privatae vitae tutelam curans, ad metadata ex fasciculis instrumentorum vel perturbanda, vel fingenda, vel funditus delenda destinata. Usoribus plenum imperium vestigii digitalis praebet antequam imagines, pelliculae vel documenta in interrete communicentur.
+
+Praecipuae proprietates:
+- Penita metadatorum deletio: EXIF, XMP, coordinatas GPS, numeros seriales machinarum, parvas imagines insertas, partes PNG et metadata vectoralia SVG penitus abolet.
+- Metadatorum venenum et figurae: Noli tantum delere—confunde indagatores. Metadata falsa atque verisimilia effice cum figuris machinarum photographicarum et locorum praefinitionibus.
+- Singulorum indicum moderamen: Elige accurate quas categorias delere aut servare velis (GPS, Machina, Dies/Tempus, Optiones photographicae, Auctor/Annotationes).
+- Visualis collatio ante / post: Metadata originalia et mutata iuxta intuere cum insignibus coloratis et colamentis categoricis.
+- Metadatorum praevisio: Inspice metadata praesentia antequam fasciculos tractes, ut plane videas quae notitiae exponantur.
+- Tabula geographica interactiva: Locum fictum visu elige in tabula vectorali Compose 100% sine interrete operante, cum praeclaris monumentis et locis personalibus.
+- Mundatio celer & Communicatio: Modus HUD singularis ad fasciculos confestim mundandos et iterum communicandos sine mora.
+- Tractatio in occulto aggregata: Fidissima simul tractatio plus quam 50 fasciculorum magnae definitionis per Android WorkManager.
+- Plurium formarum sustentatio: Plena congruentia cum imaginibus (JPEG, PNG, WebP, HEIF/HEIC, SVG), pelliculis (MP4, MOV), sonis (MP3, OGG Vorbis/Opus) et documentis PDF (deletio metadatorum, venenum et remotio annotationum occultarum).
+
+Privata Salus et Securitas:
+- Nullae amplae veniae et nullum rete: Haec applicatio nullam cinematothecae neque retis veniam requirit. Scoped Storage, SAF et architecturam localem prorsus discretam (air-gapped) adhibet.
+- 100% FOSS: Tota cum programmatura libera et aperta fabricata. Sine ulla mercatoria SDK, vestigiis vel telemetria.
+- Tutus processus (Fail-Closed): Si quid erratur, actio statim sistitur; fasciculi non mundati numquam imprudenter exportantur.
+- 100% Salus sine interrete: Venia INTERNET omnino sublata est. Tabulae et tractatio solum in tuo instrumento perficiuntur.
+- Nullae rimae in nubem: Automatum Android tergum (Auto-Backup) avertitur ne quid non mundatum ad nubem evolet.
+- Automata purgatio: Omnia temporaria residua et communicationis receptacula statim ac feliciter mundantur.

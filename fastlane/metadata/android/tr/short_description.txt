@@ -1,0 +1,1 @@
+Tam gizlilik için dosyalardaki meta verileri temizleyin, yanıltın veya silin.

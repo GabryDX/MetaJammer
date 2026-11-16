@@ -1,0 +1,20 @@
+MetaJammer este o aplicație Android axată pe confidențialitate, concepută pentru a amesteca, falsifica sau elimina complet metadatele din fișierele multimedia. Oferă utilizatorilor control total asupra amprentei digitale înainte de a partaja fotografii, videoclipuri sau documente online.
+
+Caracteristici principale:
+- Eliminare profundă a metadatelor: Șterge datele EXIF, XMP, coordonatele GPS, numerele de serie ale dispozitivelor, miniaturile încorporate, blocurile PNG și metadatele vectoriale SVG.
+- Alterarea metadatelor și profiluri: Nu doar ștergeți datele—derutați sistemele de urmărire. Generați metadate false realiste cu profiluri hardware de cameră și presetări de locație.
+- Control granular al etichetelor: Selectați ce categorii doriți să eliminați sau să păstrați (GPS, Dispozitiv, Dată/Oră, Setări cameră, Autor/Comentarii).
+- Comparare vizuală înainte / după: Comparați metadatele originale și cele modificate alăturat, cu etichete de stare colorate și filtre pe categorii.
+- Previzualizare metadate: Inspectați metadatele existente ale fișierelor înainte de procesare pentru a vedea exact ce informații sunt expuse.
+- Selector de hartă interactiv și presetări: Alegeți vizual o locație falsă pe o hartă vectorială Compose 100% offline, cu repere celebre și presetări personalizate.
+- Curățare și partajare rapidă: Mod HUD autonom pentru a curăța și repartaja fișierele instantaneu, fără pași intermediari.
+- Procesare în loturi în fundal: Procesare fiabilă pentru peste 50 de fișiere de înaltă rezoluție simultan prin Android WorkManager.
+- Compatibilitate multiformat: Suport complet pentru imagini moderne (JPEG, PNG, WebP, HEIF/HEIC, SVG), containere video (MP4, MOV), fișiere audio (MP3, OGG Vorbis/Opus) și documente PDF (eliminare metadate, alterare și ștergere adnotări ascunse).
+
+Confidențialitate și securitate:
+- Fără permisiuni extinse și fără rețea: Aplicația NU necesită permisiuni de stocare sau acces la rețea. Folosește Scoped Storage, SAF și o arhitectură locală izolată (air-gapped).
+- 100% FOSS: Dezvoltată integral cu software liber și cu sursă deschisă. Fără SDK-uri proprietare, trackere sau telemetrie.
+- Procesare Fail-Closed: La orice eroare procesarea se oprește imediat; fișierele necurățate nu sunt exportate niciodată accidental.
+- Confidențialitate 100% offline: Permisiunea INTERNET este complet eliminată. Randarea hărții și procesarea se desfășoară exclusiv local.
+- Fără scurgeri în cloud: Copia de rezervă automată Android este dezactivată pentru a preveni transmiterea datelor nescrubate în cloud.
+- Curățare automată: Toate fișierele temporare și cache-urile de partajare sunt șterse automat.

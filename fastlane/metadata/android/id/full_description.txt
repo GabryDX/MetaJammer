@@ -1,0 +1,20 @@
+MetaJammer adalah aplikasi Android yang berfokus pada privasi yang dirancang untuk mengacak, memalsukan, atau menghapus sepenuhnya metadata dari file multimedia Anda. Memberikan kontrol penuh atas jejak digital pengguna sebelum membagikan foto, video, atau dokumen secara daring.
+
+Fitur Utama:
+- Pembersihan Metadata Mendalam: Menghapus EXIF, XMP, koordinat GPS, nomor seri perangkat keras, thumbnail tersemat, chunk PNG, dan metadata vektor SVG.
+- Metadata Poisoning & Profil: Jangan hanya menghapus data—kelabui pelacak. Buat metadata palsu yang realistis dengan profil perangkat keras kamera dan preset lokasi instan.
+- Kontrol Tag Rinci: Pilih secara selektif kategori mana yang akan dihapus atau dipertahankan (GPS, Perangkat, Tanggal/Waktu, Pengaturan Kamera, Pembuat/Komentar).
+- Perbandingan Visual Sebelum / Sesudah: Bandingkan metadata asli dan yang dimodifikasi secara berdampingan dengan lencana status berwarna dan filter kategori.
+- Pratinjau Metadata: Periksa metadata yang ada pada file Anda sebelum diproses untuk melihat secara tepat informasi apa yang terekspos.
+- Pemilih Peta Interaktif & Preset: Pilih lokasi palsu secara visual pada peta vektor Compose 100% offline dengan landmark terkenal dan preset lokasi khusus.
+- Quick Scrub & Bagikan: Antarmuka HUD mandiri untuk membersihkan dan membagikan kembali file secara instan tanpa langkah rumit.
+- Pemrosesan Batch Latar Belakang: Pemrosesan andal untuk 50+ file beresolusi tinggi sekaligus di latar belakang menggunakan Android WorkManager.
+- Dukungan Multi-Format: Kompatibilitas penuh dengan format gambar modern (JPEG, PNG, WebP, HEIF/HEIC, SVG), wadah video (MP4, MOV), file audio (MP3, OGG Vorbis/Opus), dan dokumen PDF (penghapusan metadata, poisoning, dan pembersihan anotasi tersembunyi).
+
+Privasi & Keamanan:
+- Tanpa Izin Luas & Tanpa Jaringan: Aplikasi TIDAK memerlukan izin penyimpanan atau internet. Menggunakan Scoped Storage, SAF, dan arsitektur lokal yang terisolasi (air-gapped).
+- 100% FOSS: Dibangun sepenuhnya dengan Perangkat Lunak Bebas dan Sumber Terbuka. Tanpa SDK pihak ketiga, pelacak, atau analitik.
+- Pemrosesan Fail-Closed: Jika terjadi kegagalan pemrosesan segera dihentikan; file yang belum dibersihkan tidak akan pernah diekspor secara tidak sengaja.
+- Privasi 100% Offline: Izin INTERNET dihapus sepenuhnya. Peta dan pemrosesan berjalan sepenuhnya di perangkat lokal.
+- Bebas Kebocoran Cloud: Pencadangan otomatis Android dinonaktifkan untuk memastikan data tidak terunggah ke cloud.
+- Pembersihan Otomatis: Semua residu pemrosesan sementara dan cache berbagi dihapus secara otomatis.

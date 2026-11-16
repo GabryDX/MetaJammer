@@ -1,0 +1,20 @@
+MetaJammer là một ứng dụng Android tập trung vào quyền riêng tư được thiết kế để làm xáo trộn, làm giả hoặc loại bỏ hoàn toàn siêu dữ liệu (metadata) khỏi các tệp phương tiện của bạn. Ứng dụng trao cho người dùng toàn quyền kiểm soát dấu chân kỹ thuật số trước khi chia sẻ ảnh, video hoặc tài liệu lên mạng.
+
+Tính năng chính:
+- Tẩy siêu dữ liệu chuyên sâu: Xóa bỏ EXIF, XMP, tọa độ GPS, số sê-ri phần cứng, hình thu nhỏ nhúng, khối dữ liệu PNG và siêu dữ liệu vectơ SVG.
+- Đầu độc siêu dữ liệu & Cấu hình: Không chỉ xóa dữ liệu—hãy đánh lạc hướng các trình theo dõi. Tạo siêu dữ liệu giả lập chân thực với hồ sơ phần cứng máy ảnh và cài đặt vị trí sẵn có.
+- Kiểm soát thẻ chi tiết: Tùy chọn xóa hoặc giữ lại từng danh mục cụ thể (GPS, Thiết bị, Ngày/Giờ, Cài đặt máy ảnh, Tác giả/Bình luận).
+- So sánh trực quan Trước / Sau: Đối chiếu siêu dữ liệu gốc và siêu dữ liệu đã chỉnh sửa cạnh nhau với huy hiệu trạng thái màu sắc và bộ lọc danh mục.
+- Xem trước siêu dữ liệu: Kiểm tra siêu dữ liệu hiện có trong tệp trước khi xử lý để biết chính xác những thông tin nhạy cảm nào đang bị lộ.
+- Bộ chọn bản đồ tương tác & Vị trí sẵn: Trực quan chọn vị trí giả trên bản đồ vectơ Compose ngoại tuyến 100% với các địa danh nổi tiếng và vị trí tùy chỉnh.
+- Dọn dẹp nhanh & Chia sẻ: Chế độ HUD độc lập để làm sạch và chia sẻ lại tệp ngay lập tức mà không cần các thao tác rườm rà.
+- Xử lý hàng loạt trong nền: Xử lý đáng tin cậy hơn 50 tệp độ phân giải cao cùng lúc trong nền thông qua Android WorkManager.
+- Hỗ trợ đa định dạng: Tương thích hoàn toàn với các định dạng hình ảnh hiện đại (JPEG, PNG, WebP, HEIF/HEIC, SVG), video (MP4, MOV), tệp âm thanh (MP3, OGG Vorbis/Opus) và tài liệu PDF (xóa siêu dữ liệu, đầu độc dữ liệu và loại bỏ chú thích ẩn).
+
+Quyền riêng tư & Bảo mật:
+- Không quyền hạn rộng & Không mạng: Ứng dụng KHÔNG yêu cầu quyền truy cập bộ nhớ hay quyền mạng. Sử dụng Scoped Storage, SAF và kiến trúc cô lập cục bộ (air-gapped).
+- 100% FOSS: Được xây dựng hoàn toàn bằng Phần mềm Tự do và Nguồn mở. Không có SDK độc quyền, không có trình theo dõi hay phân tích dữ liệu.
+- Xử lý an toàn khi lỗi (Fail-Closed): Mọi sự cố xử lý sẽ dừng lại ngay lập tức; các tệp chưa được dọn dẹp không bao giờ bị xuất ra ngoài do sơ suất.
+- Quyền riêng tư ngoại tuyến 100%: Quyền INTERNET đã bị loại bỏ hoàn toàn. Việc dựng bản đồ và xử lý tệp diễn ra hoàn toàn trên thiết bị.
+- Không rò rỉ lên đám mây: Đã tắt tính năng sao lưu tự động của Android để đảm bảo dữ liệu chưa xử lý không bao giờ rời khỏi thiết bị của bạn.
+- Tự động dọn dẹp: Mọi tệp tạm thời và bộ nhớ đệm chia sẻ đều được xóa sạch tự động.

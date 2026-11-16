@@ -1,0 +1,20 @@
+O MetaJammer é uma aplicação Android focada na privacidade, concebida para ofuscar, falsificar ou remover completamente os metadados dos seus ficheiros multimédia. Garante aos utilizadores total controlo sobre a sua pegada digital antes de partilharem fotos, vídeos ou documentos online.
+
+Principais Características:
+- Remoção Profunda de Metadados: Elimina EXIF, XMP, coordenadas GPS, números de série de hardware, miniaturas incorporadas, blocos PNG e metadados vetoriais SVG.
+- Envenenamento de Metadados e Perfis: Não se limite a apagar dados: confunda os rastreadores. Gere metadados falsos realistas com perfis de câmaras e predefinições de localização.
+- Controlo Granular de Etiquetas: Escolha seletivamente quais as categorias a remover ou preservar (GPS, Dispositivo, Data/Hora, Definições da câmara, Autor/Comentários).
+- Diferenças Visuais Antes / Depois: Compare metadados originais e modificados lado a lado com etiquetas de estado coloridas e filtros por categoria.
+- Pré-visualização de Metadados: Inspecione os metadados existentes antes do processamento para saber exatamente que informações estão expostas.
+- Seletor de Mapa Interativo & Perfis: Escolha visualmente uma localização fictícia num mapa vetorial Compose 100% offline, com pontos de referência e locais personalizados.
+- Quick Scrub e Partilha: Interface HUD autónoma para limpar e repartilhar ficheiros instantaneamente sem passos redundantes.
+- Processamento em Lote em Segundo Plano: Processamento fiável de mais de 50 ficheiros de alta resolução em segundo plano através do Android WorkManager.
+- Suporte Multiformato: Compatibilidade total com imagens modernas (JPEG, PNG, WebP, HEIF/HEIC, SVG), vídeos (MP4, MOV), ficheiros de áudio (MP3, OGG Vorbis/Opus) e documentos PDF (remoção de metadados, envenenamento e limpeza de anotações ocultas).
+
+Privacidade e Segurança:
+- Sem Permissões Excessivas e Sem Rede: Não requer permissões de armazenamento nem acesso à rede. Utiliza Scoped Storage, SAF e uma arquitetura local isolada (air-gapped).
+- 100% FOSS: Desenvolvido inteiramente com software livre e de código aberto. Sem SDKs proprietários, rastreadores ou telemetria.
+- Processamento Fail-Closed: Em caso de falha, o processo é abortado imediatamente; ficheiros por limpar nunca são exportados acidentalmente.
+- Privacidade 100% Offline: A permissão INTERNET está completamente removida. O mapa e o processamento ocorrem exclusivamente no dispositivo.
+- Sem Fugas para a Nuvem: A cópia de segurança automática do Android está desativada para que nenhum ficheiro saia do dispositivo.
+- Limpeza Automática: Todos os resíduos temporários e caches de partilha são eliminados automaticamente.
