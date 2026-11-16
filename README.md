@@ -116,13 +116,13 @@ To verify the authenticity and integrity of MetaJammer APKs, you can use [AppVer
 ## Screenshots
 
 <p align="center">
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/01_home_screen.jpg" alt="Home Screen" width="250"/>
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/02_settings_screen.jpg" alt="Settings Screen" width="250"/>
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/03_help_screen.jpg" alt="Help Screen" width="250"/>
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/04_metadata_preview_screen.jpg" alt="Metadata Preview" width="250"/>
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/05_process_files_screen.jpg" alt="Process Files & Diff" width="250"/>
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/06_map_picker_screen.jpg" alt="Map Picker & Presets" width="250"/>
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/07_output_screen.jpg" alt="Output Screen" width="250"/>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.jpg" alt="Home Screen" width="250"/>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.jpg" alt="Settings Screen" width="250"/>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.jpg" alt="Help Screen" width="250"/>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.jpg" alt="Metadata Preview" width="250"/>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.jpg" alt="Process Files & Diff" width="250"/>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.jpg" alt="Map Picker & Presets" width="250"/>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/7.jpg" alt="Output Screen" width="250"/>
 </p>
 
 ## License
