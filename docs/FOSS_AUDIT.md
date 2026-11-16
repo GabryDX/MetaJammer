@@ -45,7 +45,7 @@ The Location Picker and Custom Location Preset features are 100% offline and air
 All core media parsers and container scrubbers are implemented entirely in pure Kotlin using standard library APIs, eliminating external binary libraries, native code, and closed codecs:
 - **HEIC / HEIF**: ISO-BMFF box parser (`HeicMetadataProcessor.kt`) with zero recompression.
 - **MP4 / MOV / M4A**: Direct ISO-BMFF atom parser and box scrubber (`Mp4MetadataReader.kt`).
-- **MP3**: Stream-level ID3v2/v1 and C2PA manifest parser and stripper (`Mp3MetadataReader.kt`).
+- **MP3**: Stream-level zero-allocation ID3v2/v1 and C2PA manifest parser, stripper, and poisoner (`Mp3MetadataReader.kt`).
 - **OGG Vorbis & Opus**: Pure Kotlin page parser and Vorbis comment packet reassembler (`OggMetadataReader.kt`).
 - **PNG & SVG**: Streaming chunk parser (`PngMetadataReader.kt`) and secure XML parser (`SvgMetadataProcessor.kt`).
 
@@ -53,6 +53,8 @@ All core media parsers and container scrubbers are implemented entirely in pure 
 
 - **Icons**: Uses Material Icons (Apache 2.0).
 - **Fonts**: No custom fonts are bundled; it uses system fonts.
+- **Graphics & Vectors**: App icons, vector feature graphic (Shield, Lightning, Padlock), and offline map assets are 100% custom-created or sourced from public domain datasets (Natural Earth), distributed under the ISC License with zero external tracking scripts or binary blobs.
+- **Fastlane Store Metadata**: Plain text descriptions across 24 supported locales (`en-US`, `it`, `de`, `es`, `fr`, `zh`, etc.) are 100% self-contained.
 - **Packaging Hygiene**: Unused third-party auxiliary files (BouncyCastle PQC tables and properties, OkHttp publicsuffix lists) are strictly stripped during packaging, maintaining minimal attack surface and clean FOSS binaries.
 - **License**: The project itself is licensed under the **ISC License** ([LICENSE.txt](../LICENSE.txt)).
 
