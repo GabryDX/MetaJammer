@@ -92,7 +92,7 @@
     <!-- HelpScreen -->
     <string name="help_title">ヘルプとチュートリアル</string>
     <string name="help_item_video_title">ビデオ処理</string>
-    <string name="help_item_video_body">サポートされている形式：MP4、MOV、M4A、OGG。\n\nこれらのコンテナの完全なリマックがサポートされています。このプロセスにより、プライバシーを保護するためにGPS、日付、およびデバイスアトムが削除されます。</string>
+    <string name="help_item_video_body">サポートされている形式：MP4、MOV、M4A、MP3、OGG。\n\nこれらのコンテナの完全なリマックがサポートされています。このプロセスにより、プライバシーを保護するためにGPS、日付、およびデバイスアトムが削除されます。</string>
     <string name="help_item_image_title">画像とベクターの処理</string>
     <string name="help_item_image_body">サポートされている形式：JPG, PNG, WebP, HEIF/HEIC, SVG。\n\nMetaJammerはビットマップ画像からEXIFメタデータを削除し、SVGからXML/RDFメタデータをクリーンアップします。「ポイズン」モードでは、機密タグを現実的なランダムデータに置き換えます。</string>
     <string name="help_item_other_title">PDFおよびドキュメント処理</string>

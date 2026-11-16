@@ -1,0 +1,20 @@
+MetaJammer, medya dosyalarınızdaki meta verileri karıştırmak, yanıltıcı bilgilerle değiştirmek veya tamamen kaldırmak için tasarlanmış, gizlilik odaklı bir Android uygulamasıdır. Fotoğrafları, videoları veya belgeleri çevrimiçi paylaşmadan önce dijital ayak izinizi tam olarak kontrol etmenizi sağlar.
+
+Temel Özellikler:
+- Derin Meta Veri Temizleme: EXIF, XMP, GPS koordinatları, cihaz seri numaraları, gömülü küçük resimler, PNG blokları ve SVG gömülü meta verilerini kaldırır.
+- Metadata Zehirleme ve Profiller: Sadece silmekle kalmayın, takipçileri yanıltın. Kamera donanım profilleri ve konum önayarlarıyla gerçekçi sahte meta veriler oluşturun.
+- Ayrıntılı Etiket Denetimi: Hangi kategorilerin temizleneceğini veya korunacağını seçin (GPS, Cihaz, Tarih/Saat, Kamera Ayarları, Yazar/Yorumlar).
+- Görsel Öncesi / Sonrası Karşılaştırma: Orijinal ve değiştirilmiş meta verileri renkli durum rozetleri ve filtrelerle yan yana inceleyin.
+- Meta Veri Önizleme: Dosyalarınızı işlemeden önce mevcut meta verilerini inceleyerek hangi bilgilerin açıkta olduğunu tam olarak görün.
+- Etkileşimli Harita Seçici ve Özel Önayarlar: %100 çevrimdışı Compose vektör dünya haritasında bilinen yerler ve özel konum önayarlarıyla sahte bir konum seçin.
+- Hızlı Temizle ve Paylaş: Dosyaları zahmetsizce anında temizleyip yeniden paylaşmak için bağımsız HUD modu.
+- Arka Planda Toplu İşleme: Android WorkManager kullanarak aynı anda 50'den fazla yüksek çözünürlüklü dosyayı arka planda güvenle işleyin.
+- Çoklu Format Desteği: Modern görsel formatları (JPEG, PNG, WebP, HEIF/HEIC, SVG), video kapsayıcıları (MP4, MOV), ses dosyaları (MP3, OGG Vorbis/Opus) ve PDF belgeleri (meta veri temizleme, zehirleme ve gizli açıklamaları kaldırma) ile tam uyumluluk.
+
+Gizlilik ve Güvenlik:
+- Sıfır Geniş İzin ve Sıfır Ağ: Uygulama depolama veya ağ izni GEREKTİRMEZ. Scoped Storage, SAF ve yalıtılmış yerel bir mimari (air-gapped) kullanır.
+- %100 FOSS: Tamamen Özgür ve Açık Kaynaklı Yazılımla geliştirilmiştir. Tescilli SDK, izleyici veya telemetri içermez.
+- Fail-Closed Güvenliği: İşleme hatası durumunda işlem derhal durdurulur; temizlenmemiş dosyalar asla yanlışlıkla dışa aktarılmaz.
+- %100 Çevrimdışı Gizlilik: INTERNET izni tamamen kaldırılmıştır. Harita işleme ve dosya işlemleri tamamen yerel olarak gerçekleşir.
+- Bulut Sızıntısı Yok: Temizlenmemiş verilerin cihaz dışına çıkmasını önlemek için Android Otomatik Yedekleme devre dışı bırakılmıştır.
+- Otomatik Temizlik: Tüm geçici işleme kalıntıları ve giden paylaşım önbellekleri otomatik olarak temizlenir.

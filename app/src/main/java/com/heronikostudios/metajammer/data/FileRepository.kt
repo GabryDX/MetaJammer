@@ -183,6 +183,9 @@ open class FileRepository(private val context: Context) {
                 if (buffer[0] == 'I'.code.toByte() && buffer[1] == 'D'.code.toByte() && buffer[2] == '3'.code.toByte()) {
                     return@use "audio/mpeg"
                 }
+                if (read >= 2 && (buffer[0].toInt() and 0xFF) == 0xFF && ((buffer[1].toInt() and 0xE0) == 0xE0)) {
+                    return@use "audio/mpeg"
+                }
 
                 null
             }

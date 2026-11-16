@@ -92,7 +92,7 @@
     <!-- HelpScreen -->
     <string name="help_title">Aiuto e tutorial</string>
     <string name="help_item_video_title">Elaborazione video</string>
-    <string name="help_item_video_body">Formati supportati: MP4, MOV, M4A, OGG.\n\nIl remuxing completo è supportato per questi contenitori. Questo processo rimuove GPS, date e atomi del dispositivo per proteggere la tua privacy.</string>
+    <string name="help_item_video_body">Formati supportati: MP4, MOV, M4A, MP3, OGG.\n\nIl remuxing completo è supportato per questi contenitori. Questo processo rimuove GPS, date e atomi del dispositivo per proteggere la tua privacy.</string>
     <string name="help_item_image_title">Elaborazione immagini e vettori</string>
     <string name="help_item_image_body">Formati supportati: JPG, PNG, WebP, HEIF/HEIC, SVG.\n\nMetaJammer rimuove i metadati EXIF dalle immagini bitmap e pulisce i metadati XML/RDF dai file SVG. In modalità \"Avvelenamento\", sostituisce i tag sensibili con dati casuali realistici.</string>
     <string name="help_item_other_title">Elaborazione di PDF e documenti</string>

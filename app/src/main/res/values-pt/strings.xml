@@ -92,7 +92,7 @@
     <!-- HelpScreen -->
     <string name="help_title">Ajuda e tutoriais</string>
     <string name="help_item_video_title">Processamento de vídeo</string>
-    <string name="help_item_video_body">Formatos suportados: MP4, MOV, M4A, OGG.\n\nO remuxing completo é suportado para estes contentores. Este processo remove GPS, datas e átomos do dispositivo para proteger a sua privacidade.</string>
+    <string name="help_item_video_body">Formatos suportados: MP4, MOV, M4A, MP3, OGG.\n\nO remuxing completo é suportado para estes contentores. Este processo remove GPS, datas e átomos do dispositivo para proteger a sua privacidade.</string>
     <string name="help_item_image_title">Processamento de Imagem e Vetores</string>
     <string name="help_item_image_body">Formatos suportados: JPG, PNG, WebP, HEIF/HEIC, SVG.\n\nO MetaJammer remove os metadados EXIF das imagens bitmap e limpa os metadados XML/RDF dos SVGs. No modo \"Envenenar\", substitui etiquetas sensíveis por dados aleatórios realistas.</string>
     <string name="help_item_other_title">Processamento de PDF e Documentos</string>

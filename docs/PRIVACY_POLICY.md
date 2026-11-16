@@ -1,6 +1,6 @@
 # Privacy Policy for MetaJammer
 
-**Last Updated:** November 10, 2026  
+**Last Updated:** November 16, 2026  
 **Developer:** HeroNikoStudios / Gabriele N.  
 **Contact:** heronikostudios@gmail.com  
 **Source Code:** [https://github.com/GabryDX/MetaJammer](https://github.com/GabryDX/MetaJammer)

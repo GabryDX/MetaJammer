@@ -5,6 +5,9 @@
   </a>
   <a href="https://f-droid.org/en/packages/com.heronikostudios.metajammer/">
     <img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" height="70">
+  </a>
+  <a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/%7B%22id%22%3A%22com.heronikostudios.metajammer%22%2C%22url%22%3A%22https%3A%2F%2Fgithub.com%2FGabryDX%2FMetaJammer%22%2C%22author%22%3A%22GabryDX%22%2C%22name%22%3A%22MetaJammer%22%7D">
+    <img src="https://raw.githubusercontent.com/ImranR98/Obtainium/main/assets/graphics/badge_obtainium.png" alt="Get it on Obtainium" height="70">
   </a><br/>
   <a href="https://github.com/GabryDX/MetaJammer/releases"><img src="https://img.shields.io/github/v/release/GabryDX/MetaJammer?logo=github&logoColor=white" alt="GitHub Release"></a>
   <a href="https://f-droid.org/en/packages/com.heronikostudios.metajammer/"><img src="https://img.shields.io/f-droid/v/com.heronikostudios.metajammer?logo=f-droid&logoColor=white" alt="F-Droid Version"></a>
@@ -17,7 +20,7 @@
 
 ## Key Features
 
-- **🛡️ Deep Metadata Stripping:** More than just EXIF. MetaJammer targets EXIF, XMP, IPTC, JPEG COM markers, GPS coordinates, hardware serial numbers, embedded thumbnails, HEIC/HEIF ISO-BMFF container items (`meta`, `iinf`, `iloc`, EXIF and XMP item scrubbing with zero recompression), MP4/MOV ISO-BMFF container atoms (`udta`, `ilst`, `©xyz`, iTunes custom tags), PNG chunks (`tEXt`, `zTXt`, `iTXt`, `pHYs`, `eXIf`), OGG Vorbis & Opus comment packets (user comments, location, hardware identifiers, picture blocks, XMP), PDF metadata (document catalog, page labels, hidden/invisible annotations, Form XObject user watermarks, and user comments/markups while preserving interactive navigation links and software trial stamps), and SVG embedded metadata to ensure no "leaks" remain.
+- **🛡️ Deep Metadata Stripping:** More than just EXIF. MetaJammer targets EXIF, XMP, IPTC, JPEG COM markers, GPS coordinates, hardware serial numbers, embedded thumbnails, HEIC/HEIF ISO-BMFF container items (`meta`, `iinf`, `iloc`, EXIF and XMP item scrubbing with zero recompression), MP4/MOV ISO-BMFF container atoms (`udta`, `ilst`, `©xyz`, iTunes custom tags), PNG chunks (`tEXt`, `zTXt`, `iTXt`, `pHYs`, `eXIf`), MP3 ID3 tags (ID3v1, ID3v2.2–v2.4, C2PA / Content Authenticity Initiative manifests inside `GEOB` frames, embedded `APIC` album art, and private tracking frames with pure streaming MPEG audio frame preservation), OGG Vorbis & Opus comment packets (user comments, location, hardware identifiers, picture blocks, XMP), PDF metadata (document catalog, page labels, hidden/invisible annotations, Form XObject user watermarks, and user comments/markups while preserving interactive navigation links and software trial stamps), and SVG embedded metadata to ensure no "leaks" remain.
 - **🧪 Metadata Poisoning & Profiles:** Don't just remove data—confuse it. Generate highly realistic fake metadata with camera hardware profiles (Pro Mirrorless, Smartphone, Vintage, Random) and instant location presets.
 - **🎛️ Granular Tag Controls:** Selectively strip or preserve individual metadata categories: GPS & Location, Device & Hardware, Date & Time, Camera Settings, Author & Comments, PDF hidden annotations, PDF user comments & markups, and JPEG JFIF resolution density (DPI) preservation with embedded thumbnail zeroing.
 - **📊 Before / After Visual Diff & Unified Scrolling:** Inspect original vs. modified metadata side-by-side with color-coded status badges (`REMOVED`, `POISONED`, `KEPT`), a sticky filter header (`All`, `Removed`, `Poisoned`, `Kept`), and collapsible poisoning settings for a smooth, single-scroll experience.
@@ -27,7 +30,7 @@
 - **📦 Background Batch Processing:** Reliable processing for 50+ high-resolution files at once using Android WorkManager, complete with system notifications.
 - **📜 History & Retention Control:** Keep an audit log of processed files with configurable privacy retention (clear after 24 hours, keep 100 items, clear on exit, or disable history) powered by an isolated Room database.
 - **📂 Flexible Output & Clean Navigation:** Save to custom folders via SAF, use standard MediaStore collections, share directly to other apps, or return to Home with one click. Intelligently preserves unsaved selections while clearing completed batches and dismissing status banners immediately.
-- **🖼️ Multi-Format Support:** Full compatibility with modern image formats (JPEG with JFIF DPI preservation & thumbnail zeroing, PNG, WebP, HEIF/HEIC pure container-level zero-recompression processing, SVG with Dublin Core, editor tracking, and embedded raster scrubbing), video & audio containers (MP4, MOV, M4A with atom scrubbing fallback, and OGG Vorbis/Opus with pure Kotlin zero-recompression comment stripping), and PDF documents (in-memory metadata wiping/poisoning, page labels reset, hidden annotation purging, and comment/markup stripping while preserving navigation links).
+- **🖼️ Multi-Format Support:** Full compatibility with modern image formats (JPEG with JFIF DPI preservation & thumbnail zeroing, PNG, WebP, HEIF/HEIC pure container-level zero-recompression processing, SVG with Dublin Core, editor tracking, and embedded raster scrubbing), video & audio containers (MP4, MOV, M4A with atom scrubbing fallback, MP3 with pure Kotlin zero-recompression ID3/C2PA stripping and poisoning, and OGG Vorbis/Opus with pure Kotlin zero-recompression comment stripping), and PDF documents (in-memory metadata wiping/poisoning, page labels reset, hidden annotation purging, and comment/markup stripping while preserving navigation links).
 - **🎨 Modern & Accessible UI:** Built with Jetpack Compose and Material 3, featuring Dynamic Color support, a dedicated OLED black mode, tuned Coil caching for butter-smooth 120Hz scrolling, and battery-aware theme scheduling.
 - **🌍 Global Reach:** Fully localized in 24 languages with 100% string parity: English, Arabic, German, Greek, Spanish, Persian, French, Hebrew, Hindi, Indonesian, Italian, Japanese, Korean, Latin, Dutch, Polish, Portuguese, Romanian, Russian, Thai, Turkish, Ukrainian, Vietnamese, and Chinese.
 
@@ -52,7 +55,7 @@ MetaJammer is committed to transparency, verifiable privacy, and user trust:
 
 ## Download
 
-MetaJammer is available on GitHub Releases and F-Droid:
+MetaJammer is available on GitHub Releases, F-Droid, and Obtainium:
 
 [<img src="https://raw.githubusercontent.com/machiav3lli/oandbackupx/034b226cea5c1b30eb4f6a6f313e4dadcbb0ece4/badge_github.png"
      alt="Get it on GitHub"
@@ -60,9 +63,13 @@ MetaJammer is available on GitHub Releases and F-Droid:
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
      alt="Get it on F-Droid"
      height="75">](https://f-droid.org/en/packages/com.heronikostudios.metajammer/)
+[<img src="https://raw.githubusercontent.com/ImranR98/Obtainium/main/assets/graphics/badge_obtainium.png"
+     alt="Get it on Obtainium"
+     height="75">](https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/%7B%22id%22%3A%22com.heronikostudios.metajammer%22%2C%22url%22%3A%22https%3A%2F%2Fgithub.com%2FGabryDX%2FMetaJammer%22%2C%22author%22%3A%22GabryDX%22%2C%22name%22%3A%22MetaJammer%22%7D)
 
 - **GitHub Releases:** [github.com/GabryDX/MetaJammer/releases](https://github.com/GabryDX/MetaJammer/releases)
 - **F-Droid Package:** [f-droid.org/en/packages/com.heronikostudios.metajammer/](https://f-droid.org/en/packages/com.heronikostudios.metajammer/)
+- **Obtainium:** Add `https://github.com/GabryDX/MetaJammer` in Obtainium, or [tap here on Android](https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/%7B%22id%22%3A%22com.heronikostudios.metajammer%22%2C%22url%22%3A%22https%3A%2F%2Fgithub.com%2FGabryDX%2FMetaJammer%22%2C%22author%22%3A%22GabryDX%22%2C%22name%22%3A%22MetaJammer%22%7D) for instant automatic background updates.
 
 You can also build the F-Droid version locally using the `floss` flavor:
 ```bash
@@ -70,6 +77,19 @@ You can also build the F-Droid version locally using the `floss` flavor:
 ```
 
 The app is 100% FOSS, carries zero Anti-Features (`TetheredNet` completely eliminated), and follows F-Droid's inclusion policy. Metadata for F-Droid is located in the `fastlane` and `metadata` directories.
+
+### ⚠️ Why MetaJammer is Not on the Google Play Store
+
+MetaJammer was created to serve a greater purpose: empowering everyday individuals, journalists, and privacy-conscious users to safeguard their digital footprints against pervasive metadata tracking, location profiling, and surveillance.
+
+We would have loved to offer MetaJammer directly on Google Play to ensure frictionless access for mainstream Android users. However, we have deliberately chosen to **opt out of the Google Play Store** due to Google's hostile and invasive **"About the developer" identity verification policies**:
+
+* **Mandatory Residential Address Doxxing:** Under Google Play's verification rules for personal developer accounts, Google mandates that independent developers publicly display their **full legal name and physical home address** (street address, city, postal code) directly on the public store listing. For a solo open-source developer with no commercial office, publishing on Google Play requires sacrificing personal safety and physical privacy.
+* **The Privacy Paradox:** Forcing a solo developer to publicly expose their home address to the entire internet in order to distribute a free, zero-network, air-gapped privacy utility is fundamentally absurd and antithetical to the core values of this project.
+* **Corporate Gatekeeping:** To keep a personal home address private, Google requires registering as an "Organization", which demands commercial corporate incorporation certificates, legal filing fees, and Dun & Bradstreet (D-U-N-S) business numbers—an unreasonable barrier for a 100% free, non-monetized open-source tool.
+* **Artificial 20-Tester Closed Testing Hurdles:** Google additionally forces personal developer accounts to recruit and maintain 20 external testers opted into closed testing for at least 14 continuous days before production release approval is even considered.
+
+MetaJammer refuses to compromise developer safety or endorse surveillance-driven distribution models. You can always download authentic, signed, air-gapped builds safely and anonymously through **[F-Droid](https://f-droid.org/en/packages/com.heronikostudios.metajammer/)**, **[Obtainium](https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/%7B%22id%22%3A%22com.heronikostudios.metajammer%22%2C%22url%22%3A%22https%3A%2F%2Fgithub.com%2FGabryDX%2FMetaJammer%22%2C%22author%22%3A%22GabryDX%22%2C%22name%22%3A%22MetaJammer%22%7D)**, or directly from **[GitHub Releases](https://github.com/GabryDX/MetaJammer/releases)**.
 
 ## Getting Started
 
@@ -96,13 +116,13 @@ To verify the authenticity and integrity of MetaJammer APKs, you can use [AppVer
 ## Screenshots
 
 <p align="center">
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/01_home_screen.jpg" alt="Home Screen" width="250"/>
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/02_settings_screen.jpg" alt="Settings Screen" width="250"/>
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/03_help_screen.jpg" alt="Help Screen" width="250"/>
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/04_metadata_preview_screen.jpg" alt="Metadata Preview" width="250"/>
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/05_process_files_screen.jpg" alt="Process Files & Diff" width="250"/>
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/06_map_picker_screen.jpg" alt="Map Picker & Presets" width="250"/>
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/07_output_screen.jpg" alt="Output Screen" width="250"/>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.jpg" alt="Home Screen" width="250"/>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.jpg" alt="Settings Screen" width="250"/>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.jpg" alt="Help Screen" width="250"/>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.jpg" alt="Metadata Preview" width="250"/>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.jpg" alt="Process Files & Diff" width="250"/>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.jpg" alt="Map Picker & Presets" width="250"/>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/7.jpg" alt="Output Screen" width="250"/>
 </p>
 
 ## License

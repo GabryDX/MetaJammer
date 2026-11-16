@@ -1,0 +1,20 @@
+MetaJammer est une application Android axée sur la confidentialité, conçue pour brouiller, falsifier ou supprimer complètement les métadonnées de vos fichiers multimédias. Elle offre un contrôle total sur votre empreinte numérique avant de partager des photos, vidéos ou documents en ligne.
+
+Fonctionnalités clés :
+- Nettoyage approfondi des métadonnées : Cible les données EXIF, XMP, coordonnées GPS, numéros de série matériels, miniatures intégrées, blocs PNG et métadonnées vectorielles SVG.
+- Empoisonnement des métadonnées & profils : Ne vous contentez pas de supprimer les données, perturbez les traqueurs. Générez des métadonnées fictives réalistes avec des profils d'appareils photo et des préréglages de position.
+- Contrôle granulaire des balises : Choisissez sélectivement les catégories à supprimer ou conserver (GPS, Appareil, Date/Heure, Réglages de prise de vue, Auteur/Commentaires).
+- Diff visuel avant / après : Comparez les métadonnées originales et modifiées côte à côte avec des badges de statut colorés et des filtres de catégories.
+- Aperçu des métadonnées : Inspectez les métadonnées existantes de vos fichiers avant traitement pour constater précisément les informations exposées.
+- Sélecteur de carte interactif & préselections : Choisissez visuellement un emplacement fictif sur une carte vectorielle Compose 100 % hors ligne, avec des repères célèbres et des emplacements personnalisés.
+- Nettoyage rapide et partage : Activité HUD autonome pour nettoyer et repartager des fichiers directement sans étapes intermédiaires.
+- Traitement par lots en arrière-plan : Traitement fiable de plus de 50 fichiers haute résolution en continu grâce à Android WorkManager.
+- Prise en charge multiformat : Prise en charge complète des images (JPEG, PNG, WebP, HEIF/HEIC, SVG), vidéos (MP4, MOV), fichiers audio (MP3, OGG Vorbis/Opus) et documents PDF (suppression des métadonnées, empoisonnement et retrait des annotations cachées).
+
+Confidentialité & Sécurité :
+- Zéro permission étendue & zéro réseau : L'application n'exige aucune autorisation de stockage ou réseau. Elle repose sur Scoped Storage, SAF et une architecture locale étanche (air-gapped).
+- 100 % FOSS : Développée exclusivement avec des logiciels libres et open source. Aucun SDK propriétaire, traqueur ou télémétrie.
+- Traitement Fail-Closed : Toute erreur interrompt immédiatement l'opération ; aucun fichier non nettoyé n'est jamais exporté par accident.
+- Confidentialité hors ligne absolue : L'autorisation INTERNET est totalement supprimée. Le rendu des cartes et l'analyse s'exécutent exclusivement en local.
+- Zéro fuite cloud : La sauvegarde automatique Android est désactivée afin qu'aucune métadonnée ne soit transmise vers le cloud lors du traitement.
+- Nettoyage automatique : Tous les résidus temporaires et caches de partage sont purgés automatiquement.

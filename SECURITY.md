@@ -10,8 +10,8 @@ Only the latest release versions receive security patches and updates. We recomm
 
 | Version | Supported |
 | :--- | :--- |
-| `0.5.x` | :white_check_mark: |
-| `< 0.5.0` | :x: |
+| `0.6.x` | :white_check_mark: |
+| `< 0.6.0` | :x: |
 
 ---
 
@@ -53,7 +53,7 @@ MetaJammer adheres to the **Principle of Least Privilege** and defensive enginee
 1. **Zero Storage Permissions:** MetaJammer declares zero storage permissions (`WRITE_EXTERNAL_STORAGE` / `READ_EXTERNAL_STORAGE`) across all supported Android versions (API 26–37). Storage operations use Scoped Storage, MediaStore, and the Storage Access Framework (SAF).
 2. **100% Air-Gapped (Zero Network Surface):** The app declares NO `android.permission.INTERNET` permission and removes transitive network permissions like `ACCESS_NETWORK_STATE`. The app operates completely offline without network sockets or telemetry.
 3. **Strict Fail-Closed Processing:** If processing fails or encounters unexpected file corruption, MetaJammer aborts immediately, purges temporary scratch files, and **never** falls back to exporting unscrubbed media.
-4. **Lossless Pure Container Rewriting:** Media formats (JPEG, PNG, HEIC/HEIF, MP4, OGG) are processed directly at the container box and marker level without decoding or re-compressing raster/audio bitstreams.
+4. **Lossless Pure Container Rewriting:** Media formats (JPEG, PNG, HEIC/HEIF, MP4, MOV, MP3, OGG) are processed directly at the container box, marker, and stream level without decoding or re-compressing raster/audio bitstreams.
 5. **No Cloud Synchronization:** Android Auto-Backup is explicitly disabled in the manifest to ensure unscrubbed files are never backed up to cloud services.
 
 ---

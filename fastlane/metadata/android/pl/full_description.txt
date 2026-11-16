@@ -1,0 +1,20 @@
+MetaJammer to zorientowana na prywatność aplikacja na Androida, zaprojektowana do zmazywania, fałszowania lub całkowitego usuwania metadanych z plików multimedialnych. Zapewnia użytkownikom pełną kontrolę nad cyfrowym śladem przed udostępnieniem zdjęć, filmów lub dokumentów w sieci.
+
+Kluczowe funkcje:
+- Głębokie usuwanie metadanych: Skutecznie usuwa dane EXIF, XMP, współrzędne GPS, numery seryjne sprzętu, osadzone miniaturki, fragmenty PNG i wektorowe metadane SVG.
+- Zatruwanie metadanych i profile: Nie tylko usuwaj dane – zmyl tropicieli. Generuj wysoce realistyczne fałszywe metadane z profilami sprzętowymi aparatów i gotowymi presetami lokalizacji.
+- Granularna kontrola tagów: Selektywnie usuwaj lub zachowuj wybrane kategorie (GPS, Urządzenie, Data/Czas, Ustawienia aparatu, Autor/Komentarze).
+- Wizualne porównanie przed / po (Diff): Porównuj oryginalne i zmodyfikowane metadane obok siebie z kolorowymi wskaźnikami statusu i filtrami.
+- Podgląd metadanych: Sprawdzaj istniejące metadane plików przed przetworzeniem, aby dokładnie wiedzieć, jakie informacje są ujawniane.
+- Interaktywna mapa i własne presety: Wybieraj fałszywą lokalizację na w 100% działającej offline wektorowej mapie Compose z presetami znanych miejsc.
+- Szybkie czyszczenie i udostępnianie: Samodzielny tryb HUD do błyskawicznego czyszczenia i ponownego udostępniania plików bez zbędnych kroków.
+- Przetwarzanie wsadowe w tle: Niezawodne przetwarzanie ponad 50 plików o wysokiej rozdzielczości jednocześnie dzięki Android WorkManager.
+- Szeroka obsługa formatów: Pełna kompatybilność ze współczesnymi obrazami (JPEG, PNG, WebP, HEIF/HEIC, SVG), wideo (MP4, MOV), plikami audio (MP3, OGG Vorbis/Opus) oraz PDF (usuwanie metadanych, zatruwanie i oczyszczanie ukrytych adnotacji).
+
+Prywatność i bezpieczeństwo:
+- Zero zbędnych uprawnień i zero sieci: Aplikacja NIE wymaga uprawnień do pamięci ani sieci. Działa w oparciu o Scoped Storage, SAF i odizolowaną architekturę lokalną (air-gapped).
+- 100% FOSS: Zbudowana wyłącznie z wolnego i otwartego oprogramowania. Brak własnościowych SDK, trackerów i analityki.
+- Przetwarzanie Fail-Closed: Każdy błąd natychmiast przerywa proces; nieoczyszczone pliki nigdy nie zostaną przypadkowo wyeksportowane.
+- Prywatność w 100% offline: Uprawnienie INTERNET zostało całkowicie usunięte. Renderowanie mapy i przetwarzanie odbywają się wyłącznie lokalnie.
+- Brak wycieków do chmury: Automatyczne kopie zapasowe Androida są wyłączone, aby nieoczyszczone metadane nigdy nie opuściły urządzenia.
+- Automatyczne czyszczenie: Wszelkie tymczasowe pliki i pamięć podręczna udostępniania są usuwane automatycznie.

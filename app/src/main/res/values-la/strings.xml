@@ -92,7 +92,7 @@
     <!-- HelpScreen -->
     <string name="help_title">Auxilium &amp; Institutiones</string>
     <string name="help_item_video_title">Processus Videophoniae</string>
-    <string name="help_item_video_body">Formae sustentatae: MP4, MOV, M4A, OGG.\n\nPlena remuscendi ratio his vasis sustinetur. Haec ratio GPS, dies, et instrumenti atomos tollit ut tuam privatiam protegat.</string>
+    <string name="help_item_video_body">Formae sustentatae: MP4, MOV, M4A, MP3, OGG.\n\nPlena remuscendi ratio his vasis sustinetur. Haec ratio GPS, dies, et instrumenti atomos tollit ut tuam privatiam protegat.</string>
     <string name="help_item_image_title">Processus Imaginis et Vectoris</string>
     <string name="help_item_image_body">Formae sustentatae: JPG, PNG, WebP, HEIF/HEIC, SVG.\n\nMetaJammer metadata EXIF ex imaginibus bitmap tollit et metadata XML/RDF ex SVG mundat. In modo \"Venenare\", notas sensitivas cum datis fortuitis verisimilibus mutat.</string>
     <string name="help_item_other_title">PDF et Documentorum Processio</string>

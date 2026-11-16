@@ -1,0 +1,20 @@
+MetaJammer is een privacygerichte Android-app ontworpen om metadata van mediabestanden te manipuleren, te vervalsen of volledig te wissen. Het geeft gebruikers volledige controle over hun digitale voetafdruk voordat foto's, video's of documenten online worden gedeeld.
+
+Belangrijkste kenmerken:
+- Grondige metadataverwijdering: Verwijdert EXIF, XMP, GPS-coördinaten, serienummers van apparaten, ingebedde miniaturen, PNG-chunks en ingebedde SVG-metadata.
+- Metadata Vergiftiging & Profielen: Verwijder data niet alleen, maar misleid trackers. Genereer realistische nepmetadata met cameraprofielen en directe locatievoorinstellingen.
+- Granulaire tagcontrole: Kies selectief welke categorieën moeten worden verwijderd of behouden (GPS, Apparaat, Datum/Tijd, Camerainstellingen, Auteur/Reacties).
+- Visuele voor/na-vergelijking (Diff): Vergelijk originele en bewerkte metadata zij aan zij met kleurgecodeerde statusbadges en categorieënfilters.
+- Metadatavoorbeeld: Bekijk bestaande metadata van bestanden vóór verwerking om precies te zien welke informatie wordt blootgesteld.
+- Interactieve kaart & voorinstellingen: Kies visueel een neplocatie op een 100% offline Compose-vectorkaart met herkenningspunten en aangepaste voorinstellingen.
+- Quick Scrub & Delen: Standalone HUD-weergave om bestanden direct en zonder omwegen te schonen en opnieuw te delen.
+- Batchverwerking op de achtergrond: Betrouwbare verwerking van 50+ hoge-resolutiebestanden tegelijkertijd via Android WorkManager.
+- Brede bestandscompatibiliteit: Volledige ondersteuning voor afbeeldingen (JPEG, PNG, WebP, HEIF/HEIC, SVG), video's (MP4, MOV), audiobestanden (MP3, OGG Vorbis/Opus) en PDF-documenten (metadata wissen, vergiftigen en verborgen annotaties verwijderen).
+
+Privacy en beveiliging:
+- Geen ruime machtigingen & geen netwerk: Vereist GEEN opslag- of netwerkmachtigingen. Maakt gebruik van Scoped Storage, SAF en een lokaal geïsoleerde architectuur (air-gapped).
+- 100% FOSS: Volledig gebouwd met vrije en open source software. Geen propriëtaire SDK's, trackers of telemetrie.
+- Fail-Closed verwerking: Bij een fout stopt de verwerking onmiddellijk; ongeschoonde bestanden worden nooit per ongeluk geëxporteerd.
+- 100% offline privacy: De INTERNET-machtiging is volledig verwijderd. Kaartweergave en verwerking vinden uitsluitend lokaal op het apparaat plaats.
+- Geen cloudlekken: Android Auto-Backup is uitgeschakeld om te voorkomen dat data naar de cloud wordt verzonden.
+- Automatische opschoning: Alle tijdelijke verwerkingsresten en deelcaches worden automatisch gewist.

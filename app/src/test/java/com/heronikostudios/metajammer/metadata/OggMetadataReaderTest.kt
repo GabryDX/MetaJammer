@@ -13,9 +13,11 @@ import java.io.File
 class OggMetadataReaderTest {
 
     private val sampleOggFile = listOf(
+        File("test_data/fake/fake_metadata_sample.ogg"),
+        File("../test_data/fake/fake_metadata_sample.ogg"),
         File("test_data/fake_metadata_sample.ogg"),
         File("../test_data/fake_metadata_sample.ogg")
-    ).firstOrNull { it.exists() } ?: File("test_data/fake_metadata_sample.ogg")
+    ).firstOrNull { it.exists() } ?: File("test_data/fake/fake_metadata_sample.ogg")
 
     @Test
     fun `readMetadata parses all Vorbis comment fields from sample Ogg file`() {

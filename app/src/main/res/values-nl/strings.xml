@@ -92,7 +92,7 @@
     <!-- HelpScreen -->
     <string name="help_title">Hulp &amp; Tutorials</string>
     <string name="help_item_video_title">Videoverwerking</string>
-    <string name="help_item_video_body">Ondersteunde formaten: MP4, MOV, M4A, OGG.\n\nVolledige remuxing wordt ondersteund voor deze containers. Dit proces verwijdert GPS, datums en apparaat-atomen om uw privacy te beschermen.</string>
+    <string name="help_item_video_body">Ondersteunde formaten: MP4, MOV, M4A, MP3, OGG.\n\nVolledige remuxing wordt ondersteund voor deze containers. Dit proces verwijdert GPS, datums en apparaat-atomen om uw privacy te beschermen.</string>
     <string name="help_item_image_title">Beeld- &amp; vectorverwerking</string>
     <string name="help_item_image_body">Ondersteunde formaten: JPG, PNG, WebP, HEIF/HEIC, SVG.\n\nMetaJammer verwijdert EXIF-metadata van bitmapafbeeldingen en schoont XML/RDF-metadata van SVG\'s op. In de modus \"Poison\" worden gevoelige tags vervangen door realistische willekeurige gegevens.</string>
     <string name="help_item_other_title">PDF- &amp; documentverwerking</string>

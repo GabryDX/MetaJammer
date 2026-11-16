@@ -32,9 +32,11 @@ class HeicMetadataProcessorTest {
 
     private val sampleHeic: File by lazy {
         listOf(
+            File("test_data/fake/fake_metadata_sample.heic"),
+            File("../test_data/fake/fake_metadata_sample.heic"),
             File("test_data/fake_metadata_sample.heic"),
             File("../test_data/fake_metadata_sample.heic")
-        ).firstOrNull { it.exists() } ?: File("test_data/fake_metadata_sample.heic")
+        ).firstOrNull { it.exists() } ?: File("test_data/fake/fake_metadata_sample.heic")
     }
 
     @Before

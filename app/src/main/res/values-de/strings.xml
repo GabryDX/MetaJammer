@@ -92,7 +92,7 @@
     <!-- HelpScreen -->
     <string name="help_title">Hilfe &amp; Tutorials</string>
     <string name="help_item_video_title">Videoverarbeitung</string>
-    <string name="help_item_video_body">Unterstützte Formate: MP4, MOV, M4A, OGG.\n\nVollständiges Remuxing wird für diese Container unterstützt. Dieser Vorgang entfernt GPS, Daten und Geräteatome, um Ihre Privatsphäre zu schützen.</string>
+    <string name="help_item_video_body">Unterstützte Formate: MP4, MOV, M4A, MP3, OGG.\n\nVollständiges Remuxing wird für diese Container unterstützt. Dieser Vorgang entfernt GPS, Daten und Geräteatome, um Ihre Privatsphäre zu schützen.</string>
     <string name="help_item_image_title">Bild- &amp; Vektorverarbeitung</string>
     <string name="help_item_image_body">Unterstützte Formate: JPG, PNG, WebP, HEIF/HEIC, SVG.\n\nMetaJammer entfernt EXIF-Metadaten aus Bitmap-Bildern und bereinigt XML/RDF-Metadaten aus SVGs. Im Modus „Vergiften“ werden sensible Tags durch realistische Zufallsdaten ersetzt.</string>
     <string name="help_item_other_title">PDF- &amp; Dokumentenverarbeitung</string>

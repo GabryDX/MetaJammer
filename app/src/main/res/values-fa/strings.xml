@@ -92,7 +92,7 @@
     <!-- HelpScreen -->
     <string name="help_title">Help &amp; Tutorials</string>
     <string name="help_item_video_title">Video Processing</string>
-    <string name="help_item_video_body">فرمت‌های پشتیبانی شده: MP4, MOV, M4A, OGG.\n\nریمکس کامل برای این ظروف پشتیبانی می‌شود. این فرآیند GPS، تاریخ‌ها و اتم‌های دستگاه را برای محافظت از حریم خصوصی شما حذف می‌کند.</string>
+    <string name="help_item_video_body">فرمت‌های پشتیبانی شده: MP4, MOV, M4A, MP3, OGG.\n\nریمکس کامل برای این ظروف پشتیبانی می‌شود. این فرآیند GPS، تاریخ‌ها و اتم‌های دستگاه را برای محافظت از حریم خصوصی شما حذف می‌کند.</string>
     <string name="help_item_image_title">پردازش تصویر و برداری</string>
     <string name="help_item_image_body">فرمت‌های پشتیبانی شده: JPG, PNG, WebP, HEIF/HEIC, SVG.\n\nMetaJammer متاداده EXIF را از تصاویر بیت‌مپ حذف می‌کند و متاداده XML/RDF را از SVGها پاک می‌کند. در حالت \"مسموم‌سازی\"، تگ‌های حساس را با داده‌های تصادفی واقع‌گرایانه جایگزین می‌کند.</string>
     <string name="help_item_other_title">پردازش PDF و اسناد</string>

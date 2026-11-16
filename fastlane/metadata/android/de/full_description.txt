@@ -1,0 +1,20 @@
+MetaJammer ist eine datenschutzorientierte Android-App, die entwickelt wurde, um Metadaten aus Ihren Mediendateien zu manipulieren, zu fälschen oder vollständig zu entfernen. Sie gibt Nutzern die volle Kontrolle über ihren digitalen Fußabdruck, bevor Fotos, Videos oder Dokumente online geteilt werden.
+
+Hauptfunktionen:
+- Tiefgreifende Metadaten-Entfernung: Entfernt EXIF, XMP, GPS-Koordinaten, Hardware-Seriennummern, eingebettete Vorschaubilder, PNG-Chunks und eingebettete SVG-Metadaten.
+- Metadaten-Vergiftung & Profile: Daten nicht nur löschen – sondern gezielt verwirren. Erzeugen Sie täuschend echte Fake-Metadaten mit Kamera-Hardwareprofilen und sofortigen Standort-Presets.
+- Granulare Tag-Kontrolle: Wählen Sie gezielt aus, welche Kategorien entfernt oder beibehalten werden sollen (GPS, Gerät, Datum/Uhrzeit, Kameraeinstellungen, Autor/Kommentare).
+- Vorher-/Nachher-Vergleich (Diff): Vergleichen Sie Original- und bearbeitete Metadaten direkt nebeneinander mit farbigen Status-Badges und Kategoriefiltern.
+- Metadaten-Vorschau: Überprüfen Sie vorhandene Metadaten Ihrer Dateien vor der Verarbeitung, um genau zu sehen, welche Informationen offengelegt werden.
+- Interaktive Kartenauswahl & Presets: Wählen Sie visuell einen Fake-Standort auf einer 100% Offline-Compose-Vektorkarte mit vordefinierten Sehenswürdigkeiten und benutzerdefinierten Profilen.
+- Quick Scrub & Share: Eigenständige HUD-Aktivität zum blitzschnellen Bereinigen und erneuten Teilen von Dateien ohne Umwege.
+- Hintergrund-Stapelverarbeitung: Zuverlässige Verarbeitung von 50+ hochauflösenden Dateien gleichzeitig über Android WorkManager.
+- Umfassende Formatunterstützung: Volle Kompatibilität mit modernen Bildformaten (JPEG, PNG, WebP, HEIF/HEIC, SVG), Videocontainern (MP4, MOV), Audiodateien (MP3, OGG Vorbis/Opus) und PDF-Dokumenten (Metadaten-Bereinigung, Vergiftung und Entfernung versteckter Anmerkungen/Wasserzeichen).
+
+Datenschutz & Sicherheit:
+- Keine weitreichenden Berechtigungen & kein Netzwerk: Die App benötigt weder Speicher- noch Netzwerkberechtigungen. Sie nutzt Scoped Storage, SAF und eine isolierte Offline-Architektur (Air-Gapped).
+- 100% FOSS: Vollständig aus freier und Open-Source-Software aufgebaut. Keine proprietären SDKs, Tracker oder Telemetriedienste.
+- Fail-Closed-Verarbeitung: Bei Fehlern bricht die Verarbeitung sofort ab; unbereinigte Dateien werden niemals versehentlich exportiert.
+- 100% Offline-Privatsphäre: Die INTERNET-Berechtigung ist vollständig entfernt. Kartendarstellung und Verarbeitung erfolgen ausschließlich lokal.
+- Keine Cloud-Lecks: Das automatische Android-Cloud-Backup ist deaktiviert, um zu verhindern, dass unbereinigte Daten das Gerät verlassen.
+- Automatische Bereinigung: Alle temporären Verarbeitungsreste und Share-Caches werden automatisch bereinigt.

@@ -93,7 +93,7 @@ object PngMetadataReader {
                         val hour = data[4].toInt() and 0xFF
                         val min = data[5].toInt() and 0xFF
                         val sec = data[6].toInt() and 0xFF
-                        val timeStr = String.format("%04d:%02d:%02d %02d:%02d:%02d", year, month, day, hour, min, sec)
+                        val timeStr = String.format(java.util.Locale.ROOT, "%04d:%02d:%02d %02d:%02d:%02d", year, month, day, hour, min, sec)
                         entries.add(MetadataEntry("DateTimeModified", timeStr))
                         skipFully(inputStream, 4L)
                     } else {

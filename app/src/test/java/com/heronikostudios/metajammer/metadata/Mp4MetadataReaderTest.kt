@@ -10,8 +10,12 @@ class Mp4MetadataReaderTest {
 
     @Test
     fun testReadMetadataOnFakeMetadataSampleMp4() {
-        val testMp4 = listOf(File("test_data/fake_metadata_sample.mp4"), File("../test_data/fake_metadata_sample.mp4"))
-            .firstOrNull { it.exists() }
+        val testMp4 = listOf(
+            File("test_data/fake/fake_metadata_sample.mp4"),
+            File("../test_data/fake/fake_metadata_sample.mp4"),
+            File("test_data/fake_metadata_sample.mp4"),
+            File("../test_data/fake_metadata_sample.mp4")
+        ).firstOrNull { it.exists() }
         assertNotNull("fake_metadata_sample.mp4 should exist", testMp4)
 
         val entries = testMp4!!.inputStream().use { stream ->
@@ -33,8 +37,12 @@ class Mp4MetadataReaderTest {
 
     @Test
     fun testStripContainerMetadataOnFakeMetadataSampleMp4() {
-        val testMp4 = listOf(File("test_data/fake_metadata_sample.mp4"), File("../test_data/fake_metadata_sample.mp4"))
-            .firstOrNull { it.exists() }
+        val testMp4 = listOf(
+            File("test_data/fake/fake_metadata_sample.mp4"),
+            File("../test_data/fake/fake_metadata_sample.mp4"),
+            File("test_data/fake_metadata_sample.mp4"),
+            File("../test_data/fake_metadata_sample.mp4")
+        ).firstOrNull { it.exists() }
         assertNotNull("fake_metadata_sample.mp4 should exist", testMp4)
 
         val strippedOutput = ByteArrayOutputStream()

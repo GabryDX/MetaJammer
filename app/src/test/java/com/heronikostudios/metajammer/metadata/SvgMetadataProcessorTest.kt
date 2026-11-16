@@ -161,9 +161,11 @@ class SvgMetadataProcessorTest {
     @Test
     fun `readSvgMetadataString parses rich Dublin Core, editor attributes, and comments from sample SVG`() {
         val sampleSvgFile = listOf(
+            File("test_data/fake/fake_metadata_sample.svg"),
+            File("../test_data/fake/fake_metadata_sample.svg"),
             File("test_data/fake_metadata_sample.svg"),
             File("../test_data/fake_metadata_sample.svg")
-        ).firstOrNull { it.exists() } ?: File("test_data/fake_metadata_sample.svg")
+        ).firstOrNull { it.exists() } ?: File("test_data/fake/fake_metadata_sample.svg")
         assertTrue("Sample SVG test file must exist", sampleSvgFile.exists())
 
         val entries = SvgMetadataProcessor.readSvgMetadataString(sampleSvgFile.readText())
@@ -190,9 +192,11 @@ class SvgMetadataProcessorTest {
     @Test
     fun `cleanSvgString strips all metadata, editor attributes, and scrubs embedded PNG chunks from sample SVG`() {
         val sampleSvgFile = listOf(
+            File("test_data/fake/fake_metadata_sample.svg"),
+            File("../test_data/fake/fake_metadata_sample.svg"),
             File("test_data/fake_metadata_sample.svg"),
             File("../test_data/fake_metadata_sample.svg")
-        ).firstOrNull { it.exists() } ?: File("test_data/fake_metadata_sample.svg")
+        ).firstOrNull { it.exists() } ?: File("test_data/fake/fake_metadata_sample.svg")
         assertTrue("Sample SVG test file must exist", sampleSvgFile.exists())
 
         val originalContent = sampleSvgFile.readText()

@@ -34,11 +34,33 @@ class MediaMetadataProcessor(
         val isOgg = mimeType == "audio/ogg" || mimeType == "application/ogg" ||
             extension.equals(".ogg", ignoreCase = true) || extension.equals("ogg", ignoreCase = true)
 
+        val isMp3 = mimeType == "audio/mpeg" || mimeType == "audio/mp3" ||
+            extension.equals(".mp3", ignoreCase = true) || extension.equals("mp3", ignoreCase = true)
+
+        if (isMp3) {
+            val outputFile = fileRepository.createSharedTempFile("media_clean_", ".mp3")
+            val success = runCatching {
+                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.buffered()?.use { input ->
+                    outputFile.outputStream().buffered().use { output ->
+                        Mp3MetadataReader.stripMetadata(input, output)
+                    }
+                } ?: false
+            }.getOrDefault(false)
+
+            if (success) {
+                Timber.d("Successfully stripped MP3 metadata")
+                return outputFile
+            } else {
+                outputFile.delete()
+                throw IllegalStateException("Failed to strip MP3 metadata")
+            }
+        }
+
         if (isOgg) {
             val outputFile = fileRepository.createSharedTempFile("media_clean_", ".ogg")
             val success = runCatching {
-                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.use { input ->
-                    outputFile.outputStream().use { output ->
+                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.buffered()?.use { input ->
+                    outputFile.outputStream().buffered().use { output ->
                         OggMetadataReader.stripMetadata(input, output)
                     }
                 } ?: false
@@ -60,10 +82,12 @@ class MediaMetadataProcessor(
         } catch (e: Exception) {
             Timber.w(e, "Standard media remuxing failed; attempting fallback container scrubber")
             val fallbackSuccess = runCatching {
-                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.use { input ->
-                    outputFile.outputStream().use { output ->
+                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.buffered()?.use { input ->
+                    outputFile.outputStream().buffered().use { output ->
                         if (isOgg) {
                             OggMetadataReader.stripMetadata(input, output)
+                        } else if (isMp3) {
+                            Mp3MetadataReader.stripMetadata(input, output)
                         } else {
                             Mp4MetadataReader.stripContainerMetadata(input, output)
                         }
@@ -92,11 +116,33 @@ class MediaMetadataProcessor(
         val isOgg = mimeType == "audio/ogg" || mimeType == "application/ogg" ||
             extension.equals(".ogg", ignoreCase = true) || extension.equals("ogg", ignoreCase = true)
 
+        val isMp3 = mimeType == "audio/mpeg" || mimeType == "audio/mp3" ||
+            extension.equals(".mp3", ignoreCase = true) || extension.equals("mp3", ignoreCase = true)
+
+        if (isMp3) {
+            val outputFile = fileRepository.createSharedTempFile("media_poisoned_", ".mp3")
+            val success = runCatching {
+                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.buffered()?.use { input ->
+                    outputFile.outputStream().buffered().use { output ->
+                        Mp3MetadataReader.poisonMetadata(input, output, plan)
+                    }
+                } ?: false
+            }.getOrDefault(false)
+
+            if (success) {
+                Timber.d("Successfully poisoned MP3 metadata")
+                return outputFile
+            } else {
+                outputFile.delete()
+                throw IllegalStateException("Failed to poison MP3 metadata")
+            }
+        }
+
         if (isOgg) {
             val outputFile = fileRepository.createSharedTempFile("media_poisoned_", ".ogg")
             val success = runCatching {
-                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.use { input ->
-                    outputFile.outputStream().use { output ->
+                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.buffered()?.use { input ->
+                    outputFile.outputStream().buffered().use { output ->
                         OggMetadataReader.poisonMetadata(input, output, plan)
                     }
                 } ?: false
@@ -118,10 +164,12 @@ class MediaMetadataProcessor(
         } catch (e: Exception) {
             Timber.w(e, "Standard media remuxing failed during poisoning; attempting fallback container scrubber")
             val fallbackSuccess = runCatching {
-                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.use { input ->
-                    outputFile.outputStream().use { output ->
+                fileRepository.getContext().contentResolver.openInputStream(inputUri)?.buffered()?.use { input ->
+                    outputFile.outputStream().buffered().use { output ->
                         if (isOgg) {
                             OggMetadataReader.poisonMetadata(input, output, plan)
+                        } else if (isMp3) {
+                            Mp3MetadataReader.poisonMetadata(input, output, plan)
                         } else {
                             Mp4MetadataReader.stripContainerMetadata(input, output)
                         }
