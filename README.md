@@ -78,6 +78,19 @@ You can also build the F-Droid version locally using the `floss` flavor:
 
 The app is 100% FOSS, carries zero Anti-Features (`TetheredNet` completely eliminated), and follows F-Droid's inclusion policy. Metadata for F-Droid is located in the `fastlane` and `metadata` directories.
 
+### ⚠️ Why MetaJammer is Not on the Google Play Store
+
+MetaJammer was created to serve a greater purpose: empowering everyday individuals, journalists, and privacy-conscious users to safeguard their digital footprints against pervasive metadata tracking, location profiling, and surveillance.
+
+We would have loved to offer MetaJammer directly on Google Play to ensure frictionless access for mainstream Android users. However, we have deliberately chosen to **opt out of the Google Play Store** due to Google's hostile and invasive **"About the developer" identity verification policies**:
+
+* **Mandatory Residential Address Doxxing:** Under Google Play's verification rules for personal developer accounts, Google mandates that independent developers publicly display their **full legal name and physical home address** (street address, city, postal code) directly on the public store listing. For a solo open-source developer with no commercial office, publishing on Google Play requires sacrificing personal safety and physical privacy.
+* **The Privacy Paradox:** Forcing a solo developer to publicly expose their home address to the entire internet in order to distribute a free, zero-network, air-gapped privacy utility is fundamentally absurd and antithetical to the core values of this project.
+* **Corporate Gatekeeping:** To keep a personal home address private, Google requires registering as an "Organization", which demands commercial corporate incorporation certificates, legal filing fees, and Dun & Bradstreet (D-U-N-S) business numbers—an unreasonable barrier for a 100% free, non-monetized open-source tool.
+* **Artificial 20-Tester Closed Testing Hurdles:** Google additionally forces personal developer accounts to recruit and maintain 20 external testers opted into closed testing for at least 14 continuous days before production release approval is even considered.
+
+MetaJammer refuses to compromise developer safety or endorse surveillance-driven distribution models. You can always download authentic, signed, air-gapped builds safely and anonymously through **[F-Droid](https://f-droid.org/en/packages/com.heronikostudios.metajammer/)**, **[Obtainium](https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/%7B%22id%22%3A%22com.heronikostudios.metajammer%22%2C%22url%22%3A%22https%3A%2F%2Fgithub.com%2FGabryDX%2FMetaJammer%22%2C%22author%22%3A%22GabryDX%22%2C%22name%22%3A%22MetaJammer%22%7D)**, or directly from **[GitHub Releases](https://github.com/GabryDX/MetaJammer/releases)**.
+
 ## Getting Started
 
 1. **Clone this repo:**  
