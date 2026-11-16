@@ -1,0 +1,20 @@
+MetaJammer è un'applicazione Android incentrata sulla privacy progettata per offuscare, falsificare o rimuovere completamente i metadati dai tuoi file multimediali. Offre agli utenti il pieno controllo sulla propria impronta digitale prima di condividere foto, video o documenti online.
+
+Funzionalità principali:
+- Rimozione approfondita dei metadati: Elimina metadati EXIF, XMP, coordinate GPS, numeri di serie hardware, miniature incorporate, chunk PNG e metadati vettoriali SVG.
+- Avvelenamento dei metadati e profili: Non limitarti a cancellare i dati, confondili. Genera metadati fittizi estremamente realistici con profili hardware fotocamera e posizioni istantanee.
+- Controllo granulare dei tag: Scegli selettivamente quali categorie rimuovere o preservare (GPS, Dispositivo, Data/Ora, Impostazioni fotocamera, Autore/Commenti).
+- Differenze visive prima / dopo: Confronta i metadati originali e modificati fianco a fianco, con badge di stato colorati e filtri per categoria.
+- Anteprima metadati: Ispeziona i metadati esistenti dei file prima dell'elaborazione per verificare esattamente quali informazioni personali sono esposte.
+- Selettore mappa interattivo e preset personalizzati: Scegli visivamente una posizione fittizia su una mappa vettoriale Compose 100% offline, con monumenti famosi e preset geografici salvabili.
+- Pulizia rapida e condivisione: Modalità rapida HUD per ripulire e ricondividere i file all'istante senza passaggi intermedi.
+- Elaborazione in background: Elabora in modo affidabile lotti di oltre 50 file ad alta risoluzione in background tramite Android WorkManager.
+- Supporto multiformato: Piena compatibilità con formati immagine moderni (JPEG, PNG, WebP, HEIF/HEIC, SVG), contenitori video (MP4, MOV), file audio (MP3, OGG Vorbis/Opus) e documenti PDF (rimozione metadati, avvelenamento ed eliminazione di annotazioni/revisioni nascoste).
+
+Privacy e Sicurezza:
+- Zero autorizzazioni estese e zero rete: L'app non richiede né autorizzazioni di archiviazione né accesso a Internet. Utilizza Scoped Storage, SAF e un'architettura locale e isolata (air-gapped).
+- 100% FOSS: Sviluppata interamente con software libero e open source. Nessun SDK proprietario, nessun tracker e nessuna telemetria analitica.
+- Elaborazione fail-closed: In caso di errore durante l'elaborazione, il processo si interrompe immediatamente; nessun file non ripulito viene mai esportato accidentalmente.
+- Privacy offline al 100%: L'autorizzazione di rete è completamente rimossa (nessun permesso INTERNET). Il rendering delle mappe e l'elaborazione avvengono esclusivamente in locale, azzerando qualsiasi rischio di esfiltrazione dati.
+- Nessun backup su cloud: Il backup automatico di Android (Auto-Backup) è disabilitato per evitare che file o metadati non ripuliti finiscano sul cloud.
+- Pulizia automatica: Tutti i residui temporanei di elaborazione e le cache di condivisione in uscita vengono eliminati automaticamente.
